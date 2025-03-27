@@ -1,21 +1,40 @@
-from datetime import date
+from datetime import datetime
 
 class Wafer:
-  def __init__(self, wafer_serial, tray_serial, radioactive_number,spreading_time: date,qaresele_time: date ,generator
-   , location_tray, location_qarusele, robot_ot2, robot_meca):
-    self.wafer_serial = wafer_serial 
-    self.tray_serial = tray_serial
-    self.radioactive_number = radioactive_number
-    self.spreading_time = spreading_time
-    self.qaresele_time = qaresele_time
-    self.generator  = generator
-    self.location_tray = location_tray
-    self.location_qarusele = location_qarusele
-    self.robot_ot2 = robot_ot2
-    self.robot_meca = robot_meca
-
-  def __repr__(self):
-    return (f"Wafer(wafer_serial={self.wafer_serial}, tray_serial={self.tray_serial}, "
-        f"radioactive_number={self.radioactive_number}, spreading_time={self.spreading_time}, qaresele_time={self.qaresele_time}, "
-        f"generator={self.generator}, location_tray={self.location_tray}, location_qarusele={self.location_qarusele}, "
-        f"robot_ot2={self.robot_ot2}, robot_meca={self.robot_meca})")
+    def __init__(self, id=None, tray_id=None, carousel_id=None, meca_id=None, 
+                 ot2_id=None, thorium_id=None, wafer_pos=None):
+        """
+        Initialize Wafer object according to the database schema
+        
+        Args:
+            id (int): Primary key id for the wafer
+            tray_id (int): Foreign key to BAKING_TRAY table
+            carousel_id (int): Foreign key to CAROUSEL table
+            meca_id (int): Foreign key to ROBOT table (MECA type)
+            ot2_id (int): Foreign key to ROBOT table (OT2 type)
+            thorium_id (int): Foreign key to THORIUM_VIAL table
+            wafer_pos (int): Position in tray (1-55)
+        """
+        self.id = id
+        self.tray_id = tray_id
+        self.carousel_id = carousel_id
+        self.meca_id = meca_id
+        self.ot2_id = ot2_id
+        self.thorium_id = thorium_id
+        self.wafer_pos = wafer_pos
+        
+        # Process logs will be handled by the PROCESSLOG table relationship
+        
+    def __repr__(self):
+        return (f"Wafer(id={self.id}, tray_id={self.tray_id}, "
+                f"carousel_id={self.carousel_id}, meca_id={self.meca_id}, "
+                f"ot2_id={self.ot2_id}, thorium_id={self.thorium_id}, "
+                f"wafer_pos={self.wafer_pos})")
+                
+    def get_process_logs(self):
+        """
+        Retrieves all process logs associated with this wafer
+        Returns list of ProcessLog objects (to be implemented)
+        """
+        # This would query the PROCESSLOG table in real implementation
+        return []

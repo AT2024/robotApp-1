@@ -5,7 +5,7 @@ from utils.logger import get_logger
 from datetime import datetime
 import time
 # Import the drop sequence function and configuration
-from routers.meca import drop_wafer_sequence
+from routers.meca import drop_wafer_sequence, carousel_wafer_sequence
 from config.meca_config import total_wafers
 
 logger = get_logger("websocket_handler")
@@ -123,11 +123,6 @@ class WebsocketHandler:
         for websocket in disconnected_clients:
             await self.disconnect(websocket)
 
-    # Update to the handle_message method in WebsocketHandler class
-# This code snippet should be integrated into websocket_handlers.py
-
-
-# Update to handle_message method in WebsocketHandler class
     async def handle_message(self, websocket: WebSocket, message: dict):
         """Handle incoming WebSocket messages."""
         try:
@@ -241,6 +236,51 @@ class WebsocketHandler:
                                 "message": f"Meca drop sequence failed: {str(e)}",
                             }
                         )
+                # Support both command types for carousel operations
+                elif command_type in ["meca_carousel", "carousel"]:
+                    try:
+                        # Import the carousel sequence function
+                        from routers.meca import (
+                            carousel_wafer_sequence,
+                            return_robot_to_home,
+                        )
+                        from config.meca_config import (
+                            total_wafers,
+                            wafers_per_carousel,
+                            EMPTY_SPEED,
+                        )
+
+                        # Get parameters with defaults
+                        start = command_data.get("start", 0)
+                        count = command_data.get("count", wafers_per_carousel)
+                        end = min(start + count, total_wafers)
+                        is_last_batch = command_data.get("is_last_batch", False)
+
+                        # Execute the carousel sequence
+                        await carousel_wafer_sequence(self.robot_manager, start, end)
+
+                        # Return to home if this is the last batch
+                        if is_last_batch:
+                            await return_robot_to_home(
+                                self.robot_manager.meca_robot, EMPTY_SPEED
+                            )
+                            logger.info(
+                                "Completed carousel sequence, robot returned to home"
+                            )
+
+                        response.update(
+                            {
+                                "status": "success",
+                                "message": f"Meca carousel sequence completed successfully for wafers {start+1} to {end}",
+                            }
+                        )
+                    except Exception as e:
+                        response.update(
+                            {
+                                "status": "error",
+                                "message": f"Meca carousel sequence failed: {str(e)}",
+                            }
+                        )
                 # Handle arduino commands
                 elif command_type.startswith("arduino_"):
                     try:
@@ -288,166 +328,7 @@ class WebsocketHandler:
                 await websocket.send_json(error_response)
             except Exception as send_error:
                 logger.error(f"Error sending error response: {send_error}")
-            """Handle incoming WebSocket messages."""
-            try:
-                msg_type = message.get("type")
 
-                if msg_type == "get_status":
-                    # Get current status from robot manager
-                    current_status = self.robot_manager.get_status()
-                    logger.info(f"Status request received. Current status: {current_status}")
-
-                    # Send status updates for each device
-                    for device, status in current_status.items():
-                        await self.send_status_update(websocket, device, status)
-                    return
-
-                if msg_type == "command":
-                    command_type = message.get("command_type")
-                    command_data = message.get("data", {})
-                    command_id = message.get("commandId")
-
-                    logger.info(f"Received command: {command_type} with data: {command_data}")
-
-                    # Prepare base response structure
-                    response = {
-                        "type": "command_response",
-                        "commandId": command_id,
-                        "timestamp": datetime.now().isoformat(),
-                    }
-
-                    # Route to appropriate command handler
-                    if command_type == "emergency_stop":
-                        await self.robot_manager.emergency_stop(command_data.get("robots"))
-                        response.update(
-                            {
-                                "status": "success",
-                                "message": "Emergency stop executed successfully",
-                            }
-                        )
-                    elif command_type == "ot2_protocol":
-                        await self.robot_manager.run_ot2_protocol_direct(command_data)
-                        response.update(
-                            {
-                                "status": "success",
-                                "message": "OT2 protocol started successfully",
-                            }
-                        )
-                    elif command_type == "meca_pickup":
-                        try:
-                            # Import the pickup sequence function
-                            from routers.meca import pickup_wafer_sequence
-
-                            # Execute the pickup sequence
-                            await pickup_wafer_sequence(self.robot_manager)
-                            response.update(
-                                {
-                                    "status": "success",
-                                    "message": "Meca pickup sequence completed successfully",
-                                }
-                            )
-                        except Exception as e:
-                            response.update(
-                                {"status": "error", "message": f"Meca pickup failed: {str(e)}"}
-                            )
-                    elif command_type == "meca_drop":
-                        try:
-                            # Import the drop sequence function and configuration
-                            from routers.meca import drop_wafer_sequence, return_robot_to_home
-                            from config.meca_config import total_wafers, EMPTY_SPEED
-
-                            # Get parameters with defaults
-                            start = command_data.get("start", 0)
-                            count = command_data.get("count", 5)
-                            end = min(start + count, total_wafers)
-                            is_last_batch = command_data.get("is_last_batch", False)
-
-                            # Execute the drop sequence
-                            await drop_wafer_sequence(self.robot_manager, start, end)
-
-                            # Return to home if this is the last batch
-                            if is_last_batch:
-                                await return_robot_to_home(
-                                    self.robot_manager.meca_robot, EMPTY_SPEED
-                                )
-                                logger.info("Completed drop sequence, robot returned to home")
-
-                            response.update(
-                                {
-                                    "status": "success",
-                                    "message": f"Meca drop sequence completed successfully for wafers {start+1} to {end}",
-                                }
-                            )
-                        except Exception as e:
-                            response.update(
-                                {
-                                    "status": "error",
-                                    "message": f"Meca drop sequence failed: {str(e)}",
-                                }
-                            )
-                    # New command handler for carousel assembly
-                    elif command_type == "meca_carousel":
-                        try:
-                            # Import the carousel sequence function
-                            from routers.meca import (
-                                carousel_wafer_sequence,
-                                return_robot_to_home,
-                            )
-                            from config.meca_config import (
-                                total_wafers,
-                                wafers_per_carousel,
-                                EMPTY_SPEED,
-                            )
-
-                            # Get parameters with defaults
-                            start = command_data.get("start", 0)
-                            count = command_data.get("count", wafers_per_carousel)
-                            end = min(start + count, total_wafers)
-                            is_last_batch = command_data.get("is_last_batch", False)
-
-                            # Execute the carousel sequence
-                            await carousel_wafer_sequence(self.robot_manager, start, end)
-
-                            # Return to home if this is the last batch
-                            if is_last_batch:
-                                await return_robot_to_home(
-                                    self.robot_manager.meca_robot, EMPTY_SPEED
-                                )
-                                logger.info(
-                                    "Completed carousel sequence, robot returned to home"
-                                )
-
-                            response.update(
-                                {
-                                    "status": "success",
-                                    "message": f"Meca carousel sequence completed successfully for wafers {start+1} to {end}",
-                                }
-                            )
-                        except Exception as e:
-                            response.update(
-                                {
-                                    "status": "error",
-                                    "message": f"Meca carousel sequence failed: {str(e)}",
-                                }
-                            )
-
-                    await websocket.send_json(response)
-                    return
-
-                # Handle other message types
-                await self.connection_manager.handle_message(websocket, message)
-
-            except Exception as e:
-                logger.error(f"Error handling message: {e}")
-                error_response = {
-                    "type": "error",
-                    "message": str(e),
-                    "timestamp": datetime.now().isoformat(),
-                }
-                try:
-                    await websocket.send_json(error_response)
-                except Exception as send_error:
-                    logger.error(f"Error sending error response: {send_error}")
     async def broadcast_server_status(self):
         try:
             status = self.robot_manager.get_status()

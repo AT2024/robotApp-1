@@ -94,6 +94,18 @@ async def move_and_delay(robot, move_func, position, delay_time=0):
     await asyncio.to_thread(move_func, *position)
     if delay_time > 0:
         await asyncio.to_thread(robot.Delay, delay_time)
+async def initialize_robot_settings(robot):
+    """Common initialization settings for robot operations."""
+    logger.info("Setting initial parameters")
+    await asyncio.to_thread(robot.SetGripperForce, FORCE)
+    await asyncio.to_thread(robot.SetJointAcc, ACC)
+    await asyncio.to_thread(robot.SetTorqueLimits, 40, 40, 40, 40, 40, 40)
+    await asyncio.to_thread(robot.SetTorqueLimitsCfg, 2, 1)
+    await asyncio.to_thread(robot.SetBlending, 0)
+    await asyncio.to_thread(robot.SetJointVel, ALIGN_SPEED)
+    await asyncio.to_thread(robot.SetConf, 1, 1, 1)
+    await asyncio.to_thread(robot.GripperOpen)
+    await asyncio.to_thread(robot.Delay, 1)
 
 
 # -----------------------------------------------------------------------------
@@ -183,22 +195,25 @@ async def pickup_wafer_sequence(
         robot = robot_manager.meca_robot
         await ensure_robot_ready(robot)
 
+        # Initialize common settings
+        await initialize_robot_settings(robot)
+
         for i in range(start, end):
             logger.info(f"Processing wafer {i+1} of {end}")
 
-            # Set initial parameters once
-            if i == start:
-                logger.info("Setting initial parameters")
-                await asyncio.to_thread(robot.SetGripperForce, FORCE)
-                await asyncio.to_thread(robot.SetJointAcc, ACC)
-                await asyncio.to_thread(robot.SetTorqueLimits, 40, 40, 40, 40, 40, 40)
-                await asyncio.to_thread(robot.SetTorqueLimitsCfg, 2, 1)
-                await asyncio.to_thread(robot.SetBlending, 0)
+            # # Set initial parameters once
+            # if i == start:
+            #     logger.info("Setting initial parameters")
+            #     await asyncio.to_thread(robot.SetGripperForce, FORCE)
+            #     await asyncio.to_thread(robot.SetJointAcc, ACC)
+            #     await asyncio.to_thread(robot.SetTorqueLimits, 40, 40, 40, 40, 40, 40)
+            #     await asyncio.to_thread(robot.SetTorqueLimitsCfg, 2, 1)
+            #     await asyncio.to_thread(robot.SetBlending, 0)
 
-            await asyncio.to_thread(robot.SetJointVel, ALIGN_SPEED)
-            await asyncio.to_thread(robot.SetConf, 1, 1, 1)
-            await asyncio.to_thread(robot.GripperOpen)
-            await asyncio.to_thread(robot.Delay, 1)
+            # await asyncio.to_thread(robot.SetJointVel, ALIGN_SPEED)
+            # await asyncio.to_thread(robot.SetConf, 1, 1, 1)
+            # await asyncio.to_thread(robot.GripperOpen)
+            # await asyncio.to_thread(robot.Delay, 1)
 
             # Calculate pickup positions
             pickup_high = copy.deepcopy(FIRST_WAFER)
@@ -365,97 +380,115 @@ async def carousel_wafer_sequence(
         robot = robot_manager.meca_robot
         await ensure_robot_status(robot)
 
-        # Set configuration at start
+        # Initialize common settings
+        await initialize_robot_settings(robot)
+        
+        # Set configuration specific to carousel movement
         await asyncio.to_thread(robot.SetConf, 1, 1, -1)
         await asyncio.to_thread(robot.Delay, 3)
+
+        # Local variables for correct coordinates
+        carousel_coords = [133.8, -247.95, 101.9, 90, 0, -90]
+        t_photogate_coords = [53.8, -217.2, 94.9, 90, 0, -90]
+        c_photogate_coords = [84.1, -217.2, 94.9, 90, 0, -90]
 
         for i in range(start, end):
             logger.info(f"Processing wafer {i+1} from baking tray to carousel")
             
-            # Add delay for each new carousel
-            if (i + 1) % 11 == 1 and i >= 1:
+            # Add delay for each new carousel batch
+            if (i+1) % 11 == 1 and i >= 1:
                 await asyncio.to_thread(robot.Delay, 5)
                 
             # Open gripper and prepare for pickup
             await asyncio.to_thread(robot.GripperOpen)
             await asyncio.to_thread(robot.Delay, 1)
+            
+            # Move to above baking tray position with correct height
             await asyncio.to_thread(robot.SetJointVel, SPEED)
-
-            # Move to above baking tray position
             above_baking = copy.deepcopy(FIRST_BAKING_TRAY)
             above_baking[0] += GAP_WAFERS * i
-            above_baking[2] += 27.558
+            above_baking[2] = 55.5  # Use absolute height instead of adding delta
             await asyncio.to_thread(robot.MovePose, *above_baking)
-
-            # Move to baking tray position and grab wafer
+            
+            # Set proper speed and blending for precise approach
             await asyncio.to_thread(robot.SetJointVel, ALIGN_SPEED)
             await asyncio.to_thread(robot.SetBlending, 0)
+            
+            # Position at wafer to pick
             baking_tray = copy.deepcopy(FIRST_BAKING_TRAY)
             baking_tray[0] += GAP_WAFERS * i
             await asyncio.to_thread(robot.MovePose, *baking_tray)
             await asyncio.to_thread(robot.Delay, 0.5)
             await asyncio.to_thread(robot.GripperClose)
             await asyncio.to_thread(robot.Delay, 0.5)
-
+            
             # Start movement path to carousel
             await asyncio.to_thread(robot.SetBlending, 100)
+            
+            # First intermediary point
             move1 = copy.deepcopy(FIRST_BAKING_TRAY)
             move1[0] += GAP_WAFERS * i - 0.7
             move1[2] += 2.8
             await asyncio.to_thread(robot.MovePose, *move1)
-
+            
             await asyncio.to_thread(robot.SetJointVel, SPEED)
+            
+            # Second intermediary point
             move2 = copy.deepcopy(FIRST_BAKING_TRAY)
             move2[0] += GAP_WAFERS * i - 2.1
             move2[2] += 6
             await asyncio.to_thread(robot.MovePose, *move2)
-
+            
+            # Third intermediary point
             move3 = copy.deepcopy(FIRST_BAKING_TRAY)
             move3[0] += GAP_WAFERS * i - 7.7
             move3[2] += 22
             await asyncio.to_thread(robot.MovePose, *move3)
-
+            
+            # Final point before photogate
             move4 = copy.deepcopy(FIRST_BAKING_TRAY)
             move4[0] += GAP_WAFERS * i - 9.7
             move4[2] += 32.058
             await asyncio.to_thread(robot.MovePose, *move4)
             await asyncio.to_thread(robot.Delay, 0.5)
-
+            
             # Through photogate
             await asyncio.to_thread(robot.SetBlending, 80)
-            await asyncio.to_thread(robot.MovePose, *T_PHOTOGATE)
-            await asyncio.to_thread(robot.MovePose, *C_PHOTOGATE)
-
-            # Y Away positions
-            move7 = copy.deepcopy(CAROUSEL)
-            move7[1] += 31.0000
-            move7[2] += 18.0000
-            await asyncio.to_thread(robot.MovePose, *move7)
+            await asyncio.to_thread(robot.MovePose, *t_photogate_coords)
+            await asyncio.to_thread(robot.MovePose, *c_photogate_coords)
             
+            # Y Away position
+            y_away1 = copy.deepcopy(carousel_coords)
+            y_away1[1] = -216.95
+            y_away1[2] = 119.9
+            await asyncio.to_thread(robot.MovePose, *y_away1)
+            
+            # Set blending and velocity for approach
             await asyncio.to_thread(robot.SetBlending, 0)
             await asyncio.to_thread(robot.Delay, 1)
             await asyncio.to_thread(robot.SetJointVel, ENTRY_SPEED)
             
-            move8 = copy.deepcopy(CAROUSEL)
-            move8[1] += 2.0000
-            move8[2] += 14.0000
-            await asyncio.to_thread(robot.MovePose, *move8)
-
-            # Above carousel positions - staged approach
-            Above_Carousel1 = copy.deepcopy(CAROUSEL)
-            Above_Carousel1[2] += 14.0000
-            await asyncio.to_thread(robot.MovePose, *Above_Carousel1)
+            # Y Away position 2
+            y_away2 = copy.deepcopy(carousel_coords)
+            y_away2[1] = -245.95
+            y_away2[2] = 115.9
+            await asyncio.to_thread(robot.MovePose, *y_away2)
             
-            Above_Carousel2 = copy.deepcopy(CAROUSEL)
-            Above_Carousel2[2] += 8.0000
-            await asyncio.to_thread(robot.MovePose, *Above_Carousel2)
+            # Approach carousel positions
+            above_carousel1 = copy.deepcopy(carousel_coords)
+            above_carousel1[2] = 115.9
+            await asyncio.to_thread(robot.MovePose, *above_carousel1)
             
-            Above_Carousel3 = copy.deepcopy(CAROUSEL)
-            Above_Carousel3[2] += 2.0000
-            await asyncio.to_thread(robot.MovePose, *Above_Carousel3)
-
+            above_carousel2 = copy.deepcopy(carousel_coords)
+            above_carousel2[2] = 109.9
+            await asyncio.to_thread(robot.MovePose, *above_carousel2)
+            
+            above_carousel3 = copy.deepcopy(carousel_coords)
+            above_carousel3[2] = 103.9
+            await asyncio.to_thread(robot.MovePose, *above_carousel3)
+            
             # Carousel position - release wafer
-            await asyncio.to_thread(robot.MovePose, *CAROUSEL)
+            await asyncio.to_thread(robot.MovePose, *carousel_coords)
             await asyncio.to_thread(robot.Delay, 0.5)
             await asyncio.to_thread(robot.MoveGripper, 2.9)
             await asyncio.to_thread(robot.Delay, 0.5)
@@ -463,32 +496,35 @@ async def carousel_wafer_sequence(
             # Exit carousel
             await asyncio.to_thread(robot.SetJointVel, EMPTY_SPEED)
             
-            Above_Carousel4 = copy.deepcopy(CAROUSEL)
-            Above_Carousel4[2] += 2.0000
-            await asyncio.to_thread(robot.MovePose, *Above_Carousel4)
+            above_carousel4 = copy.deepcopy(carousel_coords)
+            above_carousel4[2] = 103.9
+            await asyncio.to_thread(robot.MovePose, *above_carousel4)
             
-            Above_Carousel5 = copy.deepcopy(CAROUSEL)
-            Above_Carousel5[2] += 8.0000
-            await asyncio.to_thread(robot.MovePose, *Above_Carousel5)
+            above_carousel5 = copy.deepcopy(carousel_coords)
+            above_carousel5[2] = 109.9
+            await asyncio.to_thread(robot.MovePose, *above_carousel5)
             
-            move10 = copy.deepcopy(CAROUSEL)
-            move10[2] += 14.0000
-            await asyncio.to_thread(robot.MovePose, *move10)
+            exit_pos1 = copy.deepcopy(carousel_coords)
+            exit_pos1[2] = 115.9
+            await asyncio.to_thread(robot.MovePose, *exit_pos1)
             
-            move11 = copy.deepcopy(CAROUSEL)
-            move11[1] += 2.0000
-            move11[2] += 18.0000
-            await asyncio.to_thread(robot.MovePose, *move11)
+            exit_pos2 = copy.deepcopy(carousel_coords)
+            exit_pos2[1] = -245.95
+            exit_pos2[2] = 119.9
+            await asyncio.to_thread(robot.MovePose, *exit_pos2)
             
-            move12 = copy.deepcopy(CAROUSEL)
-            move12[1] += 31.0000
-            move12[2] += 18.0000
-            await asyncio.to_thread(robot.MovePose, *move12)
-
+            exit_pos3 = copy.deepcopy(carousel_coords)
+            exit_pos3[1] = -216.95
+            exit_pos3[2] = 119.9
+            await asyncio.to_thread(robot.MovePose, *exit_pos3)
+            
             # Return to safe point
-            await asyncio.to_thread(robot.MovePose, *CAROUSEL_SAFEPOINT)
+            carousel_safepoint_values = [25.567, -202.630, 179.700, 90.546, 0.866, -90.882]
+            await asyncio.to_thread(robot.MovePose, *carousel_safepoint_values)
+            
+            # Set final blending
             await asyncio.to_thread(robot.SetBlending, 100)
-
+            
         await ensure_robot_status(robot)
         logger.info("Successfully completed carousel placement sequence")
         return {
@@ -497,8 +533,8 @@ async def carousel_wafer_sequence(
         }
     except Exception as e:
         logger.error(f"Error in carousel sequence: {e}")
+        await attempt_robot_recovery(robot)
         raise
-
 
 async def empty_carousel_sequence(
     robot_manager: RobotManager, start: int = 0, end: int = 11
@@ -508,6 +544,14 @@ async def empty_carousel_sequence(
         logger.info(f"Starting empty-carousel sequence for wafers {start+1} to {end}")
         robot = robot_manager.meca_robot
         await ensure_robot_status(robot)
+
+        # Initialize common settings
+        await initialize_robot_settings(robot)
+        
+        # Local variables for correct coordinates
+        carousel_coords = [133.8, -247.95, 101.9, 90, 0, -90]
+        t_photogate_coords = [53.8, -217.2, 94.9, 90, 0, -90]
+        c_photogate_coords = [84.1, -217.2, 94.9, 90, 0, -90]
 
         for i in range(start, end):
             logger.info(f"Processing wafer {i+1} from carousel to baking tray")
@@ -521,21 +565,21 @@ async def empty_carousel_sequence(
             # Open gripper and prepare to pick up wafer from carousel
             await asyncio.to_thread(robot.GripperOpen)
             await asyncio.to_thread(robot.Delay, 1)
-
+            
             # First move to Y-away positions
-            move12_rev = copy.deepcopy(CAROUSEL)
-            move12_rev[1] += 31.0000
-            move12_rev[2] += 18.0000
-            await asyncio.to_thread(robot.MovePose, *move12_rev)
+            y_away2 = copy.deepcopy(carousel_coords)
+            y_away2[1] = -216.95
+            y_away2[2] = 119.9
+            await asyncio.to_thread(robot.MovePose, *y_away2)
             
-            move11_rev = copy.deepcopy(CAROUSEL)
-            move11_rev[1] += 2.0000
-            move11_rev[2] += 18.0000
-            await asyncio.to_thread(robot.MovePose, *move11_rev)
+            y_away1 = copy.deepcopy(carousel_coords)
+            y_away1[1] = -245.95
+            y_away1[2] = 119.9
+            await asyncio.to_thread(robot.MovePose, *y_away1)
             
-            move10_rev = copy.deepcopy(CAROUSEL)
-            move10_rev[2] += 14.0000
-            await asyncio.to_thread(robot.MovePose, *move10_rev)
+            above_carousel = copy.deepcopy(carousel_coords)
+            above_carousel[2] = 115.9
+            await asyncio.to_thread(robot.MovePose, *above_carousel)
             
             # Prepare to pick up from carousel
             await asyncio.to_thread(robot.SetBlending, 0)
@@ -544,97 +588,94 @@ async def empty_carousel_sequence(
             await asyncio.to_thread(robot.Delay, 0.5)
             
             # Staged approach to carousel
-            Above_Carousel5_Rev = copy.deepcopy(CAROUSEL)
-            Above_Carousel5_Rev[2] += 8.0000
-            await asyncio.to_thread(robot.MovePose, *Above_Carousel5_Rev)
+            above_carousel5 = copy.deepcopy(carousel_coords)
+            above_carousel5[2] = 109.9
+            await asyncio.to_thread(robot.MovePose, *above_carousel5)
             
-            Above_Carousel4_Rev = copy.deepcopy(CAROUSEL)
-            Above_Carousel4_Rev[2] += 2.0000
-            await asyncio.to_thread(robot.MovePose, *Above_Carousel4_Rev)
+            above_carousel4 = copy.deepcopy(carousel_coords)
+            above_carousel4[2] = 103.9
+            await asyncio.to_thread(robot.MovePose, *above_carousel4)
             
             # Grab wafer from carousel
-            await asyncio.to_thread(robot.MovePose, *CAROUSEL)
+            await asyncio.to_thread(robot.MovePose, *carousel_coords)
             await asyncio.to_thread(robot.Delay, 0.5)
             await asyncio.to_thread(robot.GripperClose)
             await asyncio.to_thread(robot.SetJointVel, ALIGN_SPEED)
             await asyncio.to_thread(robot.Delay, 0.5)
             
             # Staged exit from carousel
-            Above_Carousel3_Rev = copy.deepcopy(CAROUSEL)
-            Above_Carousel3_Rev[2] += 2.0000
-            await asyncio.to_thread(robot.MovePose, *Above_Carousel3_Rev)
+            above_carousel3 = copy.deepcopy(carousel_coords)
+            above_carousel3[2] = 103.9
+            await asyncio.to_thread(robot.MovePose, *above_carousel3)
             
-            Above_Carousel2_Rev = copy.deepcopy(CAROUSEL)
-            Above_Carousel2_Rev[2] += 8.0000
-            await asyncio.to_thread(robot.MovePose, *Above_Carousel2_Rev)
+            above_carousel2 = copy.deepcopy(carousel_coords)
+            above_carousel2[2] = 109.9
+            await asyncio.to_thread(robot.MovePose, *above_carousel2)
             
-            Above_Carousel1_Rev = copy.deepcopy(CAROUSEL)
-            Above_Carousel1_Rev[2] += 14.0000
-            await asyncio.to_thread(robot.MovePose, *Above_Carousel1_Rev)
+            above_carousel1 = copy.deepcopy(carousel_coords)
+            above_carousel1[2] = 115.9
+            await asyncio.to_thread(robot.MovePose, *above_carousel1)
             
             # Move through Y-away positions
-            move8_rev = copy.deepcopy(CAROUSEL)
-            move8_rev[1] += 2.0000
-            move8_rev[2] += 14.0000
+            move8_rev = copy.deepcopy(carousel_coords)
+            move8_rev[1] = -245.95
+            move8_rev[2] = 115.9
             await asyncio.to_thread(robot.MovePose, *move8_rev)
             await asyncio.to_thread(robot.Delay, 0.5)
+            
+            # Set blending and velocity for photogate movement
             await asyncio.to_thread(robot.SetBlending, 80)
             await asyncio.to_thread(robot.SetJointVel, SPEED)
             
-            move7_rev = copy.deepcopy(CAROUSEL)
-            move7_rev[1] += 31
-            move7_rev[2] += 18.1000
+            # Y-away position with precise coordinates
+            move7_rev = copy.deepcopy(carousel_coords)
+            move7_rev[1] = -216.95
+            move7_rev[2] = 120.0  # Exact height from reference
             await asyncio.to_thread(robot.MovePose, *move7_rev)
             
-            # Through photogate
-            await asyncio.to_thread(robot.MovePose, *C_PHOTOGATE)
-            await asyncio.to_thread(robot.MovePose, *T_PHOTOGATE)
+            # Through photogate in reverse order
+            await asyncio.to_thread(robot.MovePose, *c_photogate_coords)
+            await asyncio.to_thread(robot.MovePose, *t_photogate_coords)
             await asyncio.to_thread(robot.Delay, 0.5)
             
-            # Approach baking tray
-            move4_rev = copy.deepcopy(FIRST_BAKING_TRAY)
-            move4_rev[0] += GAP_WAFERS * i - 9.7
-            move4_rev[1] += 0.3
-            move4_rev[2] += 32.058
-            await asyncio.to_thread(robot.MovePose, *move4_rev)
+            # Approach to baking tray with correct coordinates
+            x_offset = -151.3702 + 2.7 * i
+            baking_approach = [x_offset, -170.2871, 60.0, -178.2908, -69.0556, 1.7626]
+            await asyncio.to_thread(robot.MovePose, *baking_approach)
             
+            # Set velocity and blending for precise approach
             await asyncio.to_thread(robot.SetJointVel, ALIGN_SPEED)
             await asyncio.to_thread(robot.Delay, 0.5)
             await asyncio.to_thread(robot.SetBlending, 100)
             
-            move3_rev = copy.deepcopy(FIRST_BAKING_TRAY)
-            move3_rev[0] += GAP_WAFERS * i - 7.7
-            move3_rev[1] += 0.3
-            move3_rev[2] += 22
-            await asyncio.to_thread(robot.MovePose, *move3_rev)
+            # Approach points with precise coordinates from reference
+            baking_approach2 = [x_offset + 2.0, -170.2871, 49.942, -178.2908, -69.0556, 1.7626]
+            await asyncio.to_thread(robot.MovePose, *baking_approach2)
             
-            move2_rev = copy.deepcopy(FIRST_BAKING_TRAY)
-            move2_rev[0] += GAP_WAFERS * i - 2.1
-            move2_rev[1] += 0.3
-            move2_rev[2] += 6
-            await asyncio.to_thread(robot.MovePose, *move2_rev)
+            baking_approach3 = [x_offset + 2.0 + 5.6, -170.2871, 33.942, -178.2908, -69.0556, 1.7626]
+            await asyncio.to_thread(robot.MovePose, *baking_approach3)
             
-            move1_rev = copy.deepcopy(FIRST_BAKING_TRAY)
-            move1_rev[0] += GAP_WAFERS * i - 0.7
-            move1_rev[1] += 0.3
-            move1_rev[2] += 2.8
-            await asyncio.to_thread(robot.MovePose, *move1_rev)
+            baking_approach4 = [x_offset + 2.0 + 5.6 + 1.4, -170.2871, 30.742, -178.2908, -69.0556, 1.7626]
+            await asyncio.to_thread(robot.MovePose, *baking_approach4)
             await asyncio.to_thread(robot.Delay, 1)
             
-            # Release wafer to baking tray
+            # Release wafer
             await asyncio.to_thread(robot.GripperOpen)
             await asyncio.to_thread(robot.Delay, 0.5)
             
-            above_baking_rev = copy.deepcopy(FIRST_BAKING_TRAY)
-            above_baking_rev[0] += GAP_WAFERS * i
-            above_baking_rev[2] += 22.058
-            await asyncio.to_thread(robot.MovePose, *above_baking_rev)
+            # Final position - using the correct formula from reference
+            wafer_position = copy.deepcopy(FIRST_BAKING_TRAY)
+            wafer_position[0] += GAP_WAFERS * i
+            wafer_position[2] = 50.0  # Set exact height
+            await asyncio.to_thread(robot.MovePose, *wafer_position)
             
             # Return to safe point
             await asyncio.to_thread(robot.SetJointVel, EMPTY_SPEED)
             await asyncio.to_thread(robot.Delay, 0.2)
             await asyncio.to_thread(robot.SetBlending, 100)
-            await asyncio.to_thread(robot.MovePose, *CAROUSEL_SAFEPOINT)
+            
+            carousel_safepoint_values = [25.567, -202.630, 179.700, 90.546, 0.866, -90.882]
+            await asyncio.to_thread(robot.MovePose, *carousel_safepoint_values)
 
         await ensure_robot_status(robot)
         logger.info("Successfully completed empty-carousel sequence")
@@ -644,6 +685,7 @@ async def empty_carousel_sequence(
         }
     except Exception as e:
         logger.error(f"Error in empty-carousel sequence: {e}")
+        await attempt_robot_recovery(robot_manager.meca_robot)
         raise
 
 # -----------------------------------------------------------------------------
