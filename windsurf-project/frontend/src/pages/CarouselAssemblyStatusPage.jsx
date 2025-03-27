@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import handleCarouselAssembly from '../utils/services/handleCarouselAssembly';
+import websocketService from '../utils/services/websocketService';
 
 const baseButtonClasses =
   'px-4 py-2 rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200';
@@ -15,6 +16,51 @@ function CarouselAssemblyStatusPage() {
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [websocketStatus, setWebsocketStatus] = useState(
+    websocketService.isConnected() ? 'connected' : 'disconnected'
+  );
+
+  // Setup WebSocket event listeners
+  useEffect(() => {
+    // Function to handle WebSocket status updates
+    const handleWebsocketStatus = (message) => {
+      if (message.type === 'status_update' && message.data?.type === 'backend') {
+        setWebsocketStatus(message.data.status);
+      }
+      
+      // Handle command responses specific to carousel assembly
+      if (message.type === 'command_response' && 
+          (message.command_type === 'carousel' || message.command_type === 'meca_carousel')) {
+        if (message.status === 'success') {
+          setStatus(message.message || 'Carousel assembly completed successfully!');
+          setLoading(false);
+        } else if (message.status === 'error') {
+          setError(`Error: ${message.message || 'Unknown error occurred'}`);
+          setLoading(false);
+        }
+      }
+    };
+
+    // Register the event listener
+    const removeListener = websocketService.onMessage(handleWebsocketStatus);
+
+    // Try to connect if not already connected
+    if (!websocketService.isConnected()) {
+      websocketService.connect()
+        .then(() => {
+          setWebsocketStatus('connected');
+        })
+        .catch((err) => {
+          console.error('Failed to connect to WebSocket:', err);
+          setWebsocketStatus('disconnected');
+        });
+    }
+
+    // Clean up on unmount
+    return () => {
+      if (removeListener) removeListener();
+    };
+  }, []);
 
   const handleAssemble = async () => {
     setLoading(true);
@@ -24,7 +70,14 @@ function CarouselAssemblyStatusPage() {
     try {
       // Default start at 0 and process 11 wafers as defined in the backend
       const response = await handleCarouselAssembly(carouselNumber, trayNumber);
+      
+      // The handleCarouselAssembly function will handle WebSocket and HTTP fallback
+      // If we get here, it means we got a direct response (most likely HTTP)
       setStatus('Carousel assembly completed successfully!');
+      
+      if (response && response.message) {
+        setStatus(response.message);
+      }
     } catch (error) {
       console.error('Error during carousel assembly:', error);
 
@@ -66,6 +119,13 @@ function CarouselAssemblyStatusPage() {
   return (
     <div className='flex flex-col items-center justify-center h-screen'>
       <h1 className='text-3xl font-semibold mb-4'>Carousel Assembly Status</h1>
+      
+      <div className='mb-4 text-sm'>
+        <p className={`${websocketStatus === 'connected' ? 'text-green-600' : 'text-red-600'}`}>
+          WebSocket: {websocketStatus}
+        </p>
+      </div>
+      
       <p className='text-lg mb-2'>
         Carousel Number: <span className='font-medium'>{carouselNumber}</span>
       </p>

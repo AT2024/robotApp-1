@@ -1,0 +1,849 @@
+2025-03-24 15:42:19,265 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 15:42:19,266 - websocket_handler - INFO - Broadcasting status change for backend: unknown -> connected
+2025-03-24 15:42:19,277 - websocket_handler - INFO - Broadcasting status change for meca: unknown -> disconnected
+2025-03-24 15:42:19,277 - websocket_handler - INFO - Broadcasting status change for arduino: unknown -> connected
+2025-03-24 15:42:19,278 - websocket_handler - INFO - Broadcasting status change for ot2: unknown -> disconnected
+2025-03-24 15:42:19,281 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 15:42:19,281 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 15:42:28,952 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 15:42:28,968 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 15:42:41,887 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 15:42:41,887 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 15:42:48,956 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 15:42:48,961 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 15:42:58,946 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 15:42:58,947 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 15:43:08,957 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 15:43:08,957 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 15:43:18,942 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 15:43:18,944 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 15:43:30,181 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 15:43:30,192 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 15:43:39,122 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 15:43:39,124 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 15:43:49,119 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 15:43:49,119 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 15:43:59,115 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 15:43:59,143 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 15:44:12,311 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 15:44:12,312 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 15:44:19,120 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 15:44:19,120 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 15:44:29,115 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 15:44:29,129 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 15:44:48,406 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 15:44:48,408 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 15:44:48,515 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 16:35:08,038 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 16:35:08,039 - websocket_handler - INFO - Broadcasting status change for backend: unknown -> connected
+2025-03-24 16:35:08,042 - websocket_handler - INFO - Broadcasting status change for meca: unknown -> disconnected
+2025-03-24 16:35:08,043 - websocket_handler - INFO - Broadcasting status change for arduino: unknown -> connected
+2025-03-24 16:35:08,043 - websocket_handler - INFO - Broadcasting status change for ot2: unknown -> disconnected
+2025-03-24 16:35:08,410 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:35:08,411 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:35:21,525 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:35:21,525 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:35:21,755 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 16:35:22,442 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 16:35:22,450 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:35:22,450 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:35:32,147 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:35:32,147 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:35:42,143 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:35:42,143 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:35:48,817 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 16:37:16,499 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 16:37:16,499 - websocket_handler - INFO - Broadcasting status change for backend: unknown -> connected
+2025-03-24 16:37:16,501 - websocket_handler - INFO - Broadcasting status change for meca: unknown -> disconnected
+2025-03-24 16:37:16,502 - websocket_handler - INFO - Broadcasting status change for arduino: unknown -> connected
+2025-03-24 16:37:16,503 - websocket_handler - INFO - Broadcasting status change for ot2: unknown -> disconnected
+2025-03-24 16:37:21,767 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:37:21,767 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:37:26,207 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:37:26,208 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:37:36,206 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:37:36,207 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:37:46,207 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:37:46,209 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:37:57,886 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:37:57,886 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:38:06,194 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:38:06,196 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:38:16,206 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:38:16,211 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:38:26,194 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:38:26,195 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:38:40,077 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:38:40,078 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:38:47,173 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:38:47,174 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:38:57,183 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:38:57,183 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:39:07,180 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:39:07,181 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:39:16,198 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:39:16,199 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:39:28,371 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:39:28,373 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:39:36,203 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:39:36,205 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:39:46,201 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:39:46,202 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:39:56,209 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:39:56,209 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:40:10,580 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:40:10,581 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:40:16,199 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:40:16,200 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:40:26,200 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:40:26,201 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:40:36,199 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:40:36,200 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:40:46,682 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:40:46,683 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:40:56,197 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:40:56,198 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:41:06,206 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:41:06,208 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:41:16,210 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:41:16,211 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:41:28,889 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:41:28,889 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:41:36,200 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:41:36,201 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:41:46,199 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:41:46,200 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:41:52,913 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 16:41:53,990 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 16:41:54,498 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:41:54,499 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:42:04,179 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:42:04,180 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:42:11,068 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 16:45:39,306 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 16:45:39,306 - websocket_handler - INFO - Broadcasting status change for backend: unknown -> connected
+2025-03-24 16:45:39,309 - websocket_handler - INFO - Broadcasting status change for meca: unknown -> disconnected
+2025-03-24 16:45:39,310 - websocket_handler - INFO - Broadcasting status change for arduino: unknown -> connected
+2025-03-24 16:45:39,310 - websocket_handler - INFO - Broadcasting status change for ot2: unknown -> disconnected
+2025-03-24 16:45:39,324 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:45:39,326 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:45:49,180 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:45:49,181 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:46:03,531 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:46:03,532 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:46:09,186 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:46:09,186 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:46:19,193 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:46:19,194 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:46:29,004 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:46:29,004 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:46:39,662 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:46:39,663 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:46:49,180 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:46:49,180 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:46:59,176 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:46:59,177 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:47:09,191 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:47:09,192 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:47:21,826 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:47:21,826 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:47:29,179 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:47:29,179 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:47:39,180 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:47:39,182 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:47:49,183 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:47:49,183 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:48:04,032 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:48:04,034 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:48:10,125 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:48:10,126 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:48:19,177 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:48:19,179 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:49:05,553 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:49:05,553 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:49:10,014 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:49:10,014 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:49:19,020 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:49:19,021 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:49:29,008 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:49:29,009 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:49:39,009 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:49:39,010 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:49:49,006 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:49:49,006 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:49:59,189 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:49:59,190 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:50:10,616 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:50:10,617 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:50:19,191 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:50:19,191 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:50:29,196 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:50:29,197 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:50:39,198 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:50:39,199 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:50:52,822 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 16:57:07,123 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 16:57:07,123 - websocket_handler - INFO - Broadcasting status change for backend: unknown -> connected
+2025-03-24 16:57:07,126 - websocket_handler - INFO - Broadcasting status change for meca: unknown -> disconnected
+2025-03-24 16:57:07,126 - websocket_handler - INFO - Broadcasting status change for arduino: unknown -> connected
+2025-03-24 16:57:07,127 - websocket_handler - INFO - Broadcasting status change for ot2: unknown -> disconnected
+2025-03-24 16:57:07,130 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:57:07,131 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:57:19,198 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:57:19,198 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:57:26,300 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:57:26,300 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:57:36,305 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:57:36,305 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:57:46,314 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:57:46,316 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:57:56,306 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:57:56,307 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:58:01,421 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 16:58:01,424 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 16:58:01,430 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:58:01,431 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:58:09,998 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:58:09,998 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:58:20,001 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:58:20,002 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:58:30,200 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:58:30,202 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 16:58:30,232 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 16:58:38,177 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 16:58:38,181 - websocket_handler - INFO - Broadcasting status change for backend: unknown -> connected
+2025-03-24 16:58:38,184 - websocket_handler - INFO - Broadcasting status change for meca: unknown -> disconnected
+2025-03-24 16:58:38,186 - websocket_handler - INFO - Broadcasting status change for arduino: unknown -> connected
+2025-03-24 16:58:38,187 - websocket_handler - INFO - Broadcasting status change for ot2: unknown -> connected
+2025-03-24 16:58:38,793 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:58:38,794 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 16:58:48,205 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:58:48,206 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 16:58:58,203 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:58:58,203 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 16:59:08,207 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:59:08,208 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 16:59:18,211 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:59:18,211 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 16:59:28,202 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:59:28,202 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 16:59:38,212 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:59:38,212 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 16:59:48,203 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:59:48,204 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 16:59:58,214 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 16:59:58,215 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:00:08,203 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:00:08,203 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:00:18,203 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:00:18,203 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:00:28,215 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:00:28,225 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:00:28,277 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 17:00:41,941 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 17:00:41,943 - websocket_handler - INFO - Broadcasting status change for backend: unknown -> connected
+2025-03-24 17:00:41,945 - websocket_handler - INFO - Broadcasting status change for meca: unknown -> disconnected
+2025-03-24 17:00:41,946 - websocket_handler - INFO - Broadcasting status change for arduino: unknown -> connected
+2025-03-24 17:00:41,947 - websocket_handler - INFO - Broadcasting status change for ot2: unknown -> connected
+2025-03-24 17:00:41,950 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:00:41,950 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:00:41,955 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 17:06:52,985 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 17:06:52,986 - websocket_handler - INFO - Broadcasting status change for backend: unknown -> connected
+2025-03-24 17:06:52,988 - websocket_handler - INFO - Broadcasting status change for meca: unknown -> disconnected
+2025-03-24 17:06:52,989 - websocket_handler - INFO - Broadcasting status change for arduino: unknown -> connected
+2025-03-24 17:06:52,989 - websocket_handler - INFO - Broadcasting status change for ot2: unknown -> connected
+2025-03-24 17:06:52,999 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:06:53,000 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:07:03,210 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:07:03,219 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:07:13,204 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:07:13,205 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:07:23,209 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:07:23,209 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:07:33,207 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:07:33,208 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:07:43,208 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:07:43,209 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:07:53,215 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:07:53,216 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:08:14,201 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:08:14,202 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:08:43,155 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:08:43,155 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:08:46,437 - websocket_handler - INFO - Received message of type: command
+2025-03-24 17:08:46,438 - websocket_handler - INFO - Received command: skip_step with data: {'stepIndex': 0}
+2025-03-24 17:08:46,440 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:08:46,441 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:08:48,032 - websocket_handler - INFO - Received message of type: command
+2025-03-24 17:08:48,032 - websocket_handler - INFO - Received command: skip_step with data: {'stepIndex': 1}
+2025-03-24 17:08:48,035 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:08:48,035 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:08:52,680 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:08:52,682 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:08:56,740 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 17:08:57,518 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 17:08:57,530 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:08:57,530 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:09:08,212 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:09:08,213 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:09:18,207 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:09:18,208 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:09:28,201 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:09:28,202 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:09:38,205 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:09:38,205 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:09:47,229 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:09:47,230 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:09:58,210 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:09:58,211 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:10:07,216 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:10:07,217 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:10:17,228 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:10:17,230 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:10:28,211 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:10:28,212 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:10:38,206 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:10:38,206 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:10:47,229 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:10:47,229 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:11:14,202 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:11:14,203 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:12:14,200 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:12:14,201 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:12:21,993 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:12:21,993 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:12:28,206 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:12:28,207 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:12:38,213 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:12:38,213 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:12:48,214 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:12:48,214 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:12:58,212 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:12:58,213 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:13:08,203 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:13:08,205 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:13:18,203 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:13:18,204 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:14:14,216 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:14:14,218 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:15:14,215 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:15:14,216 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:16:14,210 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:16:14,212 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:16:19,348 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:16:19,349 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:16:25,210 - websocket_handler - INFO - Received message of type: command
+2025-03-24 17:16:25,210 - websocket_handler - INFO - Received command: skip_step with data: {'stepIndex': 0}
+2025-03-24 17:16:25,214 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:16:25,214 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:16:25,531 - websocket_handler - INFO - Received message of type: command
+2025-03-24 17:16:25,533 - websocket_handler - INFO - Received command: skip_step with data: {'stepIndex': 1}
+2025-03-24 17:16:25,535 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:16:25,535 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:16:27,237 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:16:27,238 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:16:37,474 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:16:37,476 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:16:47,236 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:16:47,236 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:16:53,166 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 17:16:54,474 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 17:16:54,905 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:16:54,905 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:17:04,169 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:17:04,170 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:17:14,176 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:17:14,177 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:17:23,345 - websocket_handler - INFO - Received message of type: command
+2025-03-24 17:17:23,345 - websocket_handler - INFO - Received command: skip_step with data: {'stepIndex': 0}
+2025-03-24 17:17:23,348 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:17:23,349 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:17:23,764 - websocket_handler - INFO - Received message of type: command
+2025-03-24 17:17:23,765 - websocket_handler - INFO - Received command: skip_step with data: {'stepIndex': 1}
+2025-03-24 17:17:23,767 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:17:23,767 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:17:24,177 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:17:24,178 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:17:34,172 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:17:34,174 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:17:44,171 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:17:44,171 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:17:54,164 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:17:54,167 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:17:55,438 - websocket_handler - INFO - Received message of type: command
+2025-03-24 17:17:55,454 - websocket_handler - INFO - Received command: ot2_protocol with data: {'trayNumber': '2', 'vialNumber': '3'}
+2025-03-24 17:18:04,165 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:18:04,166 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:18:14,164 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:18:14,165 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:18:24,169 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:18:24,170 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:18:31,304 - websocket_handler - INFO - Received message of type: command
+2025-03-24 17:18:31,304 - websocket_handler - INFO - Received command: emergency_stop with data: {'robots': {'meca': False, 'ot2': True, 'arduino': True}}
+2025-03-24 17:18:34,165 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:18:34,165 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'disconnected', 'ot2': 'connected'}
+2025-03-24 17:18:34,166 - websocket_handler - INFO - Status changed for arduino: connected -> disconnected
+2025-03-24 17:18:44,167 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:18:44,167 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'disconnected', 'ot2': 'connected'}
+2025-03-24 17:18:54,171 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:18:54,173 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'disconnected', 'ot2': 'connected'}
+2025-03-24 17:19:04,178 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:19:04,179 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'disconnected', 'ot2': 'disconnected'}
+2025-03-24 17:19:04,179 - websocket_handler - INFO - Status changed for ot2: connected -> disconnected
+2025-03-24 17:19:14,219 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:19:14,220 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'disconnected', 'ot2': 'disconnected'}
+2025-03-24 17:19:24,209 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:19:24,210 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'disconnected', 'ot2': 'disconnected'}
+2025-03-24 17:19:24,256 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 17:20:46,634 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 17:20:46,634 - websocket_handler - INFO - Broadcasting status change for backend: unknown -> connected
+2025-03-24 17:20:46,636 - websocket_handler - INFO - Broadcasting status change for meca: unknown -> disconnected
+2025-03-24 17:20:46,636 - websocket_handler - INFO - Broadcasting status change for arduino: unknown -> connected
+2025-03-24 17:20:46,636 - websocket_handler - INFO - Broadcasting status change for ot2: unknown -> disconnected
+2025-03-24 17:20:47,116 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:20:47,117 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'disconnected'}
+2025-03-24 17:20:57,214 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:20:57,215 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:20:57,215 - websocket_handler - INFO - Status changed for ot2: disconnected -> connected
+2025-03-24 17:21:07,219 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:21:07,219 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:21:17,218 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:21:17,218 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:21:27,224 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:21:27,225 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:21:37,221 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:21:37,222 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:21:47,216 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:21:47,217 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:22:14,222 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:22:14,222 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:23:14,212 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:23:14,212 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:24:14,220 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:24:14,221 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:25:14,221 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:25:14,222 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:26:14,218 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:26:14,218 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:26:15,326 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 17:29:38,649 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 17:29:38,650 - websocket_handler - INFO - Broadcasting status change for backend: unknown -> connected
+2025-03-24 17:29:38,652 - websocket_handler - INFO - Broadcasting status change for meca: unknown -> disconnected
+2025-03-24 17:29:38,653 - websocket_handler - INFO - Broadcasting status change for arduino: unknown -> connected
+2025-03-24 17:29:38,654 - websocket_handler - INFO - Broadcasting status change for ot2: unknown -> connected
+2025-03-24 17:29:39,155 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:29:39,156 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:29:48,210 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:29:48,211 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:29:58,217 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:29:58,218 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:30:08,250 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:30:08,251 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:30:18,223 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:30:18,223 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:30:28,216 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:30:28,217 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:30:38,209 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:30:38,210 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:31:14,215 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:31:14,216 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:32:14,215 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:32:14,216 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:33:14,227 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:33:14,227 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:34:14,221 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:34:14,222 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:35:14,238 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:35:14,239 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:47:46,930 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 17:47:46,931 - websocket_handler - INFO - Broadcasting status change for backend: unknown -> connected
+2025-03-24 17:47:46,933 - websocket_handler - INFO - Broadcasting status change for meca: unknown -> disconnected
+2025-03-24 17:47:46,934 - websocket_handler - INFO - Broadcasting status change for arduino: unknown -> connected
+2025-03-24 17:47:46,935 - websocket_handler - INFO - Broadcasting status change for ot2: unknown -> connected
+2025-03-24 17:47:46,938 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:47:46,939 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:47:55,251 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:47:55,251 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:48:05,243 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:48:05,243 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:48:15,255 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:48:15,256 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:48:25,244 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:48:25,245 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:48:35,244 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:48:35,244 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:48:45,243 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:48:45,243 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:49:14,245 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:49:14,246 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:50:14,247 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:50:14,248 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:51:14,245 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:51:14,245 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:52:14,257 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:52:14,258 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:53:14,253 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:53:14,254 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:54:14,250 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:54:14,251 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:55:14,242 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:55:14,242 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:55:46,121 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 17:56:09,630 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 17:56:10,136 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:56:10,137 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:56:20,244 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:56:20,244 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:56:30,251 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:56:30,252 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:56:40,238 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:56:40,239 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:56:50,272 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:56:50,273 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:57:00,248 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:57:00,249 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:57:10,255 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:57:10,256 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:58:14,251 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:58:14,251 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 17:59:14,334 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 17:59:14,334 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 18:00:14,253 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 18:00:14,253 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 18:01:14,238 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 18:01:14,239 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 18:02:14,240 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 18:02:14,240 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'disconnected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 18:24:48,528 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 21:28:16,110 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 21:28:16,110 - websocket_handler - INFO - Broadcasting status change for backend: unknown -> connected
+2025-03-24 21:28:16,116 - websocket_handler - INFO - Broadcasting status change for meca: unknown -> connected
+2025-03-24 21:28:16,117 - websocket_handler - INFO - Broadcasting status change for arduino: unknown -> connected
+2025-03-24 21:28:16,119 - websocket_handler - INFO - Broadcasting status change for ot2: unknown -> connected
+2025-03-24 21:28:16,238 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:28:16,239 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:28:22,060 - websocket_handler - INFO - Received message of type: command
+2025-03-24 21:28:22,061 - websocket_handler - INFO - Received command: meca_pickup with data: {}
+2025-03-24 21:28:25,798 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:28:25,799 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:28:35,797 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:28:35,798 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:28:45,801 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:28:45,803 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:28:54,430 - websocket_handler - INFO - Received message of type: command
+2025-03-24 21:28:54,430 - websocket_handler - INFO - Received command: emergency_stop with data: {'robots': {'meca': True, 'ot2': True, 'arduino': True}}
+2025-03-24 21:28:56,425 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:28:56,425 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'disconnected', 'ot2': 'connected'}
+2025-03-24 21:28:56,426 - websocket_handler - INFO - Status changed for arduino: connected -> disconnected
+2025-03-24 21:29:05,800 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:29:05,800 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'disconnected', 'ot2': 'connected'}
+2025-03-24 21:29:15,789 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:29:15,790 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'disconnected', 'ot2': 'connected'}
+2025-03-24 21:29:25,801 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:29:25,802 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'disconnected', 'ot2': 'connected'}
+2025-03-24 21:29:35,800 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:29:35,800 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'disconnected', 'ot2': 'connected'}
+2025-03-24 21:29:45,791 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:29:45,791 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'disconnected', 'ot2': 'connected'}
+2025-03-24 21:29:56,781 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:29:56,781 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'disconnected', 'ot2': 'connected'}
+2025-03-24 21:30:21,790 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:30:21,790 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'disconnected', 'ot2': 'connected'}
+2025-03-24 21:30:37,899 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 21:35:54,633 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 21:35:54,634 - websocket_handler - INFO - Broadcasting status change for backend: unknown -> connected
+2025-03-24 21:35:54,637 - websocket_handler - INFO - Broadcasting status change for meca: unknown -> connected
+2025-03-24 21:35:54,638 - websocket_handler - INFO - Broadcasting status change for arduino: unknown -> connected
+2025-03-24 21:35:54,639 - websocket_handler - INFO - Broadcasting status change for ot2: unknown -> connected
+2025-03-24 21:35:54,643 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:35:54,645 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:36:01,063 - websocket_handler - INFO - Received message of type: command
+2025-03-24 21:36:01,064 - websocket_handler - INFO - Received command: meca_pickup with data: {}
+2025-03-24 21:36:04,341 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:36:04,342 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:36:14,339 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:36:14,340 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:36:24,338 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:36:24,338 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:36:34,341 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:36:34,341 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:36:44,339 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:36:44,339 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:36:55,286 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:36:55,287 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:37:04,337 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:37:04,338 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:37:14,340 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:37:14,341 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:37:20,692 - websocket_handler - INFO - Received message of type: command
+2025-03-24 21:37:20,693 - websocket_handler - INFO - Received command: skip_step with data: {'stepIndex': 0}
+2025-03-24 21:37:20,696 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:37:20,696 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:37:24,329 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:37:24,332 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:37:31,230 - websocket_handler - INFO - Received message of type: command
+2025-03-24 21:37:31,231 - websocket_handler - INFO - Received command: arduino_vacuum with data: {'operation': 'start', 'parameters': {'mode': 'initial'}}
+2025-03-24 21:37:31,231 - websocket_handler - INFO - Handling Arduino operation: start
+2025-03-24 21:37:33,645 - websocket_handler - INFO - Received message of type: command
+2025-03-24 21:37:33,646 - websocket_handler - INFO - Received command: skip_step with data: {'stepIndex': 1}
+2025-03-24 21:37:33,648 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:37:33,648 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:37:34,326 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:37:34,327 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:37:44,334 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:37:44,334 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:37:54,340 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:37:54,341 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:38:04,332 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:38:04,333 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:38:14,338 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:38:14,339 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:38:24,338 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:38:24,339 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:38:34,328 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:38:34,331 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:38:44,326 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:38:44,326 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:38:54,336 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:38:54,337 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:39:04,341 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:39:04,342 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:39:14,336 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:39:14,337 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:39:24,343 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:39:24,390 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:39:34,339 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:39:34,351 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:39:44,327 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:39:44,329 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:39:54,334 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:39:54,335 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:40:04,327 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:40:04,328 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:40:14,331 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:40:14,332 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:40:24,330 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:40:24,330 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:40:34,484 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:40:34,485 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:40:44,326 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:40:44,327 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:40:54,335 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:40:54,336 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:41:04,330 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:41:04,331 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:41:14,333 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:41:14,333 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:41:24,330 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:41:24,330 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:41:28,195 - websocket_handler - INFO - Received message of type: command
+2025-03-24 21:41:28,196 - websocket_handler - INFO - Received command: ot2_protocol with data: {'trayNumber': '11', 'vialNumber': '22'}
+2025-03-24 21:41:37,963 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:41:37,963 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:41:44,331 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:41:44,332 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:41:54,335 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:41:54,335 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:42:04,334 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 21:42:04,334 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 21:42:08,645 - websocket_handler - INFO - Received message of type: command
+2025-03-24 21:42:08,645 - websocket_handler - INFO - Received command: emergency_stop with data: {'robots': {'meca': True, 'ot2': True, 'arduino': True}}
+2025-03-24 21:42:13,548 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 22:19:16,991 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 22:19:16,992 - websocket_handler - INFO - Broadcasting status change for backend: unknown -> connected
+2025-03-24 22:19:16,994 - websocket_handler - INFO - Broadcasting status change for meca: unknown -> connected
+2025-03-24 22:19:16,994 - websocket_handler - INFO - Broadcasting status change for arduino: unknown -> connected
+2025-03-24 22:19:16,995 - websocket_handler - INFO - Broadcasting status change for ot2: unknown -> connected
+2025-03-24 22:19:16,997 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:19:16,997 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:19:19,823 - websocket_handler - INFO - Received message of type: command
+2025-03-24 22:19:19,824 - websocket_handler - INFO - Received command: skip_step with data: {'stepIndex': 0}
+2025-03-24 22:19:19,826 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:19:19,827 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:19:20,212 - websocket_handler - INFO - Received message of type: command
+2025-03-24 22:19:20,214 - websocket_handler - INFO - Received command: skip_step with data: {'stepIndex': 1}
+2025-03-24 22:19:20,215 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:19:20,215 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:19:23,055 - websocket_handler - INFO - Received message of type: command
+2025-03-24 22:19:23,056 - websocket_handler - INFO - Received command: ot2_protocol with data: {'trayNumber': '1', 'vialNumber': '2'}
+2025-03-24 22:19:34,665 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:19:34,665 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:19:36,689 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:19:36,689 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:19:46,696 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:19:46,697 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:19:56,688 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:19:56,690 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:20:07,406 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:20:07,407 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:20:17,404 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:20:17,405 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:20:27,206 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:20:27,206 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:20:36,697 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:20:36,698 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:20:47,406 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:20:47,409 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:20:57,398 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:20:57,399 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:21:07,399 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:21:07,399 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:21:17,407 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:21:17,407 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:21:27,407 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:21:27,408 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:21:37,408 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:21:37,408 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:21:46,686 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:21:46,687 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:21:57,409 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:21:57,409 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:22:08,330 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:22:08,330 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:22:17,407 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:22:17,408 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:22:27,398 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:22:27,398 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:22:37,409 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:22:37,410 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:22:47,402 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:22:47,402 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:23:21,409 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:23:21,411 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:24:21,398 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:24:21,402 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:25:21,407 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:25:21,408 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:26:11,622 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 22:28:06,306 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 22:28:08,628 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:28:08,628 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:28:16,409 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:28:16,409 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:28:26,511 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:28:26,511 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:28:36,405 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:28:36,405 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:28:46,408 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:28:46,409 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:29:21,405 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:29:21,406 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:30:21,405 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:30:21,406 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:31:21,407 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:31:21,407 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:32:21,406 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:32:21,407 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:33:12,140 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.
+2025-03-24 22:36:30,378 - websocket_handler - INFO - New WebSocket connection established. Total connections: 1
+2025-03-24 22:36:30,380 - websocket_handler - INFO - Broadcasting status change for backend: unknown -> connected
+2025-03-24 22:36:30,382 - websocket_handler - INFO - Broadcasting status change for meca: unknown -> connected
+2025-03-24 22:36:30,382 - websocket_handler - INFO - Broadcasting status change for arduino: unknown -> connected
+2025-03-24 22:36:30,383 - websocket_handler - INFO - Broadcasting status change for ot2: unknown -> connected
+2025-03-24 22:36:30,555 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:36:30,555 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:36:32,292 - websocket_handler - INFO - Received message of type: command
+2025-03-24 22:36:32,293 - websocket_handler - INFO - Received command: skip_step with data: {'stepIndex': 0}
+2025-03-24 22:36:32,295 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:36:32,295 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:36:32,682 - websocket_handler - INFO - Received message of type: command
+2025-03-24 22:36:32,683 - websocket_handler - INFO - Received command: skip_step with data: {'stepIndex': 1}
+2025-03-24 22:36:32,684 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:36:32,684 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:36:35,166 - websocket_handler - INFO - Received message of type: command
+2025-03-24 22:36:35,167 - websocket_handler - INFO - Received command: ot2_protocol with data: {'trayNumber': '1', 'vialNumber': '2'}
+2025-03-24 22:36:49,743 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:36:49,743 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:36:50,078 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:36:50,079 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:37:00,087 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:37:00,088 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:37:10,088 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:37:10,089 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:37:20,079 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:37:20,079 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:37:30,078 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:37:30,079 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:37:40,075 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:37:40,076 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:37:50,090 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:37:50,091 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:38:00,408 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:38:00,408 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:38:10,404 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:38:10,404 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:38:20,400 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:38:20,402 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:38:30,406 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:38:30,407 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:38:40,401 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:38:40,402 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:38:50,411 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:38:50,412 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:39:21,401 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:39:21,401 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:40:02,011 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:40:02,011 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:40:05,079 - websocket_handler - INFO - Received message of type: command
+2025-03-24 22:40:05,080 - websocket_handler - INFO - Received command: skip_step with data: {'stepIndex': 2}
+2025-03-24 22:40:05,091 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:40:05,092 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:40:07,305 - websocket_handler - INFO - Received message of type: command
+2025-03-24 22:40:07,305 - websocket_handler - INFO - Received command: skip_step with data: {'stepIndex': 3}
+2025-03-24 22:40:07,308 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:40:07,308 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:40:08,716 - websocket_handler - INFO - Received message of type: command
+2025-03-24 22:40:08,716 - websocket_handler - INFO - Received command: skip_step with data: {'stepIndex': 4}
+2025-03-24 22:40:08,718 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:40:08,718 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:40:10,082 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:40:10,086 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:40:10,898 - websocket_handler - INFO - Received message of type: command
+2025-03-24 22:40:10,898 - websocket_handler - INFO - Received command: skip_step with data: {'stepIndex': 5}
+2025-03-24 22:40:10,899 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:40:10,900 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:40:12,646 - websocket_handler - INFO - Received message of type: command
+2025-03-24 22:40:12,647 - websocket_handler - INFO - Received command: skip_step with data: {'stepIndex': 6}
+2025-03-24 22:40:12,649 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:40:12,650 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:40:20,080 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:40:20,082 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:40:30,083 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:40:30,085 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:40:40,084 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:40:40,085 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:40:46,561 - websocket_handler - INFO - Received message of type: command
+2025-03-24 22:40:46,562 - websocket_handler - INFO - Received command: meca_drop with data: {'start': 0, 'count': 5, 'is_last_batch': True}
+2025-03-24 22:42:00,301 - websocket_handler - INFO - Completed drop sequence, robot returned to home
+2025-03-24 22:42:00,301 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:42:00,303 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:42:00,303 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:42:00,304 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:42:00,304 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:42:00,305 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:42:00,306 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:42:00,306 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:42:00,306 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:42:00,307 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:42:00,307 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:42:00,308 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:42:00,308 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:42:00,309 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:42:00,309 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:42:00,310 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:42:10,091 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:42:10,092 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:42:20,095 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:42:20,096 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:42:48,186 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:42:48,187 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:42:48,187 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:42:48,187 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:42:51,022 - websocket_handler - INFO - Received message of type: command
+2025-03-24 22:42:51,022 - websocket_handler - INFO - Received command: skip_step with data: {'stepIndex': 0}
+2025-03-24 22:42:51,023 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:42:51,023 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:42:58,192 - websocket_handler - INFO - Received message of type: get_status
+2025-03-24 22:42:58,193 - websocket_handler - INFO - Status request received. Current status: {'backend': 'connected', 'meca': 'connected', 'arduino': 'connected', 'ot2': 'connected'}
+2025-03-24 22:50:29,460 - websocket_handler - ERROR - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close' or response already completed.

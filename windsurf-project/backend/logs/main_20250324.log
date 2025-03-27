@@ -1,0 +1,138 @@
+2025-03-24 15:40:22,697 - main - INFO - Starting application initialization...
+2025-03-24 15:40:22,707 - main - INFO - Application managers initialized successfully
+2025-03-24 15:40:28,919 - main - INFO - Application startup completed successfully
+2025-03-24 15:42:19,279 - main - INFO - Client client-2231041737040 connected successfully
+2025-03-24 15:44:48,515 - main - INFO - Client client-2231041737040 disconnected normally
+2025-03-24 15:44:48,516 - main - INFO - Client client-2231041737040 connection cleaned up successfully
+2025-03-24 15:44:48,622 - main - INFO - Starting application shutdown...
+2025-03-24 15:44:48,627 - main - INFO - Application shutdown completed successfully
+2025-03-24 15:45:04,964 - main - INFO - Starting application initialization...
+2025-03-24 15:45:04,975 - main - INFO - Application managers initialized successfully
+2025-03-24 15:45:11,100 - main - INFO - Application startup completed successfully
+2025-03-24 16:35:08,044 - main - INFO - Client client-1584709036240 connected successfully
+2025-03-24 16:35:21,754 - main - INFO - Client client-1584709036240 disconnected normally
+2025-03-24 16:35:21,755 - main - INFO - Client client-1584709036240 connection cleaned up successfully
+2025-03-24 16:35:22,444 - main - INFO - Client client-1584710303248 connected successfully
+2025-03-24 16:35:48,817 - main - INFO - Client client-1584710303248 disconnected normally
+2025-03-24 16:35:48,818 - main - INFO - Client client-1584710303248 connection cleaned up successfully
+2025-03-24 16:37:03,393 - main - INFO - Starting application initialization...
+2025-03-24 16:37:03,401 - main - INFO - Application managers initialized successfully
+2025-03-24 16:37:09,530 - main - INFO - Application startup completed successfully
+2025-03-24 16:37:16,505 - main - INFO - Client client-1960308803792 connected successfully
+2025-03-24 16:41:52,913 - main - INFO - Client client-1960308803792 disconnected normally
+2025-03-24 16:41:52,914 - main - INFO - Client client-1960308803792 connection cleaned up successfully
+2025-03-24 16:41:53,993 - main - INFO - Client client-1960309085264 connected successfully
+2025-03-24 16:42:11,068 - main - INFO - Client client-1960309085264 disconnected normally
+2025-03-24 16:42:11,069 - main - INFO - Client client-1960309085264 connection cleaned up successfully
+2025-03-24 16:42:11,174 - main - INFO - Starting application shutdown...
+2025-03-24 16:42:11,178 - main - INFO - Application shutdown completed successfully
+2025-03-24 16:42:14,189 - main - INFO - Starting application initialization...
+2025-03-24 16:42:14,191 - main - INFO - Application managers initialized successfully
+2025-03-24 16:42:20,292 - main - INFO - Application startup completed successfully
+2025-03-24 16:45:39,311 - main - INFO - Client client-2639172753296 connected successfully
+2025-03-24 16:50:52,821 - main - INFO - Client client-2639172753296 disconnected normally
+2025-03-24 16:50:52,822 - main - INFO - Client client-2639172753296 connection cleaned up successfully
+2025-03-24 16:50:59,021 - main - INFO - Starting application shutdown...
+2025-03-24 16:50:59,025 - main - INFO - Application shutdown completed successfully
+2025-03-24 16:57:00,797 - main - INFO - Starting application initialization...
+2025-03-24 16:57:00,798 - main - INFO - Application managers initialized successfully
+2025-03-24 16:57:06,923 - main - INFO - Application startup completed successfully
+2025-03-24 16:57:07,128 - main - INFO - Client client-2107759491344 connected successfully
+2025-03-24 16:58:01,420 - main - INFO - Client client-2107759491344 disconnected normally
+2025-03-24 16:58:01,422 - main - INFO - Client client-2107759491344 connection cleaned up successfully
+2025-03-24 16:58:01,427 - main - INFO - Client client-2107759540688 connected successfully
+2025-03-24 16:58:30,231 - main - INFO - Client client-2107759540688 disconnected normally
+2025-03-24 16:58:30,232 - main - INFO - Client client-2107759540688 connection cleaned up successfully
+2025-03-24 16:58:30,337 - main - INFO - Starting application shutdown...
+2025-03-24 16:58:30,340 - main - INFO - Application shutdown completed successfully
+2025-03-24 16:58:32,958 - main - INFO - Starting application initialization...
+2025-03-24 16:58:32,959 - main - INFO - Application managers initialized successfully
+2025-03-24 16:58:34,163 - main - INFO - Application startup completed successfully
+2025-03-24 16:58:38,189 - main - INFO - Client client-2836184306640 connected successfully
+2025-03-24 17:00:28,276 - main - INFO - Client client-2836184306640 disconnected normally
+2025-03-24 17:00:28,278 - main - INFO - Client client-2836184306640 connection cleaned up successfully
+2025-03-24 17:00:28,383 - main - INFO - Starting application shutdown...
+2025-03-24 17:00:28,389 - main - INFO - Application shutdown completed successfully
+2025-03-24 17:00:30,570 - main - INFO - Starting application initialization...
+2025-03-24 17:00:30,572 - main - INFO - Application managers initialized successfully
+2025-03-24 17:00:31,779 - main - INFO - Application startup completed successfully
+2025-03-24 17:00:41,949 - main - INFO - Client client-2317635619856 connected successfully
+2025-03-24 17:00:41,955 - main - INFO - Client client-2317635619856 disconnected normally
+2025-03-24 17:00:41,956 - main - INFO - Client client-2317635619856 connection cleaned up successfully
+2025-03-24 17:02:10,190 - main - INFO - Starting application shutdown...
+2025-03-24 17:02:10,195 - main - INFO - Application shutdown completed successfully
+2025-03-24 17:02:13,106 - main - INFO - Starting application initialization...
+2025-03-24 17:02:13,108 - main - INFO - Application managers initialized successfully
+2025-03-24 17:02:14,294 - main - INFO - Application startup completed successfully
+2025-03-24 17:06:52,990 - main - INFO - Client client-2311596227024 connected successfully
+2025-03-24 17:08:56,740 - main - INFO - Client client-2311596227024 disconnected normally
+2025-03-24 17:08:56,742 - main - INFO - Client client-2311596227024 connection cleaned up successfully
+2025-03-24 17:08:57,519 - main - INFO - Client client-2311599624656 connected successfully
+2025-03-24 17:16:53,165 - main - INFO - Client client-2311599624656 disconnected normally
+2025-03-24 17:16:53,166 - main - INFO - Client client-2311599624656 connection cleaned up successfully
+2025-03-24 17:16:54,476 - main - INFO - Client client-2311599634896 connected successfully
+2025-03-24 17:19:24,255 - main - INFO - Client client-2311599634896 disconnected normally
+2025-03-24 17:19:24,256 - main - INFO - Client client-2311599634896 connection cleaned up successfully
+2025-03-24 17:19:24,362 - main - INFO - Starting application shutdown...
+2025-03-24 17:19:24,366 - main - INFO - Application shutdown completed successfully
+2025-03-24 17:19:44,477 - main - INFO - Starting application initialization...
+2025-03-24 17:19:44,479 - main - INFO - Application managers initialized successfully
+2025-03-24 17:19:49,117 - main - INFO - Application startup completed successfully
+2025-03-24 17:20:46,637 - main - INFO - Client client-2032198789392 connected successfully
+2025-03-24 17:26:15,324 - main - INFO - Client client-2032198789392 disconnected normally
+2025-03-24 17:26:15,326 - main - INFO - Client client-2032198789392 connection cleaned up successfully
+2025-03-24 17:28:26,731 - main - INFO - Starting application shutdown...
+2025-03-24 17:28:26,736 - main - INFO - Application shutdown completed successfully
+2025-03-24 17:28:29,813 - main - INFO - Starting application initialization...
+2025-03-24 17:28:29,815 - main - INFO - Application managers initialized successfully
+2025-03-24 17:28:30,998 - main - INFO - Application startup completed successfully
+2025-03-24 17:28:58,095 - main - INFO - Starting application shutdown...
+2025-03-24 17:28:58,101 - main - INFO - Application shutdown completed successfully
+2025-03-24 17:28:59,964 - main - INFO - Starting application initialization...
+2025-03-24 17:28:59,966 - main - INFO - Application managers initialized successfully
+2025-03-24 17:29:01,144 - main - INFO - Application startup completed successfully
+2025-03-24 17:29:38,655 - main - INFO - Client client-2325700622800 connected successfully
+2025-03-24 17:47:45,256 - main - INFO - Starting application initialization...
+2025-03-24 17:47:45,258 - main - INFO - Application managers initialized successfully
+2025-03-24 17:47:46,432 - main - INFO - Application startup completed successfully
+2025-03-24 17:47:46,937 - main - INFO - Client client-2367304108304 connected successfully
+2025-03-24 17:55:46,120 - main - INFO - Client client-2367304108304 disconnected normally
+2025-03-24 17:55:46,122 - main - INFO - Client client-2367304108304 connection cleaned up successfully
+2025-03-24 17:56:09,632 - main - INFO - Client client-2367304173392 connected successfully
+2025-03-24 18:02:15,380 - main - INFO - Client client-2367304173392 disconnected normally
+2025-03-24 18:24:48,528 - main - INFO - Client client-2367304173392 connection cleaned up successfully
+2025-03-24 21:27:51,847 - main - INFO - Starting application initialization...
+2025-03-24 21:27:51,851 - main - INFO - Application managers initialized successfully
+2025-03-24 21:27:53,398 - main - INFO - Application startup completed successfully
+2025-03-24 21:28:16,124 - main - INFO - Client client-2453332129552 connected successfully
+2025-03-24 21:30:37,898 - main - INFO - Client client-2453332129552 disconnected normally
+2025-03-24 21:30:37,900 - main - INFO - Client client-2453332129552 connection cleaned up successfully
+2025-03-24 21:30:38,007 - main - INFO - Starting application shutdown...
+2025-03-24 21:30:38,014 - main - INFO - Application shutdown completed successfully
+2025-03-24 21:35:51,037 - main - INFO - Starting application initialization...
+2025-03-24 21:35:51,039 - main - INFO - Application managers initialized successfully
+2025-03-24 21:35:52,525 - main - INFO - Application startup completed successfully
+2025-03-24 21:35:54,640 - main - INFO - Client client-1456998610192 connected successfully
+2025-03-24 21:42:13,547 - main - INFO - Client client-1456998610192 disconnected normally
+2025-03-24 21:42:13,549 - main - INFO - Client client-1456998610192 connection cleaned up successfully
+2025-03-24 22:18:43,631 - main - INFO - Starting application shutdown...
+2025-03-24 22:18:43,638 - main - INFO - Application shutdown completed successfully
+2025-03-24 22:18:59,891 - main - INFO - Starting application initialization...
+2025-03-24 22:18:59,895 - main - INFO - Application managers initialized successfully
+2025-03-24 22:19:00,163 - main - INFO - Application startup completed successfully
+2025-03-24 22:19:16,996 - main - INFO - Client client-2358351420816 connected successfully
+2025-03-24 22:26:11,622 - main - INFO - Client client-2358351420816 disconnected normally
+2025-03-24 22:26:11,622 - main - INFO - Client client-2358351420816 connection cleaned up successfully
+2025-03-24 22:28:06,309 - main - INFO - Client client-2358352693200 connected successfully
+2025-03-24 22:33:12,138 - main - INFO - Client client-2358352693200 disconnected normally
+2025-03-24 22:33:12,141 - main - INFO - Client client-2358352693200 connection cleaned up successfully
+2025-03-24 22:33:12,166 - main - INFO - Starting application shutdown...
+2025-03-24 22:33:12,176 - main - INFO - Application shutdown completed successfully
+2025-03-24 22:33:26,166 - main - INFO - Starting application initialization...
+2025-03-24 22:33:26,171 - main - INFO - Application managers initialized successfully
+2025-03-24 22:33:26,437 - main - INFO - Application startup completed successfully
+2025-03-24 22:36:30,383 - main - INFO - Client client-1333611748240 connected successfully
+2025-03-24 22:47:41,632 - main - INFO - Client client-1333611748240 disconnected normally
+2025-03-24 22:50:29,526 - main - INFO - Client client-1333611748240 connection cleaned up successfully
+2025-03-25 16:42:22,722 - main - INFO - Starting application shutdown...
+2025-03-25 16:42:22,727 - main - INFO - Application shutdown completed successfully

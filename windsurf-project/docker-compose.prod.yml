@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "8000:8000"
+    environment:
+      ENVIRONMENT: production
+      PORT: 8000
+    networks:
+      - windsurf
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod.debian
+    environment:
+      ENVIRONMENT: production
+      VITE_API_BASE_URL: /api
+    depends_on:
+      - backend
+    networks:
+      - windsurf
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./frontend/dist:/usr/share/nginx/html
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - windsurf
+
+networks:
+  windsurf:

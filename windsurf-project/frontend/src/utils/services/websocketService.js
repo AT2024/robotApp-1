@@ -11,6 +11,7 @@ class WebSocketService {
     this.reconnectTimeout = null;
     this.WEBSOCKET_URL = 'ws://localhost:8000/ws';
     this.MAX_RECONNECT_DELAY = 5000;
+    this.disconnect_on_exception = false; // Add this configuration flag
   }
 
   isConnected() {
@@ -28,6 +29,15 @@ class WebSocketService {
 
     try {
       await this._createWebSocketConnection();
+      
+      // After successful connection, configure the robot not to disconnect on exceptions
+      if (this.isConnected()) {
+        this.send({
+          type: 'config',
+          disconnect_on_exception: false
+        });
+        logger.log('Configured robot to not disconnect on exceptions');
+      }
     } catch (error) {
       logger.error('WebSocket connection failed:', error);
       throw error;

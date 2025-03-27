@@ -1,0 +1,105 @@
+2025-03-24 21:28:22,061 - meca_router - INFO - Starting wafer pickup sequence from 1 to 5
+2025-03-24 21:28:22,064 - meca_router - INFO - Processing wafer 1 of 5
+2025-03-24 21:28:22,065 - meca_router - INFO - Setting initial parameters
+2025-03-24 21:28:22,078 - meca_router - INFO - Moving to position for wafer 1
+2025-03-24 21:28:22,083 - meca_router - INFO - Closing gripper to pick up wafer
+2025-03-24 21:28:22,086 - meca_router - INFO - Moving up with wafer
+2025-03-24 21:28:22,097 - meca_router - INFO - Moving to safe point
+2025-03-24 21:28:22,100 - meca_router - INFO - Moving to drop position 5
+2025-03-24 21:28:22,108 - meca_router - INFO - Opening gripper to release wafer
+2025-03-24 21:28:22,111 - meca_router - INFO - Moving up from placement position
+2025-03-24 21:28:22,113 - meca_router - INFO - Returning to safe point
+2025-03-24 21:28:22,117 - meca_router - INFO - Processing wafer 2 of 5
+2025-03-24 21:28:22,124 - meca_router - INFO - Moving to position for wafer 2
+2025-03-24 21:28:22,128 - meca_router - INFO - Closing gripper to pick up wafer
+2025-03-24 21:28:22,131 - meca_router - INFO - Moving up with wafer
+2025-03-24 21:28:22,141 - meca_router - INFO - Moving to safe point
+2025-03-24 21:28:22,142 - meca_router - INFO - Moving to drop position 4
+2025-03-24 21:28:22,148 - meca_router - INFO - Opening gripper to release wafer
+2025-03-24 21:28:22,151 - meca_router - INFO - Moving up from placement position
+2025-03-24 21:28:22,152 - meca_router - INFO - Returning to safe point
+2025-03-24 21:28:22,157 - meca_router - INFO - Processing wafer 3 of 5
+2025-03-24 21:28:22,163 - meca_router - INFO - Moving to position for wafer 3
+2025-03-24 21:28:22,167 - meca_router - INFO - Closing gripper to pick up wafer
+2025-03-24 21:28:22,171 - meca_router - INFO - Moving up with wafer
+2025-03-24 21:28:22,181 - meca_router - INFO - Moving to safe point
+2025-03-24 21:28:22,183 - meca_router - INFO - Moving to drop position 3
+2025-03-24 21:28:22,188 - meca_router - INFO - Opening gripper to release wafer
+2025-03-24 21:28:22,193 - meca_router - INFO - Moving up from placement position
+2025-03-24 21:28:22,195 - meca_router - INFO - Returning to safe point
+2025-03-24 21:28:22,198 - meca_router - INFO - Processing wafer 4 of 5
+2025-03-24 21:28:22,203 - meca_router - INFO - Moving to position for wafer 4
+2025-03-24 21:28:22,210 - meca_router - INFO - Closing gripper to pick up wafer
+2025-03-24 21:28:22,212 - meca_router - INFO - Moving up with wafer
+2025-03-24 21:28:22,220 - meca_router - INFO - Moving to safe point
+2025-03-24 21:28:22,224 - meca_router - INFO - Moving to drop position 2
+2025-03-24 21:28:22,229 - meca_router - INFO - Opening gripper to release wafer
+2025-03-24 21:28:22,235 - meca_router - INFO - Moving up from placement position
+2025-03-24 21:28:22,237 - meca_router - INFO - Returning to safe point
+2025-03-24 21:28:22,242 - meca_router - INFO - Processing wafer 5 of 5
+2025-03-24 21:28:22,247 - meca_router - INFO - Moving to position for wafer 5
+2025-03-24 21:28:22,251 - meca_router - INFO - Closing gripper to pick up wafer
+2025-03-24 21:28:22,256 - meca_router - INFO - Moving up with wafer
+2025-03-24 21:28:22,265 - meca_router - INFO - Moving to safe point
+2025-03-24 21:28:22,267 - meca_router - INFO - Moving to drop position 1
+2025-03-24 21:28:22,275 - meca_router - INFO - Opening gripper to release wafer
+2025-03-24 21:28:22,277 - meca_router - INFO - Moving up from placement position
+2025-03-24 21:28:22,280 - meca_router - INFO - Returning to safe point
+2025-03-24 21:28:22,285 - meca_router - INFO - Successfully completed wafer pickup sequence
+2025-03-24 21:36:01,065 - meca_router - INFO - Starting wafer pickup sequence from 1 to 5
+2025-03-24 21:36:01,067 - meca_router - INFO - Processing wafer 1 of 5
+2025-03-24 21:36:01,067 - meca_router - INFO - Setting initial parameters
+2025-03-24 21:36:01,074 - meca_router - INFO - Moving to position for wafer 1
+2025-03-24 21:36:01,078 - meca_router - INFO - Closing gripper to pick up wafer
+2025-03-24 21:36:01,080 - meca_router - INFO - Moving up with wafer
+2025-03-24 21:36:01,086 - meca_router - INFO - Moving to safe point
+2025-03-24 21:36:01,088 - meca_router - INFO - Moving to drop position 5
+2025-03-24 21:36:01,091 - meca_router - INFO - Opening gripper to release wafer
+2025-03-24 21:36:01,093 - meca_router - INFO - Moving up from placement position
+2025-03-24 21:36:01,094 - meca_router - INFO - Returning to safe point
+2025-03-24 21:36:01,097 - meca_router - INFO - Processing wafer 2 of 5
+2025-03-24 21:36:01,101 - meca_router - INFO - Moving to position for wafer 2
+2025-03-24 21:36:01,104 - meca_router - INFO - Closing gripper to pick up wafer
+2025-03-24 21:36:01,105 - meca_router - INFO - Moving up with wafer
+2025-03-24 21:36:01,110 - meca_router - INFO - Moving to safe point
+2025-03-24 21:36:01,110 - meca_router - INFO - Moving to drop position 4
+2025-03-24 21:36:01,114 - meca_router - INFO - Opening gripper to release wafer
+2025-03-24 21:36:01,115 - meca_router - INFO - Moving up from placement position
+2025-03-24 21:36:01,117 - meca_router - INFO - Returning to safe point
+2025-03-24 21:36:01,118 - meca_router - INFO - Processing wafer 3 of 5
+2025-03-24 21:36:01,121 - meca_router - INFO - Moving to position for wafer 3
+2025-03-24 21:36:01,123 - meca_router - INFO - Closing gripper to pick up wafer
+2025-03-24 21:36:01,124 - meca_router - INFO - Moving up with wafer
+2025-03-24 21:36:01,126 - meca_router - INFO - Moving to safe point
+2025-03-24 21:36:01,127 - meca_router - INFO - Moving to drop position 3
+2025-03-24 21:36:01,129 - meca_router - INFO - Opening gripper to release wafer
+2025-03-24 21:36:01,130 - meca_router - INFO - Moving up from placement position
+2025-03-24 21:36:01,132 - meca_router - INFO - Returning to safe point
+2025-03-24 21:36:01,132 - meca_router - INFO - Processing wafer 4 of 5
+2025-03-24 21:36:01,135 - meca_router - INFO - Moving to position for wafer 4
+2025-03-24 21:36:01,136 - meca_router - INFO - Closing gripper to pick up wafer
+2025-03-24 21:36:01,137 - meca_router - INFO - Moving up with wafer
+2025-03-24 21:36:01,141 - meca_router - INFO - Moving to safe point
+2025-03-24 21:36:01,141 - meca_router - INFO - Moving to drop position 2
+2025-03-24 21:36:01,144 - meca_router - INFO - Opening gripper to release wafer
+2025-03-24 21:36:01,145 - meca_router - INFO - Moving up from placement position
+2025-03-24 21:36:01,146 - meca_router - INFO - Returning to safe point
+2025-03-24 21:36:01,147 - meca_router - INFO - Processing wafer 5 of 5
+2025-03-24 21:36:01,150 - meca_router - INFO - Moving to position for wafer 5
+2025-03-24 21:36:01,151 - meca_router - INFO - Closing gripper to pick up wafer
+2025-03-24 21:36:01,153 - meca_router - INFO - Moving up with wafer
+2025-03-24 21:36:01,155 - meca_router - INFO - Moving to safe point
+2025-03-24 21:36:01,156 - meca_router - INFO - Moving to drop position 1
+2025-03-24 21:36:01,159 - meca_router - INFO - Opening gripper to release wafer
+2025-03-24 21:36:01,160 - meca_router - INFO - Moving up from placement position
+2025-03-24 21:36:01,161 - meca_router - INFO - Returning to safe point
+2025-03-24 21:36:01,163 - meca_router - INFO - Successfully completed wafer pickup sequence
+2025-03-24 22:40:46,564 - meca_router - INFO - Starting wafer drop sequence from 1 to 5
+2025-03-24 22:40:46,565 - meca_router - INFO - Processing wafer 1 drop from spreader to baking tray
+2025-03-24 22:40:46,588 - meca_router - INFO - Processing wafer 2 drop from spreader to baking tray
+2025-03-24 22:40:46,610 - meca_router - INFO - Processing wafer 3 drop from spreader to baking tray
+2025-03-24 22:40:46,633 - meca_router - INFO - Processing wafer 4 drop from spreader to baking tray
+2025-03-24 22:40:46,652 - meca_router - INFO - Processing wafer 5 drop from spreader to baking tray
+2025-03-24 22:40:46,674 - meca_router - INFO - Successfully completed wafer drop sequence
+2025-03-24 22:40:46,675 - meca_router - INFO - Returning robot to home position
+2025-03-24 22:42:00,300 - meca_router - INFO - Robot successfully returned to home position

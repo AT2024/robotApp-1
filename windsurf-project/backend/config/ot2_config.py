@@ -22,7 +22,7 @@ ot2_config = {
     "check_lct": [130, 160, 73],
     "st_lct": [100, 20, 53],
     "sec_lct": [100, 30, 53],
-    "ip": "169.254.49.202",
+    "ip": "169.254.77.72",
     # "url": lambda ip, port: f"http://{ip}:{port}",
     "port": 31950,
 }

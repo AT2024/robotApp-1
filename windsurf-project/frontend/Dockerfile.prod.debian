@@ -1,0 +1,25 @@
+# Build stage
+FROM node:18-slim AS build
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies for builds
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    openssl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies with verbose output
+RUN npm install
+
+# Copy the frontend directory
+COPY . .
+
+# Let's see what's in the directory
+RUN echo "Contents of /app directory:" && ls -la
+
+# Build the application with verbose output
+RUN npm run build || (echo "BUILD FAILED!" && npm run build --verbose && exit 1)
