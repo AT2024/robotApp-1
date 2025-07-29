@@ -860,6 +860,86 @@ class MecademicDriver(BaseRobotDriver):
             self.logger.error(f"❌ Activation error for {self.robot_id}: {type(e).__name__}: {e}")
             raise
     
+    async def clear_motion(self) -> bool:
+        """Clear robot motion queue"""
+        try:
+            if not self._robot:
+                self.logger.warning(f"⚠️ No robot connection to clear motion for {self.robot_id}")
+                return False
+                
+            self.logger.info(f"🔧 Clearing motion queue for {self.robot_id}")
+            loop = asyncio.get_event_loop()
+            
+            if hasattr(self._robot, 'ClearMotion'):
+                await loop.run_in_executor(
+                    self._executor,
+                    self._robot.ClearMotion
+                )
+                self.logger.info(f"✅ ClearMotion() completed for {self.robot_id}")
+                return True
+            else:
+                self.logger.warning(f"⚠️ ClearMotion() not available for {self.robot_id}")
+                return False
+                
+        except Exception as e:
+            self.logger.error(f"❌ Clear motion error for {self.robot_id}: {type(e).__name__}: {e}")
+            return False
+
+    async def resume_motion(self) -> bool:
+        """Resume robot motion after pause"""
+        try:
+            if not self._robot:
+                self.logger.warning(f"⚠️ No robot connection to resume motion for {self.robot_id}")
+                return False
+                
+            self.logger.info(f"🔧 Resuming motion for {self.robot_id}")
+            loop = asyncio.get_event_loop()
+            
+            if hasattr(self._robot, 'ResumeMotion'):
+                await loop.run_in_executor(
+                    self._executor,
+                    self._robot.ResumeMotion
+                )
+                self.logger.info(f"✅ ResumeMotion() completed for {self.robot_id}")
+                return True
+            else:
+                self.logger.warning(f"⚠️ ResumeMotion() not available for {self.robot_id}")
+                return False
+                
+        except Exception as e:
+            self.logger.error(f"❌ Resume motion error for {self.robot_id}: {type(e).__name__}: {e}")
+            return False
+
+    async def wait_idle(self, timeout: float = 30.0) -> bool:
+        """Wait for robot to become idle (motion complete)"""
+        try:
+            if not self._robot:
+                self.logger.warning(f"⚠️ No robot connection to wait for idle for {self.robot_id}")
+                return False
+                
+            self.logger.info(f"⏳ Waiting for robot {self.robot_id} to become idle (timeout: {timeout}s)")
+            loop = asyncio.get_event_loop()
+            
+            if hasattr(self._robot, 'WaitIdle'):
+                # WaitIdle expects timeout in milliseconds
+                timeout_ms = int(timeout * 1000)
+                await loop.run_in_executor(
+                    self._executor,
+                    self._robot.WaitIdle,
+                    timeout_ms
+                )
+                self.logger.info(f"✅ Robot {self.robot_id} is now idle")
+                return True
+            else:
+                self.logger.warning(f"⚠️ WaitIdle() not available for {self.robot_id}")
+                # Fallback: wait and check status
+                await asyncio.sleep(timeout)
+                return False
+                
+        except Exception as e:
+            self.logger.error(f"❌ Wait idle error for {self.robot_id}: {type(e).__name__}: {e}")
+            return False
+
     async def reset_error(self) -> bool:
         """Reset robot error state with connection recovery"""
         max_attempts = 3
