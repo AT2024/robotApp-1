@@ -7369,3 +7369,362 @@ core.exceptions.HardwareError: Error during error recovery for robot meca: Faile
 2025-07-29 08:43:07,764 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
 2025-07-29 08:43:15,766 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
 2025-07-29 08:43:23,768 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:43:31,785 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:43:39,788 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:43:47,791 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:43:55,794 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:44:03,821 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:44:11,830 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:44:19,832 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:44:27,834 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:44:35,862 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:44:43,863 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:44:51,866 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:44:59,890 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:45:07,892 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:45:15,893 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:45:23,895 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:45:31,913 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:45:39,915 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:45:47,918 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:45:55,919 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:46:03,936 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:46:11,938 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:46:19,941 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:46:27,944 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:46:35,968 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:46:43,970 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:46:51,976 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:47:00,000 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:47:08,007 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:47:16,011 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:47:24,014 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:47:32,037 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:47:40,041 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:47:48,042 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:47:56,044 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:48:04,069 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:48:12,071 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:48:20,074 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:48:28,076 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:48:36,095 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:48:44,097 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:48:52,100 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:49:00,124 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:49:08,127 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:49:16,132 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:49:24,134 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:49:32,146 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:49:40,151 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:49:48,155 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:49:56,158 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:50:04,180 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:50:12,182 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:50:20,185 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:50:28,187 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:50:36,200 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:50:44,203 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:50:52,206 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:51:00,225 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:51:08,227 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:51:16,231 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:51:24,234 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:51:32,259 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:51:40,261 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:51:48,265 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:51:56,268 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:52:04,284 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:52:12,285 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:52:20,310 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:52:28,313 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:52:36,339 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:52:44,342 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:52:52,348 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:53:00,374 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:53:08,380 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:53:16,384 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:53:24,387 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:53:32,413 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:53:40,418 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:53:48,422 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:53:56,424 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:54:04,450 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:54:12,452 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:54:20,481 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:54:28,485 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:54:36,512 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:54:44,516 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:54:52,519 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:55:00,548 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:55:08,549 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:55:16,552 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:55:24,553 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:55:32,586 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:55:40,886 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:55:48,897 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:55:56,902 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:56:04,930 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:56:12,933 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:56:20,937 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:56:28,942 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:56:36,977 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:56:44,979 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:56:53,174 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:57:01,197 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:57:09,206 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:57:17,208 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:57:25,211 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:57:33,231 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:57:41,235 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:57:49,237 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:57:57,240 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:58:05,261 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:58:13,263 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:58:21,266 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:58:29,268 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:58:37,300 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:58:45,304 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:58:53,307 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:59:01,347 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:59:09,349 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:59:17,351 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:59:25,355 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:59:33,375 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:59:41,378 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:59:49,384 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 08:59:57,386 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:00:05,416 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:00:13,417 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:00:21,420 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:00:29,422 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:00:37,449 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:00:45,452 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:00:53,456 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:01:01,481 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:01:09,485 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:01:17,489 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:01:25,490 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:01:33,517 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:01:41,519 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:01:49,521 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:01:57,524 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:02:05,551 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:02:13,555 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:02:21,558 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:02:29,562 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:02:37,576 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:02:45,583 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:02:53,585 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:03:01,603 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:03:09,607 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:03:17,617 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:03:25,621 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:03:33,648 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:03:41,664 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:03:49,668 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:03:57,670 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:04:05,691 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:04:13,693 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:04:21,696 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:04:29,698 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:04:37,721 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:04:45,725 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:04:53,726 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:05:01,760 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:05:09,765 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:05:17,767 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:05:25,768 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:05:33,780 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:05:41,783 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:05:49,784 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:05:57,788 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:06:05,811 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:06:13,825 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:06:21,829 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:06:29,832 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:06:37,847 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:06:45,848 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:06:53,851 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:07:01,873 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:07:09,876 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:07:17,880 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:07:25,891 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:07:33,893 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:07:41,897 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:07:49,899 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:07:57,902 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:08:05,918 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:08:11,544 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:08:11,547 - meca_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: False -> True
+2025-07-29 09:08:11,550 - meca_service - INFO - _handle_connection_state_change:263 - Meca robot meca connection restored
+2025-07-29 09:08:16,557 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:08:21,562 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:08:26,566 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:08:31,589 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:08:36,594 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:08:41,599 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:08:46,605 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:08:51,610 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:08:56,614 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:09:01,641 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:09:06,651 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:09:11,657 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:09:16,665 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:09:21,672 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:09:26,678 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:09:31,705 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:09:36,713 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:09:41,720 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:09:46,728 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:09:51,737 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:09:56,746 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:10:01,778 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:10:06,786 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:10:11,795 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:10:16,802 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:10:21,811 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:10:26,820 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:10:31,820 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:10:36,832 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:10:41,840 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:10:46,847 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:10:51,860 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:10:56,871 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:11:01,901 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:11:06,908 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:11:11,922 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:11:16,933 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:11:21,943 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:11:22,030 - meca_service - INFO - execute_operation:280 - Starting operation meca_pickup_wafer_pickup_0_5: pickup_wafer for robot meca
+2025-07-29 09:11:22,036 - meca_service - ERROR - ensure_robot_ready:622 - Unexpected error checking hardware state for meca: Robot meca not connected
+2025-07-29 09:11:22,039 - meca_service - ERROR - execute_operation:327 - Operation meca_pickup_wafer_pickup_0_5 failed: Unexpected error checking hardware state for meca: Robot meca not connected
+Traceback (most recent call last):
+  File "/app/services/meca_service.py", line 524, in ensure_robot_ready
+    status = await driver.get_status()
+  File "/app/core/hardware_manager.py", line 162, in get_status
+    raise ConnectionError(f"Robot {self.robot_id} not connected", robot_id=self.robot_id)
+core.exceptions.ConnectionError: Robot meca not connected
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/services/base.py", line 287, in execute_operation
+    result = await asyncio.wait_for(
+  File "/usr/local/lib/python3.9/asyncio/tasks.py", line 479, in wait_for
+    return fut.result()
+  File "/app/services/meca_service.py", line 1175, in _pickup_sequence
+    await self.ensure_robot_ready()
+  File "/app/services/meca_service.py", line 623, in ensure_robot_ready
+    raise HardwareError(error_msg, robot_id=self.robot_id)
+core.exceptions.HardwareError: Unexpected error checking hardware state for meca: Robot meca not connected
+2025-07-29 09:11:26,949 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:11:31,973 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:11:36,981 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:11:41,988 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:11:46,996 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:11:52,006 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:11:57,014 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:12:02,049 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:12:07,072 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:12:12,081 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:12:17,086 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:12:22,091 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:12:27,097 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:12:32,118 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:12:37,126 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:12:42,135 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:12:47,143 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:12:52,151 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:12:57,158 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:13:02,189 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:13:07,195 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:13:12,201 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:13:17,208 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:13:22,219 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:13:27,226 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:13:32,269 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:13:37,279 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:13:42,285 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:13:47,295 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:13:52,303 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:13:57,311 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:14:02,337 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:14:07,347 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:14:12,356 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:14:17,362 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:14:22,370 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:14:27,379 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:14:32,419 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:14:37,426 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:14:42,435 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:14:47,444 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:14:52,455 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:14:57,464 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:15:02,358 - meca_service - INFO - execute_operation:280 - Starting operation meca_pickup_wafer_pickup_0_5: pickup_wafer for robot meca
+2025-07-29 09:15:02,360 - meca_service - ERROR - ensure_robot_ready:622 - Unexpected error checking hardware state for meca: Robot meca not connected
+2025-07-29 09:15:02,361 - meca_service - ERROR - execute_operation:327 - Operation meca_pickup_wafer_pickup_0_5 failed: Unexpected error checking hardware state for meca: Robot meca not connected
+Traceback (most recent call last):
+  File "/app/services/meca_service.py", line 524, in ensure_robot_ready
+    status = await driver.get_status()
+  File "/app/core/hardware_manager.py", line 162, in get_status
+    raise ConnectionError(f"Robot {self.robot_id} not connected", robot_id=self.robot_id)
+core.exceptions.ConnectionError: Robot meca not connected
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/services/base.py", line 287, in execute_operation
+    result = await asyncio.wait_for(
+  File "/usr/local/lib/python3.9/asyncio/tasks.py", line 479, in wait_for
+    return fut.result()
+  File "/app/services/meca_service.py", line 1175, in _pickup_sequence
+    await self.ensure_robot_ready()
+  File "/app/services/meca_service.py", line 623, in ensure_robot_ready
+    raise HardwareError(error_msg, robot_id=self.robot_id)
+core.exceptions.HardwareError: Unexpected error checking hardware state for meca: Robot meca not connected
+2025-07-29 09:15:02,499 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:15:07,507 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:15:12,513 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:15:17,521 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:15:22,531 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:15:27,538 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:15:32,577 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:15:37,583 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:15:42,590 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:15:47,598 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:15:52,606 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:15:57,615 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:16:02,643 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:16:07,652 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:16:12,661 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:16:17,671 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:16:22,680 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:16:27,689 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:16:32,725 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:16:37,734 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:16:42,744 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:16:47,754 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:16:52,764 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:16:57,770 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:17:02,801 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:17:07,808 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:17:12,817 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:17:17,826 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:17:22,835 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:17:27,842 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:17:32,869 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:17:37,876 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:17:42,883 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:17:47,890 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:17:52,895 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:17:57,906 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:18:02,937 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:18:08,018 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:18:13,080 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:18:18,095 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:18:23,101 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:18:28,107 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:18:33,133 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:18:37,704 - meca_service - INFO - _stop_health_monitoring:197 - Stopped health monitoring for MecaService
+2025-07-29 09:18:37,709 - meca_service - INFO - _on_stop:413 - Meca robot service stopped
+2025-07-29 09:18:37,724 - meca_service - INFO - stop:160 - MecaService service stopped

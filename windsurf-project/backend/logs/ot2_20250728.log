@@ -442,3 +442,7 @@ IsADirectoryError: [Errno 21] Is a directory: '/app'
 2025-07-28 17:31:06,776 - protocol_service - INFO - start:141 - ProtocolExecutionService service started
 2025-07-28 17:31:06,891 - ot2_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: None -> True
 2025-07-28 17:31:06,893 - ot2_service - INFO - _handle_connection_state_change:144 - OT2 robot ot2 connection restored
+2025-07-29 09:18:37,726 - ot2_service - INFO - _stop_health_monitoring:197 - Stopped health monitoring for OT2Service
+2025-07-29 09:18:37,732 - ot2_service - INFO - stop:160 - OT2Service service stopped
+2025-07-29 09:18:37,734 - protocol_service - INFO - _stop_health_monitoring:197 - Stopped health monitoring for ProtocolExecutionService
+2025-07-29 09:18:37,739 - protocol_service - INFO - stop:160 - ProtocolExecutionService service stopped

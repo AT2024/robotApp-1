@@ -223,3 +223,6 @@
 2025-07-28 17:31:01,480 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
 2025-07-28 17:31:01,538 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
 2025-07-28 17:31:12,812 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-29 09:18:37,665 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-29 09:18:37,685 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-29 09:18:37,818 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped

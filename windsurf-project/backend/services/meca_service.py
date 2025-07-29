@@ -1369,7 +1369,7 @@ class MecaService(RobotService):
                         "status": "completed"
                     }
                 else:
-                    raise HardwareError(f"Carousel {operation} failed: {result.error}")
+                    raise HardwareError(f"Carousel {operation} failed: {result.error}", robot_id=self.robot_id)
         
         return await self.execute_operation(context, _carousel_operation)
     
@@ -1449,7 +1449,7 @@ class MecaService(RobotService):
         
         result = await self.async_wrapper.execute_movement(command)
         if not result.success:
-            raise HardwareError(f"Movement failed: {result.error}")
+            raise HardwareError(f"Movement failed: {result.error}", robot_id=self.robot_id)
         
         return result
     
@@ -1467,7 +1467,7 @@ class MecaService(RobotService):
         if result.success:
             self._gripper_open = True
         else:
-            raise HardwareError(f"Failed to open gripper: {result.error}")
+            raise HardwareError(f"Failed to open gripper: {result.error}", robot_id=self.robot_id)
     
     async def _close_gripper(self):
         """Close the gripper"""
@@ -1483,7 +1483,7 @@ class MecaService(RobotService):
         if result.success:
             self._gripper_open = False
         else:
-            raise HardwareError(f"Failed to close gripper: {result.error}")
+            raise HardwareError(f"Failed to close gripper: {result.error}", robot_id=self.robot_id)
     
     async def get_robot_status(self) -> ServiceResult[Dict[str, Any]]:
         """Get detailed robot status"""
@@ -1773,7 +1773,7 @@ class MecaService(RobotService):
         if command_type == "MovePose" and len(parameters) == 6:
             # MovePose with 6 coordinates
             command = MovementCommand(
-                command_type="move_pose",
+                command_type="MovePose",
                 target_position={
                     "x": parameters[0],
                     "y": parameters[1], 
@@ -1786,7 +1786,7 @@ class MecaService(RobotService):
         elif command_type == "MoveLin" and len(parameters) == 6:
             # Linear movement with 6 coordinates
             command = MovementCommand(
-                command_type="move_lin",
+                command_type="MoveLin",
                 target_position={
                     "x": parameters[0],
                     "y": parameters[1],
@@ -1798,23 +1798,23 @@ class MecaService(RobotService):
             )
         elif command_type == "GripperOpen":
             command = MovementCommand(
-                command_type="gripper_open",
+                command_type="GripperOpen",
                 tool_action="grip_open"
             )
         elif command_type == "GripperClose":
             command = MovementCommand(
-                command_type="gripper_close", 
+                command_type="GripperClose", 
                 tool_action="grip_close"
             )
         elif command_type == "MoveGripper" and len(parameters) == 1:
             command = MovementCommand(
-                command_type="gripper_move",
+                command_type="MoveGripper",
                 tool_action="grip_move",
                 parameters={"width": parameters[0]}
             )
         elif command_type == "Delay" and len(parameters) == 1:
             command = MovementCommand(
-                command_type="delay",
+                command_type="Delay",
                 parameters={"duration": parameters[0]}
             )
         elif command_type.startswith("Set"):
@@ -1832,7 +1832,7 @@ class MecaService(RobotService):
         
         result = await self.async_wrapper.execute_movement(command)
         if not result.success:
-            raise HardwareError(f"Movement command {command_type} failed: {result.error}")
+            raise HardwareError(f"Movement command {command_type} failed: {result.error}", robot_id=self.robot_id)
     
     async def execute_drop_sequence(self, start: int, count: int) -> ServiceResult[Dict[str, Any]]:
         """

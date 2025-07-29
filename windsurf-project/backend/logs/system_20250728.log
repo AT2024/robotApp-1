@@ -283,3 +283,10 @@
 2025-07-29 08:25:39,950 - main - INFO - websocket_endpoint:121 - Client client-132845918801776 disconnected normally
 2025-07-29 08:25:39,956 - main - INFO - websocket_endpoint:144 - Client client-132845918801776 connection cleaned up successfully
 2025-07-29 08:25:40,440 - main - INFO - websocket_endpoint:88 - Client client-132845918813344 connected successfully
+2025-07-29 09:18:14,937 - main - INFO - websocket_endpoint:121 - Client client-132845918813344 disconnected normally
+2025-07-29 09:18:14,944 - main - INFO - websocket_endpoint:144 - Client client-132845918813344 connection cleaned up successfully
+2025-07-29 09:18:15,443 - main - INFO - websocket_endpoint:88 - Client client-132845918286128 connected successfully
+2025-07-29 09:18:33,493 - main - INFO - websocket_endpoint:121 - Client client-132845918286128 disconnected normally
+2025-07-29 09:18:33,498 - main - INFO - websocket_endpoint:144 - Client client-132845918286128 connection cleaned up successfully
+2025-07-29 09:18:33,596 - main - INFO - shutdown_event:182 - Starting application shutdown...
+2025-07-29 09:18:37,829 - main - INFO - shutdown_event:195 - Application shutdown completed successfully

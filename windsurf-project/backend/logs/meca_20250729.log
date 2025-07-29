@@ -1,0 +1,1266 @@
+2025-07-29 09:19:09,027 - meca_service - INFO - _on_start:445 - Registered robot meca with state manager
+2025-07-29 09:19:09,031 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:19:09,032 - meca_service - INFO - _on_start:319 - TCP connection test successful, attempting full robot connection...
+2025-07-29 09:19:09,033 - meca_service - INFO - _on_start:326 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-29 09:19:24,050 - meca_service - INFO - _on_start:332 - 🎉 Full robot connection established during startup for meca
+2025-07-29 09:19:24,052 - meca_service - INFO - _on_start:358 - ✅ Robot meca successfully connected and ready for operations
+2025-07-29 09:19:24,053 - meca_service - INFO - _on_start:369 - Meca robot service started successfully
+2025-07-29 09:19:24,055 - meca_service - INFO - _start_health_monitoring:187 - Started health monitoring for MecaService
+2025-07-29 09:19:24,057 - meca_service - INFO - start:141 - MecaService service started
+2025-07-29 09:19:24,064 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:19:24,067 - meca_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: None -> True
+2025-07-29 09:19:24,068 - meca_service - INFO - _handle_connection_state_change:263 - Meca robot meca connection restored
+2025-07-29 09:19:29,075 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:19:34,115 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:19:39,120 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:19:43,858 - meca_service - INFO - execute_operation:280 - Starting operation meca_pickup_wafer_pickup_0_5: pickup_wafer for robot meca
+2025-07-29 09:19:43,878 - meca_service - INFO - ensure_robot_ready:613 - ✅ Robot meca hardware state verified - Activated: True, Homed: True, Ready for operations
+2025-07-29 09:19:43,893 - meca_service - INFO - _pickup_sequence:1213 - Wafer pickup completed: wafer_pickup_0_5
+2025-07-29 09:19:43,895 - meca_service - INFO - execute_operation:299 - Operation meca_pickup_wafer_pickup_0_5 completed successfully in 0.04s
+2025-07-29 09:19:44,126 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:19:49,134 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:19:54,143 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:19:59,150 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:20:04,188 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:20:09,193 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:20:14,200 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:20:19,206 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:20:24,213 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:20:29,219 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:20:34,246 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:20:39,251 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:20:44,257 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:20:49,264 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:20:54,272 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:20:59,279 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:21:04,304 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:21:09,312 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:21:14,319 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:21:19,325 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:21:24,334 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:21:29,340 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:21:34,374 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:21:39,381 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:21:44,392 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:21:49,399 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:21:54,408 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:21:59,417 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:22:04,442 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:22:09,451 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:22:14,465 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:22:19,470 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:22:24,477 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:22:29,483 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:22:34,515 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:22:39,522 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:22:44,530 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:22:49,537 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:22:54,543 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:22:59,549 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:23:04,574 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:23:09,582 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:23:14,588 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:23:19,599 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:23:24,647 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:23:29,652 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:23:34,673 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:23:39,679 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:23:44,689 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:23:49,694 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:23:54,707 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:23:59,716 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:24:04,740 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:24:09,746 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:24:14,751 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:24:19,757 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:24:24,767 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:24:29,815 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:24:34,935 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:24:39,941 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:24:44,947 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:24:49,954 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:24:54,962 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:24:59,971 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:25:05,000 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:25:10,008 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:25:15,020 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:25:20,026 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:25:25,034 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:25:30,042 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:25:35,067 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:25:40,075 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:25:45,082 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:25:50,099 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:25:55,109 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:26:00,116 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:26:05,147 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:26:10,156 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:26:15,163 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:26:20,169 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:26:25,175 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:26:30,180 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:26:35,203 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:26:40,208 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:26:45,215 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:26:50,222 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:26:55,228 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:27:00,234 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:27:05,250 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:27:10,255 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:27:15,262 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:27:20,271 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:27:25,277 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:27:30,285 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:27:35,310 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:27:40,316 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:27:45,321 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:27:50,327 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:27:55,335 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:28:00,341 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:28:05,339 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:28:10,347 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:28:15,355 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:28:20,362 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:28:25,368 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:28:30,375 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:28:35,392 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:28:40,400 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:28:45,406 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:28:50,412 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:28:55,417 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:29:00,423 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:29:05,446 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:29:10,453 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:29:15,457 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:29:20,462 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:29:25,471 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:29:30,479 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:29:35,504 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:29:40,511 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:29:45,520 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:29:50,526 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:29:55,533 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:30:00,540 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:30:05,554 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:30:10,562 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:30:15,568 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:30:20,575 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:30:25,583 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:30:30,590 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:30:35,616 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:30:40,625 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:30:45,633 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:30:50,646 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:30:55,652 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:31:00,663 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:31:05,672 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:31:10,678 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:31:15,683 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:31:20,692 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:31:25,701 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:31:30,708 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:31:35,721 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:31:40,726 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:31:45,731 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:31:50,738 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:31:55,743 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:32:00,747 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:32:05,757 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:32:10,762 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:32:15,815 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:32:20,856 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:32:25,868 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:32:30,874 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:32:35,888 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:32:40,897 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:32:45,903 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:32:50,921 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:32:55,926 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:33:00,945 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:33:05,969 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:33:10,988 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:33:15,996 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:33:21,003 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:33:26,011 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:33:31,017 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:33:36,027 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:33:41,036 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:33:46,044 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:33:51,050 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:33:56,057 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:34:01,064 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:34:06,081 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:34:11,088 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:34:16,093 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:34:21,099 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:34:26,110 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:34:31,117 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:34:36,138 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:34:41,144 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:34:46,150 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:34:51,155 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:34:56,163 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:35:01,173 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:35:06,183 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:35:11,191 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:35:16,199 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:35:21,209 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:35:26,216 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:35:31,224 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:35:36,238 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:35:41,246 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:35:46,253 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:35:51,259 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:35:56,266 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:36:01,274 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:36:06,297 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:36:11,304 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:36:16,312 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:36:21,319 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:36:26,326 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:36:31,347 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:36:36,355 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:36:41,360 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:36:46,367 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:36:51,373 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:36:56,390 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:37:01,410 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:37:06,417 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:37:11,421 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:37:16,430 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:37:21,443 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:37:26,450 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:37:31,474 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:37:36,481 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:37:41,485 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:37:46,492 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:37:51,499 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:37:56,519 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:38:01,537 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:38:06,544 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:38:11,550 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:38:16,555 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:38:21,571 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:38:26,578 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:38:31,605 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:38:36,611 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:38:41,618 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:38:46,628 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:38:51,636 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:38:56,644 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:39:01,654 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:39:06,658 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:39:11,664 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:39:16,670 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:39:21,675 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:39:26,680 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:39:31,699 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:39:36,705 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:39:41,709 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:39:46,715 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:39:51,722 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:39:56,736 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:40:01,748 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:40:06,753 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:40:11,761 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:40:16,770 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:40:21,774 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:40:26,781 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:40:31,798 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:40:36,803 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:40:41,807 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:40:46,812 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:40:51,819 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:40:56,824 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:41:01,837 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:41:06,841 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:41:11,855 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:41:16,861 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:41:21,870 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:41:26,874 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:41:31,887 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:41:36,893 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:41:41,901 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:41:46,906 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:41:51,913 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:41:56,922 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:42:01,946 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:42:06,954 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:42:11,960 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:42:16,967 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:42:21,975 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:42:26,984 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:42:32,008 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:42:37,016 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:42:42,022 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:42:47,030 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:42:52,039 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:42:57,046 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:43:02,064 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:43:07,072 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:43:12,078 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:43:17,085 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:43:22,091 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:43:27,098 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:43:32,097 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:43:37,107 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:43:42,113 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:43:47,118 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:43:52,124 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:43:57,130 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:44:02,159 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:44:07,166 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:44:12,173 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:44:17,178 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:44:22,185 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:44:27,193 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:44:32,215 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:44:37,222 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:44:42,228 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:44:47,234 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:44:52,242 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:44:57,247 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:45:02,282 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:45:07,286 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:45:12,291 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:45:17,299 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:45:21,351 - meca_service - INFO - _stop_health_monitoring:197 - Stopped health monitoring for MecaService
+2025-07-29 09:45:21,354 - meca_service - INFO - _on_stop:413 - Meca robot service stopped
+2025-07-29 09:45:21,356 - meca_service - INFO - stop:160 - MecaService service stopped
+2025-07-29 09:45:26,982 - meca_service - INFO - _on_start:445 - Registered robot meca with state manager
+2025-07-29 09:45:26,986 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:45:26,988 - meca_service - INFO - _on_start:319 - TCP connection test successful, attempting full robot connection...
+2025-07-29 09:45:26,989 - meca_service - INFO - _on_start:326 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-29 09:45:30,593 - meca_service - INFO - _on_start:332 - 🎉 Full robot connection established during startup for meca
+2025-07-29 09:45:30,595 - meca_service - INFO - _on_start:358 - ✅ Robot meca successfully connected and ready for operations
+2025-07-29 09:45:30,600 - meca_service - INFO - _on_start:369 - Meca robot service started successfully
+2025-07-29 09:45:30,601 - meca_service - INFO - _start_health_monitoring:187 - Started health monitoring for MecaService
+2025-07-29 09:45:30,603 - meca_service - INFO - start:141 - MecaService service started
+2025-07-29 09:45:30,611 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:45:30,614 - meca_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: None -> True
+2025-07-29 09:45:30,617 - meca_service - INFO - _handle_connection_state_change:263 - Meca robot meca connection restored
+2025-07-29 09:45:35,639 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:45:40,647 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:45:44,506 - meca_service - INFO - _stop_health_monitoring:197 - Stopped health monitoring for MecaService
+2025-07-29 09:45:44,507 - meca_service - INFO - _on_stop:413 - Meca robot service stopped
+2025-07-29 09:45:44,509 - meca_service - INFO - stop:160 - MecaService service stopped
+2025-07-29 09:45:49,894 - meca_service - INFO - _on_start:445 - Registered robot meca with state manager
+2025-07-29 09:45:49,899 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:45:49,901 - meca_service - INFO - _on_start:319 - TCP connection test successful, attempting full robot connection...
+2025-07-29 09:45:49,902 - meca_service - INFO - _on_start:326 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-29 09:45:53,512 - meca_service - INFO - _on_start:332 - 🎉 Full robot connection established during startup for meca
+2025-07-29 09:45:53,513 - meca_service - INFO - _on_start:358 - ✅ Robot meca successfully connected and ready for operations
+2025-07-29 09:45:53,514 - meca_service - INFO - _on_start:369 - Meca robot service started successfully
+2025-07-29 09:45:53,515 - meca_service - INFO - _start_health_monitoring:187 - Started health monitoring for MecaService
+2025-07-29 09:45:53,515 - meca_service - INFO - start:141 - MecaService service started
+2025-07-29 09:45:53,521 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:45:53,523 - meca_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: None -> True
+2025-07-29 09:45:53,525 - meca_service - INFO - _handle_connection_state_change:263 - Meca robot meca connection restored
+2025-07-29 09:45:58,531 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:46:03,946 - meca_service - INFO - _stop_health_monitoring:197 - Stopped health monitoring for MecaService
+2025-07-29 09:46:03,948 - meca_service - INFO - _on_stop:413 - Meca robot service stopped
+2025-07-29 09:46:03,950 - meca_service - INFO - stop:160 - MecaService service stopped
+2025-07-29 09:46:06,956 - meca_service - INFO - _on_start:445 - Registered robot meca with state manager
+2025-07-29 09:46:06,960 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:46:06,962 - meca_service - INFO - _on_start:319 - TCP connection test successful, attempting full robot connection...
+2025-07-29 09:46:06,963 - meca_service - INFO - _on_start:326 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-29 09:46:10,574 - meca_service - INFO - _on_start:332 - 🎉 Full robot connection established during startup for meca
+2025-07-29 09:46:10,575 - meca_service - INFO - _on_start:358 - ✅ Robot meca successfully connected and ready for operations
+2025-07-29 09:46:10,576 - meca_service - INFO - _on_start:369 - Meca robot service started successfully
+2025-07-29 09:46:10,577 - meca_service - INFO - _start_health_monitoring:187 - Started health monitoring for MecaService
+2025-07-29 09:46:10,578 - meca_service - INFO - start:141 - MecaService service started
+2025-07-29 09:46:10,585 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:46:10,587 - meca_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: None -> True
+2025-07-29 09:46:10,588 - meca_service - INFO - _handle_connection_state_change:263 - Meca robot meca connection restored
+2025-07-29 09:46:15,594 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:46:20,606 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:46:22,291 - meca_service - INFO - _stop_health_monitoring:197 - Stopped health monitoring for MecaService
+2025-07-29 09:46:22,293 - meca_service - INFO - _on_stop:413 - Meca robot service stopped
+2025-07-29 09:46:22,295 - meca_service - INFO - stop:160 - MecaService service stopped
+2025-07-29 09:46:25,055 - meca_service - INFO - _on_start:445 - Registered robot meca with state manager
+2025-07-29 09:46:25,060 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:46:25,062 - meca_service - INFO - _on_start:319 - TCP connection test successful, attempting full robot connection...
+2025-07-29 09:46:25,064 - meca_service - INFO - _on_start:326 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-29 09:46:28,679 - meca_service - INFO - _on_start:332 - 🎉 Full robot connection established during startup for meca
+2025-07-29 09:46:28,686 - meca_service - INFO - _on_start:358 - ✅ Robot meca successfully connected and ready for operations
+2025-07-29 09:46:28,688 - meca_service - INFO - _on_start:369 - Meca robot service started successfully
+2025-07-29 09:46:28,689 - meca_service - INFO - _start_health_monitoring:187 - Started health monitoring for MecaService
+2025-07-29 09:46:28,703 - meca_service - INFO - start:141 - MecaService service started
+2025-07-29 09:46:28,710 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:46:28,712 - meca_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: None -> True
+2025-07-29 09:46:28,713 - meca_service - INFO - _handle_connection_state_change:263 - Meca robot meca connection restored
+2025-07-29 09:46:33,748 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:46:38,754 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:46:43,758 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:46:48,767 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:46:49,583 - meca_service - INFO - _stop_health_monitoring:197 - Stopped health monitoring for MecaService
+2025-07-29 09:46:49,584 - meca_service - INFO - _on_stop:413 - Meca robot service stopped
+2025-07-29 09:46:49,587 - meca_service - INFO - stop:160 - MecaService service stopped
+2025-07-29 09:46:52,576 - meca_service - INFO - _on_start:445 - Registered robot meca with state manager
+2025-07-29 09:46:52,582 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:46:52,583 - meca_service - INFO - _on_start:319 - TCP connection test successful, attempting full robot connection...
+2025-07-29 09:46:52,584 - meca_service - INFO - _on_start:326 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-29 09:46:56,192 - meca_service - INFO - _on_start:332 - 🎉 Full robot connection established during startup for meca
+2025-07-29 09:46:56,195 - meca_service - INFO - _on_start:358 - ✅ Robot meca successfully connected and ready for operations
+2025-07-29 09:46:56,196 - meca_service - INFO - _on_start:369 - Meca robot service started successfully
+2025-07-29 09:46:56,198 - meca_service - INFO - _start_health_monitoring:187 - Started health monitoring for MecaService
+2025-07-29 09:46:56,199 - meca_service - INFO - start:141 - MecaService service started
+2025-07-29 09:46:56,206 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:46:56,208 - meca_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: None -> True
+2025-07-29 09:46:56,211 - meca_service - INFO - _handle_connection_state_change:263 - Meca robot meca connection restored
+2025-07-29 09:47:01,217 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:47:06,248 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:47:11,255 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:47:11,424 - meca_service - INFO - _stop_health_monitoring:197 - Stopped health monitoring for MecaService
+2025-07-29 09:47:11,427 - meca_service - INFO - _on_stop:413 - Meca robot service stopped
+2025-07-29 09:47:11,430 - meca_service - INFO - stop:160 - MecaService service stopped
+2025-07-29 09:47:14,401 - meca_service - INFO - _on_start:445 - Registered robot meca with state manager
+2025-07-29 09:47:14,407 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:47:14,409 - meca_service - INFO - _on_start:319 - TCP connection test successful, attempting full robot connection...
+2025-07-29 09:47:14,410 - meca_service - INFO - _on_start:326 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-29 09:47:18,036 - meca_service - INFO - _on_start:332 - 🎉 Full robot connection established during startup for meca
+2025-07-29 09:47:18,039 - meca_service - INFO - _on_start:358 - ✅ Robot meca successfully connected and ready for operations
+2025-07-29 09:47:18,043 - meca_service - INFO - _on_start:369 - Meca robot service started successfully
+2025-07-29 09:47:18,046 - meca_service - INFO - _start_health_monitoring:187 - Started health monitoring for MecaService
+2025-07-29 09:47:18,048 - meca_service - INFO - start:141 - MecaService service started
+2025-07-29 09:47:18,057 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:47:18,061 - meca_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: None -> True
+2025-07-29 09:47:18,062 - meca_service - INFO - _handle_connection_state_change:263 - Meca robot meca connection restored
+2025-07-29 09:47:23,071 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:47:28,076 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:47:32,396 - meca_service - INFO - _stop_health_monitoring:197 - Stopped health monitoring for MecaService
+2025-07-29 09:47:32,399 - meca_service - INFO - _on_stop:413 - Meca robot service stopped
+2025-07-29 09:47:32,404 - meca_service - INFO - stop:160 - MecaService service stopped
+2025-07-29 09:47:35,115 - meca_service - INFO - _on_start:445 - Registered robot meca with state manager
+2025-07-29 09:47:35,122 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:47:35,124 - meca_service - INFO - _on_start:319 - TCP connection test successful, attempting full robot connection...
+2025-07-29 09:47:35,127 - meca_service - INFO - _on_start:326 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-29 09:47:38,749 - meca_service - INFO - _on_start:332 - 🎉 Full robot connection established during startup for meca
+2025-07-29 09:47:38,753 - meca_service - INFO - _on_start:358 - ✅ Robot meca successfully connected and ready for operations
+2025-07-29 09:47:38,757 - meca_service - INFO - _on_start:369 - Meca robot service started successfully
+2025-07-29 09:47:38,759 - meca_service - INFO - _start_health_monitoring:187 - Started health monitoring for MecaService
+2025-07-29 09:47:38,762 - meca_service - INFO - start:141 - MecaService service started
+2025-07-29 09:47:38,774 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:47:38,777 - meca_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: None -> True
+2025-07-29 09:47:38,780 - meca_service - INFO - _handle_connection_state_change:263 - Meca robot meca connection restored
+2025-07-29 09:47:43,790 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:47:48,798 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:47:53,805 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:47:58,812 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:48:03,820 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:48:08,829 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:48:13,835 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:48:18,843 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:48:23,851 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:48:28,864 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:48:33,895 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:48:36,182 - meca_service - INFO - _stop_health_monitoring:197 - Stopped health monitoring for MecaService
+2025-07-29 09:48:36,184 - meca_service - INFO - _on_stop:413 - Meca robot service stopped
+2025-07-29 09:48:36,186 - meca_service - INFO - stop:160 - MecaService service stopped
+2025-07-29 09:48:40,466 - meca_service - INFO - _on_start:445 - Registered robot meca with state manager
+2025-07-29 09:48:40,469 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:48:40,469 - meca_service - INFO - _on_start:319 - TCP connection test successful, attempting full robot connection...
+2025-07-29 09:48:40,470 - meca_service - INFO - _on_start:326 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-29 09:48:44,135 - meca_service - INFO - _on_start:332 - 🎉 Full robot connection established during startup for meca
+2025-07-29 09:48:44,137 - meca_service - INFO - _on_start:358 - ✅ Robot meca successfully connected and ready for operations
+2025-07-29 09:48:44,139 - meca_service - INFO - _on_start:369 - Meca robot service started successfully
+2025-07-29 09:48:44,140 - meca_service - INFO - _start_health_monitoring:187 - Started health monitoring for MecaService
+2025-07-29 09:48:44,141 - meca_service - INFO - start:141 - MecaService service started
+2025-07-29 09:48:44,151 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:48:44,153 - meca_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: None -> True
+2025-07-29 09:48:44,154 - meca_service - INFO - _handle_connection_state_change:263 - Meca robot meca connection restored
+2025-07-29 09:48:49,162 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:48:50,511 - meca_service - INFO - execute_operation:280 - Starting operation meca_status: status_check for robot meca
+2025-07-29 09:48:50,515 - meca_service - INFO - execute_operation:299 - Operation meca_status completed successfully in 0.00s
+2025-07-29 09:48:54,170 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:48:59,176 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:49:01,241 - meca_router - INFO - create_pickup:137 - Received meca pickup request: start=0, count=1
+2025-07-29 09:49:01,243 - meca_router - INFO - create_pickup:145 - Executing pickup sequence for wafers 1 to 1
+2025-07-29 09:49:01,245 - meca_service - INFO - execute_operation:280 - Starting operation meca_pickup_sequence_0_1: pickup_wafer for robot meca
+2025-07-29 09:49:01,256 - meca_service - INFO - ensure_robot_ready:613 - ✅ Robot meca hardware state verified - Activated: True, Homed: True, Ready for operations
+2025-07-29 09:49:01,257 - meca_service - INFO - _pickup_sequence:1573 - Starting pickup sequence for wafers 1 to 1
+2025-07-29 09:49:02,288 - meca_service - INFO - _pickup_sequence:1591 - Processing wafer 1
+2025-07-29 09:49:04,206 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:49:06,310 - meca_service - INFO - _pickup_sequence:1645 - Pickup sequence completed for wafers 1 to 1
+2025-07-29 09:49:06,311 - meca_service - INFO - execute_operation:299 - Operation meca_pickup_sequence_0_1 completed successfully in 5.07s
+2025-07-29 09:49:06,312 - meca_router - INFO - create_pickup:152 - Pickup sequence completed successfully
+2025-07-29 09:49:09,212 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:49:14,217 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:49:19,226 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:49:24,231 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:49:29,236 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:49:34,273 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:49:39,279 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:49:44,286 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:49:49,294 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:49:54,299 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:49:59,306 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:50:04,325 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:50:09,332 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:50:14,340 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:50:19,349 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:50:24,357 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:50:29,366 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:50:34,398 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:50:39,407 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:50:44,413 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:50:49,426 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:50:54,445 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:50:59,488 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:51:04,517 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:51:09,525 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:51:14,532 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:51:19,540 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:51:24,546 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:51:29,553 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:51:34,591 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:51:39,598 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:51:44,641 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:51:49,720 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:51:54,727 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:51:59,731 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:52:04,767 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:52:09,780 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:52:14,786 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:52:19,792 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:52:23,974 - meca_service - INFO - execute_operation:280 - Starting operation meca_pickup_wafer_pickup_0_5: pickup_wafer for robot meca
+2025-07-29 09:52:23,985 - meca_service - INFO - ensure_robot_ready:613 - ✅ Robot meca hardware state verified - Activated: True, Homed: True, Ready for operations
+2025-07-29 09:52:23,990 - meca_service - INFO - _pickup_sequence:1213 - Wafer pickup completed: wafer_pickup_0_5
+2025-07-29 09:52:23,991 - meca_service - INFO - execute_operation:299 - Operation meca_pickup_wafer_pickup_0_5 completed successfully in 0.02s
+2025-07-29 09:52:24,799 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:52:29,817 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:52:34,843 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:52:39,849 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:52:44,855 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:52:52,858 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:52:52,861 - meca_service - WARNING - _handle_connection_state_change:270 - Meca robot meca connection lost
+2025-07-29 09:53:00,864 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:53:08,890 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:53:16,893 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:53:24,897 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:53:32,908 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:53:40,912 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:53:48,915 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:53:56,917 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:54:04,937 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:54:12,940 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:54:20,945 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:54:28,951 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:54:36,950 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:54:44,955 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:54:52,960 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:55:00,963 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:55:08,959 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:55:16,961 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:55:24,962 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 09:55:30,003 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:55:30,005 - meca_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: False -> True
+2025-07-29 09:55:30,008 - meca_service - INFO - _handle_connection_state_change:263 - Meca robot meca connection restored
+2025-07-29 09:55:35,023 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:55:40,028 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:55:45,034 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:55:46,612 - meca_service - INFO - execute_operation:280 - Starting operation meca_pickup_wafer_pickup_0_5: pickup_wafer for robot meca
+2025-07-29 09:55:46,623 - meca_service - INFO - ensure_robot_ready:613 - ✅ Robot meca hardware state verified - Activated: True, Homed: True, Ready for operations
+2025-07-29 09:55:46,626 - meca_service - ERROR - _pickup_sequence:1217 - Pickup sequence failed for wafer wafer_pickup_0_5: __init__() missing 1 required positional argument: 'robot_id'
+2025-07-29 09:55:46,627 - meca_service - ERROR - execute_operation:327 - Operation meca_pickup_wafer_pickup_0_5 failed: __init__() missing 1 required positional argument: 'robot_id'
+Traceback (most recent call last):
+  File "/app/services/base.py", line 287, in execute_operation
+    result = await asyncio.wait_for(
+  File "/usr/local/lib/python3.9/asyncio/tasks.py", line 479, in wait_for
+    return fut.result()
+  File "/app/services/meca_service.py", line 1179, in _pickup_sequence
+    await self._move_to_position(self.safe_position, "safe_position")
+  File "/app/services/meca_service.py", line 1452, in _move_to_position
+    raise HardwareError(f"Movement failed: {result.error}")
+TypeError: __init__() missing 1 required positional argument: 'robot_id'
+2025-07-29 09:55:50,039 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:55:55,052 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:56:00,061 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:56:02,572 - meca_service - INFO - execute_operation:280 - Starting operation meca_pickup_wafer_pickup_0_5: pickup_wafer for robot meca
+2025-07-29 09:56:02,580 - meca_service - INFO - ensure_robot_ready:613 - ✅ Robot meca hardware state verified - Activated: True, Homed: True, Ready for operations
+2025-07-29 09:56:02,582 - meca_service - ERROR - _pickup_sequence:1217 - Pickup sequence failed for wafer wafer_pickup_0_5: __init__() missing 1 required positional argument: 'robot_id'
+2025-07-29 09:56:02,582 - meca_service - ERROR - execute_operation:327 - Operation meca_pickup_wafer_pickup_0_5 failed: __init__() missing 1 required positional argument: 'robot_id'
+Traceback (most recent call last):
+  File "/app/services/base.py", line 287, in execute_operation
+    result = await asyncio.wait_for(
+  File "/usr/local/lib/python3.9/asyncio/tasks.py", line 479, in wait_for
+    return fut.result()
+  File "/app/services/meca_service.py", line 1179, in _pickup_sequence
+    await self._move_to_position(self.safe_position, "safe_position")
+  File "/app/services/meca_service.py", line 1452, in _move_to_position
+    raise HardwareError(f"Movement failed: {result.error}")
+TypeError: __init__() missing 1 required positional argument: 'robot_id'
+2025-07-29 09:56:05,078 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:56:10,084 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:56:15,091 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:56:20,097 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:56:25,104 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:56:30,112 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:56:35,130 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:56:40,137 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:56:45,143 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:56:50,149 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:56:55,155 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:57:00,161 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:57:05,183 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:57:10,191 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:57:15,196 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:57:20,202 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:57:25,208 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:57:30,214 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:57:35,238 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:57:40,245 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:57:45,249 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:57:50,256 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:57:55,265 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:58:00,273 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:58:05,293 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:58:10,298 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:58:15,306 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:58:20,315 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:58:25,325 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:58:30,331 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:58:35,344 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:58:40,352 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:58:45,362 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:58:50,370 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:58:55,376 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:59:00,384 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:59:05,403 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:59:10,411 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:59:15,419 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:59:20,432 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:59:25,440 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:59:30,448 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:59:35,456 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:59:40,462 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:59:45,472 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:59:50,480 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 09:59:55,487 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:00:00,493 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:00:05,510 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:00:10,515 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:00:15,523 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:00:20,529 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:00:25,536 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:00:30,546 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:00:31,214 - meca_service - INFO - _stop_health_monitoring:197 - Stopped health monitoring for MecaService
+2025-07-29 10:00:31,217 - meca_service - INFO - _on_stop:413 - Meca robot service stopped
+2025-07-29 10:00:31,220 - meca_service - INFO - stop:160 - MecaService service stopped
+2025-07-29 10:00:33,941 - meca_service - INFO - _on_start:445 - Registered robot meca with state manager
+2025-07-29 10:00:33,946 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:00:33,948 - meca_service - INFO - _on_start:319 - TCP connection test successful, attempting full robot connection...
+2025-07-29 10:00:33,949 - meca_service - INFO - _on_start:326 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-29 10:00:48,987 - meca_service - INFO - _on_start:332 - 🎉 Full robot connection established during startup for meca
+2025-07-29 10:00:48,989 - meca_service - INFO - _on_start:358 - ✅ Robot meca successfully connected and ready for operations
+2025-07-29 10:00:48,991 - meca_service - INFO - _on_start:369 - Meca robot service started successfully
+2025-07-29 10:00:48,992 - meca_service - INFO - _start_health_monitoring:187 - Started health monitoring for MecaService
+2025-07-29 10:00:48,993 - meca_service - INFO - start:141 - MecaService service started
+2025-07-29 10:00:49,000 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:00:49,002 - meca_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: None -> True
+2025-07-29 10:00:49,003 - meca_service - INFO - _handle_connection_state_change:263 - Meca robot meca connection restored
+2025-07-29 10:00:54,012 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:00:59,186 - meca_service - INFO - _stop_health_monitoring:197 - Stopped health monitoring for MecaService
+2025-07-29 10:00:59,190 - meca_service - INFO - _on_stop:413 - Meca robot service stopped
+2025-07-29 10:00:59,192 - meca_service - INFO - stop:160 - MecaService service stopped
+2025-07-29 10:01:02,343 - meca_service - INFO - _on_start:445 - Registered robot meca with state manager
+2025-07-29 10:01:02,350 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:01:02,353 - meca_service - INFO - _on_start:319 - TCP connection test successful, attempting full robot connection...
+2025-07-29 10:01:02,356 - meca_service - INFO - _on_start:326 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-29 10:01:06,001 - meca_service - INFO - _on_start:332 - 🎉 Full robot connection established during startup for meca
+2025-07-29 10:01:06,002 - meca_service - INFO - _on_start:358 - ✅ Robot meca successfully connected and ready for operations
+2025-07-29 10:01:06,003 - meca_service - INFO - _on_start:369 - Meca robot service started successfully
+2025-07-29 10:01:06,004 - meca_service - INFO - _start_health_monitoring:187 - Started health monitoring for MecaService
+2025-07-29 10:01:06,007 - meca_service - INFO - start:141 - MecaService service started
+2025-07-29 10:01:06,017 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:01:06,019 - meca_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: None -> True
+2025-07-29 10:01:06,020 - meca_service - INFO - _handle_connection_state_change:263 - Meca robot meca connection restored
+2025-07-29 10:01:11,026 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:01:16,243 - meca_service - INFO - _stop_health_monitoring:197 - Stopped health monitoring for MecaService
+2025-07-29 10:01:16,245 - meca_service - INFO - _on_stop:413 - Meca robot service stopped
+2025-07-29 10:01:16,248 - meca_service - INFO - stop:160 - MecaService service stopped
+2025-07-29 10:01:19,373 - meca_service - INFO - _on_start:445 - Registered robot meca with state manager
+2025-07-29 10:01:19,378 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:01:19,382 - meca_service - INFO - _on_start:319 - TCP connection test successful, attempting full robot connection...
+2025-07-29 10:01:19,385 - meca_service - INFO - _on_start:326 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-29 10:01:23,006 - meca_service - INFO - _on_start:332 - 🎉 Full robot connection established during startup for meca
+2025-07-29 10:01:23,009 - meca_service - INFO - _on_start:358 - ✅ Robot meca successfully connected and ready for operations
+2025-07-29 10:01:23,013 - meca_service - INFO - _on_start:369 - Meca robot service started successfully
+2025-07-29 10:01:23,016 - meca_service - INFO - _start_health_monitoring:187 - Started health monitoring for MecaService
+2025-07-29 10:01:23,019 - meca_service - INFO - start:141 - MecaService service started
+2025-07-29 10:01:23,031 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:01:23,033 - meca_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: None -> True
+2025-07-29 10:01:23,036 - meca_service - INFO - _handle_connection_state_change:263 - Meca robot meca connection restored
+2025-07-29 10:01:28,043 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:01:33,289 - meca_service - INFO - _stop_health_monitoring:197 - Stopped health monitoring for MecaService
+2025-07-29 10:01:33,291 - meca_service - INFO - _on_stop:413 - Meca robot service stopped
+2025-07-29 10:01:33,291 - meca_service - INFO - stop:160 - MecaService service stopped
+2025-07-29 10:01:37,523 - meca_service - INFO - _on_start:445 - Registered robot meca with state manager
+2025-07-29 10:01:37,531 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:01:37,534 - meca_service - INFO - _on_start:319 - TCP connection test successful, attempting full robot connection...
+2025-07-29 10:01:37,537 - meca_service - INFO - _on_start:326 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-29 10:01:41,151 - meca_service - INFO - _on_start:332 - 🎉 Full robot connection established during startup for meca
+2025-07-29 10:01:41,152 - meca_service - INFO - _on_start:358 - ✅ Robot meca successfully connected and ready for operations
+2025-07-29 10:01:41,153 - meca_service - INFO - _on_start:369 - Meca robot service started successfully
+2025-07-29 10:01:41,154 - meca_service - INFO - _start_health_monitoring:187 - Started health monitoring for MecaService
+2025-07-29 10:01:41,155 - meca_service - INFO - start:141 - MecaService service started
+2025-07-29 10:01:41,163 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:01:41,168 - meca_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: None -> True
+2025-07-29 10:01:41,171 - meca_service - INFO - _handle_connection_state_change:263 - Meca robot meca connection restored
+2025-07-29 10:01:46,178 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:01:51,183 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:01:55,304 - meca_service - INFO - _stop_health_monitoring:197 - Stopped health monitoring for MecaService
+2025-07-29 10:01:55,307 - meca_service - INFO - _on_stop:413 - Meca robot service stopped
+2025-07-29 10:01:55,310 - meca_service - INFO - stop:160 - MecaService service stopped
+2025-07-29 10:01:59,332 - meca_service - INFO - _on_start:445 - Registered robot meca with state manager
+2025-07-29 10:01:59,338 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:01:59,341 - meca_service - INFO - _on_start:319 - TCP connection test successful, attempting full robot connection...
+2025-07-29 10:01:59,344 - meca_service - INFO - _on_start:326 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-29 10:02:02,992 - meca_service - INFO - _on_start:332 - 🎉 Full robot connection established during startup for meca
+2025-07-29 10:02:02,996 - meca_service - INFO - _on_start:358 - ✅ Robot meca successfully connected and ready for operations
+2025-07-29 10:02:03,003 - meca_service - INFO - _on_start:369 - Meca robot service started successfully
+2025-07-29 10:02:03,007 - meca_service - INFO - _start_health_monitoring:187 - Started health monitoring for MecaService
+2025-07-29 10:02:03,011 - meca_service - INFO - start:141 - MecaService service started
+2025-07-29 10:02:03,024 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:02:03,027 - meca_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: None -> True
+2025-07-29 10:02:03,030 - meca_service - INFO - _handle_connection_state_change:263 - Meca robot meca connection restored
+2025-07-29 10:02:08,058 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:02:13,086 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:02:18,092 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:02:23,099 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:02:27,634 - meca_router - INFO - create_pickup:137 - Received meca pickup request: start=0, count=1
+2025-07-29 10:02:27,636 - meca_router - INFO - create_pickup:145 - Executing pickup sequence for wafers 1 to 1
+2025-07-29 10:02:27,641 - meca_service - INFO - execute_operation:280 - Starting operation meca_pickup_sequence_0_1: pickup_wafer for robot meca
+2025-07-29 10:02:27,666 - meca_service - INFO - ensure_robot_ready:613 - ✅ Robot meca hardware state verified - Activated: True, Homed: True, Ready for operations
+2025-07-29 10:02:27,667 - meca_service - INFO - _pickup_sequence:1573 - Starting pickup sequence for wafers 1 to 1
+2025-07-29 10:02:28,109 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:02:28,681 - meca_service - INFO - _pickup_sequence:1591 - Processing wafer 1
+2025-07-29 10:02:32,728 - meca_service - INFO - _pickup_sequence:1645 - Pickup sequence completed for wafers 1 to 1
+2025-07-29 10:02:32,730 - meca_service - INFO - execute_operation:299 - Operation meca_pickup_sequence_0_1 completed successfully in 5.09s
+2025-07-29 10:02:32,738 - meca_router - INFO - create_pickup:152 - Pickup sequence completed successfully
+2025-07-29 10:02:33,129 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:02:38,138 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:02:43,146 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:02:46,643 - meca_router - INFO - create_pickup:137 - Received meca pickup request: start=1, count=1
+2025-07-29 10:02:46,645 - meca_router - INFO - create_pickup:145 - Executing pickup sequence for wafers 2 to 2
+2025-07-29 10:02:46,647 - meca_service - INFO - execute_operation:280 - Starting operation meca_pickup_sequence_1_1: pickup_wafer for robot meca
+2025-07-29 10:02:46,662 - meca_service - INFO - ensure_robot_ready:613 - ✅ Robot meca hardware state verified - Activated: True, Homed: True, Ready for operations
+2025-07-29 10:02:46,665 - meca_service - INFO - _pickup_sequence:1573 - Starting pickup sequence for wafers 2 to 2
+2025-07-29 10:02:47,673 - meca_service - INFO - _pickup_sequence:1591 - Processing wafer 2
+2025-07-29 10:02:48,156 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:02:51,710 - meca_service - INFO - _pickup_sequence:1645 - Pickup sequence completed for wafers 2 to 2
+2025-07-29 10:02:51,713 - meca_service - INFO - execute_operation:299 - Operation meca_pickup_sequence_1_1 completed successfully in 5.07s
+2025-07-29 10:02:51,716 - meca_router - INFO - create_pickup:152 - Pickup sequence completed successfully
+2025-07-29 10:02:53,163 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:02:58,173 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:03:03,196 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:03:08,204 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:03:13,211 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:03:18,218 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:03:23,226 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:03:28,233 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:03:33,254 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:03:38,262 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:03:43,272 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:03:48,282 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:03:53,290 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:03:58,298 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:04:03,311 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:04:08,319 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:04:13,325 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:04:18,333 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:04:23,342 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:04:28,349 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:04:33,368 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:04:38,375 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:04:43,392 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:04:48,401 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:04:53,411 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:04:58,419 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:05:03,438 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:05:08,444 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:05:13,451 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:05:18,456 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:05:23,462 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:05:28,473 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:05:33,488 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:05:38,493 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:05:43,505 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:05:48,510 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:05:53,516 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:05:58,524 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:06:03,548 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:06:08,567 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:06:13,573 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:06:18,586 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:06:23,596 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:06:28,604 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:06:33,622 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:06:38,628 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:06:43,633 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:06:48,641 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:06:53,651 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:06:58,657 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:07:03,678 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:07:08,686 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:07:13,694 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:07:18,701 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:07:23,710 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:07:28,717 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:07:33,730 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:07:38,741 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:07:43,762 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:07:48,767 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:07:53,777 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:07:58,784 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:08:03,798 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:08:03,910 - meca_service - INFO - execute_operation:280 - Starting operation meca_pickup_wafer_pickup_0_5: pickup_wafer for robot meca
+2025-07-29 10:08:03,919 - meca_service - INFO - ensure_robot_ready:613 - ✅ Robot meca hardware state verified - Activated: True, Homed: True, Ready for operations
+2025-07-29 10:08:03,925 - meca_service - INFO - _pickup_sequence:1213 - Wafer pickup completed: wafer_pickup_0_5
+2025-07-29 10:08:03,926 - meca_service - INFO - execute_operation:299 - Operation meca_pickup_wafer_pickup_0_5 completed successfully in 0.02s
+2025-07-29 10:08:08,810 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:08:13,816 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:08:18,823 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:08:23,828 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:08:28,834 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:08:33,857 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:08:38,864 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:08:43,874 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:08:48,884 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:08:53,913 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:08:58,921 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:09:02,202 - meca_service - INFO - execute_operation:280 - Starting operation meca_disconnect_1753783742202: disconnect for robot meca
+2025-07-29 10:09:02,208 - meca_service - INFO - _disconnect:1114 - Disconnected from robot meca
+2025-07-29 10:09:02,210 - meca_service - INFO - execute_operation:299 - Operation meca_disconnect_1753783742202 completed successfully in 0.01s
+2025-07-29 10:09:03,940 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:09:03,942 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 1)
+2025-07-29 10:09:03,945 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 1/10)
+2025-07-29 10:09:06,936 - meca_service - WARNING - _health_monitoring_loop:223 - Connection check timeout for MecaService
+2025-07-29 10:17:39,705 - meca_service - INFO - _stop_health_monitoring:197 - Stopped health monitoring for MecaService
+2025-07-29 10:17:39,707 - meca_service - INFO - _on_stop:413 - Meca robot service stopped
+2025-07-29 10:17:39,709 - meca_service - INFO - stop:160 - MecaService service stopped
+2025-07-29 10:17:44,287 - meca_service - INFO - _on_start:445 - Registered robot meca with state manager
+2025-07-29 10:17:44,295 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:17:44,297 - meca_service - INFO - _on_start:319 - TCP connection test successful, attempting full robot connection...
+2025-07-29 10:17:44,298 - meca_service - INFO - _on_start:326 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-29 10:17:48,294 - meca_service - INFO - _on_start:445 - Registered robot meca with state manager
+2025-07-29 10:17:48,303 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:17:48,306 - meca_service - INFO - _on_start:319 - TCP connection test successful, attempting full robot connection...
+2025-07-29 10:17:48,308 - meca_service - INFO - _on_start:326 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-29 10:17:48,457 - meca_service - ERROR - _on_start:337 - ❌ Robot connection failed during startup for meca
+2025-07-29 10:17:48,462 - meca_service - ERROR - _on_start:338 - 💡 Check network connectivity and robot status at 192.168.0.100:10000
+2025-07-29 10:17:48,466 - meca_service - ERROR - _on_start:349 - 🚫 Robot meca connection failed - service cannot start without hardware connection
+2025-07-29 10:17:48,470 - meca_service - ERROR - _on_start:356 - 💡 Health monitoring will attempt reconnection for meca
+2025-07-29 10:17:48,500 - meca_service - INFO - _on_start:369 - Meca robot service started successfully
+2025-07-29 10:17:48,512 - meca_service - INFO - _start_health_monitoring:187 - Started health monitoring for MecaService
+2025-07-29 10:17:48,514 - meca_service - INFO - start:141 - MecaService service started
+2025-07-29 10:17:48,533 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:17:48,535 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 1)
+2025-07-29 10:17:48,537 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 1/10)
+2025-07-29 10:17:48,606 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 1.0s (attempt 1/10, reason: Connection returned False)
+2025-07-29 10:17:48,607 - meca_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: None -> True
+2025-07-29 10:17:48,609 - meca_service - INFO - _handle_connection_state_change:263 - Meca robot meca connection restored
+2025-07-29 10:17:53,614 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:17:53,616 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 2)
+2025-07-29 10:17:53,618 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 2/10)
+2025-07-29 10:17:53,688 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 2.0s (attempt 2/10, reason: Connection returned False)
+2025-07-29 10:17:58,694 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:17:58,697 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 3)
+2025-07-29 10:17:58,699 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 3/10)
+2025-07-29 10:17:58,765 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 4.0s (attempt 3/10, reason: Connection returned False)
+2025-07-29 10:17:59,693 - meca_service - INFO - _on_start:332 - 🎉 Full robot connection established during startup for meca
+2025-07-29 10:17:59,695 - meca_service - INFO - _on_start:358 - ✅ Robot meca successfully connected and ready for operations
+2025-07-29 10:17:59,697 - meca_service - INFO - _on_start:369 - Meca robot service started successfully
+2025-07-29 10:17:59,699 - meca_service - INFO - _start_health_monitoring:187 - Started health monitoring for MecaService
+2025-07-29 10:17:59,700 - meca_service - INFO - start:141 - MecaService service started
+2025-07-29 10:17:59,711 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:17:59,713 - meca_service - INFO - _health_monitoring_loop:212 - Robot connection state changed: None -> True
+2025-07-29 10:17:59,715 - meca_service - INFO - _handle_connection_state_change:263 - Meca robot meca connection restored
+2025-07-29 10:18:03,791 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:03,794 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 4)
+2025-07-29 10:18:03,797 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 4/10)
+2025-07-29 10:18:03,869 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 8.0s (attempt 4/10, reason: Connection returned False)
+2025-07-29 10:18:04,743 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:08,720 - meca_service - INFO - execute_operation:280 - Starting operation meca_pickup_wafer_pickup_0_5: pickup_wafer for robot meca
+2025-07-29 10:18:08,721 - meca_service - WARNING - ensure_robot_ready:520 - No robot instance available for meca - skipping hardware state check
+2025-07-29 10:18:08,724 - meca_service - ERROR - _pickup_sequence:1217 - Pickup sequence failed for wafer wafer_pickup_0_5: Movement failed: Movement failed: Robot meca not connected: ❌ No robot instance available for meca - command 'move_pose' cannot be executed
+2025-07-29 10:18:08,725 - meca_service - ERROR - execute_operation:327 - Operation meca_pickup_wafer_pickup_0_5 failed: Movement failed: Movement failed: Robot meca not connected: ❌ No robot instance available for meca - command 'move_pose' cannot be executed
+Traceback (most recent call last):
+  File "/app/services/base.py", line 287, in execute_operation
+    result = await asyncio.wait_for(
+  File "/usr/local/lib/python3.9/asyncio/tasks.py", line 479, in wait_for
+    return fut.result()
+  File "/app/services/meca_service.py", line 1179, in _pickup_sequence
+    await self._move_to_position(self.safe_position, "safe_position")
+  File "/app/services/meca_service.py", line 1452, in _move_to_position
+    raise HardwareError(f"Movement failed: {result.error}", robot_id=self.robot_id)
+core.exceptions.HardwareError: Movement failed: Movement failed: Robot meca not connected: ❌ No robot instance available for meca - command 'move_pose' cannot be executed
+2025-07-29 10:18:08,877 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:09,748 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:13,884 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:13,886 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 5)
+2025-07-29 10:18:13,889 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 5/10)
+2025-07-29 10:18:13,997 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 16.0s (attempt 5/10, reason: Connection returned False)
+2025-07-29 10:18:14,754 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:19,005 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:19,760 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:24,014 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:24,767 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:29,021 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:29,774 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:34,050 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:34,053 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 6)
+2025-07-29 10:18:34,055 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 6/10)
+2025-07-29 10:18:34,134 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 6/10, reason: Connection returned False)
+2025-07-29 10:18:34,801 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:39,140 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:39,807 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:44,153 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:44,811 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:49,163 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:49,877 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:54,175 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:54,893 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:59,192 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:18:59,901 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:04,223 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:04,225 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 7)
+2025-07-29 10:19:04,226 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 7/10)
+2025-07-29 10:19:04,269 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 7/10, reason: Connection returned False)
+2025-07-29 10:19:04,934 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:09,273 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:09,942 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:14,278 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:14,948 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:19,282 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:19,954 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:24,288 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:24,960 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:29,294 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:29,969 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:34,311 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:34,313 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 8)
+2025-07-29 10:19:34,316 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 8/10)
+2025-07-29 10:19:34,367 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 8/10, reason: Connection returned False)
+2025-07-29 10:19:34,989 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:39,373 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:39,995 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:44,380 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:45,003 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:49,391 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:50,015 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:54,404 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:55,020 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:19:59,411 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:00,027 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:04,444 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:04,447 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 9)
+2025-07-29 10:20:04,450 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 9/10)
+2025-07-29 10:20:04,528 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:20:05,061 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:09,534 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:10,070 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:14,541 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:15,078 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:19,549 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:20,088 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:24,567 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:25,097 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:29,574 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:30,103 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:34,594 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:34,597 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:20:34,599 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:20:34,662 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:20:34,663 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:20:35,122 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:39,669 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:40,130 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:44,679 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:45,137 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:49,698 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:50,143 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:54,727 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:55,149 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:20:59,735 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:00,155 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:04,757 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:04,760 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:21:04,764 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:21:04,844 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:21:04,847 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:21:05,177 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:09,861 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:10,183 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:14,869 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:15,190 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:19,875 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:20,197 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:24,882 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:25,203 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:29,889 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:30,213 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:34,908 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:34,911 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:21:34,913 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:21:34,984 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:21:34,985 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:21:35,230 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:39,990 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:40,245 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:44,996 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:45,260 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:50,001 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:50,266 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:55,006 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:21:55,272 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:00,014 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:00,279 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:05,035 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:05,037 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:22:05,038 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:22:05,084 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:22:05,087 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:22:05,303 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:10,098 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:10,312 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:15,103 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:15,318 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:20,110 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:20,323 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:25,117 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:25,331 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:30,127 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:30,338 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:35,147 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:35,150 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:22:35,153 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:22:35,218 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:22:35,222 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:22:35,359 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:40,229 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:40,366 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:45,237 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:45,372 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:50,243 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:50,379 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:55,249 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:22:55,384 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:00,261 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:00,390 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:05,289 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:05,291 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:23:05,293 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:23:05,388 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:23:05,390 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:23:05,418 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:10,396 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:10,425 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:15,402 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:15,430 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:20,408 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:20,436 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:25,417 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:25,443 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:30,423 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:30,448 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:35,447 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:35,451 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:23:35,453 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:23:35,472 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:35,519 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:23:35,521 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:23:40,479 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:40,528 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:45,488 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:45,537 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:50,493 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:50,547 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:55,499 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:23:55,562 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:00,505 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:00,569 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:05,523 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:05,588 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:05,592 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:24:05,595 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:24:05,644 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:24:05,646 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:24:10,526 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:10,651 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:15,533 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:15,658 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:20,539 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:20,664 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:25,559 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:25,669 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:30,565 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:30,674 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:35,596 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:35,713 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:35,717 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:24:35,718 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:24:35,778 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:24:35,779 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:24:40,608 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:40,784 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:45,613 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:45,791 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:50,618 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:50,802 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:55,623 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:24:55,809 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:00,651 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:00,815 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:05,677 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:05,842 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:05,844 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:25:05,845 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:25:05,891 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:25:05,893 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:25:10,683 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:10,898 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:15,694 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:15,906 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:20,701 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:20,920 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:25,710 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:25,929 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:30,717 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:30,937 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:35,744 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:35,964 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:35,967 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:25:35,968 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:25:36,028 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:25:36,029 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:25:40,759 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:41,033 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:45,767 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:46,037 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:50,774 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:51,041 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:55,780 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:25:56,046 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:00,787 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:01,054 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:05,812 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:06,079 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:06,081 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:26:06,084 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:26:06,171 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:26:06,173 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:26:10,821 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:11,178 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:15,827 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:16,182 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:20,832 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:21,188 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:25,838 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:26,195 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:30,845 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:31,228 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:35,871 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:36,252 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:36,253 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:26:36,254 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:26:36,318 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:26:36,320 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:26:40,886 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:41,327 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:45,895 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:46,335 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:50,901 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:51,350 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:55,909 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:26:56,357 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:00,917 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:01,362 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:05,938 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:06,381 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:06,384 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:27:06,387 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:27:06,469 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:27:06,472 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:27:10,945 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:11,478 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:15,953 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:16,483 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:20,959 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:21,489 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:25,965 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:26,496 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:30,977 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:31,507 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:36,001 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:36,532 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:36,533 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:27:36,535 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:27:36,589 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:27:36,591 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:27:41,007 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:41,601 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:46,018 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:46,612 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:51,029 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:51,622 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:56,036 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:27:56,634 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:01,047 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:01,640 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:06,073 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:06,662 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:06,666 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:28:06,669 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:28:06,750 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:28:06,753 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:28:11,081 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:11,760 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:16,092 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:16,772 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:21,101 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:21,782 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:26,108 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:26,791 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:31,115 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:31,801 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:36,139 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:36,824 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:36,829 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:28:36,835 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:28:37,008 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:28:37,014 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:28:41,157 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:42,028 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:46,166 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:47,040 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:51,177 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:52,050 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:56,185 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:28:57,058 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:29:01,192 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:29:02,069 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:29:06,203 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:29:07,080 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:29:07,085 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:29:07,093 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:29:07,237 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:29:07,242 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:29:11,210 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:29:12,250 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:29:16,223 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:29:17,258 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:29:21,231 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:29:22,266 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:29:26,240 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:29:27,278 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:29:31,249 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:29:32,292 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:29:36,266 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:29:37,309 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:29:37,315 - meca_service - INFO - _check_robot_connection:166 - TCP connection OK but no robot instance for meca - attempting reconnection (attempt 10)
+2025-07-29 10:29:37,318 - meca_service - INFO - _attempt_robot_reconnection:190 - 🔄 Attempting full robot reconnection for meca (attempt 10/10)
+2025-07-29 10:29:37,457 - meca_service - WARNING - _schedule_next_reconnect_attempt:236 - Maximum reconnection attempts (10) reached for meca
+2025-07-29 10:29:37,461 - meca_service - INFO - _schedule_next_reconnect_attempt:248 - Scheduled next reconnection attempt for meca in 30.0s (attempt 9/10, reason: Connection returned False)
+2025-07-29 10:29:41,275 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-29 10:29:42,470 - meca_service - INFO - _test_robot_connection:440 - Meca robot TCP connection test successful to 192.168.0.100:10000

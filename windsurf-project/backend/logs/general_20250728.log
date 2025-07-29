@@ -2706,3 +2706,15 @@ NoneType: None
 2025-07-29 07:24:29,932 - meca_driver_meca - INFO - _activate_robot_sync_internal:365 - ⏳ Waiting for robot meca to complete homing...
 2025-07-29 07:24:41,319 - meca_driver_meca - INFO - _activate_robot_sync_internal:368 - ✅ Robot meca homing completed
 2025-07-29 07:24:41,324 - meca_driver_meca - INFO - _activate_robot_sync_internal:392 - 🎉 Robot activation sequence completed for meca
+2025-07-29 09:18:33,610 - playwright_mcp_service - INFO - stop:70 - Stopping Playwright MCP Service...
+2025-07-29 09:18:33,616 - mcp_client_playwright - INFO - connect:57 - Connecting to MCP server: ws://playwright-mcp-gateway:8000/message
+2025-07-29 09:18:35,785 - mcp_client_playwright - ERROR - connect:71 - Failed to connect to MCP server playwright: [Errno -2] Name or service not known
+2025-07-29 09:18:35,786 - mcp_client_playwright - INFO - connect:57 - Connecting to MCP server: ws://playwright-mcp-gateway:8000/message
+2025-07-29 09:18:37,658 - mcp_client_playwright - ERROR - connect:71 - Failed to connect to MCP server playwright: [Errno -2] Name or service not known
+2025-07-29 09:18:37,676 - playwright_mcp_service - ERROR - _call_tool:110 - Failed to call Playwright tool browser_close: Not connected to MCP server playwright
+2025-07-29 09:18:37,692 - playwright_mcp_service - ERROR - close_browser:434 - Failed to close browser: Not connected to MCP server playwright
+2025-07-29 09:18:37,695 - playwright_mcp_service - INFO - stop:78 - Playwright MCP Service stopped successfully
+2025-07-29 09:18:37,697 - mcp_client_service - INFO - stop:300 - Stopping MCP Client Service...
+2025-07-29 09:18:37,700 - mcp_client_service - INFO - stop:308 - MCP Client Service stopped successfully
+2025-07-29 09:18:37,781 - meca_driver_meca - INFO - _disconnect_sync:456 - Disconnected from Mecademic robot meca
+2025-07-29 09:18:37,801 - meca_driver_meca - INFO - disconnect:134 - Disconnected from meca

@@ -373,7 +373,7 @@ class WiperService(RobotService):
                     
                 elif status and status.get('state') == 'error':
                     error_msg = status.get('error_message', 'Unknown error')
-                    raise HardwareError(f"Cleaning failed: {error_msg}")
+                    raise HardwareError(f"Cleaning failed: {error_msg}", robot_id=self.robot_id)
                 
                 await asyncio.sleep(monitoring_interval)
                 
@@ -418,7 +418,7 @@ class WiperService(RobotService):
                     
                 elif status and status.get('state') == 'error':
                     error_msg = status.get('error_message', 'Unknown error')
-                    raise HardwareError(f"Drying failed: {error_msg}")
+                    raise HardwareError(f"Drying failed: {error_msg}", robot_id=self.robot_id)
                 
                 await asyncio.sleep(monitoring_interval)
                 
