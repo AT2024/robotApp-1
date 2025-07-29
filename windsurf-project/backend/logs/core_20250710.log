@@ -1,0 +1,6 @@
+2025-07-10 11:34:24,626 - hardware_manager - INFO - <module>:14 - Testing hardware_manager logger - this is an info message
+2025-07-10 11:34:24,628 - hardware_manager - ERROR - <module>:15 - Testing hardware_manager logger - this is an error message
+2025-07-10 11:34:24,652 - circuit_breaker - INFO - <module>:14 - Testing circuit_breaker logger - this is an info message
+2025-07-10 11:34:24,654 - circuit_breaker - ERROR - <module>:15 - Testing circuit_breaker logger - this is an error message
+2025-07-10 11:34:24,676 - state_manager - INFO - <module>:14 - Testing state_manager logger - this is an info message
+2025-07-10 11:34:24,677 - state_manager - ERROR - <module>:15 - Testing state_manager logger - this is an error message

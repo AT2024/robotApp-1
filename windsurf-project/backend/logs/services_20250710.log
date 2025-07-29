@@ -1,0 +1,6 @@
+2025-07-10 11:34:24,539 - orchestrator - INFO - <module>:14 - Testing orchestrator logger - this is an info message
+2025-07-10 11:34:24,541 - orchestrator - ERROR - <module>:15 - Testing orchestrator logger - this is an error message
+2025-07-10 11:34:24,590 - command_service - INFO - <module>:14 - Testing command_service logger - this is an info message
+2025-07-10 11:34:24,592 - command_service - ERROR - <module>:15 - Testing command_service logger - this is an error message
+2025-07-10 11:34:24,704 - base - INFO - <module>:14 - Testing base logger - this is an info message
+2025-07-10 11:34:24,706 - base - ERROR - <module>:15 - Testing base logger - this is an error message

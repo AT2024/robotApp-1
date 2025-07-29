@@ -10,8 +10,8 @@ docker-compose up -d
 echo.
 echo ======================================================
 echo Development environment is now running:
-echo Frontend: http://localhost:3000
-echo Backend: http://localhost:8000
+echo Frontend: http://localhost:3002
+echo Backend: http://localhost:8080
 echo ======================================================
 echo.
 echo To stop the containers, run: docker-compose down

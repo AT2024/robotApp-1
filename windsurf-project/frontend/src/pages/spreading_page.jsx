@@ -5,7 +5,8 @@ import websocketService from '../utils/services/websocketService';
 import logger from '../utils/logger';
 import { SystemStatus } from '../components/status';
 import { ProgressSteps, StepContent } from '../components/steps';
-import { EmergencyButton, SecondaryButton } from '../components/buttons';
+import { EmergencyButton, SecondaryButton, PauseButton, ResumeButton } from '../components/buttons';
+import { ConfirmationModal } from '../components/common';
 
 const ROBOT_MAP = {
   MECA: 'meca',
@@ -31,6 +32,20 @@ const SpreadingPage = () => {
   const [ot2Status, setOt2Status] = useState('idle');
   const [connectionError, setConnectionError] = useState(false);
   const [lastError, setLastError] = useState(null);
+  
+  // Pause/Resume functionality state
+  const [systemPaused, setSystemPaused] = useState(false);
+  const [pausedOperations, setPausedOperations] = useState([]);
+  const [pauseReason, setPauseReason] = useState('');
+  
+  // Confirmation modal state
+  const [confirmationModal, setConfirmationModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    action: null,
+    variant: 'primary'
+  });
 
   // Define workflow steps with their associated robot commands
   const steps = [
@@ -83,6 +98,24 @@ const SpreadingPage = () => {
       robot: 'OT2',
       status: 'waiting',
       hasPress: true,
+      onClick: async () => {
+        try {
+          logger.log('Initiating OT2 protocol operation');
+          websocketService.send({
+            type: 'command',
+            command_type: 'ot2_protocol',
+            data: {
+              protocol_name: 'liquid_handling',
+              volume: 50,
+              source_well: 'A1',
+              dest_well: 'B1',
+            },
+          });
+        } catch (error) {
+          logger.error('OT2 protocol operation failed:', error);
+          setLastError('Failed to initiate OT2 protocol');
+        }
+      },
     },
     {
       label: 'Use Fingers To Spread',
@@ -244,12 +277,39 @@ const SpreadingPage = () => {
           if (message.command_type === 'ot2_protocol') {
             logger.log('OT2 protocol started successfully');
             setOt2Status('running');
+          } else if (message.command_type === 'pause_system') {
+            logger.log('System paused successfully');
+            setSystemPaused(true);
+            setPauseReason(message.data?.reason || 'System paused');
+            setPausedOperations(message.paused_operations || []);
+          } else if (message.command_type === 'resume_system') {
+            logger.log('System resumed successfully');
+            setSystemPaused(false);
+            setPauseReason('');
+            setPausedOperations([]);
           }
         } else {
           logger.error('Command failed:', message.error);
           setLastError(message.error);
           if (message.error?.includes('timeout')) {
             setConnectionError(true);
+          }
+        }
+      } else if (message.type === 'system_status_update') {
+        // Handle system-wide status updates (like pause/resume broadcasts)
+        if (message.data) {
+          const { system_paused, pause_reason, current_step } = message.data;
+          
+          if (typeof system_paused === 'boolean') {
+            setSystemPaused(system_paused);
+            setPauseReason(pause_reason || '');
+            
+            if (system_paused) {
+              logger.log(`System paused: ${pause_reason}`);
+            } else {
+              logger.log('System resumed');
+              setPausedOperations([]);
+            }
           }
         }
       }
@@ -314,22 +374,96 @@ const SpreadingPage = () => {
     }
   };
 
-  // Handle emergency stop
+  // Handle emergency stop with confirmation
   const handleEmergencyStop = useCallback(() => {
-    logger.log('Emergency stop activated');
-    setEmergencyStopActive(true);
+    showConfirmation(
+      'Emergency Stop',
+      'This will immediately stop all robot operations. This action cannot be undone. Are you sure?',
+      () => {
+        logger.log('Emergency stop activated');
+        setEmergencyStopActive(true);
+        websocketService.send({
+          type: 'command',
+          command_type: 'emergency_stop',
+          data: {
+            robots: {
+              meca: systemStatus.meca === 'connected',
+              ot2: systemStatus.ot2 === 'connected',
+              arduino: systemStatus.arduino === 'connected',
+            },
+          },
+        });
+      },
+      'danger'
+    );
+  }, [systemStatus]);
+
+  // Confirmation modal handlers
+  const showConfirmation = (title, message, action, variant = 'primary') => {
+    setConfirmationModal({
+      isOpen: true,
+      title,
+      message,
+      action,
+      variant
+    });
+  };
+
+  const handleConfirm = () => {
+    if (confirmationModal.action) {
+      confirmationModal.action();
+    }
+    setConfirmationModal({ isOpen: false, title: '', message: '', action: null, variant: 'primary' });
+  };
+
+  const handleConfirmationCancel = () => {
+    setConfirmationModal({ isOpen: false, title: '', message: '', action: null, variant: 'primary' });
+  };
+
+  // Handle system pause with confirmation
+  const handlePause = useCallback(() => {
+    showConfirmation(
+      'Pause System',
+      'This will pause all active operations. Are you sure you want to continue?',
+      () => {
+        logger.log('System pause activated');
+        setSystemPaused(true);
+        setPauseReason('User requested pause');
+        
+        // Send pause command to backend
+        websocketService.send({
+          type: 'command',
+          command_type: 'pause_system',
+          commandId: Date.now().toString(),
+          data: {
+            reason: 'User requested pause',
+            pause_all_operations: true,
+            current_step: activeStep
+          },
+        });
+      },
+      'warning'
+    );
+  }, [activeStep]);
+
+  // Handle system resume
+  const handleResume = useCallback(() => {
+    logger.log('System resume activated');
+    setSystemPaused(false);
+    setPauseReason('');
+    setPausedOperations([]);
+    
+    // Send resume command to backend
     websocketService.send({
       type: 'command',
-      command_type: 'emergency_stop',
+      command_type: 'resume_system', 
+      commandId: Date.now().toString(),
       data: {
-        robots: {
-          meca: systemStatus.meca === 'connected',
-          ot2: systemStatus.ot2 === 'connected',
-          arduino: systemStatus.arduino === 'connected',
-        },
+        resume_all_operations: true,
+        current_step: activeStep
       },
     });
-  }, [systemStatus]);
+  }, [activeStep]);
 
   // Handle step skipping
   const handleSkip = () => {
@@ -387,6 +521,19 @@ const SpreadingPage = () => {
               </div>
             )}
           </div>
+          {/* System Status Indicators */}
+          {systemPaused && (
+            <div className='mt-4 bg-orange-50 text-orange-700 px-4 py-2 rounded-md border border-orange-200'>
+              <div className='flex items-center'>
+                <span className='mr-2'>⏸️</span>
+                <div>
+                  <strong>System Paused</strong>
+                  {pauseReason && <span className='ml-2 text-sm'>- {pauseReason}</span>}
+                </div>
+              </div>
+            </div>
+          )}
+          
           {/* Error Display */}
           {(connectionError || lastError) && (
             <div className='mt-4 bg-red-50 text-red-700 px-4 py-2 rounded-md'>
@@ -427,10 +574,34 @@ const SpreadingPage = () => {
             disabled={emergencyStopActive}
             className='w-full sm:w-auto'
           />
+          <PauseButton
+            paused={systemPaused}
+            onClick={handlePause}
+            disabled={emergencyStopActive}
+            className='w-full sm:w-auto'
+          />
+          <ResumeButton
+            paused={systemPaused}
+            onClick={handleResume}
+            disabled={emergencyStopActive}
+            className='w-full sm:w-auto'
+          />
           <SecondaryButton onClick={() => navigate('/spreading/form')} className='w-full sm:w-auto'>
             Back to Form
           </SecondaryButton>
         </div>
+        
+        {/* Confirmation Modal */}
+        <ConfirmationModal
+          isOpen={confirmationModal.isOpen}
+          onClose={handleConfirmationCancel}
+          onConfirm={handleConfirm}
+          title={confirmationModal.title}
+          message={confirmationModal.message}
+          variant={confirmationModal.variant}
+          confirmText="OK"
+          cancelText="Cancel"
+        />
       </div>
     </div>
   );

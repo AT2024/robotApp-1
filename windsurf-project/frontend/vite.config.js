@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  const apiUrl = mode === 'production' ? env.VITE_PRODUCTION_API_URL : 'http://localhost:8000';
+  const apiUrl = mode === 'production' ? env.VITE_PRODUCTION_API_URL : 'http://localhost:8080';
 
   return {
     define: {

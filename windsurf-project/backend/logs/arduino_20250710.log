@@ -1,0 +1,2 @@
+2025-07-10 11:34:24,532 - arduino_router - INFO - <module>:14 - Testing arduino_router logger - this is an info message
+2025-07-10 11:34:24,534 - arduino_router - ERROR - <module>:15 - Testing arduino_router logger - this is an error message

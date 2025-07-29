@@ -38,32 +38,55 @@ def load_config(protocol):
     Load configuration from external file or protocol parameters.
     
     This function attempts to load configuration from:
-    1. Protocol parameters (most likely source in production)
-    2. ot2_config.py (Python module)
-    3. parameters.json (JSON file)
+    1. Protocol runtime parameters (OT2 API v2.16+)
+    2. Protocol parameters (legacy compatibility)
+    3. ot2_config.py (Python module)
+    4. parameters.json (JSON file)
     
-    It prioritizes protocol parameters for normal operation.
+    It prioritizes protocol runtime parameters for normal operation.
     """
     config = None
     
-    # First try: Look for parameters directly in the protocol context
+    # First try: Look for runtime parameters (OT2 API v2.16+)
     try:
-        protocol.comment("Checking for protocol parameters...")
+        protocol.comment("Checking for protocol runtime parameters...")
         
-        if hasattr(protocol, "parameters") and protocol.parameters:
-            protocol.comment("Found parameters in protocol.parameters")
-            config = protocol.parameters
+        # Check for runtime parameters in various locations
+        if hasattr(protocol, "params") and protocol.params:
+            protocol.comment("Found parameters in protocol.params")
+            config = {param.variable_name: param.value for param in protocol.params}
         elif hasattr(protocol, "_protocol_json") and isinstance(protocol._protocol_json, dict):
-            if "parameters" in protocol._protocol_json:
+            # Check for runtime parameters in protocol JSON
+            if "runTimeParameterValues" in protocol._protocol_json:
+                protocol.comment("Found parameters in _protocol_json.runTimeParameterValues")
+                config = protocol._protocol_json["runTimeParameterValues"]
+            elif "parameters" in protocol._protocol_json:
                 protocol.comment("Found parameters in _protocol_json.parameters")
                 config = protocol._protocol_json["parameters"]
             elif "metadata" in protocol._protocol_json and "parameters" in protocol._protocol_json["metadata"]:
                 protocol.comment("Found parameters in _protocol_json.metadata.parameters")
                 config = protocol._protocol_json["metadata"]["parameters"]
+        elif hasattr(protocol, "context") and hasattr(protocol.context, "params"):
+            protocol.comment("Found parameters in protocol.context.params")
+            config = {param.variable_name: param.value for param in protocol.context.params}
     except Exception as e:
-        protocol.comment(f"Error checking protocol parameters: {str(e)}")
+        protocol.comment(f"Error checking protocol runtime parameters: {str(e)}")
     
-    # Second try: Import external Python module if protocol parameters not found
+    # Second try: Look for parameters directly in the protocol context (legacy)
+    if not config:
+        try:
+            protocol.comment("Checking for legacy protocol parameters...")
+            
+            if hasattr(protocol, "parameters") and protocol.parameters:
+                protocol.comment("Found parameters in protocol.parameters")
+                config = protocol.parameters
+            elif hasattr(protocol, "custom_data") and protocol.custom_data:
+                protocol.comment("Found parameters in protocol.custom_data")
+                config = protocol.custom_data
+        except Exception as e:
+            protocol.comment(f"Error checking legacy protocol parameters: {str(e)}")
+    
+    # Third try: Import external Python module if protocol parameters not found
     if not config:
         try:
             protocol.comment("Attempting to load external Python configuration...")
@@ -76,7 +99,7 @@ def load_config(protocol):
         except Exception as e:
             protocol.comment(f"Error importing config module: {str(e)}")
     
-    # Third try: Load JSON file if neither protocol parameters nor Python module found
+    # Fourth try: Load JSON file if neither protocol parameters nor Python module found
     if not config:
         try:
             protocol.comment("Attempting to load JSON configuration...")
@@ -99,9 +122,16 @@ def load_config(protocol):
         except Exception as e:
             protocol.comment(f"Error loading JSON config: {str(e)}")
     
-    # If still no config, use minimal defaults
+    # If still no config, raise an error with debugging information
     if not config:
-        protocol.comment("WARNING: No parameters found, using minimal defaults")
+        protocol.comment("ERROR: No parameters found anywhere!")
+        protocol.comment("Available protocol attributes:")
+        for attr in dir(protocol):
+            if not attr.startswith('_'):
+                protocol.comment(f"  - {attr}")
+        
+        # Use minimal defaults as fallback
+        protocol.comment("Using minimal defaults as fallback")
         config = {
             "NUM_OF_GENERATORS": 5,
             "radioactive_VOL": 6.6,

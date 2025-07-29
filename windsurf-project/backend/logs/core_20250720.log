@@ -1,0 +1,181 @@
+2025-07-20 07:43:14,398 - hardware_manager - INFO - __init__:61 - Initialized Mecademic driver for meca at 192.168.0.100:10000
+2025-07-20 07:43:14,412 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 07:43:14,432 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 10:36:52,332 - hardware_manager - INFO - disconnect:134 - Disconnected from meca
+2025-07-20 10:36:52,340 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 14:16:12,933 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 14:16:13,048 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 14:16:18,302 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 14:16:18,950 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 14:16:34,430 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 14:16:34,469 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 14:23:38,617 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 14:23:38,620 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 14:23:41,615 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 14:23:41,638 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 14:23:58,302 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 14:23:58,304 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 14:24:01,602 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 14:24:01,621 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 14:44:24,092 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 14:44:24,097 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 14:44:34,279 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 14:44:34,340 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 14:56:42,117 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 14:56:42,118 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 14:56:45,723 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 14:56:45,749 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 14:56:56,211 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 14:56:56,213 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 14:57:15,669 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 14:57:15,698 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 14:57:21,792 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 14:57:21,793 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 14:57:27,107 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 14:57:27,127 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 14:58:08,546 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 14:58:08,548 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 14:58:11,451 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 14:58:11,468 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 14:58:38,089 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 14:58:38,097 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 14:58:43,794 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 14:58:43,867 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 14:58:49,407 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 14:58:49,408 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 14:58:53,251 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 14:58:53,285 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 14:58:58,595 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 14:58:58,597 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 14:59:03,831 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 14:59:03,864 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 14:59:41,195 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 14:59:41,197 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 14:59:45,182 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 14:59:45,205 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 14:59:50,614 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 14:59:50,621 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 14:59:55,073 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 14:59:55,115 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:00:00,381 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:00:00,383 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:00:04,912 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:00:04,940 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:10:52,151 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:10:52,152 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:10:56,232 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:10:56,262 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:10:58,696 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:10:58,700 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:11:02,141 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:11:02,159 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:11:12,557 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:11:12,559 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:11:16,075 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:11:16,093 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:11:36,352 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:11:36,355 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:11:39,477 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:11:39,507 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:11:49,113 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:11:49,116 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:11:53,110 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:11:53,137 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:12:00,041 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:12:00,043 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:12:03,274 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:12:03,302 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:12:57,583 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:12:57,585 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:13:00,970 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:13:00,997 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:13:09,816 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:13:09,818 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:13:12,653 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:13:12,675 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:15:21,433 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:15:21,435 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:15:24,682 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:15:24,703 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:15:31,729 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:15:31,730 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:15:35,340 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:15:35,370 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:15:40,641 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:15:40,642 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:15:44,780 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:15:44,802 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:15:49,078 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:15:49,080 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:15:52,373 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:15:52,406 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:16:02,230 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:16:02,232 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:16:05,790 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:16:05,819 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:29:18,837 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:29:18,838 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:29:22,234 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:29:22,262 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:30:27,036 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:30:27,039 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:30:29,944 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:30:29,965 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:30:38,541 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:30:38,543 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:30:43,378 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:30:43,407 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:45:28,816 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:45:28,817 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:45:35,828 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:45:35,856 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:45:36,236 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:45:36,239 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:45:40,713 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:45:40,933 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:46:34,758 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:46:34,760 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:46:38,363 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:46:38,384 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:47:28,973 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:47:28,976 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:47:33,435 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:47:33,469 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:47:58,186 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:47:58,187 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:48:01,327 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:48:01,355 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:48:58,779 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:48:58,780 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:49:01,576 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:49:01,597 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:49:38,312 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:49:38,314 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:49:41,316 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:49:41,346 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:50:38,854 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:50:38,856 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:50:41,660 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:50:41,691 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:51:14,594 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:51:14,597 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:51:18,402 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:51:18,430 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:51:30,020 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:51:30,024 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:51:32,942 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:51:32,969 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:51:40,970 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:51:40,972 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:51:44,068 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:51:44,096 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:52:06,340 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:52:06,342 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:52:10,385 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:52:10,413 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-20 15:54:29,043 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-20 15:54:29,045 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-20 15:54:35,173 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-20 15:54:35,203 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-21 08:50:37,302 - hardware_manager - ERROR - stop:260 - Error disconnecting robot: 'MecademicDriver' object has no attribute 'disconnect'
+2025-07-21 08:50:37,348 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped

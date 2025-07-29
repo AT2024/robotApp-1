@@ -1,25 +1,53 @@
 # websocket_handlers.py
+# Updated to use the new service layer architecture
 from fastapi import WebSocket
-from typing import Dict
+from typing import Dict, Optional
 from utils.logger import get_logger
 from datetime import datetime
 import time
-# Import the drop sequence function and configuration
-from routers.meca import drop_wafer_sequence, carousel_wafer_sequence
-from config.meca_config import total_wafers
+import asyncio
+from services.orchestrator import RobotOrchestrator
+from services.command_service import RobotCommandService, CommandType, CommandPriority
+from services.protocol_service import ProtocolExecutionService
+from core.state_manager import AtomicStateManager, RobotState
 
 logger = get_logger("websocket_handler")
 
 class WebsocketHandler:
-    def __init__(self, robot_manager, connection_manager):
-        # Store references to managers
-        self.robot_manager = robot_manager
+    def __init__(
+        self, 
+        orchestrator: RobotOrchestrator,
+        command_service: RobotCommandService,
+        protocol_service: ProtocolExecutionService,
+        state_manager: AtomicStateManager,
+        connection_manager
+    ):
+        # Store references to services
+        self.orchestrator = orchestrator
+        self.command_service = command_service
+        self.protocol_service = protocol_service
+        self.state_manager = state_manager
         self.connection_manager = connection_manager
 
         # Initialize connection tracking
         self.active_connections = []
         self.server_status = "Connected"
         self.last_status = {}
+        
+        # Background tasks
+        self._status_monitor_task: Optional[asyncio.Task] = None
+
+    async def connect(self, websocket: WebSocket):
+        """Handle new WebSocket connection"""
+        await websocket.accept()
+        self.active_connections.append(websocket)
+        logger.info(f"WebSocket connected. Total connections: {len(self.active_connections)}")
+
+    async def disconnect(self, websocket: WebSocket):
+        """Handle WebSocket disconnection"""
+        if websocket in self.active_connections:
+            self.active_connections.remove(websocket)
+        logger.info(f"WebSocket disconnected. Total connections: {len(self.active_connections)}")
 
     async def send_status_update(self, websocket: WebSocket, device: str, status: str):
         """Send status update only if there's a change"""
@@ -67,15 +95,46 @@ class WebsocketHandler:
                 "timestamp": datetime.now().isoformat()
             })
 
-            # Send current robot status
+            # Send current robot status - only the 4 required statuses
             try:
-                current_status = self.robot_manager.get_status()
-                for device, status in current_status.items():
+                # Get system status from orchestrator
+                system_status = await self.orchestrator.get_system_status()
+                
+                # Send backend status based on system state
+                backend_status = "connected" if system_status.system_state.value == "ready" else "disconnected"
+                await websocket.send_json({
+                    "type": "status_update",
+                    "data": {
+                        "type": "backend",
+                        "status": backend_status
+                    },
+                    "timestamp": datetime.now().isoformat()
+                })
+                
+                # Send robot status updates - check if robots exist and their states
+                robot_statuses = {
+                    "meca": "disconnected",
+                    "arduino": "disconnected", 
+                    "ot2": "disconnected"
+                }
+                
+                # Update robot statuses based on actual robot states
+                for robot_id, robot_info in system_status.robot_details.items():
+                    robot_state = robot_info.get("state", "disconnected")
+                    if "meca" in robot_id.lower():
+                        robot_statuses["meca"] = "connected" if robot_state in ["idle", "busy"] else "disconnected"
+                    elif "ot2" in robot_id.lower():
+                        robot_statuses["ot2"] = "connected" if robot_state in ["idle", "busy"] else "disconnected"
+                    elif "arduino" in robot_id.lower():
+                        robot_statuses["arduino"] = "connected" if robot_state in ["idle", "busy"] else "disconnected"
+                
+                # Send individual robot status updates
+                for robot_type, status in robot_statuses.items():
                     await websocket.send_json({
                         "type": "status_update",
                         "data": {
-                            "type": device,
-                            "status": status.lower()
+                            "type": robot_type,
+                            "status": status
                         },
                         "timestamp": datetime.now().isoformat()
                     })
@@ -130,13 +189,57 @@ class WebsocketHandler:
             logger.info(f"Received message of type: {msg_type}")
 
             if msg_type == "get_status":
-                # Get current status from robot manager
-                current_status = self.robot_manager.get_status()
-                logger.info(f"Status request received. Current status: {current_status}")
+                # Get current status from orchestrator
+                try:
+                    system_status = await self.orchestrator.get_system_status()
+                    logger.info(f"Status request received. System state: {system_status.system_state.value}")
 
-                # Send status updates for each device
-                for device, status in current_status.items():
-                    await self.send_status_update(websocket, device, status)
+                    # Send individual status updates for each component
+                    # Backend status based on system state
+                    backend_status = "connected" if system_status.system_state.value == "ready" else "disconnected"
+                    await websocket.send_json({
+                        "type": "status_update",
+                        "data": {
+                            "type": "backend",
+                            "status": backend_status
+                        },
+                        "timestamp": datetime.now().isoformat()
+                    })
+                    
+                    # Send robot status updates - check if robots exist and their states
+                    robot_statuses = {
+                        "meca": "disconnected",
+                        "arduino": "disconnected", 
+                        "ot2": "disconnected"
+                    }
+                    
+                    # Update robot statuses based on actual robot states
+                    for robot_id, robot_info in system_status.robot_details.items():
+                        robot_type = robot_info.get("state", "disconnected")
+                        if "meca" in robot_id.lower():
+                            robot_statuses["meca"] = "connected" if robot_type in ["idle", "busy"] else "disconnected"
+                        elif "ot2" in robot_id.lower():
+                            robot_statuses["ot2"] = "connected" if robot_type in ["idle", "busy"] else "disconnected"
+                        elif "arduino" in robot_id.lower():
+                            robot_statuses["arduino"] = "connected" if robot_type in ["idle", "busy"] else "disconnected"
+                    
+                    # Send individual robot status updates
+                    for robot_type, status in robot_statuses.items():
+                        await websocket.send_json({
+                            "type": "status_update",
+                            "data": {
+                                "type": robot_type,
+                                "status": status
+                            },
+                            "timestamp": datetime.now().isoformat()
+                        })
+                except Exception as e:
+                    logger.error(f"Error getting system status: {e}")
+                    await websocket.send_json({
+                        "type": "error",
+                        "message": f"Failed to get status: {str(e)}",
+                        "timestamp": datetime.now().isoformat()
+                    })
                 return
 
             if msg_type == "command":
@@ -144,7 +247,7 @@ class WebsocketHandler:
                 command_data = message.get("data", {})
                 command_id = message.get("commandId", str(int(time.time())))
 
-                logger.info(f"Received command: {command_type} with data: {command_data}")
+                logger.info(f"*** WEBSOCKET: Received command: {command_type} with data: {command_data}, commandId: {command_id}")
 
                 # Prepare base response structure
                 response = {
@@ -156,153 +259,377 @@ class WebsocketHandler:
 
                 # Route to appropriate command handler
                 if command_type == "emergency_stop":
-                    await self.robot_manager.emergency_stop(command_data.get("robots"))
-                    response.update(
-                        {
-                            "status": "success",
-                            "message": "Emergency stop executed successfully",
-                        }
-                    )
-                elif command_type == "ot2_protocol":
-                    # Pass the data directly to the robot manager's protocol runner
                     try:
-                        result = await self.robot_manager.run_ot2_protocol_direct(
-                            command_data
-                        )
-                        response.update(
-                            {
+                        robots = command_data.get("robots", [])
+                        if not robots:  # Emergency stop all if no specific robots
+                            result = await self.orchestrator.emergency_stop_all(
+                                reason="Emergency stop requested via WebSocket"
+                            )
+                        else:
+                            # Emergency stop specific robots
+                            results = {}
+                            for robot_id in robots:
+                                cmd_result = await self.command_service.submit_command(
+                                    robot_id=robot_id,
+                                    command_type=CommandType.EMERGENCY_STOP,
+                                    parameters={},
+                                    priority=CommandPriority.EMERGENCY,
+                                    timeout=10.0
+                                )
+                                results[robot_id] = cmd_result.success
+                            result = type('obj', (object,), {'success': True, 'data': results})()
+                        
+                        if result.success:
+                            response.update({
                                 "status": "success",
-                                "message": "OT2 protocol started successfully",
-                                "result": result,
-                            }
+                                "message": "Emergency stop executed successfully",
+                                "results": result.data if hasattr(result, 'data') else None
+                            })
+                        else:
+                            response.update({
+                                "status": "error",
+                                "message": f"Emergency stop failed: {result.error}"
+                            })
+                    except Exception as e:
+                        logger.error(f"Emergency stop error: {e}")
+                        response.update({
+                            "status": "error",
+                            "message": f"Emergency stop failed: {str(e)}"
+                        })
+                elif command_type == "ot2_protocol":
+                    # Submit OT2 protocol execution command through command service
+                    try:
+                        result = await self.command_service.submit_command(
+                            robot_id="ot2",
+                            command_type=CommandType.PROTOCOL_EXECUTION,
+                            parameters=command_data,
+                            priority=CommandPriority.NORMAL,
+                            timeout=600.0
                         )
+                        
+                        if result.success:
+                            response.update({
+                                "status": "success",
+                                "message": "OT2 protocol command submitted successfully",
+                                "command_id": result.data
+                            })
+                        else:
+                            response.update({
+                                "status": "error",
+                                "message": f"OT2 protocol failed: {result.error}"
+                            })
                     except Exception as e:
                         logger.error(f"OT2 protocol error: {e}")
-                        response.update(
-                            {
-                                "status": "error",
-                                "message": f"Failed to start OT2 protocol: {str(e)}",
-                            }
-                        )
+                        response.update({
+                            "status": "error",
+                            "message": f"Failed to start OT2 protocol: {str(e)}"
+                        })
                 elif command_type == "meca_pickup":
                     try:
-                        # Import the pickup sequence function
-                        from routers.meca import pickup_wafer_sequence
-
-                        # Execute the pickup sequence
-                        await pickup_wafer_sequence(self.robot_manager)
-                        response.update(
-                            {
-                                "status": "success",
-                                "message": "Meca pickup sequence completed successfully",
-                            }
-                        )
-                    except Exception as e:
-                        response.update(
-                            {"status": "error", "message": f"Meca pickup failed: {str(e)}"}
-                        )
-                elif command_type == "meca_drop":
-                    try:
-                        # Import the drop sequence function and configuration
-                        from routers.meca import drop_wafer_sequence, return_robot_to_home
-                        from config.meca_config import total_wafers, EMPTY_SPEED
-
-                        # Get parameters with defaults
+                        # Submit pickup sequence command through command service
                         start = command_data.get("start", 0)
                         count = command_data.get("count", 5)
-                        end = min(start + count, total_wafers)
                         is_last_batch = command_data.get("is_last_batch", False)
-
-                        # Execute the drop sequence
-                        await drop_wafer_sequence(self.robot_manager, start, end)
-
-                        # Return to home if this is the last batch
-                        if is_last_batch:
-                            await return_robot_to_home(
-                                self.robot_manager.meca_robot, EMPTY_SPEED
-                            )
-                            logger.info("Completed drop sequence, robot returned to home")
-
-                        response.update(
-                            {
+                        
+                        logger.info(f"*** WEBSOCKET: Submitting meca_pickup command with start={start}, count={count}")
+                        
+                        result = await self.command_service.submit_command(
+                            robot_id="meca",
+                            command_type=CommandType.PICKUP_SEQUENCE,
+                            parameters={
+                                "start": start,
+                                "count": count,
+                                "operation_type": "pickup_wafer_sequence",
+                                "is_last_batch": is_last_batch
+                            },
+                            priority=CommandPriority.NORMAL,
+                            timeout=600.0
+                        )
+                        
+                        logger.info(f"*** WEBSOCKET: Command submission result: {result.success}, data: {result.data}, error: {result.error}")
+                        
+                        if result.success:
+                            response.update({
                                 "status": "success",
-                                "message": f"Meca drop sequence completed successfully for wafers {start+1} to {end}",
-                            }
-                        )
-                    except Exception as e:
-                        response.update(
-                            {
+                                "message": "Meca pickup command submitted successfully",
+                                "command_id": result.data
+                            })
+                        else:
+                            response.update({
                                 "status": "error",
-                                "message": f"Meca drop sequence failed: {str(e)}",
-                            }
+                                "message": f"Meca pickup failed: {result.error}"
+                            })
+                    except Exception as e:
+                        response.update({
+                            "status": "error", 
+                            "message": f"Meca pickup failed: {str(e)}"
+                        })
+                elif command_type == "meca_drop":
+                    try:
+                        # Submit drop sequence command through command service
+                        start = command_data.get("start", 0)
+                        count = command_data.get("count", 5)
+                        is_last_batch = command_data.get("is_last_batch", False)
+                        
+                        result = await self.command_service.submit_command(
+                            robot_id="meca",
+                            command_type=CommandType.DROP_SEQUENCE,
+                            parameters={
+                                "start": start,
+                                "count": count,
+                                "operation_type": "drop_wafer_sequence",
+                                "is_last_batch": is_last_batch
+                            },
+                            priority=CommandPriority.NORMAL,
+                            timeout=600.0
                         )
+                        
+                        if result.success:
+                            response.update({
+                                "status": "success",
+                                "message": "Meca drop command submitted successfully",
+                                "command_id": result.data
+                            })
+                        else:
+                            response.update({
+                                "status": "error",
+                                "message": f"Meca drop failed: {result.error}"
+                            })
+                    except Exception as e:
+                        response.update({
+                            "status": "error",
+                            "message": f"Meca drop sequence failed: {str(e)}"
+                        })
                 # Support both command types for carousel operations
                 elif command_type in ["meca_carousel", "carousel"]:
                     try:
-                        # Import the carousel sequence function
-                        from routers.meca import (
-                            carousel_wafer_sequence,
-                            return_robot_to_home,
-                        )
-                        from config.meca_config import (
-                            total_wafers,
-                            wafers_per_carousel,
-                            EMPTY_SPEED,
-                        )
-
-                        # Get parameters with defaults
+                        # Submit carousel sequence command through command service
                         start = command_data.get("start", 0)
-                        count = command_data.get("count", wafers_per_carousel)
-                        end = min(start + count, total_wafers)
+                        count = command_data.get("count", 11)  # Default carousel count
                         is_last_batch = command_data.get("is_last_batch", False)
-
-                        # Execute the carousel sequence
-                        await carousel_wafer_sequence(self.robot_manager, start, end)
-
-                        # Return to home if this is the last batch
-                        if is_last_batch:
-                            await return_robot_to_home(
-                                self.robot_manager.meca_robot, EMPTY_SPEED
-                            )
-                            logger.info(
-                                "Completed carousel sequence, robot returned to home"
-                            )
-
-                        response.update(
-                            {
+                        
+                        result = await self.command_service.submit_command(
+                            robot_id="meca",
+                            command_type=CommandType.CAROUSEL_SEQUENCE,
+                            parameters={
+                                "start": start,
+                                "count": count,
+                                "operation_type": "carousel_wafer_sequence",
+                                "is_last_batch": is_last_batch
+                            },
+                            priority=CommandPriority.NORMAL,
+                            timeout=900.0  # 15 minutes timeout
+                        )
+                        
+                        if result.success:
+                            response.update({
                                 "status": "success",
-                                "message": f"Meca carousel sequence completed successfully for wafers {start+1} to {end}",
-                            }
-                        )
-                    except Exception as e:
-                        response.update(
-                            {
+                                "message": "Meca carousel command submitted successfully",
+                                "command_id": result.data
+                            })
+                        else:
+                            response.update({
                                 "status": "error",
-                                "message": f"Meca carousel sequence failed: {str(e)}",
-                            }
-                        )
+                                "message": f"Meca carousel failed: {result.error}"
+                            })
+                    except Exception as e:
+                        response.update({
+                            "status": "error",
+                            "message": f"Meca carousel sequence failed: {str(e)}"
+                        })
                 # Handle arduino commands
                 elif command_type.startswith("arduino_"):
                     try:
-                        # Add code for handling Arduino commands
                         operation = command_data.get("operation", "")
+                        arduino_command = command_data.get("command", operation)
+                        priority = command_data.get("priority", "normal")
+                        
+                        # Map priority
+                        priority_map = {
+                            "low": CommandPriority.LOW,
+                            "normal": CommandPriority.NORMAL,
+                            "high": CommandPriority.HIGH,
+                            "critical": CommandPriority.CRITICAL,
+                            "emergency": CommandPriority.EMERGENCY
+                        }
+                        cmd_priority = priority_map.get(priority.lower(), CommandPriority.NORMAL)
+                        
                         logger.info(f"Handling Arduino operation: {operation}")
-
-                        # Implement the actual Arduino command logic here
-                        # This is a placeholder that simulates success
-                        response.update(
-                            {
+                        
+                        result = await self.command_service.submit_command(
+                            robot_id="arduino",
+                            command_type=arduino_command,
+                            parameters=command_data.get("parameters", {}),
+                            priority=cmd_priority,
+                            timeout=60.0
+                        )
+                        
+                        if result.success:
+                            response.update({
                                 "status": "success",
-                                "message": f"Arduino {operation} operation executed successfully",
-                            }
-                        )
-                    except Exception as e:
-                        response.update(
-                            {
+                                "message": f"Arduino {operation} command submitted successfully",
+                                "command_id": result.data
+                            })
+                        else:
+                            response.update({
                                 "status": "error",
-                                "message": f"Arduino operation failed: {str(e)}",
-                            }
+                                "message": f"Arduino operation failed: {result.error}"
+                            })
+                    except Exception as e:
+                        response.update({
+                            "status": "error",
+                            "message": f"Arduino operation failed: {str(e)}"
+                        })
+                elif command_type == "pause_system":
+                    # System-wide pause functionality
+                    try:
+                        pause_reason = command_data.get("reason", "User requested pause")
+                        current_step = command_data.get("current_step", 0)
+                        pause_all = command_data.get("pause_all_operations", True)
+                        
+                        logger.info(f"System pause requested: {pause_reason}")
+                        
+                        # Pause through orchestrator
+                        pause_result = await self.orchestrator.pause_all_operations(
+                            reason=pause_reason,
+                            metadata={"current_step": current_step, "pause_all": pause_all}
                         )
+                        
+                        if pause_result.success:
+                            response.update({
+                                "status": "success",
+                                "message": "System paused successfully",
+                                "paused_operations": pause_result.data.get("paused_operations", [])
+                            })
+                            
+                            # Broadcast pause status to all clients
+                            await self.broadcast({
+                                "type": "system_status_update",
+                                "data": {
+                                    "system_paused": True,
+                                    "pause_reason": pause_reason,
+                                    "current_step": current_step
+                                }
+                            })
+                        else:
+                            response.update({
+                                "status": "error",
+                                "message": f"Failed to pause system: {pause_result.error}"
+                            })
+                    except Exception as e:
+                        logger.error(f"System pause error: {e}")
+                        response.update({
+                            "status": "error",
+                            "message": f"System pause failed: {str(e)}"
+                        })
+                elif command_type == "resume_system":
+                    # System-wide resume functionality
+                    try:
+                        current_step = command_data.get("current_step", 0)
+                        resume_all = command_data.get("resume_all_operations", True)
+                        
+                        logger.info("System resume requested")
+                        
+                        # Resume through orchestrator
+                        resume_result = await self.orchestrator.resume_all_operations(
+                            metadata={"current_step": current_step, "resume_all": resume_all}
+                        )
+                        
+                        if resume_result.success:
+                            response.update({
+                                "status": "success",
+                                "message": "System resumed successfully",
+                                "resumed_operations": resume_result.data.get("resumed_operations", [])
+                            })
+                            
+                            # Broadcast resume status to all clients
+                            await self.broadcast({
+                                "type": "system_status_update",
+                                "data": {
+                                    "system_paused": False,
+                                    "pause_reason": "",
+                                    "current_step": current_step
+                                }
+                            })
+                        else:
+                            response.update({
+                                "status": "error",
+                                "message": f"Failed to resume system: {resume_result.error}"
+                            })
+                    except Exception as e:
+                        logger.error(f"System resume error: {e}")
+                        response.update({
+                            "status": "error",
+                            "message": f"System resume failed: {str(e)}"
+                        })
+                elif command_type.startswith("disconnect_"):
+                    # Handle robot disconnect commands
+                    try:
+                        robot_type = command_type.replace("disconnect_", "")
+                        robot_id = command_data.get("robot_id", robot_type)
+                        graceful = command_data.get("graceful", True)
+                        
+                        logger.info(f"Disconnect requested for {robot_type} (robot_id: {robot_id})")
+                        
+                        # Find the appropriate service
+                        robot_service = None
+                        if robot_type == "meca":
+                            robot_service = self.orchestrator._robot_services.get("meca")
+                        elif robot_type == "ot2":
+                            robot_service = self.orchestrator._robot_services.get("ot2")
+                        elif robot_type == "arduino":
+                            robot_service = self.orchestrator._robot_services.get("arduino")
+                        
+                        if robot_service and hasattr(robot_service, 'disconnect'):
+                            disconnect_result = await robot_service.disconnect()
+                            if disconnect_result.success:
+                                response.update({
+                                    "status": "success",
+                                    "message": f"Successfully disconnected {robot_type}",
+                                    "robot_id": robot_id
+                                })
+                                
+                                # Broadcast disconnect status to all clients
+                                await self.broadcast({
+                                    "type": "status_update",
+                                    "data": {
+                                        "type": robot_type,
+                                        "status": "disconnected"
+                                    }
+                                })
+                            else:
+                                response.update({
+                                    "status": "error",
+                                    "message": f"Failed to disconnect {robot_type}: {disconnect_result.error}"
+                                })
+                        else:
+                            # Fallback: Use state manager to update robot state
+                            await self.state_manager.update_robot_state(
+                                robot_id,
+                                RobotState.DISCONNECTED,
+                                reason="User requested disconnect"
+                            )
+                            
+                            response.update({
+                                "status": "success", 
+                                "message": f"Marked {robot_type} as disconnected",
+                                "robot_id": robot_id
+                            })
+                            
+                            # Broadcast disconnect status
+                            await self.broadcast({
+                                "type": "status_update",
+                                "data": {
+                                    "type": robot_type,
+                                    "status": "disconnected"
+                                }
+                            })
+                    except Exception as e:
+                        logger.error(f"Disconnect operation failed: {e}")
+                        response.update({
+                            "status": "error",
+                            "message": f"Disconnect failed: {str(e)}"
+                        })
                 else:
                     response.update(
                         {
@@ -331,24 +658,54 @@ class WebsocketHandler:
 
     async def broadcast_server_status(self):
         try:
-            status = self.robot_manager.get_status()
+            system_status = await self.orchestrator.get_system_status()
 
-            for device, state in status.items():
-                normalized_state = state.lower() if state else "disconnected"
+            # Broadcast backend status based on system state
+            backend_status = "connected" if system_status.system_state.value == "ready" else "disconnected"
+            if self.last_status.get("backend") != backend_status:
+                message = {
+                    "type": "status_update",
+                    "data": {
+                        "type": "backend",
+                        "status": backend_status
+                    },
+                    "timestamp": datetime.now().isoformat()
+                }
+                logger.info(f"Broadcasting backend status change: {self.last_status.get('backend', 'unknown')} -> {backend_status}")
+                await self.broadcast(message)
+                self.last_status["backend"] = backend_status
 
-                # Only broadcast if status has changed
-                if self.last_status.get(device) != normalized_state:
+            # Broadcast robot status updates - only the 4 required statuses
+            robot_statuses = {
+                "meca": "disconnected",
+                "arduino": "disconnected", 
+                "ot2": "disconnected"
+            }
+            
+            # Update robot statuses based on actual robot states
+            for robot_id, robot_info in system_status.robot_details.items():
+                robot_state = robot_info.get("state", "disconnected")
+                if "meca" in robot_id.lower():
+                    robot_statuses["meca"] = "connected" if robot_state in ["idle", "busy"] else "disconnected"
+                elif "ot2" in robot_id.lower():
+                    robot_statuses["ot2"] = "connected" if robot_state in ["idle", "busy"] else "disconnected"
+                elif "arduino" in robot_id.lower():
+                    robot_statuses["arduino"] = "connected" if robot_state in ["idle", "busy"] else "disconnected"
+            
+            # Send individual robot status updates only if changed
+            for robot_type, status in robot_statuses.items():
+                if self.last_status.get(robot_type) != status:
                     message = {
                         "type": "status_update",
                         "data": {
-                            "type": device,
-                            "status": normalized_state
+                            "type": robot_type,
+                            "status": status
                         },
                         "timestamp": datetime.now().isoformat()
                     }
-                    logger.info(f"Broadcasting status change for {device}: {self.last_status.get(device, 'unknown')} -> {normalized_state}")
+                    logger.info(f"Broadcasting status change for {robot_type}: {self.last_status.get(robot_type, 'unknown')} -> {status}")
                     await self.broadcast(message)
-                    self.last_status[device] = normalized_state
+                    self.last_status[robot_type] = status
         except Exception as e:
             logger.error(f"Error broadcasting status: {e}")
 
@@ -365,6 +722,18 @@ class WebsocketHandler:
             })
 
 
-def get_websocket_handler(robot_manager, connection_manager) -> WebsocketHandler:
+def get_websocket_handler(
+    orchestrator: RobotOrchestrator,
+    command_service: RobotCommandService,
+    protocol_service: ProtocolExecutionService,
+    state_manager: AtomicStateManager,
+    connection_manager
+) -> WebsocketHandler:
     """Factory function to create a WebSocket handler instance."""
-    return WebsocketHandler(robot_manager, connection_manager)
+    return WebsocketHandler(
+        orchestrator,
+        command_service,
+        protocol_service,
+        state_manager,
+        connection_manager
+    )

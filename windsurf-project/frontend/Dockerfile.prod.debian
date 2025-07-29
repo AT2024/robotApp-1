@@ -1,25 +1,39 @@
-# Build stage
+# Multi-stage build for production
 FROM node:18-slim AS build
 
 # Set working directory
 WORKDIR /app
 
-# Install dependencies for builds
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    openssl \
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    python3 \
+    make \
+    g++ \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install dependencies with verbose output
-RUN npm install
+# Install dependencies
+RUN npm ci --only=production=false
 
-# Copy the frontend directory
+# Copy the frontend source
 COPY . .
 
-# Let's see what's in the directory
-RUN echo "Contents of /app directory:" && ls -la
+# Build the application
+RUN npm run build
 
-# Build the application with verbose output
-RUN npm run build || (echo "BUILD FAILED!" && npm run build --verbose && exit 1)
+# Production stage
+FROM nginx:alpine AS production
+
+# Copy built files to nginx html directory
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose port 80
+EXPOSE 80
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]

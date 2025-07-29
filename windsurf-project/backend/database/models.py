@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, ForeignKey, Index
 from sqlalchemy.orm import relationship
 from .db_config import Base
 from datetime import datetime
@@ -38,6 +38,18 @@ class ProcessLog(Base):
     # Relationships
     wafer = relationship("Wafer", back_populates="process_logs")
     robot = relationship("Robot", back_populates="process_logs")
+    
+    # Strategic indexes for performance optimization
+    __table_args__ = (
+        # Index for querying logs by wafer and creation time (common query pattern)
+        Index('idx_processlog_wafer_created', 'wafer_id', 'created_at'),
+        # Index for querying logs by robot and process type (monitoring/analytics)
+        Index('idx_processlog_robot_type', 'robot_id', 'process_type'),
+        # Index for time-based queries (recent activities)
+        Index('idx_processlog_created_at', 'created_at'),
+        # Composite index for complex queries
+        Index('idx_processlog_wafer_robot_created', 'wafer_id', 'robot_id', 'created_at'),
+    )
 
 class ThoriumVial(Base):
     __tablename__ = "THORIUM_VIAL"
@@ -61,6 +73,8 @@ class Wafer(Base):
     ot2_id = Column(Integer, ForeignKey("ROBOT.id"))
     thorium_id = Column(Integer, ForeignKey("THORIUM_VIAL.id"))
     wafer_pos = Column(Integer)
+    status = Column(String(50), default="created")  # Add status tracking
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)  # Add update tracking
     created_at = Column(DateTime, default=datetime.now)
     
     # Relationships
@@ -70,6 +84,19 @@ class Wafer(Base):
     ot2_robot = relationship("Robot", foreign_keys=[ot2_id], back_populates="wafers_ot2")
     thorium_vial = relationship("ThoriumVial", back_populates="wafers")
     process_logs = relationship("ProcessLog", back_populates="wafer", cascade="all, delete-orphan")
+    
+    # Strategic indexes for performance optimization
+    __table_args__ = (
+        # Index for querying wafers by status and update time
+        Index('idx_wafer_status_updated', 'status', 'updated_at'),
+        # Index for tray-based queries
+        Index('idx_wafer_tray_pos', 'tray_id', 'wafer_pos'),
+        # Index for carousel operations
+        Index('idx_wafer_carousel_created', 'carousel_id', 'created_at'),
+        # Index for robot-based queries
+        Index('idx_wafer_meca_status', 'meca_id', 'status'),
+        Index('idx_wafer_ot2_status', 'ot2_id', 'status'),
+    )
 
 class BakingTray(Base):
     __tablename__ = "BAKING_TRAY"

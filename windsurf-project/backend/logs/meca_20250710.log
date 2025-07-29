@@ -1,0 +1,4 @@
+2025-07-10 11:34:24,463 - meca_router - INFO - <module>:14 - Testing meca_router logger - this is an info message
+2025-07-10 11:34:24,465 - meca_router - ERROR - <module>:15 - Testing meca_router logger - this is an error message
+2025-07-10 11:34:24,492 - meca_service - INFO - <module>:14 - Testing meca_service logger - this is an info message
+2025-07-10 11:34:24,494 - meca_service - ERROR - <module>:15 - Testing meca_service logger - this is an error message

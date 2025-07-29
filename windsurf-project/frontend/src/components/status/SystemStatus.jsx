@@ -40,16 +40,44 @@ const SystemStatus = ({ onStatusChange }) => {
               changed: prevStatuses[type] !== normalizedStatus,
             });
 
-            // Immediately notify parent of status change
-            onStatusChange?.(newStatuses);
-
             return newStatuses;
           });
         }
       }
     },
-    [onStatusChange]
+    []
   );
+
+  // Notify parent of status changes via useEffect to avoid render-time setState
+  useEffect(() => {
+    onStatusChange?.(statuses);
+  }, [statuses, onStatusChange]);
+
+  // Handle disconnect for specific device
+  const handleDisconnect = useCallback((device) => {
+    if (device === 'backend') {
+      // Cannot disconnect backend from UI
+      logger.warn('Cannot disconnect backend from UI');
+      return;
+    }
+
+    logger.log(`Disconnecting ${device}...`);
+    
+    // Send disconnect command to backend
+    if (websocketService.isConnected()) {
+      websocketService.send({
+        type: 'command',
+        command_type: `disconnect_${device}`,
+        commandId: Date.now().toString(),
+        data: {
+          robot_id: `${device}_001`,
+          graceful: true
+        }
+      });
+    } else {
+      logger.error('WebSocket not connected, cannot send disconnect command');
+    }
+  }, []);
 
   // Set up WebSocket connection
   useEffect(() => {
@@ -58,10 +86,17 @@ const SystemStatus = ({ onStatusChange }) => {
     // Initial connection
     websocketService.connect().then(() => {
       console.log('WebSocket connected, requesting initial status');
-      websocketService.send({
-        type: 'get_status',
-        timestamp: new Date().toISOString(),
-      });
+      // Add small delay to ensure connection is fully established
+      setTimeout(() => {
+        if (websocketService.isConnected()) {
+          websocketService.send({
+            type: 'get_status',
+            timestamp: new Date().toISOString(),
+          });
+        }
+      }, 100);
+    }).catch(error => {
+      console.error('Failed to connect to WebSocket:', error);
     });
 
     return () => messageHandler();
@@ -71,10 +106,16 @@ const SystemStatus = ({ onStatusChange }) => {
   useEffect(() => {
     const pollInterval = setInterval(() => {
       if (websocketService.isConnected()) {
-        websocketService.send({
-          type: 'get_status',
-          timestamp: new Date().toISOString(),
-        });
+        try {
+          websocketService.send({
+            type: 'get_status',
+            timestamp: new Date().toISOString(),
+          });
+        } catch (error) {
+          console.error('Failed to send status request:', error);
+        }
+      } else {
+        console.log('WebSocket not connected, skipping status request');
       }
     }, 10000);
 
@@ -95,15 +136,35 @@ const SystemStatus = ({ onStatusChange }) => {
                 ? 'bg-yellow-500'
                 : 'bg-red-500'
             } shadow-lg transition-all duration-300`}>
-            <div className='flex justify-between items-start'>
-              <div className='flex-1'>
-                <h3 className='text-xl font-semibold text-white capitalize'>{device}</h3>
-                <p className='text-white/90 capitalize'>{status}</p>
+            <div className='flex flex-col h-full'>
+              <div className='flex justify-between items-start mb-3'>
+                <div className='flex-1'>
+                  <h3 className='text-xl font-semibold text-white capitalize'>{device}</h3>
+                  <p className='text-white/90 capitalize'>{status}</p>
+                </div>
+                <div
+                  className={`h-3 w-3 rounded-full bg-white/30 ${
+                    status === 'connecting' ? 'animate-pulse' : ''
+                  }`}></div>
               </div>
-              <div
-                className={`h-3 w-3 rounded-full bg-white/30 ${
-                  status === 'connecting' ? 'animate-pulse' : ''
-                }`}></div>
+              
+              {/* Disconnect button for connected devices (except backend) */}
+              {status === 'connected' && device !== 'backend' && (
+                <button
+                  onClick={() => handleDisconnect(device)}
+                  className='mt-auto px-3 py-1 text-xs bg-white/20 hover:bg-white/30 text-white rounded-md transition-colors duration-200 border border-white/30 hover:border-white/50'
+                  title={`Disconnect ${device}`}
+                >
+                  Disconnect
+                </button>
+              )}
+              
+              {/* Info for backend */}
+              {device === 'backend' && (
+                <div className='mt-auto text-xs text-white/70'>
+                  Core system
+                </div>
+              )}
             </div>
           </div>
         ))}

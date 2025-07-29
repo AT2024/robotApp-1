@@ -1,0 +1,225 @@
+2025-07-28 08:32:29,719 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 08:32:29,753 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 08:39:13,608 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 08:39:13,685 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 09:17:48,101 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 09:35:46,381 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 09:35:46,540 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 09:38:05,421 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 09:38:16,725 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 09:38:16,767 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 12:58:42,521 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 12:58:56,351 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 12:58:56,389 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 12:59:36,601 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 12:59:46,964 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 12:59:47,008 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 13:00:33,889 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 13:00:44,528 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 13:00:44,866 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 13:00:49,621 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 13:10:25,366 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 13:10:25,409 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 13:13:54,739 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 13:14:00,759 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 13:14:00,864 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 13:14:06,776 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 13:14:18,751 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 13:14:18,860 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 13:15:07,039 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 13:27:30,990 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 13:27:31,116 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 15:29:26,339 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 15:29:31,200 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 15:29:31,257 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 15:29:46,703 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 15:29:46,759 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 15:29:46,765 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 15:29:46,792 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 15:29:50,567 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 15:29:50,615 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 15:29:54,570 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 15:32:47,524 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 15:32:47,528 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 15:33:21,898 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 3
+2025-07-28 15:33:21,903 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 15:33:21,920 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 15:33:24,422 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 15:33:24,477 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 15:33:40,231 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 15:33:49,028 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 15:33:49,032 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 15:33:49,056 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 15:33:52,897 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 15:33:52,949 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 15:33:56,869 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 15:34:46,498 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 15:34:46,501 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 15:35:26,553 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 3
+2025-07-28 15:35:26,556 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 15:36:04,876 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 4
+2025-07-28 15:36:04,878 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 3
+2025-07-28 15:37:15,686 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 5
+2025-07-28 15:37:15,687 - circuit_breaker - WARNING - _record_failure:190 - Circuit breaker 'mcp_request' failure threshold reached: 5/5 consecutive failures
+2025-07-28 15:37:15,688 - circuit_breaker - ERROR - _transition_to_open:209 - Circuit breaker 'mcp_request' transition: closed → OPEN. Failure threshold breached: 5/5 consecutive failures. Blocking requests for 60.0s.
+2025-07-28 15:37:15,690 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 4
+2025-07-28 15:39:23,280 - circuit_breaker - INFO - _transition_to_half_open:223 - Circuit breaker 'mcp_request' transition: open → HALF_OPEN. Recovery timeout reached after 127.6s. Testing service recovery with max 3 attempts.
+2025-07-28 15:39:23,310 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 6
+2025-07-28 15:39:23,314 - circuit_breaker - WARNING - _record_failure:197 - Circuit breaker 'mcp_request' failed during recovery test (attempt 0/3)
+2025-07-28 15:39:23,317 - circuit_breaker - ERROR - _transition_to_open:209 - Circuit breaker 'mcp_request' transition: half_open → OPEN. Failure threshold breached: 6/5 consecutive failures. Blocking requests for 60.0s.
+2025-07-28 15:39:23,324 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 5
+2025-07-28 15:39:23,327 - circuit_breaker - WARNING - _record_failure:190 - Circuit breaker 'playwright_mcp' failure threshold reached: 5/5 consecutive failures
+2025-07-28 15:39:23,329 - circuit_breaker - ERROR - _transition_to_open:209 - Circuit breaker 'playwright_mcp' transition: closed → OPEN. Failure threshold breached: 5/5 consecutive failures. Blocking requests for 60.0s.
+2025-07-28 15:53:27,735 - circuit_breaker - INFO - _transition_to_half_open:223 - Circuit breaker 'playwright_mcp' transition: open → HALF_OPEN. Recovery timeout reached after 844.4s. Testing service recovery with max 3 attempts.
+2025-07-28 15:53:27,738 - circuit_breaker - INFO - _transition_to_half_open:223 - Circuit breaker 'mcp_request' transition: open → HALF_OPEN. Recovery timeout reached after 844.4s. Testing service recovery with max 3 attempts.
+2025-07-28 15:53:35,508 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 7
+2025-07-28 15:53:35,510 - circuit_breaker - WARNING - _record_failure:197 - Circuit breaker 'mcp_request' failed during recovery test (attempt 0/3)
+2025-07-28 15:53:35,512 - circuit_breaker - ERROR - _transition_to_open:209 - Circuit breaker 'mcp_request' transition: half_open → OPEN. Failure threshold breached: 7/5 consecutive failures. Blocking requests for 60.0s.
+2025-07-28 15:53:35,516 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 6
+2025-07-28 15:53:35,517 - circuit_breaker - WARNING - _record_failure:197 - Circuit breaker 'playwright_mcp' failed during recovery test (attempt 0/3)
+2025-07-28 15:53:35,518 - circuit_breaker - ERROR - _transition_to_open:209 - Circuit breaker 'playwright_mcp' transition: half_open → OPEN. Failure threshold breached: 6/5 consecutive failures. Blocking requests for 60.0s.
+2025-07-28 15:53:35,552 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 15:53:39,108 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 15:53:39,174 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 15:53:43,157 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 15:53:43,242 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 15:53:43,245 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 15:53:43,272 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 15:53:45,650 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 15:53:45,709 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 15:54:09,040 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 15:54:09,098 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 15:54:43,148 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 1
+2025-07-28 15:55:26,478 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 2
+2025-07-28 15:55:26,532 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 1
+2025-07-28 15:58:51,574 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 15:58:51,635 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 15:59:25,799 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 1
+2025-07-28 16:03:35,144 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 2
+2025-07-28 16:03:35,148 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 1
+2025-07-28 16:03:35,183 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 16:03:38,132 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 16:03:38,179 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 16:04:12,135 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 1
+2025-07-28 16:13:24,066 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 2
+2025-07-28 16:13:24,071 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 1
+2025-07-28 16:14:25,044 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 3
+2025-07-28 16:14:25,048 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 2
+2025-07-28 16:14:25,103 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 16:14:32,614 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 16:14:32,690 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 16:15:06,902 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 1
+2025-07-28 16:16:01,939 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 2
+2025-07-28 16:16:01,944 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 1
+2025-07-28 16:16:01,990 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 16:16:10,353 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 16:16:10,410 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 16:16:44,501 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 1
+2025-07-28 16:22:57,981 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 16:22:58,041 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 16:23:31,998 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 1
+2025-07-28 16:25:07,774 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 2
+2025-07-28 16:25:07,781 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 1
+2025-07-28 16:27:57,159 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 3
+2025-07-28 16:27:57,166 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 2
+2025-07-28 16:27:57,225 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 16:28:00,113 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 16:28:00,168 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 16:28:34,182 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 1
+2025-07-28 16:28:54,240 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: no close frame received or sent. Consecutive failures: 2
+2025-07-28 16:28:54,246 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: no close frame received or sent. Consecutive failures: 1
+2025-07-28 16:28:54,320 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 16:29:01,290 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 16:29:01,343 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 16:29:35,592 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 1
+2025-07-28 16:30:31,691 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 2
+2025-07-28 16:30:31,695 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Request to playwright timed out after 30.0s. Consecutive failures: 1
+2025-07-28 16:35:00,383 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 3
+2025-07-28 16:35:00,386 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 16:46:20,351 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 4
+2025-07-28 16:46:20,354 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 3
+2025-07-28 16:46:20,387 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 16:46:24,948 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 16:46:25,015 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 16:46:46,376 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 16:51:55,149 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 16:51:55,154 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 16:51:55,193 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 16:51:57,819 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 16:51:57,867 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 16:52:19,143 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 16:52:23,151 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 16:52:23,162 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 16:52:23,209 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 16:52:27,654 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 16:52:27,772 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 16:52:37,940 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 16:53:43,946 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 16:53:43,950 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 16:53:43,976 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 16:53:48,473 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 16:53:48,542 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 16:53:58,427 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 16:56:55,372 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 16:56:55,379 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 16:56:55,399 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 16:56:58,133 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 16:56:58,201 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 16:57:08,175 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 16:57:12,239 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 16:57:12,245 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 16:57:12,294 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 16:57:15,150 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 16:57:15,213 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 16:57:25,011 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 16:57:29,080 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 16:57:29,085 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 16:57:29,168 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 16:57:33,731 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 16:57:33,752 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 16:57:43,783 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 17:02:15,388 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 17:02:15,393 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 17:02:15,431 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 17:02:18,126 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 17:02:18,192 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 17:02:31,802 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 17:02:39,402 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 17:02:39,444 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 17:02:49,456 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 17:06:44,789 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 17:06:44,793 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 17:06:44,856 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 17:06:47,324 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 17:06:47,392 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 17:07:08,681 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 17:07:14,749 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 17:07:14,751 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 17:07:14,768 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 17:07:20,337 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 17:07:20,391 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 17:07:30,267 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 17:15:32,083 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 17:15:32,087 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 17:15:32,107 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 17:15:35,668 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 17:15:35,719 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 17:15:45,605 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 17:15:49,651 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 17:15:49,655 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 17:15:49,688 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 17:15:54,387 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 17:15:54,445 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 17:16:04,217 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 17:16:13,878 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 17:16:13,896 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 17:16:14,794 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 17:16:19,297 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 17:16:19,332 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 17:16:29,220 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 17:30:55,646 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 2
+2025-07-28 17:30:55,652 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1
+2025-07-28 17:30:55,683 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-28 17:31:01,480 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-28 17:31:01,538 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-28 17:31:12,812 - circuit_breaker - WARNING - _record_failure:182 - Failure recorded: Not connected to MCP server playwright. Consecutive failures: 1

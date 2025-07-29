@@ -155,7 +155,7 @@ const ConfigPage = () => {
 
         if (!mounted) return;
 
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Removed 1-second delay for immediate startup responsiveness
 
         if (mounted) {
           const configResponse = await configService.requestConfig(type);

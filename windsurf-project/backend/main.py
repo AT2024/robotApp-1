@@ -5,10 +5,15 @@ import traceback
 import asyncio
 from datetime import datetime
 from utils.logger import get_logger
-from core.robot_manager import RobotManager
+from dependencies import (
+    startup_dependencies, 
+    shutdown_dependencies, 
+    check_dependencies_health,
+    get_container
+)
 from websocket.connection_manager import ConnectionManager
 from websocket.websocket_handlers import get_websocket_handler
-from routers import meca, ot2
+from routers import meca, ot2, arduino, config, playwright
 
 logger = get_logger("main")
 app = FastAPI()
@@ -16,9 +21,11 @@ app = FastAPI()
 # CORS setup remains the same
 origins = [
     "http://localhost:3000",
+    "http://localhost:3002",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://127.0.0.1:3000",
+    "http://127.0.0.1:3002",
 ]
 
 app.add_middleware(
@@ -29,27 +36,42 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize managers and handlers with better error handling
+# Initialize service layer architecture
 async def initialize_application():
     try:
-        connection_manager = ConnectionManager()
-        robot_manager = RobotManager(connection_manager)
-        websocket_handler = get_websocket_handler(robot_manager, connection_manager)
+        # Initialize dependency container
+        container = await get_container()
         
-        # Store managers in app state
-        app.state.robot_manager = robot_manager
+        # Initialize connection manager
+        connection_manager = ConnectionManager()
+        
+        # Create websocket handler with service dependencies
+        websocket_handler = get_websocket_handler(
+            orchestrator=container.get_orchestrator(),
+            command_service=container.get_command_service(),
+            protocol_service=container.get_protocol_service(),
+            state_manager=container.get_state_manager(),
+            connection_manager=connection_manager
+        )
+        
+        # Store services in app state for FastAPI dependencies
+        app.state.container = container
         app.state.websocket_handler = websocket_handler
         app.state.connection_manager = connection_manager
         
-        logger.info("Application managers initialized successfully")
+        logger.info("Application services initialized successfully")
         return True
     except Exception as e:
-        logger.error(f"Failed to initialize application managers: {e}")
+        logger.error(f"Failed to initialize application services: {e}")
+        logger.debug(f"Initialization error traceback: {traceback.format_exc()}")
         return False
 
 # Register API routers
-app.include_router(meca.router, prefix="/api/meca")
-app.include_router(ot2.router, prefix="/api/ot2")
+app.include_router(meca.router, prefix="/api/meca", tags=["Mecademic Robot"])
+app.include_router(ot2.router, prefix="/api/ot2", tags=["OT2 Robot"])
+app.include_router(arduino.router, prefix="/api/arduino", tags=["Arduino System"])
+app.include_router(config.router, prefix="/api", tags=["Configuration"])
+app.include_router(playwright.router, prefix="/api/playwright", tags=["Browser Automation"])
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -67,10 +89,19 @@ async def websocket_endpoint(websocket: WebSocket):
 
         # Send initial system status
         try:
-            current_status = app.state.robot_manager.get_status()
+            # Get system status from orchestrator
+            orchestrator = app.state.container.get_orchestrator()
+            system_status = await orchestrator.get_system_status()
+            
             await websocket.send_json({
                 "type": "status_update",
-                "data": current_status,
+                "data": {
+                    "system_state": system_status.system_state.value,
+                    "operational_robots": system_status.operational_robots,
+                    "total_robots": system_status.total_robots,
+                    "active_operations": system_status.active_operations,
+                    "robots": system_status.robot_details
+                },
                 "timestamp": datetime.now().isoformat()
             })
         except Exception as e:
@@ -123,13 +154,17 @@ async def startup_event():
     try:
         logger.info("Starting application initialization...")
         
+        # Initialize dependencies (this will start all services)
+        await startup_dependencies()
+        
         # Initialize application components
         if not await initialize_application():
             raise Exception("Failed to initialize application components")
-
-        # Initialize robots and start monitoring
-        await app.state.robot_manager.initialize_robots()
-        asyncio.create_task(app.state.robot_manager.monitor_robots())
+        
+        # Health check to ensure everything is working
+        health_info = await check_dependencies_health()
+        if not health_info.get("healthy", False):
+            logger.warning(f"Some components are not healthy: {health_info}")
         
         logger.info("Application startup completed successfully")
     except Exception as e:
@@ -146,15 +181,16 @@ async def shutdown_event():
     try:
         logger.info("Starting application shutdown...")
         
-        # Stop robot monitoring and cleanup
-        await app.state.robot_manager.shutdown()
-        
         # Close all WebSocket connections
-        for websocket in app.state.websocket_handler.active_connections:
-            try:
-                await websocket.close()
-            except Exception as e:
-                logger.error(f"Error closing websocket during shutdown: {e}")
+        if hasattr(app.state, 'websocket_handler'):
+            for websocket in app.state.websocket_handler.active_connections:
+                try:
+                    await websocket.close()
+                except Exception as e:
+                    logger.error(f"Error closing websocket during shutdown: {e}")
+        
+        # Shutdown all dependencies and services
+        await shutdown_dependencies()
         
         logger.info("Application shutdown completed successfully")
     except Exception as e:
@@ -167,13 +203,64 @@ async def health_check():
     """
     Health check endpoint that also returns the status of critical system components.
     """
-    return {
-        "status": "healthy",
-        "timestamp": datetime.now().isoformat(),
-        "robot_status": app.state.robot_manager.get_status(),
-        "connections": len(app.state.websocket_handler.active_connections)
-    }
+    try:
+        # Get comprehensive health information
+        health_info = await check_dependencies_health()
+        
+        # Add WebSocket connection info if available
+        websocket_connections = 0
+        if hasattr(app.state, 'websocket_handler'):
+            websocket_connections = len(app.state.websocket_handler.active_connections)
+        
+        return {
+            "status": "healthy" if health_info.get("healthy", False) else "unhealthy",
+            "timestamp": datetime.now().isoformat(),
+            "dependencies": health_info,
+            "websocket_connections": websocket_connections
+        }
+    except Exception as e:
+        logger.error(f"Error in health check: {e}")
+        return {
+            "status": "error",
+            "timestamp": datetime.now().isoformat(),
+            "error": str(e)
+        }
+
+@app.get("/api/system/status")
+async def get_system_status():
+    """
+    Get detailed system status including all robots and services.
+    """
+    try:
+        if not hasattr(app.state, 'container'):
+            raise Exception("Service container not initialized")
+        
+        orchestrator = app.state.container.get_orchestrator()
+        system_status = await orchestrator.get_system_status()
+        
+        return {
+            "system_state": system_status.system_state.value,
+            "operational_robots": system_status.operational_robots,
+            "error_robots": system_status.error_robots,
+            "total_robots": system_status.total_robots,
+            "active_operations": system_status.active_operations,
+            "last_updated": system_status.last_updated,
+            "robot_details": system_status.robot_details
+        }
+    except Exception as e:
+        logger.error(f"Error getting system status: {e}")
+        raise JSONResponse(
+            status_code=500,
+            content={"error": f"Failed to get system status: {str(e)}"}
+        )
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    logger.info("Starting Robotics Control System Server...")
+    uvicorn.run(
+        app, 
+        host="127.0.0.1", 
+        port=8000,
+        log_level="info",
+        access_log=True
+    )

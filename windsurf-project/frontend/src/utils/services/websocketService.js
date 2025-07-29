@@ -1,5 +1,6 @@
 // websocketService.js
 import logger from '../logger';
+import { WS_URL } from './config';
 
 class WebSocketService {
   constructor() {
@@ -9,7 +10,8 @@ class WebSocketService {
     this.statusListeners = new Set();
     this.disconnectListeners = new Set();
     this.reconnectTimeout = null;
-    this.WEBSOCKET_URL = 'ws://localhost:8000/ws';
+    this.reconnectAttempts = 0;
+    this.WEBSOCKET_URL = WS_URL;
     this.MAX_RECONNECT_DELAY = 5000;
     this.disconnect_on_exception = false; // Add this configuration flag
   }
@@ -113,7 +115,32 @@ class WebSocketService {
 
     if (wasConnected) {
       this.disconnectListeners.forEach((listener) => listener());
+      // Attempt to reconnect after a delay
+      this._scheduleReconnect();
     }
+  }
+
+  _scheduleReconnect() {
+    // Clear existing timeout
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout);
+    }
+
+    // Schedule reconnection with exponential backoff
+    const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts || 0), this.MAX_RECONNECT_DELAY);
+    this.reconnectAttempts = (this.reconnectAttempts || 0) + 1;
+    
+    logger.log(`Scheduling reconnection attempt ${this.reconnectAttempts} in ${delay}ms`);
+    
+    this.reconnectTimeout = setTimeout(async () => {
+      try {
+        await this.connect();
+        this.reconnectAttempts = 0; // Reset on successful connection
+      } catch (error) {
+        logger.error('Reconnection failed:', error);
+        // Will schedule another attempt via _handleDisconnect
+      }
+    }, delay);
   }
 
   disconnect() {
@@ -121,6 +148,9 @@ class WebSocketService {
       clearTimeout(this.reconnectTimeout);
       this.reconnectTimeout = null;
     }
+
+    // Reset reconnection attempts
+    this.reconnectAttempts = 0;
 
     if (this.socket) {
       const socket = this.socket;

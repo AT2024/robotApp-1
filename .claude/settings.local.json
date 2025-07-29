@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rg:*)",
+      "Bash(sed:*)",
+      "Bash(grep:*)",
+      "Bash(python3:*)",
+      "Bash(docker-compose logs:*)",
+      "Bash(docker-compose up:*)",
+      "Bash(docker-compose restart:*)",
+      "Bash(docker-compose:*)",
+      "Bash(ping:*)",
+      "Bash(curl:*)",
+      "Bash(find:*)",
+      "Bash(python test:*)",
+      "Bash(gemini:*)"
+    ],
+    "deny": []
+  }
+}

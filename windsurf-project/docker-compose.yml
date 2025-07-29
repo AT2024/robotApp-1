@@ -1,12 +1,11 @@
-version: "3.9"
-
 services:
-  backend:
+  robotics-backend:
+    container_name: robotics-backend
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
     ports:
-      - "8000:8000"
+      - "8080:8000"
     volumes:
       - ./backend:/app
       - /app/__pycache__
@@ -16,26 +15,27 @@ services:
       - PYTHONPATH=/app
     restart: unless-stopped
     networks:
-      - windsurf
+      - robotics-network
 
-  frontend:
+  robotics-frontend:
+    container_name: robotics-frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
     ports:
-      - "3000:5173"
+      - "3002:5173"
     volumes:
       - ./frontend:/app
       - /app/node_modules
     environment:
       - ENVIRONMENT=development
-      - VITE_API_BASE_URL=http://localhost:8000
+      - VITE_API_BASE_URL=http://localhost:8080
       - CHOKIDAR_USEPOLLING=true
     depends_on:
-      - backend
+      - robotics-backend
     restart: unless-stopped
     networks:
-      - windsurf
+      - robotics-network
 
 networks:
-  windsurf:
+  robotics-network:

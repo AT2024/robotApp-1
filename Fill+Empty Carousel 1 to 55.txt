@@ -1,0 +1,4812 @@
+
+//Initial Statements:
+SetGripperForce(100)
+SetJointAcc(50)
+SetTorqueLimits(40,40,40,40,40,40)
+SetTorqueLimitsCfg(2,1)
+SetBlending(0)
+SetJointVel(20)
+SetConf(1,1,1)
+GripperOpen()
+Delay(1)
+
+//Pick Wafer 1 from Baking Tray to Carousel
+SetConf(1,1,-1)
+Delay(3)
+Delay(5)
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-141.6702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-141.6702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-142.3702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-143.7702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-149.3702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-151.3702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 2 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-138.9702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-138.9702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-139.6702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-141.0702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-146.6702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-148.6702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 3 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-136.2702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-136.2702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-136.9702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-138.3702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-143.9702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-145.9702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 4 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-133.5702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-133.5702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-134.2702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-135.6702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-141.2702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-143.2702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 5 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-130.8702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-130.8702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-131.5702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-132.9702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-138.5702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-140.5702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 6 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-128.1702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-128.1702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-128.8702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-130.2702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-135.8702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-137.8702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 7 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-125.4702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-125.4702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-126.1702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-127.5702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-133.1702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-135.1702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 8 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-122.7702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-122.7702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-123.4702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-124.8702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-130.4702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-132.4702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 9 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-120.0702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-120.0702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-120.7702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-122.1702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-127.7702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-129.7702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 10 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-117.3702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-117.3702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-118.0702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-119.4702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-125.0702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-127.0702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 11 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-114.6702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-114.6702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-115.3702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-116.7702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-122.3702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-124.3702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+
+//Empty Wafer 1 from Carousel to Baking Tray
+Delay(7.5)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-151.3702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-149.3702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-143.7702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-142.3702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-141.6702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 2 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-148.6702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-146.6702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-141.0702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-139.6702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-138.9702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 3 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-145.9702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-143.9702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-138.3702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-136.9702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-136.2702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 4 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-143.2702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-141.2702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-135.6702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-134.2702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-133.5702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 5 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-140.5702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-138.5702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-132.9702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-131.5702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-130.8702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 6 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-137.8702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-135.8702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-130.2702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-128.8702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-128.1702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 7 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-135.1702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-133.1702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-127.5702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-126.1702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-125.4702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 8 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-132.4702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-130.4702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-124.8702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-123.4702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-122.7702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 9 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-129.7702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-127.7702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-122.1702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-120.7702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-120.0702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 10 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-127.0702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-125.0702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-119.4702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-118.0702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-117.3702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 11 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-124.3702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-122.3702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-116.7702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-115.3702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-114.6702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+
+//Pick Wafer 12 from Baking Tray to Carousel
+Delay(5)
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-111.9702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-111.9702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-112.6702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-114.0702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-119.6702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-121.6702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 13 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-109.2702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-109.2702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-109.9702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-111.3702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-116.9702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-118.9702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 14 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-106.5702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-106.5702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-107.2702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-108.6702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-114.2702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-116.2702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 15 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-103.8702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-103.8702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-104.5702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-105.9702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-111.5702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-113.5702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 16 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-101.1702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-101.1702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-101.8702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-103.2702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-108.8702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-110.8702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 17 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-98.4702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-98.4702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-99.1702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-100.5702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-106.1702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-108.1702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 18 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-95.7702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-95.7702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-96.4702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-97.8702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-103.4702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-105.4702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 19 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-93.0702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-93.0702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-93.7702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-95.1702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-100.7702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-102.7702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 20 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-90.3702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-90.3702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-91.0702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-92.4702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-98.0702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-100.0702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 21 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-87.6702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-87.6702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-88.3702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-89.7702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-95.3702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-97.3702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 22 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-84.9702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-84.9702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-85.6702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-87.0702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-92.6702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-94.6702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+
+//Empty Wafer 12 from Carousel to Baking Tray
+Delay(7.5)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-121.6702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-119.6702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-114.0702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-112.6702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-111.9702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 13 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-118.9702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-116.9702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-111.3702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-109.9702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-109.2702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 14 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-116.2702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-114.2702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-108.6702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-107.2702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-106.5702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 15 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-113.5702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-111.5702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-105.9702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-104.5702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-103.8702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 16 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-110.8702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-108.8702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-103.2702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-101.8702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-101.1702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 17 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-108.1702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-106.1702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-100.5702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-99.1702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-98.4702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 18 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-105.4702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-103.4702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-97.8702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-96.4702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-95.7702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 19 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-102.7702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-100.7702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-95.1702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-93.7702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-93.0702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 20 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-100.0702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-98.0702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-92.4702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-91.0702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-90.3702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 21 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-97.3702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-95.3702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-89.7702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-88.3702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-87.6702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 22 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-94.6702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-92.6702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-87.0702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-85.6702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-84.9702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+
+//Pick Wafer 23 from Baking Tray to Carousel
+Delay(5)
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-82.2702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-82.2702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-82.9702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-84.3702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-89.9702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-91.9702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 24 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-79.5702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-79.5702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-80.2702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-81.6702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-87.2702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-89.2702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 25 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-76.8702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-76.8702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-77.5702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-78.9702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-84.5702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-86.5702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 26 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-74.1702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-74.1702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-74.8702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-76.2702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-81.8702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-83.8702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 27 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-71.4702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-71.4702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-72.1702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-73.5702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-79.1702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-81.1702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 28 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-68.7702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-68.7702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-69.4702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-70.8702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-76.4702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-78.4702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 29 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-66.0702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-66.0702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-66.7702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-68.1702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-73.7702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-75.7702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 30 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-63.3702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-63.3702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-64.0702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-65.4702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-71.0702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-73.0702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 31 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-60.6702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-60.6702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-61.3702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-62.7702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-68.3702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-70.3702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 32 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-57.9702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-57.9702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-58.6702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-60.0702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-65.6702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-67.6702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 33 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-55.2702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-55.2702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-55.9702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-57.3702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-62.9702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-64.9702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+
+//Empty Wafer 23 from Carousel to Baking Tray
+Delay(7.5)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-91.9702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-89.9702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-84.3702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-82.9702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-82.2702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 24 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-89.2702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-87.2702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-81.6702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-80.2702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-79.5702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 25 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-86.5702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-84.5702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-78.9702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-77.5702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-76.8702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 26 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-83.8702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-81.8702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-76.2702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-74.8702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-74.1702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 27 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-81.1702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-79.1702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-73.5702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-72.1702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-71.4702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 28 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-78.4702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-76.4702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-70.8702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-69.4702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-68.7702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 29 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-75.7702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-73.7702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-68.1702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-66.7702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-66.0702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 30 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-73.0702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-71.0702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-65.4702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-64.0702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-63.3702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 31 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-70.3702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-68.3702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-62.7702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-61.3702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-60.6702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 32 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-67.6702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-65.6702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-60.0702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-58.6702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-57.9702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 33 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-64.9702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-62.9702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-57.3702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-55.9702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-55.2702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+
+//Pick Wafer 34 from Baking Tray to Carousel
+Delay(5)
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-52.5702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-52.5702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-53.2702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-54.6702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-60.2702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-62.2702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 35 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-49.8702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-49.8702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-50.5702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-51.9702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-57.5702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-59.5702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 36 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-47.1702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-47.1702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-47.8702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-49.2702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-54.8702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-56.8702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 37 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-44.4702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-44.4702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-45.1702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-46.5702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-52.1702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-54.1702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 38 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-41.7702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-41.7702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-42.4702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-43.8702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-49.4702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-51.4702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 39 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-39.0702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-39.0702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-39.7702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-41.1702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-46.7702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-48.7702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 40 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-36.3702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-36.3702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-37.0702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-38.4702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-44.0702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-46.0702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 41 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-33.6702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-33.6702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-34.3702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-35.7702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-41.3702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-43.3702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 42 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-30.9702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-30.9702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-31.6702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-33.0702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-38.6702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-40.6702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 43 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-28.2702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-28.2702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-28.9702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-30.3702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-35.9702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-37.9702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 44 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-25.5702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-25.5702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-26.2702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-27.6702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-33.2702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-35.2702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+
+//Empty Wafer 34 from Carousel to Baking Tray
+Delay(7.5)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-62.2702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-60.2702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-54.6702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-53.2702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-52.5702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 35 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-59.5702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-57.5702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-51.9702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-50.5702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-49.8702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 36 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-56.8702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-54.8702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-49.2702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-47.8702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-47.1702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 37 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-54.1702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-52.1702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-46.5702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-45.1702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-44.4702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 38 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-51.4702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-49.4702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-43.8702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-42.4702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-41.7702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 39 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-48.7702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-46.7702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-41.1702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-39.7702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-39.0702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 40 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-46.0702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-44.0702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-38.4702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-37.0702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-36.3702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 41 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-43.3702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-41.3702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-35.7702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-34.3702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-33.6702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 42 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-40.6702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-38.6702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-33.0702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-31.6702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-30.9702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 43 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-37.9702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-35.9702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-30.3702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-28.9702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-28.2702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 44 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-35.2702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-33.2702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-27.6702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-26.2702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-25.5702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+
+//Pick Wafer 45 from Baking Tray to Carousel
+Delay(5)
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-22.8702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-22.8702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-23.5702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-24.9702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-30.5702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-32.5702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 46 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-20.1702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-20.1702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-20.8702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-22.2702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-27.8702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-29.8702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 47 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-17.4702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-17.4702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-18.1702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-19.5702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-25.1702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-27.1702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 48 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-14.7702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-14.7702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-15.4702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-16.8702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-22.4702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-24.4702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 49 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-12.0702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-12.0702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-12.7702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-14.1702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-19.7702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-21.7702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 50 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-9.3702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-9.3702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-10.0702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-11.4702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-17.0702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-19.0702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 51 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-6.6702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-6.6702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-7.3702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-8.7702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-14.3702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-16.3702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 52 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-3.9702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-3.9702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-4.6702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-6.0702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-11.6702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-13.6702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 53 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(-1.2702,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(-1.2702,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(-1.9702,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-3.3702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-8.9702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-10.9702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 54 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(1.4298,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(1.4298,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(0.7298,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(-0.6702,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-6.2702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-8.2702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+//Pick Wafer 55 from Baking Tray to Carousel
+GripperOpen()
+Delay(1)
+SetJointVel(35)
+MovePose(4.1298,-170.5871,55.5,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+SetBlending(0)
+MovePose(4.1298,-170.5871,27.942,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+GripperClose()
+Delay(0.5)
+SetBlending(100)
+MovePose(3.4298,-170.5871,30.742,-178.2908,-69.0556,1.7626)
+SetJointVel(35)
+MovePose(2.0298,-170.5871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-3.5702,-170.5871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-5.5702,-170.5871,60.0,-178.2908,-69.0556,1.7626)
+Delay(0.5)
+SetBlending(80)
+MovePose(53.8,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(84.1,-217.2,94.9,90,0,-90) //After Photogate
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 1
+SetBlending(0)
+Delay(1)
+SetJointVel(15)
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 3
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+MoveGripper(2.9)
+Delay(0.5)
+SetJointVel(50)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+SetBlending(100)
+
+
+//Empty Wafer 45 from Carousel to Baking Tray
+Delay(7.5)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-32.5702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-30.5702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-24.9702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-23.5702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-22.8702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 46 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-29.8702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-27.8702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-22.2702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-20.8702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-20.1702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 47 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-27.1702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-25.1702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-19.5702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-18.1702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-17.4702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 48 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-24.4702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-22.4702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-16.8702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-15.4702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-14.7702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 49 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-21.7702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-19.7702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-14.1702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-12.7702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-12.0702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 50 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-19.0702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-17.0702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-11.4702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-10.0702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-9.3702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 51 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-16.3702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-14.3702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-8.7702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-7.3702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-6.6702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 52 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-13.6702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-11.6702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-6.0702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-4.6702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-3.9702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 53 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-10.9702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-8.9702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-3.3702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(-1.9702,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(-1.2702,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 54 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-8.2702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-6.2702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(-0.6702,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(0.7298,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(1.4298,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)
+
+//Empty Wafer 55 from Carousel to Baking Tray
+Delay(1)
+GripperOpen()
+Delay(1)
+MovePose(133.8,-216.95,119.9,90,0,-90) //Y Away 2
+MovePose(133.8,-245.95,119.9,90,0,-90) //Y Away 1
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel
+SetBlending(0)
+SetJointVel(15)
+MoveGripper(3.7)
+Delay(0.5)
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 5
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,101.9,90,0,-90) //Carousel
+Delay(0.5)
+GripperClose()
+SetJointVel(20)
+Delay(0.5)
+MovePose(133.8,-247.95,103.9,90,0,-90) //Above Carousel 4
+MovePose(133.8,-247.95,109.9,90,0,-90) //Above Carousel 2
+MovePose(133.8,-247.95,115.9,90,0,-90) //Above Carousel 1
+MovePose(133.8,-245.95,115.9,90,0,-90) //Y Away 1
+Delay(0.5)
+SetBlending(80)
+SetJointVel(35)
+MovePose(133.8,-216.95,120.0,90,0,-90) //Y Away 2
+MovePose(84.1,-217.2,94.9,90,0,-90) //Before Photogate
+MovePose(53.8,-217.2,94.9,90,0,-90) //After Photogate
+Delay(0.5)
+MovePose(-5.5702,-170.2871,60.0,-178.2908,-69.0556,1.7626)
+SetJointVel(20)
+Delay(0.5)
+SetBlending(100)
+MovePose(-3.5702,-170.2871,49.942,-178.2908,-69.0556,1.7626)
+MovePose(2.0298,-170.2871,33.942,-178.2908,-69.0556,1.7626)
+MovePose(3.4298,-170.2871,30.742,-178.2908,-69.0556,1.7626)
+Delay(1)
+GripperOpen()
+Delay(0.5)
+MovePose(4.1298,-170.5871,50.0,-178.2908,-69.0556,1.7626)
+SetJointVel(50)
+Delay(0.2)
+SetBlending(100)
+MovePose(25.567,-202.630,179.700,90.546,0.866,-90.882)

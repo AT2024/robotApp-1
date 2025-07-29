@@ -1,0 +1,5 @@
+2025-07-14 07:13:04,743 - meca_service - INFO - _on_start:356 - Registered robot meca with state manager
+2025-07-14 07:13:04,746 - meca_service - INFO - _on_start:128 - Meca robot service started successfully
+2025-07-14 07:13:04,748 - meca_service - INFO - start:132 - MecaService service started
+2025-07-14 07:27:42,963 - meca_service - INFO - _on_stop:162 - Meca robot service stopped
+2025-07-14 07:27:42,968 - meca_service - INFO - stop:148 - MecaService service stopped

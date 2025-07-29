@@ -47,4 +47,32 @@ const StepButton = ({ connected, ...props }) => (
   </button>
 );
 
-export { PrimaryButton, SecondaryButton, EmergencyButton, StepButton };
+const PauseButton = ({ paused, className = "", ...props }) => (
+  <button
+    className={`${baseButtonClasses} ${
+      paused 
+        ? "bg-gray-500 text-white cursor-not-allowed"
+        : "bg-orange-500 text-white hover:bg-orange-600"
+    } focus:ring-orange-500 ${className}`}
+    disabled={paused}
+    {...props}
+  >
+    ⏸️ Pause
+  </button>
+);
+
+const ResumeButton = ({ paused, className = "", ...props }) => (
+  <button
+    className={`${baseButtonClasses} ${
+      !paused 
+        ? "bg-gray-500 text-white cursor-not-allowed"
+        : "bg-green-500 text-white hover:bg-green-600"
+    } focus:ring-green-500 ${className}`}
+    disabled={!paused}
+    {...props}
+  >
+    ▶️ Resume
+  </button>
+);
+
+export { PrimaryButton, SecondaryButton, EmergencyButton, StepButton, PauseButton, ResumeButton };

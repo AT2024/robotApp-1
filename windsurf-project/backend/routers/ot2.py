@@ -1,67 +1,200 @@
 """
 Router for OT2 robot endpoints.
+Updated to use the new service layer architecture.
 """
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, HTTPException, Body
 from fastapi.responses import JSONResponse
 from typing import Dict, Any, Optional
-from core.robot_manager import RobotManager
+from dependencies import OT2ServiceDep, ProtocolServiceDep, CommandServiceDep
+from services.ot2_service import OT2Service
+from services.protocol_service import ProtocolExecutionService
+from services.command_service import RobotCommandService, CommandType, CommandPriority
 from utils.logger import get_logger
 import os
 import json
 import asyncio
 import requests
 import time
+from pydantic import BaseModel
 
 router = APIRouter()
 logger = get_logger("ot2_router")
 
-# Define the path to the protocol file relative to the project root
-PROTOCOL_FILE = os.path.join(
-    os.path.dirname(os.path.dirname(__file__)),
-    "protocols",  # Create a protocols directory
-    "ot2Protocole.py",
-)
 
-# Log the protocol file path at module initialization
-logger.info(f"Protocol file path configured as: {PROTOCOL_FILE}")
+# Pydantic models for request validation
+class ProtocolRequest(BaseModel):
+    trayInfo: Optional[Dict[str, Any]] = None
+    vialNumber: Optional[int] = None
+    trayNumber: Optional[int] = None
+    parameters: Optional[Dict[str, Any]] = None
 
 
-async def get_robot_manager(request: Request) -> RobotManager:
-    """Get the RobotManager instance from the application state."""
-    return request.app.state.robot_manager
+class RunRequest(BaseModel):
+    protocol_name: Optional[str] = "OT2_Liquid_Handling"
+    parameters: Optional[Dict[str, Any]] = None
 
 
-async def execute_ot2_protocol(
-    robot_manager: RobotManager, parameters: Dict = None
-) -> Dict:
-    """Execute OT2 protocol by delegating to the robot manager.
+# -----------------------------------------------------------------------------
+# New service layer endpoints
+# -----------------------------------------------------------------------------
 
-    This function processes API requests and delegates actual execution
-    to the robot_manager's run_ot2_protocol_direct method.
-    """
+
+@router.get("/robot-status")
+async def get_ot2_robot_status(ot2_service: OT2Service = OT2ServiceDep()):
+    """Get current status of the OT2 robot"""
     try:
-        logger.info("Processing OT2 protocol execution request")
-
-        # Verify robot connection before proceeding
-        if not robot_manager.ot2_connected:
-            status = await robot_manager._check_ot2_status()
-            if status != "connected":
-                raise Exception("OT2 robot is not connected")
-
-        # Delegate the actual execution to robot_manager
-        result = await robot_manager.run_ot2_protocol_direct(parameters)
-
-        logger.info("OT2 protocol execution request processed successfully")
-        return result
-
+        result = await ot2_service.get_robot_status()
+        if not result.success:
+            raise HTTPException(status_code=500, detail=result.error)
+        return result.data
+    except HTTPException:
+        raise
     except Exception as e:
-        logger.error(f"Error processing OT2 protocol execution request: {e}")
-        raise Exception(f"Failed to execute OT2 protocol: {str(e)}")
+        logger.error(f"Error getting OT2 status: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.post("/connect")
+async def connect_ot2(ot2_service: OT2Service = OT2ServiceDep()):
+    """Connect to OT2 robot"""
+    try:
+        result = await ot2_service.connect()
+        if not result.success:
+            raise HTTPException(status_code=500, detail=result.error)
+        return {"status": "success", "message": "Connected to OT2 robot"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error connecting to OT2: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/disconnect")
+async def disconnect_ot2(ot2_service: OT2Service = OT2ServiceDep()):
+    """Disconnect from OT2 robot"""
+    try:
+        result = await ot2_service.disconnect()
+        if not result.success:
+            raise HTTPException(status_code=500, detail=result.error)
+        return {"status": "success", "message": "Disconnected from OT2 robot"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error disconnecting from OT2: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/home")
+async def home_ot2(command_service: RobotCommandService = CommandServiceDep()):
+    """Send OT2 robot to home position"""
+    try:
+        result = await command_service.submit_command(
+            robot_id="ot2",
+            command_type=CommandType.HOME,
+            parameters={},
+            priority=CommandPriority.HIGH,
+            timeout=120.0,
+        )
+
+        if not result.success:
+            raise HTTPException(status_code=500, detail=result.error)
+
+        return {
+            "status": "success",
+            "command_id": result.data,
+            "message": "Home command submitted",
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error homing OT2 robot: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/emergency-stop")
+async def emergency_stop_ot2(
+    command_service: RobotCommandService = CommandServiceDep(),
+):
+    """Emergency stop the OT2 robot"""
+    try:
+        result = await command_service.submit_command(
+            robot_id="ot2",
+            command_type=CommandType.EMERGENCY_STOP,
+            parameters={},
+            priority=CommandPriority.EMERGENCY,
+            timeout=10.0,
+        )
+
+        if not result.success:
+            raise HTTPException(status_code=500, detail=result.error)
+
+        return {
+            "status": "success",
+            "command_id": result.data,
+            "message": "Emergency stop command submitted",
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error emergency stopping OT2 robot: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/pause/{execution_id}")
+async def pause_protocol(
+    execution_id: str, protocol_service: ProtocolExecutionService = ProtocolServiceDep()
+):
+    """Pause an OT2 protocol execution"""
+    try:
+        result = await protocol_service.pause_protocol_execution(execution_id)
+
+        if not result.success:
+            raise HTTPException(status_code=500, detail=result.error)
+
+        return {
+            "status": "success",
+            "execution_id": execution_id,
+            "message": "Protocol execution paused",
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error pausing protocol: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/resume/{execution_id}")
+async def resume_protocol(
+    execution_id: str, protocol_service: ProtocolExecutionService = ProtocolServiceDep()
+):
+    """Resume a paused OT2 protocol execution"""
+    try:
+        result = await protocol_service.resume_protocol_execution(execution_id)
+
+        if not result.success:
+            raise HTTPException(status_code=500, detail=result.error)
+
+        return {
+            "status": "success",
+            "execution_id": execution_id,
+            "message": "Protocol execution resumed",
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error resuming protocol: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# -----------------------------------------------------------------------------
+# Legacy functions (to be removed after migration)
+# -----------------------------------------------------------------------------
+
+
+# Legacy function - will be removed after service migration
 async def wait_for_protocol_analysis(
-    robot_manager: RobotManager, protocol_id: str, headers: Dict
+    robot_manager, protocol_id: str, headers: Dict
 ) -> bool:
     """Wait for protocol analysis to complete and return whether it was successful.
 
@@ -129,7 +262,9 @@ async def wait_for_protocol_analysis(
         except Exception as e:
             logger.error(f"Error checking analysis status: {e}")
 
-        await asyncio.sleep(2)  # Wait 2 seconds before checking again
+        await asyncio.sleep(
+            0.5
+        )  # Optimized: check every 0.5 seconds for faster response
 
     # If we've been polling for a while and keep seeing "completed", assume it's ready
     logger.info(
@@ -138,7 +273,7 @@ async def wait_for_protocol_analysis(
     return True  # Proceed anyway after max attempts
 
 
-async def monitor_run(robot_manager: RobotManager, run_id: str, headers: Dict) -> None:
+async def monitor_run(robot_manager, run_id: str, headers: Dict) -> None:
     """Monitor the run progress in a background task.
 
     Args:
@@ -147,9 +282,9 @@ async def monitor_run(robot_manager: RobotManager, run_id: str, headers: Dict) -
         headers: The HTTP headers to use for requests
     """
     try:
-        max_attempts = 30  # Check status for 5 minutes (10s interval)
+        max_attempts = 60  # Check status for 5 minutes (5s interval)
         for attempt in range(max_attempts):
-            await asyncio.sleep(10)  # Check every 10 seconds
+            await asyncio.sleep(5)  # Optimized: check every 5 seconds instead of 10
             status_url = (
                 f"http://{robot_manager.ot2_ip}:{robot_manager.ot2_port}/runs/{run_id}"
             )
@@ -201,7 +336,7 @@ async def monitor_run(robot_manager: RobotManager, run_id: str, headers: Dict) -
         logger.error(f"Error monitoring run: {e}")
 
 
-async def check_run_status(robot_manager: RobotManager, run_id: str) -> str:
+async def check_run_status(robot_manager, run_id: str) -> str:
     """Check the status of a run.
 
     Args:
@@ -232,219 +367,161 @@ async def check_run_status(robot_manager: RobotManager, run_id: str) -> str:
 
 @router.post("/run-protocol")
 async def run_ot2_protocol(
-    request: Request, robot_manager: RobotManager = Depends(get_robot_manager)
+    request_data: ProtocolRequest = Body(default_factory=ProtocolRequest),
+    protocol_service: ProtocolExecutionService = ProtocolServiceDep(),
 ):
-    """Run the OT2 protocol.
+    """Run the OT2 protocol using the new service layer.
 
-    This endpoint handles requests to execute the OT2 protocol. It checks the robot
-    connection status, reads the protocol file, and initiates the protocol execution.
-
-    The protocol is executed using the OT2's native protocol execution system rather
-    than step-by-step API commands, which avoids API compatibility issues.
+    This endpoint creates and executes an OT2 protocol through the
+    ProtocolExecutionService for better coordination and monitoring.
     """
     try:
-        logger.info("Starting OT2 protocol")
+        logger.info("Starting OT2 protocol execution through service layer")
 
-        # Log current connection state
-        logger.info(
-            f"OT2 Connection state - Flag: {robot_manager.ot2_connected}, "
-            f"Status: {robot_manager.status['ot2']}"
-        )
-
-        # Force a status check before proceeding
-        current_status = await robot_manager._check_ot2_status()
-
-        if not robot_manager.ot2_connected:
-            error_msg = "OT2 robot is not connected"
-            logger.error(error_msg)
-            return JSONResponse(
-                status_code=400,
-                content={
-                    "detail": error_msg,
-                    "status": current_status,
-                    "connection_info": {
-                        "ip": robot_manager.ot2_ip,
-                        "port": robot_manager.ot2_port,
-                    },
-                },
-            )
-
-        # Log the incoming request
-        try:
-            body = await request.json()
-            logger.info(f"Received request with body: {body}")
-        except:
-            body = {}
-            logger.info("No request body received")
-
-        # Prepare parameters from request body
+        # Prepare protocol parameters
         parameters = {}
-        if body and isinstance(body, dict):
-            # Extract trayInfo if available
-            if "trayInfo" in body:
-                parameters["trayInfo"] = body["trayInfo"]
+        if request_data.trayInfo:
+            parameters.update(request_data.trayInfo)
+        if request_data.vialNumber:
+            parameters["vialNumber"] = request_data.vialNumber
+        if request_data.trayNumber:
+            parameters["trayNumber"] = request_data.trayNumber
+        if request_data.parameters:
+            parameters.update(request_data.parameters)
 
-            # Extract any other parameters
-            for key, value in body.items():
-                if key != "trayInfo":
-                    parameters[key] = value
-
-        # Use our improved execution function instead of robot_manager.run_ot2_protocol_direct
-        result = await execute_ot2_protocol(robot_manager, parameters)
-
-        logger.info("OT2 protocol started successfully")
-        return JSONResponse(
-            status_code=200,
-            content={
-                "message": "Protocol execution started",
-                "status": "success",
-                "result": result,
-            },
+        # Create OT2 protocol execution
+        result = await protocol_service.create_ot2_protocol_execution(
+            protocol_name="OT2_Liquid_Handling",
+            parameters=parameters if parameters else None,
         )
 
+        if not result.success:
+            raise HTTPException(status_code=500, detail=result.error)
+
+        execution_id = result.data
+
+        # Start the protocol execution
+        start_result = await protocol_service.start_protocol_execution(execution_id)
+
+        if not start_result.success:
+            raise HTTPException(status_code=500, detail=start_result.error)
+
+        logger.info(f"OT2 protocol execution started: {execution_id}")
+        return {
+            "message": "OT2 protocol execution started",
+            "status": "success",
+            "execution_id": execution_id,
+            "parameters": parameters,
+        }
+
+    except HTTPException:
+        raise
     except Exception as e:
         error_msg = f"Failed to execute protocol: {str(e)}"
         logger.error(error_msg)
-        return JSONResponse(status_code=500, content={"detail": error_msg})
+        raise HTTPException(status_code=500, detail=error_msg)
 
 
-@router.get("/status/{run_id}")
-async def get_run_status(
-    run_id: str, robot_manager: RobotManager = Depends(get_robot_manager)
+@router.get("/status/{execution_id}")
+async def get_protocol_status(
+    execution_id: str, protocol_service: ProtocolExecutionService = ProtocolServiceDep()
 ):
-    """Get the current status of a protocol run.
+    """Get the current status of a protocol execution.
 
     This endpoint allows clients to check the status of a running protocol
-    by providing the run ID.
+    by providing the execution ID.
     """
     try:
-        # Use our improved status check function
-        status = await check_run_status(robot_manager, run_id)
-        return JSONResponse(
-            status_code=200,
-            content={
-                "runId": run_id,
-                "status": status,
-            },
-        )
+        result = await protocol_service.get_protocol_execution_status(execution_id)
+
+        if not result.success:
+            raise HTTPException(status_code=404, detail=result.error)
+
+        return result.data
+
+    except HTTPException:
+        raise
     except Exception as e:
-        error_msg = f"Failed to get run status: {str(e)}"
+        error_msg = f"Failed to get protocol status: {str(e)}"
         logger.error(error_msg)
-        return JSONResponse(status_code=500, content={"detail": error_msg})
+        raise HTTPException(status_code=500, detail=error_msg)
 
 
-@router.post("/stop/{run_id}")
+@router.post("/stop/{execution_id}")
 async def stop_protocol(
-    run_id: str, robot_manager: RobotManager = Depends(get_robot_manager)
+    execution_id: str, protocol_service: ProtocolExecutionService = ProtocolServiceDep()
 ):
-    """Stop an OT2 protocol run.
+    """Stop an OT2 protocol execution.
 
-    This endpoint allows clients to stop a running protocol by providing
-    the run ID.
+    This endpoint allows clients to stop a running protocol execution
+    by providing the execution ID.
     """
     try:
-        headers = {"Accept": "application/json", "Opentrons-Version": "2"}
-        url = f"http://{robot_manager.ot2_ip}:{robot_manager.ot2_port}/runs/{run_id}/commands"
-
-        stop_data = {"data": {"commandType": "stop", "reason": "User requested stop"}}
-
-        response = await asyncio.to_thread(
-            lambda: requests.post(url, headers=headers, json=stop_data, timeout=30)
+        result = await protocol_service.cancel_protocol_execution(
+            execution_id, reason="User requested stop"
         )
 
-        if response.status_code not in [200, 201]:
-            return JSONResponse(
-                status_code=500,
-                content={
-                    "detail": f"Failed to stop protocol: {response.text}",
-                    "status": "error",
-                },
-            )
+        if not result.success:
+            raise HTTPException(status_code=500, detail=result.error)
 
-        return JSONResponse(
-            status_code=200,
-            content={
-                "message": "Protocol stopped successfully",
-                "status": "success",
-            },
-        )
+        return {
+            "message": "Protocol execution stopped successfully",
+            "status": "success",
+            "execution_id": execution_id,
+        }
+
+    except HTTPException:
+        raise
     except Exception as e:
         error_msg = f"Failed to stop protocol: {str(e)}"
         logger.error(error_msg)
-        return JSONResponse(status_code=500, content={"detail": error_msg})
+        raise HTTPException(status_code=500, detail=error_msg)
 
 
 @router.get("/protocols")
-async def list_protocols(robot_manager: RobotManager = Depends(get_robot_manager)):
-    """List all protocols on the OT2.
+async def list_active_protocols(
+    protocol_service: ProtocolExecutionService = ProtocolServiceDep(),
+):
+    """List all active protocol executions.
 
-    This endpoint retrieves a list of all protocols that have been uploaded
-    to the OT2 robot.
+    This endpoint retrieves a list of all protocol executions that are
+    currently active in the system.
     """
     try:
-        headers = {"Accept": "application/json", "Opentrons-Version": "2"}
-        url = f"http://{robot_manager.ot2_ip}:{robot_manager.ot2_port}/protocols"
+        result = await protocol_service.list_active_protocols()
 
-        response = await asyncio.to_thread(
-            lambda: requests.get(url, headers=headers, timeout=30)
-        )
+        if not result.success:
+            raise HTTPException(status_code=500, detail=result.error)
 
-        if response.status_code != 200:
-            return JSONResponse(
-                status_code=500,
-                content={
-                    "detail": f"Failed to list protocols: {response.text}",
-                    "status": "error",
-                },
-            )
+        return {"protocols": result.data, "status": "success"}
 
-        protocols = response.json().get("data", [])
-        return JSONResponse(
-            status_code=200,
-            content={
-                "protocols": protocols,
-                "status": "success",
-            },
-        )
+    except HTTPException:
+        raise
     except Exception as e:
         error_msg = f"Failed to list protocols: {str(e)}"
         logger.error(error_msg)
-        return JSONResponse(status_code=500, content={"detail": error_msg})
+        raise HTTPException(status_code=500, detail=error_msg)
 
 
-@router.get("/runs")
-async def list_runs(robot_manager: RobotManager = Depends(get_robot_manager)):
-    """List all protocol runs on the OT2.
+@router.get("/executions")
+async def list_protocol_executions(
+    protocol_service: ProtocolExecutionService = ProtocolServiceDep(),
+):
+    """List all protocol executions.
 
-    This endpoint retrieves a list of all protocol runs that have been
-    created on the OT2 robot.
+    This endpoint retrieves a list of all protocol executions in the system.
     """
     try:
-        headers = {"Accept": "application/json", "Opentrons-Version": "2"}
-        url = f"http://{robot_manager.ot2_ip}:{robot_manager.ot2_port}/runs"
+        result = await protocol_service.list_active_protocols()
 
-        response = await asyncio.to_thread(
-            lambda: requests.get(url, headers=headers, timeout=30)
-        )
+        if not result.success:
+            raise HTTPException(status_code=500, detail=result.error)
 
-        if response.status_code != 200:
-            return JSONResponse(
-                status_code=500,
-                content={
-                    "detail": f"Failed to list runs: {response.text}",
-                    "status": "error",
-                },
-            )
+        return {"executions": result.data, "status": "success"}
 
-        runs = response.json().get("data", [])
-        return JSONResponse(
-            status_code=200,
-            content={
-                "runs": runs,
-                "status": "success",
-            },
-        )
+    except HTTPException:
+        raise
     except Exception as e:
-        error_msg = f"Failed to list runs: {str(e)}"
+        error_msg = f"Failed to list executions: {str(e)}"
         logger.error(error_msg)
-        return JSONResponse(status_code=500, content={"detail": error_msg})
+        raise HTTPException(status_code=500, detail=error_msg)

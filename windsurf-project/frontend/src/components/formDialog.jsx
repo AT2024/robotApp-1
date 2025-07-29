@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import Dialog from './Dialog';
-import Input from './Input';
-import Button from './Button';
+import { Dialog, Input, Button } from './common';
 
 const FormDialog = ({ isOpen, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -54,7 +52,8 @@ const FormDialog = ({ isOpen, onClose, onSubmit }) => {
           name='trayNumber'
           value={formData.trayNumber}
           onChange={handleChange}
-          error={errors.trayNumber}
+          error={!!errors.trayNumber}
+          errorMessage={errors.trayNumber}
           placeholder='Enter tray serial number'
         />
 
@@ -64,7 +63,8 @@ const FormDialog = ({ isOpen, onClose, onSubmit }) => {
           name='vialNumber'
           value={formData.vialNumber}
           onChange={handleChange}
-          error={errors.vialNumber}
+          error={!!errors.vialNumber}
+          errorMessage={errors.vialNumber}
           placeholder='Enter thorium vial number'
         />
 
