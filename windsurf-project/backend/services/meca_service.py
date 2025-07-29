@@ -524,8 +524,31 @@ class MecaService(RobotService):
             status = await driver.get_status()
             activation_status = status.get('activation_status', False)
             homing_status = status.get('homing_status', False)
+            error_status = status.get('error_status', False)
+            pause_status = status.get('paused', False)
             
-            self.logger.debug(f"Robot {self.robot_id} hardware state - Activated: {activation_status}, Homed: {homing_status}")
+            self.logger.debug(f"Robot {self.robot_id} hardware state - Activated: {activation_status}, Homed: {homing_status}, Error: {error_status}, Paused: {pause_status}")
+            
+            # Step 1: Reset any error condition first
+            if error_status:
+                self.logger.info(f"🔧 Robot {self.robot_id} has error - resetting...")
+                try:
+                    reset_success = await driver.reset_error()
+                    if reset_success:
+                        self.logger.info(f"✅ Error reset successful for {self.robot_id}")
+                        # Re-check status after reset
+                        await asyncio.sleep(2.0)
+                        status = await driver.get_status()
+                        activation_status = status.get('activation_status', False)
+                        homing_status = status.get('homing_status', False)
+                        error_status = status.get('error_status', False)
+                        pause_status = status.get('paused', False)
+                    else:
+                        raise HardwareError(f"Failed to reset error for robot {self.robot_id}", robot_id=self.robot_id)
+                except Exception as e:
+                    error_msg = f"Error reset failed for robot {self.robot_id}: {str(e)}"
+                    self.logger.error(error_msg)
+                    raise HardwareError(error_msg, robot_id=self.robot_id)
             
             # Check if robot needs activation
             if not activation_status:
@@ -548,15 +571,36 @@ class MecaService(RobotService):
                     self.logger.error(error_msg)
                     raise HardwareError(error_msg, robot_id=self.robot_id)
             
-            # Check if robot needs homing
+            # Step 3: Resume motion if paused and not homed (prevents homing deadlock)
+            if pause_status and not homing_status:
+                self.logger.info(f"🔧 Robot {self.robot_id} is paused and not homed - resuming before homing...")
+                try:
+                    resume_success = await driver.resume_motion()
+                    if resume_success:
+                        self.logger.info(f"✅ Motion resumed for robot {self.robot_id} before homing")
+                        # Update pause status
+                        await asyncio.sleep(1.0)
+                        status = await driver.get_status()
+                        pause_status = status.get('paused', False)
+                    else:
+                        self.logger.warning(f"⚠️ Failed to resume motion before homing for {self.robot_id}")
+                except Exception as e:
+                    self.logger.error(f"Failed to resume motion before homing for {self.robot_id}: {str(e)}")
+            
+            # Step 4: Home robot if needed, then wait for completion
             if not homing_status:
                 self.logger.info(f"🏠 Robot {self.robot_id} not homed - homing now...")
                 try:
                     await driver.home_robot()
                     self.logger.info(f"✅ Robot {self.robot_id} homing command sent")
                     
-                    # Wait and verify homing completed
-                    await asyncio.sleep(5.0)  # Give time for homing to complete
+                    # Wait for homing to complete using wait_idle
+                    self.logger.info(f"⏳ Waiting for robot {self.robot_id} to complete homing...")
+                    wait_success = await driver.wait_idle(timeout=30.0)
+                    if not wait_success:
+                        self.logger.warning(f"⚠️ Wait idle timeout for robot {self.robot_id} - checking status")
+                    
+                    # Verify homing completed
                     verification_status = await driver.get_status()
                     if not verification_status.get('homing_status', False):
                         raise HardwareError(f"Robot {self.robot_id} homing failed to complete", robot_id=self.robot_id)
@@ -568,6 +612,28 @@ class MecaService(RobotService):
                     error_msg = f"Failed to home robot {self.robot_id}: {str(e)}"
                     self.logger.error(error_msg)
                     raise HardwareError(error_msg, robot_id=self.robot_id)
+            
+            # Clear motion queue and resume motion after successful homing/activation
+            if homing_status and activation_status:
+                try:
+                    self.logger.info(f"🔧 Clearing and resuming motion for {self.robot_id}")
+                    
+                    # Clear any leftover motion queue (this also pauses the robot)
+                    clear_success = await driver.clear_motion()
+                    if not clear_success:
+                        self.logger.warning(f"⚠️ Failed to clear motion for {self.robot_id}")
+                    
+                    # Resume motion so robot is ready for new commands
+                    resume_success = await driver.resume_motion()
+                    if not resume_success:
+                        self.logger.warning(f"⚠️ Failed to resume motion for {self.robot_id}")
+                    
+                    if clear_success and resume_success:
+                        self.logger.info(f"✅ Motion cleared and resumed for {self.robot_id}")
+                    
+                except Exception as e:
+                    # Log error but don't fail - robot is still technically ready
+                    self.logger.error(f"⚠️ Failed to clear/resume motion for {self.robot_id}: {str(e)}", exc_info=True)
             
             # Final verification of robot readiness
             final_status = await driver.get_status()
@@ -1434,7 +1500,7 @@ class MecaService(RobotService):
     async def _move_to_position(self, position: WaferPosition, move_type: str = "linear"):
         """Internal method to move robot to specified position"""
         command = MovementCommand(
-            command_type="move_lin" if move_type == "linear" else "move_pose",
+            command_type="MoveLin" if move_type == "linear" else "MovePose",
             target_position={
                 "x": position.x,
                 "y": position.y,
