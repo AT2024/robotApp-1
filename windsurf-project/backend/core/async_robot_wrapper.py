@@ -336,7 +336,7 @@ class AsyncRobotWrapper:
                 else:
                     self.logger.warning(f"MoveJoints not available on robot {self.robot_id}")
             
-            elif command.command_type == "move_pose":
+            elif command.command_type == "MovePose":
                 if hasattr(actual_robot, 'MovePose'):
                     actual_robot.MovePose(
                         command.target_position["x"],
@@ -350,7 +350,7 @@ class AsyncRobotWrapper:
                 else:
                     self.logger.warning(f"MovePose not available on robot {self.robot_id}")
             
-            elif command.command_type == "move_lin":
+            elif command.command_type == "MoveLin":
                 if hasattr(actual_robot, 'MoveLin'):
                     actual_robot.MoveLin(
                         command.target_position["x"],
@@ -377,6 +377,45 @@ class AsyncRobotWrapper:
                     self.logger.info(f"Executed GripperClose command for {self.robot_id}")
                 else:
                     self.logger.warning(f"GripperClose not available on robot {self.robot_id}")
+            elif command.tool_action == "grip_move":
+                width = command.parameters.get("width", 0) if command.parameters else 0
+                if hasattr(actual_robot, 'MoveGripper'):
+                    actual_robot.MoveGripper(width)
+                    self.logger.info(f"Executed MoveGripper to width {width} for {self.robot_id}")
+                else:
+                    self.logger.warning(f"MoveGripper not available on robot {self.robot_id}")
+            
+            # Direct gripper command types (alternative to tool_action)
+            elif command.command_type == "GripperOpen":
+                if hasattr(actual_robot, 'GripperOpen'):
+                    actual_robot.GripperOpen()
+                    self.logger.info(f"Executed GripperOpen command for {self.robot_id}")
+                else:
+                    self.logger.warning(f"GripperOpen not available on robot {self.robot_id}")
+            
+            elif command.command_type == "GripperClose":
+                if hasattr(actual_robot, 'GripperClose'):
+                    actual_robot.GripperClose()
+                    self.logger.info(f"Executed GripperClose command for {self.robot_id}")
+                else:
+                    self.logger.warning(f"GripperClose not available on robot {self.robot_id}")
+            
+            elif command.command_type == "MoveGripper":
+                width = command.parameters.get("width", 0) if command.parameters else 0
+                if hasattr(actual_robot, 'MoveGripper'):
+                    actual_robot.MoveGripper(width)
+                    self.logger.info(f"Executed MoveGripper to width {width} for {self.robot_id}")
+                else:
+                    self.logger.warning(f"MoveGripper not available on robot {self.robot_id}")
+            
+            # Delay command
+            elif command.command_type == "Delay":
+                duration = command.parameters.get("duration", 0) if command.parameters else 0
+                if duration > 0:
+                    self.logger.info(f"Executing delay of {duration} seconds for {self.robot_id}")
+                    time.sleep(duration)  # Synchronous sleep in thread pool is OK
+                else:
+                    self.logger.warning(f"Invalid delay duration: {duration} for {self.robot_id}")
             
             # Configuration commands
             elif command.command_type == "config":
@@ -451,37 +490,6 @@ class AsyncRobotWrapper:
                 else:
                     self.logger.warning(f"Unknown configuration command: {config_type} with values {values} for {self.robot_id}")
             
-            # Delay command
-            elif command.command_type == "delay":
-                duration = command.parameters.get("duration", 0)
-                if duration > 0:
-                    self.logger.info(f"Executing delay of {duration} seconds for {self.robot_id}")
-                    time.sleep(duration)  # Synchronous sleep in thread pool is OK
-                else:
-                    self.logger.warning(f"Invalid delay duration: {duration} for {self.robot_id}")
-            
-            # Special gripper commands (alternative naming)
-            elif command.command_type == "gripper_open":
-                if hasattr(actual_robot, 'GripperOpen'):
-                    actual_robot.GripperOpen()
-                    self.logger.info(f"Executed GripperOpen command for {self.robot_id}")
-                else:
-                    self.logger.warning(f"GripperOpen not available on robot {self.robot_id}")
-                    
-            elif command.command_type == "gripper_close":
-                if hasattr(actual_robot, 'GripperClose'):
-                    actual_robot.GripperClose()
-                    self.logger.info(f"Executed GripperClose command for {self.robot_id}")
-                else:
-                    self.logger.warning(f"GripperClose not available on robot {self.robot_id}")
-                    
-            elif command.command_type == "gripper_move":
-                width = command.parameters.get("width")
-                if width is not None and hasattr(actual_robot, 'MoveGripper'):
-                    actual_robot.MoveGripper(width)
-                    self.logger.info(f"Executed MoveGripper to {width} for {self.robot_id}")
-                else:
-                    self.logger.warning(f"MoveGripper not available or invalid width on robot {self.robot_id}")
             
             else:
                 self.logger.warning(f"Unknown command type: {command.command_type} for robot {self.robot_id}")
