@@ -29,8 +29,6 @@ from services.meca_service import MecaService
 from services.ot2_service import OT2Service
 from services.protocol_service import ProtocolExecutionService
 from services.command_service import RobotCommandService
-from services.mcp_client_service import MCPClientService
-from services.playwright_mcp_service import PlaywrightMCPService
 
 
 class DependencyContainer:
@@ -58,10 +56,6 @@ class DependencyContainer:
         self._ot2_service: Optional[OT2Service] = None
         self._protocol_service: Optional[ProtocolExecutionService] = None
         self._command_service: Optional[RobotCommandService] = None
-        
-        # MCP Services
-        self._mcp_client_service: Optional[MCPClientService] = None
-        self._playwright_mcp_service: Optional[PlaywrightMCPService] = None
 
         # Service registry
         self._robot_services: Dict[str, Any] = {}
@@ -192,33 +186,6 @@ class DependencyContainer:
             self._settings, self._state_manager, self._lock_manager, self._orchestrator
         )
 
-        # Initialize MCP services
-        try:
-            # MCP Client Service
-            self._mcp_client_service = MCPClientService(
-                settings=self._settings,
-                state_manager=self._state_manager,
-                lock_manager=self._lock_manager,
-                mcp_servers={
-                    "playwright": "http://playwright-mcp-gateway:8000",
-                    "magic": "http://localhost:3003", 
-                    "context7": "http://localhost:3001"
-                }
-            )
-            
-            # Playwright MCP Service
-            self._playwright_mcp_service = PlaywrightMCPService(
-                settings=self._settings,
-                state_manager=self._state_manager,
-                lock_manager=self._lock_manager,
-                mcp_client_service=self._mcp_client_service
-            )
-            
-        except Exception as e:
-            print(f"Warning: Failed to initialize MCP services: {e}")
-            self._mcp_client_service = None
-            self._playwright_mcp_service = None
-
     async def _register_services(self):
         """Register services with orchestrator"""
         # Register robot services
@@ -235,19 +202,6 @@ class DependencyContainer:
 
         # Start command service
         await self._command_service.start()
-        
-        # Start MCP services
-        if self._mcp_client_service:
-            try:
-                await self._mcp_client_service.start()
-            except Exception as e:
-                print(f"Warning: Failed to start MCP client service: {e}")
-        
-        if self._playwright_mcp_service:
-            try:
-                await self._playwright_mcp_service.start()
-            except Exception as e:
-                print(f"Warning: Failed to start Playwright MCP service: {e}")
 
     async def shutdown(self):
         """Shutdown all dependencies in reverse order"""
@@ -257,19 +211,6 @@ class DependencyContainer:
         # Stop services
         if self._command_service:
             await self._command_service.stop()
-
-        # Stop MCP services
-        if self._playwright_mcp_service:
-            try:
-                await self._playwright_mcp_service.stop()
-            except Exception as e:
-                print(f"Warning: Error stopping Playwright MCP service: {e}")
-        
-        if self._mcp_client_service:
-            try:
-                await self._mcp_client_service.stop()
-            except Exception as e:
-                print(f"Warning: Error stopping MCP client service: {e}")
 
         if self._orchestrator:
             await self._orchestrator.stop()
@@ -363,14 +304,6 @@ class DependencyContainer:
     def get_broadcaster(self):
         """Get selective broadcaster instance"""
         return self._broadcaster
-
-    def get_mcp_client_service(self) -> Optional[MCPClientService]:
-        """Get MCP client service"""
-        return self._mcp_client_service
-
-    def get_playwright_mcp_service(self) -> Optional[PlaywrightMCPService]:
-        """Get Playwright MCP service"""
-        return self._playwright_mcp_service
 
 
 # Global dependency container instance
@@ -496,28 +429,6 @@ def HardwareManagerDep():
     return Depends(get_hardware_manager)
 
 
-async def get_mcp_client_service() -> Optional[MCPClientService]:
-    """FastAPI dependency to get MCP client service"""
-    container = await get_container()
-    return container.get_mcp_client_service()
-
-
-async def get_playwright_mcp_service() -> Optional[PlaywrightMCPService]:
-    """FastAPI dependency to get Playwright MCP service"""
-    container = await get_container()
-    return container.get_playwright_mcp_service()
-
-
-def MCPClientServiceDep():
-    """FastAPI dependency function for MCP client service"""
-    return Depends(get_mcp_client_service)
-
-
-def PlaywrightMCPServiceDep():
-    """FastAPI dependency function for Playwright MCP service"""
-    return Depends(get_playwright_mcp_service)
-
-
 # Application lifecycle management
 async def startup_dependencies():
     """Initialize dependencies at application startup"""
@@ -564,24 +475,6 @@ async def check_dependencies_health() -> Dict[str, Any]:
                 robot_health[robot_id] = {"healthy": False, "error": str(e)}
 
         health_info["components"]["robot_services"] = robot_health
-
-        # Check MCP services health
-        mcp_health = {}
-        if _container._mcp_client_service:
-            try:
-                mcp_client_health = await _container._mcp_client_service.health_check()
-                mcp_health["mcp_client"] = mcp_client_health
-            except Exception as e:
-                mcp_health["mcp_client"] = {"healthy": False, "error": str(e)}
-
-        if _container._playwright_mcp_service:
-            try:
-                playwright_health = await _container._playwright_mcp_service.health_check()
-                mcp_health["playwright_mcp"] = playwright_health
-            except Exception as e:
-                mcp_health["playwright_mcp"] = {"healthy": False, "error": str(e)}
-
-        health_info["components"]["mcp_services"] = mcp_health
 
         # Check if any component is unhealthy
         def is_component_healthy(component):
@@ -651,6 +544,4 @@ __all__ = [
     "StateManagerDep",
     "LockManagerDep",
     "HardwareManagerDep",
-    "MCPClientServiceDep",
-    "PlaywrightMCPServiceDep",
 ]

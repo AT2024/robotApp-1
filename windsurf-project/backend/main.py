@@ -13,7 +13,7 @@ from dependencies import (
 )
 from websocket.connection_manager import ConnectionManager
 from websocket.websocket_handlers import get_websocket_handler
-from routers import meca, ot2, arduino, config, playwright
+from routers import meca, ot2, arduino, config
 
 logger = get_logger("main")
 app = FastAPI()
@@ -71,7 +71,6 @@ app.include_router(meca.router, prefix="/api/meca", tags=["Mecademic Robot"])
 app.include_router(ot2.router, prefix="/api/ot2", tags=["OT2 Robot"])
 app.include_router(arduino.router, prefix="/api/arduino", tags=["Arduino System"])
 app.include_router(config.router, prefix="/api", tags=["Configuration"])
-app.include_router(playwright.router, prefix="/api/playwright", tags=["Browser Automation"])
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):

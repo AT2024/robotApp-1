@@ -960,11 +960,21 @@ class RobotCommandService(BaseService):
     async def _transform_protocol_execution_params(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Transform WebSocket protocol execution parameters to OT2Service method parameters"""
         from services.ot2_service import ProtocolConfig
+        from pathlib import Path
+        
+        # Get protocol file with user override capability
+        protocol_file = params.get("protocol_file")
+        if not protocol_file:
+            # Default to the standard OT2 protocol file
+            default_proto_conf = self.settings.get_robot_config("ot2").get("protocol_config", {})
+            directory = default_proto_conf.get("directory", "protocols/")
+            default_file = default_proto_conf.get("default_file", "ot2Protocole.py")
+            protocol_file = str(Path(directory) / default_file)
         
         # Create protocol configuration from WebSocket parameters
         protocol_config = ProtocolConfig(
             protocol_name=params.get("protocol_name", "liquid_handling"),
-            protocol_file="",  # Will be generated dynamically
+            protocol_file=protocol_file,
             parameters={
                 "volume": params.get("volume", 50.0),
                 "source_well": params.get("source_well", "A1"),

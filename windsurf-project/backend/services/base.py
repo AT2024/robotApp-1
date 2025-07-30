@@ -126,6 +126,31 @@ class BaseService(ABC):
         
         self.logger = get_logger("base")
     
+    def debug_log(self, robot_id: str, method: str, step: str, message: str, context: Dict[str, Any] = None):
+        """
+        Debug logging utility for robot operations.
+        
+        Only logs when enable_debug_logging is True in settings.
+        Format: ROBOT_DEBUG [robot_id] method:step - message (context) [timestamp]
+        
+        Args:
+            robot_id: Robot identifier
+            method: Method name being executed
+            step: Specific step within the method
+            message: Debug message
+            context: Optional context data
+        """
+        if not self.settings.enable_debug_logging:
+            return
+            
+        context_str = ""
+        if context:
+            context_str = f" ({context})"
+            
+        timestamp = time.time()
+        debug_msg = f"ROBOT_DEBUG [{robot_id}] {method}:{step} - {message}{context_str} [{timestamp:.3f}]"
+        self.logger.debug(debug_msg)
+    
     async def start(self):
         """Start the service"""
         if self._running:

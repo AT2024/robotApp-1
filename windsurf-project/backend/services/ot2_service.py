@@ -115,7 +115,13 @@ class OT2Service(RobotService):
         # Protocol storage from settings
         protocol_config = self.ot2_config.get("protocol_config", {})
         protocol_dir = protocol_config.get("directory", "protocols/")
-        self.protocol_directory = Path(protocol_dir)
+        
+        # Ensure protocol directory is resolved as absolute path
+        if not Path(protocol_dir).is_absolute():
+            self.protocol_directory = Path("/app") / protocol_dir
+        else:
+            self.protocol_directory = Path(protocol_dir)
+            
         self.protocol_directory.mkdir(exist_ok=True)
         self.default_protocol_file = protocol_config.get("default_file", "ot2Protocole.py")
         self.protocol_execution_timeout = protocol_config.get("execution_timeout", 3600.0)
@@ -524,10 +530,15 @@ class OT2Service(RobotService):
             for param in unsupported_params:
                 protocol_parameters.pop(param, None)
             
+            # Validate protocol file exists before creating config
+            protocol_file_path = self.protocol_directory / "ot2Protocole.py"
+            if not protocol_file_path.exists():
+                raise ValidationError(f"Protocol file not found: {protocol_file_path}")
+            
             # Create a default protocol config for the standard OT2 protocol
             protocol_config = ProtocolConfig(
                 protocol_name=protocol_parameters.get("protocol_name", "OT2_Liquid_Handling"),
-                protocol_file=str(self.protocol_directory / "ot2Protocole.py"),
+                protocol_file=str(protocol_file_path),
                 parameters=protocol_parameters,
                 labware_setup={}
             )
@@ -645,10 +656,7 @@ class OT2Service(RobotService):
         """Upload protocol to OT2 using multipart/form-data format"""
         protocol_file = Path(protocol_config.protocol_file)
         
-        # Resolve relative paths to absolute paths
-        if not protocol_file.is_absolute():
-            protocol_file = Path.cwd() / protocol_file
-        
+        # Protocol file should already be absolute path and validated
         if not protocol_file.exists():
             raise ValidationError(f"Protocol file not found: {protocol_file}")
         

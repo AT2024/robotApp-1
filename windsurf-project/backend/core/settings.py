@@ -52,6 +52,9 @@ class RoboticsSettings(BaseSettings):
     log_file: Optional[str] = Field(default=None)
     log_rotation: str = Field(default="1 day")
     log_retention: str = Field(default="30 days")
+    
+    # Debug logging for robot operations
+    enable_debug_logging: bool = Field(default=False, description="Enable detailed debug logging for robot operations")
 
     # Database
     database_url: str = Field(default="sqlite+aiosqlite:///./robotics.db")

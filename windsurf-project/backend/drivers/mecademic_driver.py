@@ -62,6 +62,32 @@ class MecademicDriver(BaseRobotDriver):
         
         self.logger.info(f"Initialized Mecademic driver for {robot_id} at {self.ip_address}:{self.port}")
     
+    def set_settings(self, settings):
+        """Set settings reference for debug logging"""
+        self._settings = settings
+    
+    def debug_log(self, method: str, step: str, message: str, context: Dict[str, Any] = None):
+        """
+        Debug logging utility for driver operations.
+        Only logs when enable_debug_logging is True in settings.
+        """
+        if not hasattr(self, '_settings') or not self._settings or not self._settings.enable_debug_logging:
+            return
+            
+        context_str = ""
+        if context:
+            context_str = f" ({context})"
+            
+        timestamp = time.time()
+        debug_msg = f"ROBOT_DEBUG [{self.robot_id}] {method}:{step} - {message}{context_str} [{timestamp:.3f}]"
+        self.logger.debug(debug_msg)
+    
+    def clear_status_cache(self):
+        """Clear cached status to force fresh fetch"""
+        self.debug_log("clear_status_cache", "clearing", "Clearing status cache to force fresh fetch")
+        self._last_status = {}
+        self._last_status_time = 0.0
+    
     async def __aenter__(self):
         """Async context manager entry"""
         return self
@@ -83,23 +109,32 @@ class MecademicDriver(BaseRobotDriver):
     async def _connect_impl(self) -> bool:
         """Implementation-specific connection logic"""
         try:
+            self.debug_log("_connect_impl", "entry", "Starting MecademicDriver connection process")
             self.logger.info(f"🔄 Starting MecademicDriver connection process for {self.robot_id}")
             
             # Create robot instance
+            self.debug_log("_connect_impl", "create_instance", "Creating mecademicpy Robot() instance")
             self.logger.info(f"📦 Creating mecademicpy Robot() instance for {self.robot_id}")
             try:
                 self._robot = MecademicRobot()
+                self.debug_log("_connect_impl", "instance_success", "mecademicpy instance created successfully")
                 self.logger.info(f"✅ mecademicpy Robot() instance created successfully for {self.robot_id}")
             except Exception as robot_create_error:
+                self.debug_log("_connect_impl", "instance_failure", f"Robot instance creation failed", 
+                              {"error": str(robot_create_error)})
                 self.logger.error(f"❌ Failed to create mecademicpy Robot instance for {self.robot_id}: {robot_create_error}")
                 self.logger.error(f"💡 Troubleshooting: Check mecademicpy library installation")
                 return False
             
             # Connect in thread pool to avoid blocking
+            self.debug_log("_connect_impl", "thread_pool", "Submitting connection to thread pool executor")
             self.logger.info(f"🔧 Executing connection in thread pool (timeout={self.timeout}s) for {self.robot_id}")
             loop = asyncio.get_event_loop()
             
             try:
+                self.debug_log("_connect_impl", "connection_attempt", 
+                              f"Starting TCP connection attempt", 
+                              {"ip": self.ip_address, "port": self.port, "timeout": self.timeout})
                 connect_success = await asyncio.wait_for(
                     loop.run_in_executor(
                         self._executor,
@@ -107,6 +142,8 @@ class MecademicDriver(BaseRobotDriver):
                     ),
                     timeout=self.timeout + 5.0  # Add 5s buffer for thread pool overhead
                 )
+                self.debug_log("_connect_impl", "connection_complete", 
+                              f"TCP connection attempt completed", {"success": connect_success})
             except asyncio.TimeoutError:
                 self.logger.error(f"⏱️ Connection timeout ({self.timeout}s + 5s buffer) for {self.robot_id}")
                 self.logger.error(f"💡 Troubleshooting: Robot may be unresponsive or network latency is high")
@@ -114,16 +151,22 @@ class MecademicDriver(BaseRobotDriver):
                 return False
             
             if connect_success:
+                self.debug_log("_connect_impl", "tcp_success", "mecademicpy Robot.Connect() succeeded")
                 self.logger.info(f"🎉 mecademicpy Robot.Connect() succeeded for {self.robot_id}")
                 
                 # Activate robot before setting parameters
+                self.debug_log("_connect_impl", "stabilization", "Waiting for connection stabilization")
                 self.logger.info(f"⏳ Waiting 1s for connection stabilization before activation for {self.robot_id}")
                 await asyncio.sleep(1.0)  # Give connection more time to stabilize
                 
                 try:
+                    self.debug_log("_connect_impl", "activation_start", "Starting robot activation sequence")
                     await self._activate_robot_after_connect()
+                    self.debug_log("_connect_impl", "activation_success", "Robot activation completed successfully")
                     self.logger.info(f"✅ Robot activation completed for {self.robot_id}")
                 except Exception as activation_error:
+                    self.debug_log("_connect_impl", "activation_failure", 
+                                  f"Robot activation failed", {"error": str(activation_error)})
                     self.logger.warning(f"⚠️ Robot activation failed for {self.robot_id}: {activation_error}")
                     self.logger.warning(f"💡 Connection successful but robot may need manual activation")
                 
@@ -134,6 +177,10 @@ class MecademicDriver(BaseRobotDriver):
                 except Exception as params_error:
                     self.logger.warning(f"⚠️ Failed to set initial parameters for {self.robot_id}: {params_error}")
                     self.logger.warning(f"💡 Connection successful but parameters may need manual configuration")
+                
+                # Clear status cache to ensure fresh status on next get_status() call
+                self.debug_log("_connect_impl", "cache_clear", "Clearing status cache after successful connection")
+                self.clear_status_cache()
                 
                 self.logger.info(f"🏆 MecademicDriver fully initialized and connected for {self.robot_id}")
                 return True
@@ -498,20 +545,31 @@ class MecademicDriver(BaseRobotDriver):
         """Implementation-specific status logic"""
         current_time = time.time()
         
+        self.debug_log("_get_status_impl", "entry", "Getting robot status")
+        
         # Use cached status if available and fresh
         if (self._last_status and 
             current_time - self._last_status_time < self._status_cache_duration):
+            self.debug_log("_get_status_impl", "cache_hit", 
+                          f"Using cached status", {"age": current_time - self._last_status_time})
             return self._last_status.copy()
+        
+        self.debug_log("_get_status_impl", "cache_miss", "Status cache expired or empty - fetching fresh status")
         
         try:
             if not self._robot:
+                self.debug_log("_get_status_impl", "no_robot", "No robot instance available")
                 return {"connected": False, "error": "Robot not initialized"}
             
+            self.debug_log("_get_status_impl", "fetching", "Executing status fetch in thread pool")
             loop = asyncio.get_event_loop()
             status = await loop.run_in_executor(
                 self._executor,
                 self._get_status_sync
             )
+            
+            self.debug_log("_get_status_impl", "status_received", 
+                          f"Fresh status retrieved", {"status": status})
             
             # Cache the result
             self._last_status = status
@@ -863,21 +921,28 @@ class MecademicDriver(BaseRobotDriver):
     async def clear_motion(self) -> bool:
         """Clear robot motion queue"""
         try:
+            self.debug_log("clear_motion", "entry", "Starting clear motion sequence")
+            
             if not self._robot:
+                self.debug_log("clear_motion", "no_robot", "No robot connection available")
                 self.logger.warning(f"⚠️ No robot connection to clear motion for {self.robot_id}")
                 return False
                 
+            self.debug_log("clear_motion", "clearing", "Calling ClearMotion() on robot instance")
             self.logger.info(f"🔧 Clearing motion queue for {self.robot_id}")
             loop = asyncio.get_event_loop()
             
             if hasattr(self._robot, 'ClearMotion'):
+                self.debug_log("clear_motion", "executing", "Executing ClearMotion() in thread pool")
                 await loop.run_in_executor(
                     self._executor,
                     self._robot.ClearMotion
                 )
+                self.debug_log("clear_motion", "success", "ClearMotion() completed successfully")
                 self.logger.info(f"✅ ClearMotion() completed for {self.robot_id}")
                 return True
             else:
+                self.debug_log("clear_motion", "unavailable", "ClearMotion() method not available")
                 self.logger.warning(f"⚠️ ClearMotion() not available for {self.robot_id}")
                 return False
                 
@@ -888,21 +953,28 @@ class MecademicDriver(BaseRobotDriver):
     async def resume_motion(self) -> bool:
         """Resume robot motion after pause"""
         try:
+            self.debug_log("resume_motion", "entry", "Starting resume motion sequence")
+            
             if not self._robot:
+                self.debug_log("resume_motion", "no_robot", "No robot connection available")
                 self.logger.warning(f"⚠️ No robot connection to resume motion for {self.robot_id}")
                 return False
                 
+            self.debug_log("resume_motion", "resuming", "Calling ResumeMotion() on robot instance")
             self.logger.info(f"🔧 Resuming motion for {self.robot_id}")
             loop = asyncio.get_event_loop()
             
             if hasattr(self._robot, 'ResumeMotion'):
+                self.debug_log("resume_motion", "executing", "Executing ResumeMotion() in thread pool")
                 await loop.run_in_executor(
                     self._executor,
                     self._robot.ResumeMotion
                 )
+                self.debug_log("resume_motion", "success", "ResumeMotion() completed successfully")
                 self.logger.info(f"✅ ResumeMotion() completed for {self.robot_id}")
                 return True
             else:
+                self.debug_log("resume_motion", "unavailable", "ResumeMotion() method not available")
                 self.logger.warning(f"⚠️ ResumeMotion() not available for {self.robot_id}")
                 return False
                 

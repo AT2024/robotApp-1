@@ -53,31 +53,6 @@ const SystemStatus = ({ onStatusChange }) => {
     onStatusChange?.(statuses);
   }, [statuses, onStatusChange]);
 
-  // Handle disconnect for specific device
-  const handleDisconnect = useCallback((device) => {
-    if (device === 'backend') {
-      // Cannot disconnect backend from UI
-      logger.warn('Cannot disconnect backend from UI');
-      return;
-    }
-
-    logger.log(`Disconnecting ${device}...`);
-    
-    // Send disconnect command to backend
-    if (websocketService.isConnected()) {
-      websocketService.send({
-        type: 'command',
-        command_type: `disconnect_${device}`,
-        commandId: Date.now().toString(),
-        data: {
-          robot_id: `${device}_001`,
-          graceful: true
-        }
-      });
-    } else {
-      logger.error('WebSocket not connected, cannot send disconnect command');
-    }
-  }, []);
 
   // Set up WebSocket connection
   useEffect(() => {
@@ -148,16 +123,6 @@ const SystemStatus = ({ onStatusChange }) => {
                   }`}></div>
               </div>
               
-              {/* Disconnect button for connected devices (except backend) */}
-              {status === 'connected' && device !== 'backend' && (
-                <button
-                  onClick={() => handleDisconnect(device)}
-                  className='mt-auto px-3 py-1 text-xs bg-white/20 hover:bg-white/30 text-white rounded-md transition-colors duration-200 border border-white/30 hover:border-white/50'
-                  title={`Disconnect ${device}`}
-                >
-                  Disconnect
-                </button>
-              )}
               
               {/* Info for backend */}
               {device === 'backend' && (
