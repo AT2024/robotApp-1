@@ -839,3 +839,169 @@
 2025-07-30 14:07:55,562 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
 2025-07-30 14:08:05,591 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
 2025-07-30 14:08:05,594 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:08:15,581 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:08:15,584 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:08:25,575 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:08:25,578 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:08:35,599 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:08:35,601 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:08:45,595 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:08:45,600 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:08:55,576 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:08:55,578 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:09:05,584 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:09:05,586 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:09:15,577 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:09:15,580 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:09:25,561 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:09:25,565 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:09:35,605 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:09:35,607 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:09:45,593 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:09:45,594 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:09:55,589 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:09:55,591 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:10:05,595 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:10:05,597 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:10:15,585 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:10:15,589 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:10:25,566 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:10:25,568 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:10:35,599 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:10:35,605 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:10:45,594 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:10:45,597 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:10:55,563 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:10:55,566 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:11:05,591 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:11:05,593 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:11:15,597 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:11:15,599 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:11:25,582 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:11:25,585 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:11:35,597 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:11:35,599 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:11:45,601 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:11:45,603 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:11:55,584 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:11:55,586 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:12:05,596 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:12:05,598 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:12:15,587 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:12:15,591 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:12:25,573 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:12:25,575 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:12:35,592 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:12:35,595 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:12:45,595 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:12:45,597 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:12:55,579 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:12:55,584 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:13:05,604 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:13:05,605 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:13:15,596 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:13:15,599 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:13:17,465 - websocket_handler - ERROR - disconnect:162 - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close'.
+2025-07-30 14:14:27,067 - websocket_handler - INFO - connect:86 - New WebSocket connection established. Total connections: 1
+2025-07-30 14:14:27,068 - websocket_handler - INFO - broadcast_server_status:606 - Broadcasting backend status change: unknown -> connected
+2025-07-30 14:14:27,072 - websocket_handler - INFO - broadcast_server_status:638 - Broadcasting status change for meca: unknown -> connected
+2025-07-30 14:14:27,074 - websocket_handler - INFO - broadcast_server_status:638 - Broadcasting status change for arduino: unknown -> disconnected
+2025-07-30 14:14:27,075 - websocket_handler - INFO - broadcast_server_status:638 - Broadcasting status change for ot2: unknown -> connected
+2025-07-30 14:14:27,513 - websocket_handler - INFO - handle_message:189 - Received message of type: config
+2025-07-30 14:14:27,623 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:14:27,625 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:14:28,649 - websocket_handler - INFO - handle_message:189 - Received message of type: command
+2025-07-30 14:14:28,651 - websocket_handler - INFO - handle_message:250 - *** WEBSOCKET: Received command: skip_step with data: {'stepIndex': 0}, commandId: 1753884868
+2025-07-30 14:14:28,845 - websocket_handler - INFO - handle_message:189 - Received message of type: command
+2025-07-30 14:14:28,847 - websocket_handler - INFO - handle_message:250 - *** WEBSOCKET: Received command: skip_step with data: {'stepIndex': 1}, commandId: 1753884868
+2025-07-30 14:14:28,955 - websocket_handler - INFO - handle_message:189 - Received message of type: command
+2025-07-30 14:14:28,957 - websocket_handler - INFO - handle_message:250 - *** WEBSOCKET: Received command: skip_step with data: {'stepIndex': 2}, commandId: 1753884868
+2025-07-30 14:14:29,121 - websocket_handler - INFO - handle_message:189 - Received message of type: command
+2025-07-30 14:14:29,122 - websocket_handler - INFO - handle_message:250 - *** WEBSOCKET: Received command: skip_step with data: {'stepIndex': 3}, commandId: 1753884869
+2025-07-30 14:14:29,294 - websocket_handler - INFO - handle_message:189 - Received message of type: command
+2025-07-30 14:14:29,295 - websocket_handler - INFO - handle_message:250 - *** WEBSOCKET: Received command: skip_step with data: {'stepIndex': 4}, commandId: 1753884869
+2025-07-30 14:14:29,450 - websocket_handler - INFO - handle_message:189 - Received message of type: command
+2025-07-30 14:14:29,453 - websocket_handler - INFO - handle_message:250 - *** WEBSOCKET: Received command: skip_step with data: {'stepIndex': 5}, commandId: 1753884869
+2025-07-30 14:14:29,893 - websocket_handler - INFO - handle_message:189 - Received message of type: command
+2025-07-30 14:14:29,895 - websocket_handler - INFO - handle_message:250 - *** WEBSOCKET: Received command: skip_step with data: {'stepIndex': 6}, commandId: 1753884869
+2025-07-30 14:14:32,336 - websocket_handler - INFO - handle_message:189 - Received message of type: command
+2025-07-30 14:14:32,338 - websocket_handler - INFO - handle_message:250 - *** WEBSOCKET: Received command: meca_drop with data: {'start': 0, 'count': 5, 'is_last_batch': True}, commandId: 1753884872
+2025-07-30 14:14:37,091 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:14:37,093 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:14:47,078 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:14:47,081 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:14:57,074 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:14:57,075 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:15:07,108 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:15:07,110 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:15:17,096 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:15:17,098 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:15:27,081 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:15:27,084 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:15:37,108 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:15:37,112 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:15:47,100 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:15:47,102 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:15:57,084 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:15:57,087 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:16:07,102 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:16:07,106 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:16:17,082 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:16:17,084 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:16:27,072 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:16:27,073 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:16:37,088 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:16:37,093 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:16:47,086 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:16:47,089 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:16:57,076 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:16:57,082 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:17:07,001 - websocket_handler - INFO - handle_message:189 - Received message of type: command
+2025-07-30 14:17:07,004 - websocket_handler - INFO - handle_message:250 - *** WEBSOCKET: Received command: skip_step with data: {'stepIndex': 7}, commandId: 1753885027
+2025-07-30 14:17:07,110 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:17:07,113 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:17:17,096 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:17:17,097 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:17:27,088 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:17:27,090 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:17:37,097 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:17:37,098 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:17:47,101 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:17:47,104 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:17:57,086 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:17:57,087 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:18:07,105 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:18:07,109 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:18:17,098 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:18:17,102 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:18:20,627 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:18:20,629 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:18:20,630 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:18:20,644 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:18:25,812 - websocket_handler - ERROR - disconnect:162 - Error during WebSocket disconnection: Unexpected ASGI message 'websocket.close', after sending 'websocket.close'.
+2025-07-30 14:19:34,471 - websocket_handler - INFO - connect:86 - New WebSocket connection established. Total connections: 1
+2025-07-30 14:19:34,472 - websocket_handler - INFO - broadcast_server_status:606 - Broadcasting backend status change: unknown -> connected
+2025-07-30 14:19:34,475 - websocket_handler - INFO - broadcast_server_status:638 - Broadcasting status change for meca: unknown -> connected
+2025-07-30 14:19:34,476 - websocket_handler - INFO - broadcast_server_status:638 - Broadcasting status change for arduino: unknown -> disconnected
+2025-07-30 14:19:34,478 - websocket_handler - INFO - broadcast_server_status:638 - Broadcasting status change for ot2: unknown -> connected
+2025-07-30 14:19:34,880 - websocket_handler - INFO - handle_message:189 - Received message of type: config
+2025-07-30 14:19:34,983 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:19:34,987 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:19:37,661 - websocket_handler - INFO - handle_message:189 - Received message of type: command
+2025-07-30 14:19:37,663 - websocket_handler - INFO - handle_message:250 - *** WEBSOCKET: Received command: meca_pickup with data: {}, commandId: 1753885177
+2025-07-30 14:19:37,664 - websocket_handler - INFO - handle_message:334 - *** WEBSOCKET: Submitting meca_pickup command with start=0, count=5
+2025-07-30 14:19:37,674 - websocket_handler - INFO - handle_message:349 - *** WEBSOCKET: Command submission result: True, data: cmd_meca_1753885177666, error: None
+2025-07-30 14:19:44,470 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:19:44,472 - websocket_handler - INFO - handle_message:195 - Status request received. System state: ready
+2025-07-30 14:19:44,694 - websocket_handler - INFO - handle_message:189 - Received message of type: command
+2025-07-30 14:19:44,696 - websocket_handler - INFO - handle_message:250 - *** WEBSOCKET: Received command: pause_system with data: {'reason': 'User requested pause', 'pause_all_operations': True, 'current_step': 0}, commandId: 1753885184685
+2025-07-30 14:19:44,698 - websocket_handler - INFO - handle_message:490 - System pause requested: User requested pause
+2025-07-30 14:19:54,458 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:19:54,460 - websocket_handler - INFO - handle_message:195 - Status request received. System state: maintenance
+2025-07-30 14:20:04,469 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:20:04,470 - websocket_handler - INFO - handle_message:195 - Status request received. System state: maintenance
+2025-07-30 14:20:14,481 - websocket_handler - INFO - handle_message:189 - Received message of type: get_status
+2025-07-30 14:20:14,483 - websocket_handler - INFO - handle_message:195 - Status request received. System state: maintenance
+2025-07-30 14:20:15,076 - websocket_handler - INFO - handle_message:189 - Received message of type: command
+2025-07-30 14:20:15,077 - websocket_handler - INFO - handle_message:250 - *** WEBSOCKET: Received command: resume_system with data: {'resume_all_operations': True, 'current_step': 0}, commandId: 1753885215068
+2025-07-30 14:20:15,078 - websocket_handler - INFO - handle_message:531 - System resume requested

@@ -209,3 +209,21 @@
 2025-07-30 14:03:13,166 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
 2025-07-30 14:03:16,924 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
 2025-07-30 14:03:16,942 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-30 14:13:17,618 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-30 14:13:20,549 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-30 14:13:20,585 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-30 14:13:32,847 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-30 14:13:36,108 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-30 14:13:36,147 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-30 14:13:40,490 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-30 14:13:44,422 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-30 14:13:44,452 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-30 14:18:25,952 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-30 14:18:28,854 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-30 14:18:28,886 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-30 14:18:44,220 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-30 14:18:46,501 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-30 14:18:46,529 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-30 14:18:54,613 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-30 14:18:58,193 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-30 14:18:58,230 - hardware_manager - INFO - start:231 - HardwareConnectionManager started

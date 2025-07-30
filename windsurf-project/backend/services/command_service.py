@@ -642,7 +642,7 @@ class RobotCommandService(BaseService):
             
             # High-level sequence operations
             CommandType.PICKUP_SEQUENCE: "execute_pickup_sequence",
-            CommandType.DROP_SEQUENCE: "drop_wafer_sequence", 
+            CommandType.DROP_SEQUENCE: "execute_drop_sequence", 
             CommandType.CAROUSEL_SEQUENCE: "carousel_wafer_operation",
             CommandType.CAROUSEL_MOVE: "carousel_wafer_operation"
         }
@@ -884,32 +884,16 @@ class RobotCommandService(BaseService):
         }
     
     async def _transform_drop_sequence_params(self, params: Dict[str, Any]) -> Dict[str, Any]:
-        """Transform WebSocket drop sequence parameters to MecaService method parameters"""
-        from services.meca_service import WaferPosition
+        """Transform WebSocket drop sequence parameters to execute_drop_sequence method parameters"""
         
-        # Get parameters from the API request  
-        start_position = params.get("start", 0)
+        # Get parameters for multi-wafer drop sequence
+        start = params.get("start", 0)
         count = params.get("count", 5)
         
-        # Create a wafer ID based on the actual sequence parameters
-        wafer_id = f"wafer_drop_{start_position}_{count}"
-        
-        # Create drop position based on start position (using real coordinates)
-        # This uses the actual sequence logic for drop positions
-        drop_position = WaferPosition(
-            x=300.0 + (start_position * 2.7),  # Use actual spacing for drop positions
-            y=100.0,  
-            z=50.0,   
-            slot_id=f"drop_slot_{start_position}"
-        )
-        
-        # Use actual safe height offset
-        safe_height_offset = params.get("safe_height_offset", 50.0)
-        
+        # execute_drop_sequence expects start and count parameters directly
         return {
-            "wafer_id": wafer_id,
-            "drop_position": drop_position,
-            "safe_height_offset": safe_height_offset
+            "start": start,
+            "count": count
         }
     
     async def _transform_carousel_sequence_params(self, params: Dict[str, Any]) -> Dict[str, Any]:
