@@ -1671,6 +1671,15 @@ class MecaService(RobotService):
         )
         
         async def _pickup_sequence():
+            # Start step tracking
+            await self.state_manager.start_step(
+                robot_id=self.robot_id,
+                step_index=0,  # This will be updated from WebSocket handler
+                step_name="Create Pick Up",
+                operation_type="pickup_sequence",
+                progress_data={"start": start, "count": count, "current_wafer_index": start}
+            )
+            
             # Pre-operation connection health check
             self.logger.info(f"🔍 PRE-OPERATION CHECK: Validating connection health before pickup sequence {start+1} to {start+count}")
             
@@ -1726,12 +1735,38 @@ class MecaService(RobotService):
             processed_wafers = []
             failed_wafers = []
             
-            for i in range(start, start + count):
+            # Check if resuming from a previous pause
+            resume_from_wafer = 0
+            step_state = await self.state_manager.get_step_state(self.robot_id)
+            if step_state and step_state.progress_data.get("current_wafer_index") is not None:
+                resume_from_wafer = step_state.progress_data["current_wafer_index"]
+                self.logger.info(f"🔄 Resuming pickup sequence from wafer {resume_from_wafer + 1}")
+            
+            for i in range(max(start, resume_from_wafer), start + count):
                 wafer_num = i + 1
                 step_context = f"wafer {wafer_num} (index {i})"
                 
+                # Check for pause before processing each wafer
+                if await self.state_manager.is_step_paused(self.robot_id):
+                    self.logger.info(f"⏸️ Operation paused at {step_context}")
+                    # Update progress to current wafer index
+                    await self.state_manager.update_step_progress(
+                        self.robot_id, 
+                        {"current_wafer_index": i, "total_wafers": count}
+                    )
+                    # Wait while paused
+                    while await self.state_manager.is_step_paused(self.robot_id):
+                        await asyncio.sleep(1.0)  # Check every second
+                    self.logger.info(f"▶️ Operation resumed at {step_context}")
+                
                 try:
                     self.logger.info(f"🔄 Starting pickup process for {step_context}")
+                    
+                    # Update progress with current wafer
+                    await self.state_manager.update_step_progress(
+                        self.robot_id,
+                        {"current_wafer_index": i, "current_wafer_num": wafer_num, "total_wafers": count}
+                    )
                     
                     # Get positions for this wafer
                     positions = self.calculate_intermediate_positions(i, "pickup")
@@ -1827,6 +1862,10 @@ class MecaService(RobotService):
                 self.logger.info(f"Pickup sequence completed with partial success: {len(processed_wafers)}/{count} wafers processed successfully")
             else:
                 self.logger.info(f"Pickup sequence completed successfully for all {count} wafers ({start+1} to {start+count})")
+            
+            # Complete step tracking
+            await self.state_manager.complete_step(self.robot_id)
+            
             return result
         
         return await self.execute_operation(context, _pickup_sequence)
@@ -2076,62 +2115,135 @@ class MecaService(RobotService):
         )
         
         async def _drop_sequence():
+            # Start step tracking
+            await self.state_manager.start_step(
+                robot_id=self.robot_id,
+                step_index=7,  # This will be updated from WebSocket handler
+                step_name="Move to Baking Tray",
+                operation_type="drop_sequence",
+                progress_data={"start": start, "count": count, "current_wafer_index": start}
+            )
+            
             await self.ensure_robot_ready()
             
             self.logger.info(f"Starting drop sequence for wafers {start+1} to {start+count}")
             
-            for i in range(start, start + count):
+            processed_wafers = []
+            failed_wafers = []
+            
+            # Check if resuming from a previous pause
+            resume_from_wafer = 0
+            step_state = await self.state_manager.get_step_state(self.robot_id)
+            if step_state and step_state.progress_data.get("current_wafer_index") is not None:
+                resume_from_wafer = step_state.progress_data["current_wafer_index"]
+                self.logger.info(f"🔄 Resuming drop sequence from wafer {resume_from_wafer + 1}")
+            
+            for i in range(max(start, resume_from_wafer), start + count):
                 wafer_num = i + 1
-                self.logger.info(f"Processing wafer {wafer_num} drop from spreader to baking tray")
+                step_context = f"wafer {wafer_num} (index {i})"
                 
-                # Get positions for this wafer
-                positions = self.calculate_intermediate_positions(i, "drop")
+                # Check for pause before processing each wafer
+                if await self.state_manager.is_step_paused(self.robot_id):
+                    self.logger.info(f"⏸️ Drop operation paused at {step_context}")
+                    # Update progress to current wafer index
+                    await self.state_manager.update_step_progress(
+                        self.robot_id, 
+                        {"current_wafer_index": i, "total_wafers": count}
+                    )
+                    # Wait while paused
+                    while await self.state_manager.is_step_paused(self.robot_id):
+                        await asyncio.sleep(1.0)  # Check every second
+                    self.logger.info(f"▶️ Drop operation resumed at {step_context}")
                 
-                # Move to spreader area
-                await self._execute_movement_command("SetJointVel", [self.ALIGN_SPEED])
-                await self._execute_movement_command("MovePose", positions["above_spreader"])
-                await self._execute_movement_command("Delay", [1])
-                await self._execute_movement_command("MovePose", positions["spreader"])
-                await self._execute_movement_command("Delay", [1])
+                try:
+                    self.logger.info(f"🔄 Processing wafer {wafer_num} drop from spreader to baking tray")
+                    
+                    # Update progress with current wafer
+                    await self.state_manager.update_step_progress(
+                        self.robot_id,
+                        {"current_wafer_index": i, "current_wafer_num": wafer_num, "total_wafers": count}
+                    )
+                    
+                    # Get positions for this wafer
+                    positions = self.calculate_intermediate_positions(i, "drop")
                 
-                # Pick up wafer from spreader
-                await self._execute_movement_command("GripperClose", [])
-                await self._execute_movement_command("Delay", [1])
+                    # Move to spreader area
+                    await self._execute_movement_command("SetJointVel", [self.ALIGN_SPEED])
+                    await self._execute_movement_command("MovePose", positions["above_spreader"])
+                    await self._execute_movement_command("Delay", [1])
+                    await self._execute_movement_command("MovePose", positions["spreader"])
+                    await self._execute_movement_command("Delay", [1])
+                    
+                    # Pick up wafer from spreader
+                    await self._execute_movement_command("GripperClose", [])
+                    await self._execute_movement_command("Delay", [1])
                 
-                # Move up from spreader
-                await self._execute_movement_command("MovePose", positions["above_spreader_pickup"])
-                await self._execute_movement_command("SetJointVel", [self.SPEED])
+                    # Move up from spreader
+                    await self._execute_movement_command("MovePose", positions["above_spreader_pickup"])
+                    await self._execute_movement_command("SetJointVel", [self.SPEED])
+                    
+                    # Move to safe point
+                    await self._execute_movement_command("MovePose", self.SAFE_POINT)
+                    
+                    # Move through baking tray alignment sequence
+                    await self._execute_movement_command("MovePose", positions["baking_align1"])
+                    await self._execute_movement_command("SetJointVel", [self.ALIGN_SPEED])
+                    await self._execute_movement_command("SetBlending", [100])
+                    await self._execute_movement_command("MovePose", positions["baking_align2"])
+                    await self._execute_movement_command("MovePose", positions["baking_align3"])
+                    await self._execute_movement_command("MovePose", positions["baking_align4"])
+                    await self._execute_movement_command("Delay", [1])
+                    
+                    # Release wafer in baking tray
+                    await self._execute_movement_command("GripperOpen", [])
+                    await self._execute_movement_command("Delay", [0.5])
+                    
+                    # Move up from baking tray
+                    await self._execute_movement_command("MovePose", positions["baking_up"])
+                    await self._execute_movement_command("SetJointVel", [self.SPEED])
+                    await self._execute_movement_command("SetBlending", [0])
+                    
+                    # Return to safe point
+                    await self._execute_movement_command("MovePose", self.SAFE_POINT)
+                    
+                    processed_wafers.append(wafer_num)
+                    self.logger.info(f"✅ Successfully completed drop for {step_context}")
                 
-                # Move to safe point
-                await self._execute_movement_command("MovePose", self.SAFE_POINT)
-                
-                # Move through baking tray alignment sequence
-                await self._execute_movement_command("MovePose", positions["baking_align1"])
-                await self._execute_movement_command("SetJointVel", [self.ALIGN_SPEED])
-                await self._execute_movement_command("SetBlending", [100])
-                await self._execute_movement_command("MovePose", positions["baking_align2"])
-                await self._execute_movement_command("MovePose", positions["baking_align3"])
-                await self._execute_movement_command("MovePose", positions["baking_align4"])
-                await self._execute_movement_command("Delay", [1])
-                
-                # Release wafer in baking tray
-                await self._execute_movement_command("GripperOpen", [])
-                await self._execute_movement_command("Delay", [0.5])
-                
-                # Move up from baking tray
-                await self._execute_movement_command("MovePose", positions["baking_up"])
-                await self._execute_movement_command("SetJointVel", [self.SPEED])
-                await self._execute_movement_command("SetBlending", [0])
-                
-                # Return to safe point
-                await self._execute_movement_command("MovePose", self.SAFE_POINT)
+                except Exception as e:
+                    error_msg = f"❌ Failed to process {step_context}: {str(e)}"
+                    self.logger.error(error_msg, exc_info=True)
+                    failed_wafers.append({"wafer_num": wafer_num, "error": str(e)})
+                    
+                    # Attempt recovery - move to safe position
+                    try:
+                        self.logger.warning(f"🔧 Attempting recovery for {step_context} - moving to safe position")
+                        await self._execute_movement_command("SetJointVel", [self.SPEED])
+                        await self._execute_movement_command("MovePose", self.SAFE_POINT)
+                        await self._execute_movement_command("GripperOpen", [])  # Ensure gripper is open
+                        self.logger.info(f"🛡️ Recovery completed for {step_context}")
+                    except Exception as recovery_error:
+                        self.logger.error(f"💥 Recovery failed for {step_context}: {str(recovery_error)}")
+                        # If recovery fails, re-raise the original error to stop the sequence
+                        raise HardwareError(f"Drop sequence failed at {step_context} and recovery failed: {str(e)}", robot_id=self.robot_id)
+                    
+                    # Continue with next wafer even if this one failed (partial success)
+                    continue
+            
+            if failed_wafers:
+                self.logger.warning(f"⚠️ Drop sequence completed with {len(failed_wafers)} failures: {[fw['wafer_num'] for fw in failed_wafers]}")
             
             result = {
-                "status": "completed",
-                "wafers_processed": count,
+                "status": "completed" if not failed_wafers else "partial_success",
+                "wafers_processed": len(processed_wafers),
+                "wafers_succeeded": processed_wafers,
+                "wafers_failed": failed_wafers,
                 "start_wafer": start + 1,
-                "end_wafer": start + count
+                "end_wafer": start + count,
+                "success_rate": f"{(len(processed_wafers) / count) * 100:.1f}%"
             }
+            
+            # Complete step tracking
+            await self.state_manager.complete_step(self.robot_id)
             
             self.logger.info(f"Drop sequence completed for wafers {start+1} to {start+count}")
             return result

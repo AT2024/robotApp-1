@@ -48,6 +48,26 @@ class StateTransition:
 
 
 @dataclass
+class StepState:
+    """Information about current workflow step state"""
+    step_index: int
+    step_name: str
+    robot_id: str
+    operation_type: str
+    started_at: float
+    paused: bool = False
+    paused_at: Optional[float] = None
+    pause_reason: Optional[str] = None
+    progress_data: Dict[str, Any] = field(default_factory=dict)  # e.g., current wafer index
+    
+    @property
+    def duration_seconds(self) -> float:
+        """Calculate step duration in seconds"""
+        end_time = self.paused_at if self.paused else time.time()
+        return end_time - self.started_at
+
+
+@dataclass
 class RobotInfo:
     """Information about a robot and its state"""
     robot_id: str
@@ -58,6 +78,8 @@ class RobotInfo:
     metadata: Dict[str, Any] = field(default_factory=dict)
     error_count: int = 0
     uptime_start: Optional[float] = None
+    # Step-specific state
+    current_step: Optional[StepState] = None
     
     @property
     def uptime_seconds(self) -> float:
@@ -483,3 +505,124 @@ class AtomicStateManager:
                 self.logger.info(f"Removed disconnected robot: {robot_id}")
             
             return to_remove
+    
+    # Step management methods for workflow tracking
+    
+    async def start_step(
+        self, 
+        robot_id: str, 
+        step_index: int, 
+        step_name: str, 
+        operation_type: str,
+        progress_data: Optional[Dict[str, Any]] = None
+    ) -> None:
+        """Start a new workflow step for a robot"""
+        async with self._lock:
+            if robot_id not in self._robots:
+                raise ValidationError(f"Robot {robot_id} not registered")
+            
+            step_state = StepState(
+                step_index=step_index,
+                step_name=step_name,
+                robot_id=robot_id,
+                operation_type=operation_type,
+                started_at=time.time(),
+                progress_data=progress_data or {}
+            )
+            
+            self._robots[robot_id].current_step = step_state
+            self.logger.info(f"Started step {step_index} ({step_name}) for robot {robot_id}")
+    
+    async def update_step_progress(
+        self, 
+        robot_id: str, 
+        progress_data: Dict[str, Any]
+    ) -> None:
+        """Update progress data for current step"""
+        async with self._lock:
+            if robot_id not in self._robots:
+                raise ValidationError(f"Robot {robot_id} not registered")
+            
+            robot_info = self._robots[robot_id]
+            if robot_info.current_step is None:
+                raise ValidationError(f"No active step for robot {robot_id}")
+            
+            robot_info.current_step.progress_data.update(progress_data)
+            self.logger.debug(f"Updated step progress for robot {robot_id}: {progress_data}")
+    
+    async def pause_step(
+        self, 
+        robot_id: str, 
+        reason: str = "User requested pause"
+    ) -> Optional[StepState]:
+        """Pause the current step for a robot"""
+        async with self._lock:
+            if robot_id not in self._robots:
+                raise ValidationError(f"Robot {robot_id} not registered")
+            
+            robot_info = self._robots[robot_id]
+            if robot_info.current_step is None:
+                return None
+            
+            if robot_info.current_step.paused:
+                return robot_info.current_step
+            
+            robot_info.current_step.paused = True
+            robot_info.current_step.paused_at = time.time()
+            robot_info.current_step.pause_reason = reason
+            
+            self.logger.info(f"Paused step {robot_info.current_step.step_index} for robot {robot_id}: {reason}")
+            return robot_info.current_step
+    
+    async def resume_step(self, robot_id: str) -> Optional[StepState]:
+        """Resume the current step for a robot"""
+        async with self._lock:
+            if robot_id not in self._robots:
+                raise ValidationError(f"Robot {robot_id} not registered")
+            
+            robot_info = self._robots[robot_id]
+            if robot_info.current_step is None or not robot_info.current_step.paused:
+                return None
+            
+            robot_info.current_step.paused = False
+            robot_info.current_step.paused_at = None
+            robot_info.current_step.pause_reason = None
+            
+            self.logger.info(f"Resumed step {robot_info.current_step.step_index} for robot {robot_id}")
+            return robot_info.current_step
+    
+    async def complete_step(self, robot_id: str) -> Optional[StepState]:
+        """Complete the current step for a robot"""
+        async with self._lock:
+            if robot_id not in self._robots:
+                raise ValidationError(f"Robot {robot_id} not registered")
+            
+            robot_info = self._robots[robot_id]
+            if robot_info.current_step is None:
+                return None
+            
+            completed_step = robot_info.current_step
+            robot_info.current_step = None
+            
+            self.logger.info(f"Completed step {completed_step.step_index} ({completed_step.step_name}) for robot {robot_id}")
+            return completed_step
+    
+    async def get_step_state(self, robot_id: str) -> Optional[StepState]:
+        """Get current step state for a robot"""
+        async with self._lock:
+            if robot_id not in self._robots:
+                return None
+            return self._robots[robot_id].current_step
+    
+    async def get_all_step_states(self) -> Dict[str, Optional[StepState]]:
+        """Get step states for all robots"""
+        async with self._lock:
+            return {
+                robot_id: robot_info.current_step
+                for robot_id, robot_info in self._robots.items()
+            }
+    
+    async def is_step_paused(self, robot_id: str) -> bool:
+        """Check if robot's current step is paused"""
+        step_state = await self.get_step_state(robot_id)
+        return step_state is not None and step_state.paused

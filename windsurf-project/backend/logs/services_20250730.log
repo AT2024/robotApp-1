@@ -1327,3 +1327,299 @@
 2025-07-30 14:20:02,193 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['ot2']
 2025-07-30 14:20:07,196 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['ot2']
 2025-07-30 14:20:12,198 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['ot2']
+2025-07-30 14:20:15,079 - orchestrator - INFO - resume_all_operations:513 - Resuming all operations
+2025-07-30 14:28:26,947 - command_service - INFO - execute_operation:305 - Starting operation submit_command_1753885706947: submit_command for robot meca
+2025-07-30 14:28:26,949 - command_service - INFO - _submit_command:303 - [c54ede17] Submitting command: type=CommandType.PICKUP_SEQUENCE, robot=meca, command_id=cmd_meca_1753885706949
+2025-07-30 14:28:26,950 - command_service - INFO - _submit_command:313 - [c54ede17] Robot meca state: RobotState.IDLE, operational: True
+2025-07-30 14:28:26,951 - command_service - INFO - _validate_command:398 - [c54ede17] Command cmd_meca_1753885706949 validation passed: start=0, count=5, operation_type=pickup_wafer_sequence, is_last_batch=False
+2025-07-30 14:28:26,952 - command_service - INFO - _submit_command:327 - [c54ede17] Adding command cmd_meca_1753885706949 to queue with priority -2
+2025-07-30 14:28:26,953 - command_service - INFO - _submit_command:333 - [c54ede17] Command submitted successfully: cmd_meca_1753885706949 for robot meca, queue size: 1
+2025-07-30 14:28:26,954 - command_service - INFO - execute_operation:324 - Operation submit_command_1753885706947 completed successfully in 0.01s
+2025-07-30 14:28:26,958 - command_service - INFO - _process_command_queue:411 - Dequeued command: cmd_meca_1753885706949 (type: pickup_sequence, robot: meca)
+2025-07-30 14:28:26,960 - command_service - INFO - _process_command_queue:419 - Starting execution of command cmd_meca_1753885706949
+2025-07-30 14:28:26,963 - command_service - INFO - _execute_command:432 - *** EXECUTING COMMAND cmd_meca_1753885706949 ***
+2025-07-30 14:28:26,965 - command_service - INFO - _execute_command:433 - Command details: robot=meca, type=pickup_sequence, params={'start': 0, 'count': 5, 'operation_type': 'pickup_wafer_sequence', 'is_last_batch': False}
+2025-07-30 14:28:26,967 - command_service - INFO - _execute_command:440 - Setting robot meca state to BUSY (current state: idle)
+2025-07-30 14:28:26,969 - command_service - INFO - _execute_command:451 - Robot meca state updated to BUSY (verified: busy)
+2025-07-30 14:28:26,971 - command_service - INFO - _execute_command:457 - Robot type: meca, available processors: ['meca', 'ot2', 'arduino', 'carousel']
+2025-07-30 14:28:26,972 - command_service - INFO - _execute_command:462 - Using processor: <bound method RobotCommandService._process_meca_command of <services.command_service.RobotCommandService object at 0x7c5f8e326dc0>>
+2025-07-30 14:28:26,974 - command_service - INFO - _process_meca_command:612 - Processing Meca command: cmd_meca_1753885706949 for robot meca
+2025-07-30 14:28:26,976 - command_service - INFO - _process_meca_command:627 - Found Meca service: <services.meca_service.MecaService object at 0x7c5f8e3216d0> for robot meca
+2025-07-30 14:28:30,898 - command_service - INFO - execute_operation:305 - Starting operation submit_command_1753885710898: submit_command for robot meca
+2025-07-30 14:28:30,902 - command_service - INFO - _submit_command:303 - [aad571fb] Submitting command: type=CommandType.EMERGENCY_STOP, robot=meca, command_id=cmd_meca_1753885710902
+2025-07-30 14:28:30,904 - command_service - INFO - _submit_command:313 - [aad571fb] Robot meca state: RobotState.BUSY, operational: True
+2025-07-30 14:28:30,905 - command_service - INFO - _submit_command:327 - [aad571fb] Adding command cmd_meca_1753885710902 to queue with priority -5
+2025-07-30 14:28:30,907 - command_service - INFO - _submit_command:333 - [aad571fb] Command submitted successfully: cmd_meca_1753885710902 for robot meca, queue size: 1
+2025-07-30 14:28:30,909 - command_service - INFO - execute_operation:324 - Operation submit_command_1753885710898 completed successfully in 0.01s
+2025-07-30 14:28:30,911 - command_service - INFO - execute_operation:305 - Starting operation submit_command_1753885710911: submit_command for robot ot2
+2025-07-30 14:28:30,912 - command_service - INFO - _submit_command:303 - [3c351c97] Submitting command: type=CommandType.EMERGENCY_STOP, robot=ot2, command_id=cmd_ot2_1753885710912
+2025-07-30 14:28:30,914 - command_service - INFO - _submit_command:313 - [3c351c97] Robot ot2 state: RobotState.IDLE, operational: True
+2025-07-30 14:28:30,915 - command_service - INFO - _submit_command:327 - [3c351c97] Adding command cmd_ot2_1753885710912 to queue with priority -5
+2025-07-30 14:28:30,916 - command_service - INFO - _submit_command:333 - [3c351c97] Command submitted successfully: cmd_ot2_1753885710912 for robot ot2, queue size: 2
+2025-07-30 14:28:30,917 - command_service - INFO - execute_operation:324 - Operation submit_command_1753885710911 completed successfully in 0.01s
+2025-07-30 14:28:30,919 - command_service - INFO - execute_operation:305 - Starting operation submit_command_1753885710919: submit_command for robot arduino
+2025-07-30 14:28:30,920 - command_service - INFO - _submit_command:303 - [14d52d5e] Submitting command: type=CommandType.EMERGENCY_STOP, robot=arduino, command_id=cmd_arduino_1753885710920
+2025-07-30 14:28:30,921 - command_service - ERROR - _submit_command:310 - [14d52d5e] Robot not found in state manager: arduino
+2025-07-30 14:28:30,922 - command_service - ERROR - execute_operation:352 - Operation submit_command_1753885710919 failed: Robot not found: arduino
+Traceback (most recent call last):
+  File "/app/services/base.py", line 317, in execute_operation
+    result = await operation_func(*args, **kwargs)
+  File "/app/services/command_service.py", line 311, in _submit_command
+    raise ValidationError(f"Robot not found: {robot_id}")
+core.exceptions.ValidationError: Robot not found: arduino
+2025-07-30 14:28:50,761 - command_service - INFO - _execute_command:478 - Command cmd_meca_1753885706949 completed successfully with result: ServiceResult(success=True, data={'status': 'completed', 'wafers_processed': 5, 'wafers_succeeded': [1, 2, 3, 4, 5], 'wafers_failed': [], 'start_wafer': 1, 'end_wafer': 5, 'success_rate': '100.0%'}, error=None, error_code=None, execution_time=23.781673908233643, metadata={'operation_id': 'meca_pickup_sequence_0_5'})
+2025-07-30 14:28:50,762 - command_service - INFO - _execute_command:487 - Setting robot meca state back to IDLE (current state: busy)
+2025-07-30 14:28:50,765 - command_service - INFO - _execute_command:495 - Robot meca state updated to IDLE (verified: idle)
+2025-07-30 14:28:50,766 - command_service - INFO - _process_command_queue:411 - Dequeued command: cmd_meca_1753885710902 (type: emergency_stop, robot: meca)
+2025-07-30 14:28:50,767 - command_service - INFO - _process_command_queue:419 - Starting execution of command cmd_meca_1753885710902
+2025-07-30 14:28:50,768 - command_service - INFO - _execute_command:432 - *** EXECUTING COMMAND cmd_meca_1753885710902 ***
+2025-07-30 14:28:50,769 - command_service - INFO - _execute_command:433 - Command details: robot=meca, type=emergency_stop, params={}
+2025-07-30 14:28:50,770 - command_service - INFO - _execute_command:440 - Setting robot meca state to BUSY (current state: idle)
+2025-07-30 14:28:50,771 - command_service - INFO - _execute_command:451 - Robot meca state updated to BUSY (verified: busy)
+2025-07-30 14:28:50,772 - command_service - INFO - _execute_command:457 - Robot type: meca, available processors: ['meca', 'ot2', 'arduino', 'carousel']
+2025-07-30 14:28:50,773 - command_service - INFO - _execute_command:462 - Using processor: <bound method RobotCommandService._process_meca_command of <services.command_service.RobotCommandService object at 0x7c5f8e326dc0>>
+2025-07-30 14:28:50,774 - command_service - INFO - _process_meca_command:612 - Processing Meca command: cmd_meca_1753885710902 for robot meca
+2025-07-30 14:28:50,775 - command_service - INFO - _process_meca_command:627 - Found Meca service: <services.meca_service.MecaService object at 0x7c5f8e3216d0> for robot meca
+2025-07-30 14:28:50,777 - command_service - INFO - _execute_command:478 - Command cmd_meca_1753885710902 completed successfully with result: ServiceResult(success=True, data=True, error=None, error_code=None, execution_time=0.0009672641754150391, metadata={'operation_id': 'meca_emergency_stop_1753885730775'})
+2025-07-30 14:28:50,778 - command_service - INFO - _execute_command:487 - Setting robot meca state back to IDLE (current state: emergency_stop)
+2025-07-30 14:28:50,779 - command_service - ERROR - _execute_command:532 - Command cmd_meca_1753885710902 failed: Invalid state transition for robot 'meca': emergency_stop -> idle
+2025-07-30 14:28:50,781 - command_service - WARNING - _execute_command:537 - Resetting robot meca state to IDLE after failure (current state: emergency_stop)
+2025-07-30 14:28:50,782 - command_service - ERROR - _execute_command:547 - Failed to reset robot state after failure: Invalid state transition for robot 'meca': emergency_stop -> idle
+2025-07-30 14:28:50,783 - command_service - INFO - _retry_command:561 - Retrying command cmd_meca_1753885710902 (attempt 2)
+2025-07-30 14:28:50,785 - command_service - INFO - _process_command_queue:411 - Dequeued command: cmd_ot2_1753885710912 (type: emergency_stop, robot: ot2)
+2025-07-30 14:28:50,785 - command_service - INFO - _process_command_queue:419 - Starting execution of command cmd_ot2_1753885710912
+2025-07-30 14:28:50,786 - command_service - INFO - _execute_command:432 - *** EXECUTING COMMAND cmd_ot2_1753885710912 ***
+2025-07-30 14:28:50,787 - command_service - INFO - _execute_command:433 - Command details: robot=ot2, type=emergency_stop, params={}
+2025-07-30 14:28:50,788 - command_service - INFO - _execute_command:440 - Setting robot ot2 state to BUSY (current state: idle)
+2025-07-30 14:28:50,789 - command_service - INFO - _execute_command:451 - Robot ot2 state updated to BUSY (verified: busy)
+2025-07-30 14:28:50,789 - command_service - INFO - _execute_command:457 - Robot type: ot2, available processors: ['meca', 'ot2', 'arduino', 'carousel']
+2025-07-30 14:28:50,790 - command_service - INFO - _execute_command:462 - Using processor: <bound method RobotCommandService._process_ot2_command of <services.command_service.RobotCommandService object at 0x7c5f8e326dc0>>
+2025-07-30 14:28:52,508 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:28:57,509 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:29:00,810 - command_service - ERROR - _execute_command:503 - Command cmd_ot2_1753885710912 timed out
+2025-07-30 14:29:00,813 - command_service - WARNING - _execute_command:508 - Resetting robot ot2 state to IDLE after timeout (current state: busy)
+2025-07-30 14:29:00,814 - command_service - INFO - _execute_command:516 - Robot ot2 state reset to IDLE after timeout (verified: idle)
+2025-07-30 14:29:00,816 - command_service - INFO - _retry_command:561 - Retrying command cmd_ot2_1753885710912 (attempt 2)
+2025-07-30 14:29:00,820 - command_service - INFO - _process_command_queue:411 - Dequeued command: cmd_meca_1753885710902 (type: emergency_stop, robot: meca)
+2025-07-30 14:29:00,821 - command_service - INFO - _process_command_queue:419 - Starting execution of command cmd_meca_1753885710902
+2025-07-30 14:29:00,823 - command_service - INFO - _execute_command:432 - *** EXECUTING COMMAND cmd_meca_1753885710902 ***
+2025-07-30 14:29:00,824 - command_service - INFO - _execute_command:433 - Command details: robot=meca, type=emergency_stop, params={}
+2025-07-30 14:29:00,826 - command_service - INFO - _execute_command:440 - Setting robot meca state to BUSY (current state: emergency_stop)
+2025-07-30 14:29:00,828 - command_service - ERROR - _execute_command:532 - Command cmd_meca_1753885710902 failed: Invalid state transition for robot 'meca': emergency_stop -> busy
+2025-07-30 14:29:00,830 - command_service - WARNING - _execute_command:537 - Resetting robot meca state to IDLE after failure (current state: emergency_stop)
+2025-07-30 14:29:00,832 - command_service - ERROR - _execute_command:547 - Failed to reset robot state after failure: Invalid state transition for robot 'meca': emergency_stop -> idle
+2025-07-30 14:29:00,833 - command_service - INFO - _retry_command:561 - Retrying command cmd_meca_1753885710902 (attempt 3)
+2025-07-30 14:29:00,837 - command_service - INFO - _process_command_queue:411 - Dequeued command: cmd_ot2_1753885710912 (type: emergency_stop, robot: ot2)
+2025-07-30 14:29:00,839 - command_service - INFO - _process_command_queue:419 - Starting execution of command cmd_ot2_1753885710912
+2025-07-30 14:29:00,840 - command_service - INFO - _execute_command:432 - *** EXECUTING COMMAND cmd_ot2_1753885710912 ***
+2025-07-30 14:29:00,841 - command_service - INFO - _execute_command:433 - Command details: robot=ot2, type=emergency_stop, params={}
+2025-07-30 14:29:00,844 - command_service - INFO - _execute_command:440 - Setting robot ot2 state to BUSY (current state: idle)
+2025-07-30 14:29:00,846 - command_service - INFO - _execute_command:451 - Robot ot2 state updated to BUSY (verified: busy)
+2025-07-30 14:29:00,849 - command_service - INFO - _execute_command:457 - Robot type: ot2, available processors: ['meca', 'ot2', 'arduino', 'carousel']
+2025-07-30 14:29:00,853 - command_service - INFO - _execute_command:462 - Using processor: <bound method RobotCommandService._process_ot2_command of <services.command_service.RobotCommandService object at 0x7c5f8e326dc0>>
+2025-07-30 14:29:00,891 - command_service - INFO - _execute_command:478 - Command cmd_ot2_1753885710912 completed successfully with result: ServiceResult(success=True, data=True, error=None, error_code=None, execution_time=0.0, metadata={})
+2025-07-30 14:29:00,892 - command_service - INFO - _execute_command:487 - Setting robot ot2 state back to IDLE (current state: error)
+2025-07-30 14:29:00,894 - command_service - INFO - _execute_command:495 - Robot ot2 state updated to IDLE (verified: idle)
+2025-07-30 14:29:00,895 - command_service - INFO - _process_command_queue:411 - Dequeued command: cmd_meca_1753885710902 (type: emergency_stop, robot: meca)
+2025-07-30 14:29:00,897 - command_service - INFO - _process_command_queue:419 - Starting execution of command cmd_meca_1753885710902
+2025-07-30 14:29:00,898 - command_service - INFO - _execute_command:432 - *** EXECUTING COMMAND cmd_meca_1753885710902 ***
+2025-07-30 14:29:00,900 - command_service - INFO - _execute_command:433 - Command details: robot=meca, type=emergency_stop, params={}
+2025-07-30 14:29:00,902 - command_service - INFO - _execute_command:440 - Setting robot meca state to BUSY (current state: emergency_stop)
+2025-07-30 14:29:00,903 - command_service - ERROR - _execute_command:532 - Command cmd_meca_1753885710902 failed: Invalid state transition for robot 'meca': emergency_stop -> busy
+2025-07-30 14:29:00,905 - command_service - WARNING - _execute_command:537 - Resetting robot meca state to IDLE after failure (current state: emergency_stop)
+2025-07-30 14:29:00,906 - command_service - ERROR - _execute_command:547 - Failed to reset robot state after failure: Invalid state transition for robot 'meca': emergency_stop -> idle
+2025-07-30 14:29:00,907 - command_service - INFO - _retry_command:561 - Retrying command cmd_meca_1753885710902 (attempt 4)
+2025-07-30 14:29:00,909 - command_service - INFO - _process_command_queue:411 - Dequeued command: cmd_meca_1753885710902 (type: emergency_stop, robot: meca)
+2025-07-30 14:29:00,910 - command_service - INFO - _process_command_queue:419 - Starting execution of command cmd_meca_1753885710902
+2025-07-30 14:29:00,911 - command_service - INFO - _execute_command:432 - *** EXECUTING COMMAND cmd_meca_1753885710902 ***
+2025-07-30 14:29:00,913 - command_service - INFO - _execute_command:433 - Command details: robot=meca, type=emergency_stop, params={}
+2025-07-30 14:29:00,914 - command_service - INFO - _execute_command:440 - Setting robot meca state to BUSY (current state: emergency_stop)
+2025-07-30 14:29:00,915 - command_service - ERROR - _execute_command:532 - Command cmd_meca_1753885710902 failed: Invalid state transition for robot 'meca': emergency_stop -> busy
+2025-07-30 14:29:00,916 - command_service - WARNING - _execute_command:537 - Resetting robot meca state to IDLE after failure (current state: emergency_stop)
+2025-07-30 14:29:00,918 - command_service - ERROR - _execute_command:547 - Failed to reset robot state after failure: Invalid state transition for robot 'meca': emergency_stop -> idle
+2025-07-30 14:29:00,920 - command_service - ERROR - _handle_command_failure:574 - Command cmd_meca_1753885710902 failed permanently after 4 attempts
+2025-07-30 14:29:00,921 - command_service - ERROR - _handle_command_failure:585 - Failed to reset robot state after permanent failure: Invalid state transition for robot 'meca': emergency_stop -> idle
+2025-07-30 14:29:00,922 - command_service - ERROR - _handle_command_failure:594 - Failed to set robot to error state: Invalid state transition for robot 'meca': emergency_stop -> error
+2025-07-30 14:29:02,530 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:29:07,532 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:29:12,535 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:29:17,538 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:29:22,539 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:29:27,540 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:29:32,559 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:29:37,560 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:29:42,564 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:29:47,567 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:29:52,569 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:29:57,571 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:30:02,588 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:30:07,593 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:30:12,596 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:30:17,598 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:30:22,600 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:30:27,603 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:30:32,632 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:30:37,654 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:30:42,658 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:30:47,660 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:30:52,662 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:30:57,668 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:31:02,679 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:31:07,680 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:31:12,681 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:31:17,688 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:31:22,693 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:31:27,696 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:31:32,710 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:31:37,717 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:31:42,725 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:31:47,727 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:31:52,731 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:31:57,733 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:32:02,749 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:32:07,754 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:32:12,756 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:32:17,762 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:32:22,767 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:32:27,769 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:32:32,781 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:32:37,784 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:32:42,786 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:32:47,792 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:32:52,796 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:32:57,797 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:33:02,810 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:33:07,813 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:33:12,816 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:33:17,819 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:33:22,821 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:33:27,824 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:33:32,837 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:33:37,840 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:33:42,844 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:33:47,846 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:33:52,848 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:33:57,850 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:34:02,872 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:34:07,875 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:34:12,877 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:34:17,886 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:34:22,889 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:34:27,892 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:34:32,907 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:34:37,910 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:34:42,914 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:34:47,916 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:34:52,919 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:34:57,923 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:35:02,946 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:35:07,948 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:35:12,951 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:35:17,955 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:35:22,957 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:35:27,960 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:35:32,988 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:35:37,992 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:35:42,994 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:35:47,996 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:35:52,999 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:35:58,003 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:36:03,011 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:36:08,017 - orchestrator - WARNING - _monitor_system_status:397 - Robots needing attention: ['meca']
+2025-07-30 14:36:09,976 - command_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for RobotCommandService
+2025-07-30 14:36:09,979 - command_service - INFO - _process_command_queue:423 - Command queue processor cancelled
+2025-07-30 14:36:09,981 - command_service - INFO - _on_stop:167 - Robot command service stopped
+2025-07-30 14:36:09,983 - command_service - INFO - stop:185 - RobotCommandService service stopped
+2025-07-30 14:36:09,990 - orchestrator - INFO - _stop_health_monitoring:222 - Stopped health monitoring for RobotOrchestrator
+2025-07-30 14:36:10,018 - orchestrator - INFO - stop:185 - RobotOrchestrator service stopped
+2025-07-30 14:36:12,695 - orchestrator - INFO - register_robot_service:124 - Registered robot service: meca
+2025-07-30 14:36:12,698 - orchestrator - INFO - register_robot_service:124 - Registered robot service: ot2
+2025-07-30 14:36:12,701 - orchestrator - INFO - register_protocol_service:129 - Registered protocol execution service
+2025-07-30 14:36:16,617 - orchestrator - INFO - start:166 - RobotOrchestrator service started
+2025-07-30 14:36:16,619 - command_service - INFO - _on_start:134 - Starting Robot command service...
+2025-07-30 14:36:16,621 - command_service - INFO - _on_start:139 - Orchestrator available with registered services: {'meca': 'MecaService', 'ot2': 'OT2Service'}
+2025-07-30 14:36:16,623 - command_service - INFO - _on_start:144 - Available command processors: ['meca', 'ot2', 'arduino', 'carousel']
+2025-07-30 14:36:16,625 - command_service - INFO - _on_start:148 - Robot command service started with command queue processor
+2025-07-30 14:36:16,627 - command_service - INFO - start:166 - RobotCommandService service started
+2025-07-30 14:36:16,641 - command_service - INFO - _process_command_queue:402 - Command queue processor started
+2025-07-30 14:36:40,464 - command_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for RobotCommandService
+2025-07-30 14:36:40,466 - command_service - INFO - _process_command_queue:423 - Command queue processor cancelled
+2025-07-30 14:36:40,468 - command_service - INFO - _on_stop:167 - Robot command service stopped
+2025-07-30 14:36:40,470 - command_service - INFO - stop:185 - RobotCommandService service stopped
+2025-07-30 14:36:40,472 - orchestrator - INFO - _stop_health_monitoring:222 - Stopped health monitoring for RobotOrchestrator
+2025-07-30 14:36:40,487 - orchestrator - INFO - stop:185 - RobotOrchestrator service stopped
+2025-07-30 14:36:43,100 - orchestrator - INFO - register_robot_service:124 - Registered robot service: meca
+2025-07-30 14:36:43,102 - orchestrator - INFO - register_robot_service:124 - Registered robot service: ot2
+2025-07-30 14:36:43,103 - orchestrator - INFO - register_protocol_service:129 - Registered protocol execution service
+2025-07-30 14:36:46,978 - orchestrator - INFO - start:166 - RobotOrchestrator service started
+2025-07-30 14:36:46,981 - command_service - INFO - _on_start:134 - Starting Robot command service...
+2025-07-30 14:36:46,983 - command_service - INFO - _on_start:139 - Orchestrator available with registered services: {'meca': 'MecaService', 'ot2': 'OT2Service'}
+2025-07-30 14:36:46,985 - command_service - INFO - _on_start:144 - Available command processors: ['meca', 'ot2', 'arduino', 'carousel']
+2025-07-30 14:36:46,988 - command_service - INFO - _on_start:148 - Robot command service started with command queue processor
+2025-07-30 14:36:46,989 - command_service - INFO - start:166 - RobotCommandService service started
+2025-07-30 14:36:47,012 - command_service - INFO - _process_command_queue:402 - Command queue processor started
+2025-07-30 14:37:11,701 - command_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for RobotCommandService
+2025-07-30 14:37:11,703 - command_service - INFO - _process_command_queue:423 - Command queue processor cancelled
+2025-07-30 14:37:11,704 - command_service - INFO - _on_stop:167 - Robot command service stopped
+2025-07-30 14:37:11,706 - command_service - INFO - stop:185 - RobotCommandService service stopped
+2025-07-30 14:37:11,707 - orchestrator - INFO - _stop_health_monitoring:222 - Stopped health monitoring for RobotOrchestrator
+2025-07-30 14:37:11,737 - orchestrator - INFO - stop:185 - RobotOrchestrator service stopped
+2025-07-30 14:37:14,273 - orchestrator - INFO - register_robot_service:124 - Registered robot service: meca
+2025-07-30 14:37:14,274 - orchestrator - INFO - register_robot_service:124 - Registered robot service: ot2
+2025-07-30 14:37:14,275 - orchestrator - INFO - register_protocol_service:129 - Registered protocol execution service
+2025-07-30 14:37:18,184 - orchestrator - INFO - start:166 - RobotOrchestrator service started
+2025-07-30 14:37:18,185 - command_service - INFO - _on_start:134 - Starting Robot command service...
+2025-07-30 14:37:18,188 - command_service - INFO - _on_start:139 - Orchestrator available with registered services: {'meca': 'MecaService', 'ot2': 'OT2Service'}
+2025-07-30 14:37:18,189 - command_service - INFO - _on_start:144 - Available command processors: ['meca', 'ot2', 'arduino', 'carousel']
+2025-07-30 14:37:18,190 - command_service - INFO - _on_start:148 - Robot command service started with command queue processor
+2025-07-30 14:37:18,192 - command_service - INFO - start:166 - RobotCommandService service started
+2025-07-30 14:37:18,215 - command_service - INFO - _process_command_queue:402 - Command queue processor started
+2025-07-30 14:37:28,950 - command_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for RobotCommandService
+2025-07-30 14:37:28,955 - command_service - INFO - _process_command_queue:423 - Command queue processor cancelled
+2025-07-30 14:37:28,958 - command_service - INFO - _on_stop:167 - Robot command service stopped
+2025-07-30 14:37:28,962 - command_service - INFO - stop:185 - RobotCommandService service stopped
+2025-07-30 14:37:28,964 - orchestrator - INFO - _stop_health_monitoring:222 - Stopped health monitoring for RobotOrchestrator
+2025-07-30 14:37:28,999 - orchestrator - INFO - stop:185 - RobotOrchestrator service stopped
+2025-07-30 14:43:43,403 - orchestrator - INFO - register_robot_service:124 - Registered robot service: meca
+2025-07-30 14:43:43,408 - orchestrator - INFO - register_robot_service:124 - Registered robot service: ot2
+2025-07-30 14:43:43,410 - orchestrator - INFO - register_protocol_service:129 - Registered protocol execution service
+2025-07-30 14:43:48,200 - orchestrator - INFO - start:166 - RobotOrchestrator service started
+2025-07-30 14:43:48,201 - command_service - INFO - _on_start:134 - Starting Robot command service...
+2025-07-30 14:43:48,202 - command_service - INFO - _on_start:139 - Orchestrator available with registered services: {'meca': 'MecaService', 'ot2': 'OT2Service'}
+2025-07-30 14:43:48,202 - command_service - INFO - _on_start:144 - Available command processors: ['meca', 'ot2', 'arduino', 'carousel']
+2025-07-30 14:43:48,204 - command_service - INFO - _on_start:148 - Robot command service started with command queue processor
+2025-07-30 14:43:48,205 - command_service - INFO - start:166 - RobotCommandService service started
+2025-07-30 14:43:48,219 - command_service - INFO - _process_command_queue:402 - Command queue processor started
+2025-07-30 14:43:48,223 - command_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for RobotCommandService
+2025-07-30 14:43:48,224 - command_service - INFO - _process_command_queue:423 - Command queue processor cancelled
+2025-07-30 14:43:48,225 - command_service - INFO - _on_stop:167 - Robot command service stopped
+2025-07-30 14:43:48,225 - command_service - INFO - stop:185 - RobotCommandService service stopped
+2025-07-30 14:43:48,226 - orchestrator - INFO - _stop_health_monitoring:222 - Stopped health monitoring for RobotOrchestrator
+2025-07-30 14:43:48,248 - orchestrator - INFO - stop:185 - RobotOrchestrator service stopped
+2025-07-30 14:43:52,234 - orchestrator - INFO - register_robot_service:124 - Registered robot service: meca
+2025-07-30 14:43:52,235 - orchestrator - INFO - register_robot_service:124 - Registered robot service: ot2
+2025-07-30 14:43:52,237 - orchestrator - INFO - register_protocol_service:129 - Registered protocol execution service
+2025-07-30 14:43:56,107 - orchestrator - INFO - start:166 - RobotOrchestrator service started
+2025-07-30 14:43:56,108 - command_service - INFO - _on_start:134 - Starting Robot command service...
+2025-07-30 14:43:56,110 - command_service - INFO - _on_start:139 - Orchestrator available with registered services: {'meca': 'MecaService', 'ot2': 'OT2Service'}
+2025-07-30 14:43:56,111 - command_service - INFO - _on_start:144 - Available command processors: ['meca', 'ot2', 'arduino', 'carousel']
+2025-07-30 14:43:56,113 - command_service - INFO - _on_start:148 - Robot command service started with command queue processor
+2025-07-30 14:43:56,114 - command_service - INFO - start:166 - RobotCommandService service started
+2025-07-30 14:43:56,134 - command_service - INFO - _process_command_queue:402 - Command queue processor started
+2025-07-30 14:44:47,317 - command_service - INFO - execute_operation:305 - Starting operation submit_command_1753886687317: submit_command for robot meca
+2025-07-30 14:44:47,318 - command_service - INFO - _submit_command:303 - [ff941e1b] Submitting command: type=CommandType.PICKUP_SEQUENCE, robot=meca, command_id=cmd_meca_1753886687318
+2025-07-30 14:44:47,319 - command_service - INFO - _submit_command:313 - [ff941e1b] Robot meca state: RobotState.IDLE, operational: True
+2025-07-30 14:44:47,320 - command_service - INFO - _validate_command:398 - [ff941e1b] Command cmd_meca_1753886687318 validation passed: start=0, count=5, operation_type=pickup_wafer_sequence, is_last_batch=False
+2025-07-30 14:44:47,321 - command_service - INFO - _submit_command:327 - [ff941e1b] Adding command cmd_meca_1753886687318 to queue with priority -2
+2025-07-30 14:44:47,322 - command_service - INFO - _submit_command:333 - [ff941e1b] Command submitted successfully: cmd_meca_1753886687318 for robot meca, queue size: 1
+2025-07-30 14:44:47,323 - command_service - INFO - execute_operation:324 - Operation submit_command_1753886687317 completed successfully in 0.01s
+2025-07-30 14:44:47,326 - command_service - INFO - _process_command_queue:411 - Dequeued command: cmd_meca_1753886687318 (type: pickup_sequence, robot: meca)
+2025-07-30 14:44:47,327 - command_service - INFO - _process_command_queue:419 - Starting execution of command cmd_meca_1753886687318
+2025-07-30 14:44:47,328 - command_service - INFO - _execute_command:432 - *** EXECUTING COMMAND cmd_meca_1753886687318 ***
+2025-07-30 14:44:47,329 - command_service - INFO - _execute_command:433 - Command details: robot=meca, type=pickup_sequence, params={'start': 0, 'count': 5, 'operation_type': 'pickup_wafer_sequence', 'is_last_batch': False}
+2025-07-30 14:44:47,330 - command_service - INFO - _execute_command:440 - Setting robot meca state to BUSY (current state: idle)
+2025-07-30 14:44:47,332 - command_service - INFO - _execute_command:451 - Robot meca state updated to BUSY (verified: busy)
+2025-07-30 14:44:47,332 - command_service - INFO - _execute_command:457 - Robot type: meca, available processors: ['meca', 'ot2', 'arduino', 'carousel']
+2025-07-30 14:44:47,333 - command_service - INFO - _execute_command:462 - Using processor: <bound method RobotCommandService._process_meca_command of <services.command_service.RobotCommandService object at 0x76b79fdb41c0>>
+2025-07-30 14:44:47,334 - command_service - INFO - _process_meca_command:612 - Processing Meca command: cmd_meca_1753886687318 for robot meca
+2025-07-30 14:44:47,335 - command_service - INFO - _process_meca_command:627 - Found Meca service: <services.meca_service.MecaService object at 0x76b79fe29a90> for robot meca

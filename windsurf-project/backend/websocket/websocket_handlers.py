@@ -330,8 +330,19 @@ class WebsocketHandler:
                         start = command_data.get("start", 0)
                         count = command_data.get("count", 5)
                         is_last_batch = command_data.get("is_last_batch", False)
+                        current_step = command_data.get("current_step", 0)
+                        step_name = command_data.get("step_name", "Create Pick Up")
                         
-                        logger.info(f"*** WEBSOCKET: Submitting meca_pickup command with start={start}, count={count}")
+                        logger.info(f"*** WEBSOCKET: Submitting meca_pickup command for step {current_step} with start={start}, count={count}")
+                        
+                        # Start step tracking before submitting command
+                        await self.state_manager.start_step(
+                            robot_id="meca",
+                            step_index=current_step,
+                            step_name=step_name,
+                            operation_type="pickup_sequence",
+                            progress_data={"start": start, "count": count, "current_wafer_index": start}
+                        )
                         
                         result = await self.command_service.submit_command(
                             robot_id="meca",
@@ -370,6 +381,19 @@ class WebsocketHandler:
                         start = command_data.get("start", 0)
                         count = command_data.get("count", 5)
                         is_last_batch = command_data.get("is_last_batch", False)
+                        current_step = command_data.get("current_step", 7)
+                        step_name = command_data.get("step_name", "Move to Baking Tray")
+                        
+                        logger.info(f"*** WEBSOCKET: Submitting meca_drop command for step {current_step} with start={start}, count={count}")
+                        
+                        # Start step tracking before submitting command
+                        await self.state_manager.start_step(
+                            robot_id="meca",
+                            step_index=current_step,
+                            step_name=step_name,
+                            operation_type="drop_sequence",
+                            progress_data={"start": start, "count": count, "current_wafer_index": start}
+                        )
                         
                         result = await self.command_service.submit_command(
                             robot_id="meca",
@@ -481,86 +505,131 @@ class WebsocketHandler:
                             "message": f"Arduino operation failed: {str(e)}"
                         })
                 elif command_type == "pause_system":
-                    # System-wide pause functionality
+                    # Step-aware pause functionality
                     try:
                         pause_reason = command_data.get("reason", "User requested pause")
                         current_step = command_data.get("current_step", 0)
-                        pause_all = command_data.get("pause_all_operations", True)
+                        step_name = command_data.get("step_name", f"Step {current_step}")
                         
-                        logger.info(f"System pause requested: {pause_reason}")
+                        logger.info(f"Step-aware pause requested for step {current_step} ({step_name}): {pause_reason}")
                         
-                        # Pause through orchestrator
-                        pause_result = await self.orchestrator.pause_all_operations(
-                            reason=pause_reason,
-                            metadata={"current_step": current_step, "pause_all": pause_all}
-                        )
+                        # Get step states to find which robot is currently active
+                        step_states = await self.state_manager.get_all_step_states()
+                        active_robot = None
                         
-                        if pause_result.success:
-                            response.update({
-                                "status": "success",
-                                "message": "System paused successfully",
-                                "paused_operations": pause_result.data.get("paused_operations", [])
-                            })
+                        # Find robot currently running the specified step
+                        for robot_id, step_state in step_states.items():
+                            if step_state and step_state.step_index == current_step and not step_state.paused:
+                                active_robot = robot_id
+                                break
+                        
+                        if active_robot:
+                            # Pause the specific robot's current step
+                            paused_step = await self.state_manager.pause_step(active_robot, pause_reason)
                             
-                            # Broadcast pause status to all clients
-                            await self.broadcast({
-                                "type": "system_status_update",
-                                "data": {
-                                    "system_paused": True,
-                                    "pause_reason": pause_reason,
-                                    "current_step": current_step
-                                }
-                            })
+                            if paused_step:
+                                response.update({
+                                    "status": "success",
+                                    "message": f"Step {current_step} paused successfully for robot {active_robot}",
+                                    "paused_step": {
+                                        "step_index": paused_step.step_index,
+                                        "step_name": paused_step.step_name,
+                                        "robot_id": paused_step.robot_id,
+                                        "progress": paused_step.progress_data
+                                    }
+                                })
+                                
+                                # Broadcast step-specific pause status to all clients
+                                await self.broadcast({
+                                    "type": "step_status_update",
+                                    "data": {
+                                        "step_index": current_step,
+                                        "step_name": step_name,
+                                        "robot_id": active_robot,
+                                        "paused": True,
+                                        "pause_reason": pause_reason,
+                                        "progress": paused_step.progress_data
+                                    }
+                                })
+                            else:
+                                response.update({
+                                    "status": "error",
+                                    "message": f"Failed to pause step {current_step} for robot {active_robot}"
+                                })
                         else:
                             response.update({
                                 "status": "error",
-                                "message": f"Failed to pause system: {pause_result.error}"
+                                "message": f"No active robot found for step {current_step}"
                             })
+                            
                     except Exception as e:
-                        logger.error(f"System pause error: {e}")
+                        logger.error(f"Step pause error: {e}")
                         response.update({
                             "status": "error",
-                            "message": f"System pause failed: {str(e)}"
+                            "message": f"Step pause failed: {str(e)}"
                         })
                 elif command_type == "resume_system":
-                    # System-wide resume functionality
+                    # Step-aware resume functionality
                     try:
                         current_step = command_data.get("current_step", 0)
-                        resume_all = command_data.get("resume_all_operations", True)
+                        step_name = command_data.get("step_name", f"Step {current_step}")
                         
-                        logger.info("System resume requested")
+                        logger.info(f"Step-aware resume requested for step {current_step} ({step_name})")
                         
-                        # Resume through orchestrator
-                        resume_result = await self.orchestrator.resume_all_operations(
-                            metadata={"current_step": current_step, "resume_all": resume_all}
-                        )
+                        # Get step states to find which robot is paused for this step
+                        step_states = await self.state_manager.get_all_step_states()
+                        paused_robot = None
                         
-                        if resume_result.success:
-                            response.update({
-                                "status": "success",
-                                "message": "System resumed successfully",
-                                "resumed_operations": resume_result.data.get("resumed_operations", [])
-                            })
+                        # Find robot with paused step matching the current step
+                        for robot_id, step_state in step_states.items():
+                            if step_state and step_state.step_index == current_step and step_state.paused:
+                                paused_robot = robot_id
+                                break
+                        
+                        if paused_robot:
+                            # Resume the specific robot's step
+                            resumed_step = await self.state_manager.resume_step(paused_robot)
                             
-                            # Broadcast resume status to all clients
-                            await self.broadcast({
-                                "type": "system_status_update",
-                                "data": {
-                                    "system_paused": False,
-                                    "pause_reason": "",
-                                    "current_step": current_step
-                                }
-                            })
+                            if resumed_step:
+                                response.update({
+                                    "status": "success",
+                                    "message": f"Step {current_step} resumed successfully for robot {paused_robot}",
+                                    "resumed_step": {
+                                        "step_index": resumed_step.step_index,
+                                        "step_name": resumed_step.step_name,
+                                        "robot_id": resumed_step.robot_id,
+                                        "progress": resumed_step.progress_data
+                                    }
+                                })
+                                
+                                # Broadcast step-specific resume status to all clients
+                                await self.broadcast({
+                                    "type": "step_status_update",
+                                    "data": {
+                                        "step_index": current_step,
+                                        "step_name": step_name,
+                                        "robot_id": paused_robot,
+                                        "paused": False,
+                                        "pause_reason": "",
+                                        "progress": resumed_step.progress_data
+                                    }
+                                })
+                            else:
+                                response.update({
+                                    "status": "error",
+                                    "message": f"Failed to resume step {current_step} for robot {paused_robot}"
+                                })
                         else:
                             response.update({
                                 "status": "error",
-                                "message": f"Failed to resume system: {resume_result.error}"
+                                "message": f"No paused robot found for step {current_step}"
                             })
+                            
                     except Exception as e:
-                        logger.error(f"System resume error: {e}")
+                        logger.error(f"Step resume error: {e}")
                         response.update({
                             "status": "error",
-                            "message": f"System resume failed: {str(e)}"
+                            "message": f"Step resume failed: {str(e)}"
                         })
                 else:
                     response.update(

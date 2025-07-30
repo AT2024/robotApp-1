@@ -38,6 +38,11 @@ const SpreadingPage = () => {
   const [pausedOperations, setPausedOperations] = useState([]);
   const [pauseReason, setPauseReason] = useState('');
   
+  // Step-specific pause functionality state
+  const [stepPaused, setStepPaused] = useState(false);
+  const [pausedStepName, setPausedStepName] = useState('');
+  const [pausedStepIndex, setPausedStepIndex] = useState(-1);
+  
   // Confirmation modal state
   const [confirmationModal, setConfirmationModal] = useState({
     isOpen: false,
@@ -60,7 +65,10 @@ const SpreadingPage = () => {
           websocketService.send({
             type: 'command',
             command_type: 'meca_pickup',
-            data: {},
+            data: {
+              current_step: activeStep,
+              step_name: steps[activeStep].label
+            },
           });
         } catch (error) {
           logger.error('Pickup operation failed:', error);
@@ -220,6 +228,8 @@ const SpreadingPage = () => {
               start: 0,
               count: 5,
               is_last_batch: true,
+              current_step: activeStep,
+              step_name: steps[activeStep].label
             },
           });
         } catch (error) {
@@ -295,8 +305,30 @@ const SpreadingPage = () => {
             setConnectionError(true);
           }
         }
+      } else if (message.type === 'step_status_update') {
+        // Handle step-specific status updates (like pause/resume broadcasts)
+        if (message.data) {
+          const { paused, pause_reason, step_index, step_name } = message.data;
+          
+          if (typeof paused === 'boolean') {
+            setSystemPaused(paused);
+            setStepPaused(paused);
+            setPauseReason(pause_reason || '');
+            
+            if (paused) {
+              setPausedStepName(step_name || '');
+              setPausedStepIndex(step_index || -1);
+              logger.log(`Step ${step_index} (${step_name}) paused: ${pause_reason}`);
+            } else {
+              setPausedStepName('');
+              setPausedStepIndex(-1);
+              logger.log(`Step ${step_index} (${step_name}) resumed`);
+              setPausedOperations([]);
+            }
+          }
+        }
       } else if (message.type === 'system_status_update') {
-        // Handle system-wide status updates (like pause/resume broadcasts)
+        // Handle system-wide status updates for backward compatibility
         if (message.data) {
           const { system_paused, pause_reason, current_step } = message.data;
           
@@ -430,21 +462,21 @@ const SpreadingPage = () => {
         setSystemPaused(true);
         setPauseReason('User requested pause');
         
-        // Send pause command to backend
+        // Send pause command to backend with step information
         websocketService.send({
           type: 'command',
           command_type: 'pause_system',
           commandId: Date.now().toString(),
           data: {
             reason: 'User requested pause',
-            pause_all_operations: true,
-            current_step: activeStep
+            current_step: activeStep,
+            step_name: steps[activeStep].label
           },
         });
       },
       'warning'
     );
-  }, [activeStep]);
+  }, [activeStep, steps]);
 
   // Handle system resume
   const handleResume = useCallback(() => {
@@ -453,17 +485,17 @@ const SpreadingPage = () => {
     setPauseReason('');
     setPausedOperations([]);
     
-    // Send resume command to backend
+    // Send resume command to backend with step information
     websocketService.send({
       type: 'command',
       command_type: 'resume_system', 
       commandId: Date.now().toString(),
       data: {
-        resume_all_operations: true,
-        current_step: activeStep
+        current_step: activeStep,
+        step_name: steps[activeStep].label
       },
     });
-  }, [activeStep]);
+  }, [activeStep, steps]);
 
   // Handle step skipping
   const handleSkip = () => {
@@ -527,8 +559,15 @@ const SpreadingPage = () => {
               <div className='flex items-center'>
                 <span className='mr-2'>⏸️</span>
                 <div>
-                  <strong>System Paused</strong>
+                  <strong>
+                    {pausedStepName ? `Step "${pausedStepName}" Paused` : 'System Paused'}
+                  </strong>
                   {pauseReason && <span className='ml-2 text-sm'>- {pauseReason}</span>}
+                  {pausedStepIndex >= 0 && (
+                    <span className='ml-2 text-sm'>
+                      (Step {pausedStepIndex + 1} of {steps.length})
+                    </span>
+                  )}
                 </div>
               </div>
             </div>

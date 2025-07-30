@@ -227,3 +227,18 @@
 2025-07-30 14:18:54,613 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
 2025-07-30 14:18:58,193 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
 2025-07-30 14:18:58,230 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-30 14:36:10,012 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-30 14:36:12,669 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-30 14:36:12,703 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-30 14:36:40,486 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-30 14:36:43,089 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-30 14:36:43,104 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-30 14:37:11,735 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-30 14:37:14,264 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-30 14:37:14,276 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-30 14:37:28,996 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-30 14:43:43,389 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-30 14:43:43,411 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
+2025-07-30 14:43:48,246 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped
+2025-07-30 14:43:52,216 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
+2025-07-30 14:43:52,238 - hardware_manager - INFO - start:231 - HardwareConnectionManager started

@@ -6108,3 +6108,694 @@ AttributeError: 'MecaService' object has no attribute 'get_robot_state'
 2025-07-30 14:20:02,001 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
 2025-07-30 14:20:07,009 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
 2025-07-30 14:20:12,027 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:20:17,034 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:20:22,043 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:20:27,057 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:20:32,094 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:20:37,102 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:20:42,110 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:20:47,116 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:20:52,124 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:20:57,134 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:21:02,155 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:21:07,174 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:21:12,199 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:21:17,207 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:21:22,215 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:21:27,222 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:21:32,251 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:21:37,257 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:21:42,262 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:21:47,268 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:21:52,273 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:21:57,282 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:22:02,303 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:22:07,309 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:22:12,315 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:22:17,322 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:22:22,330 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:22:27,336 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:22:32,357 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:22:37,365 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:22:42,372 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:22:47,381 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:22:52,388 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:22:57,394 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:23:02,430 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:23:07,439 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:23:12,473 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:23:17,480 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:23:22,487 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:23:27,493 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:23:32,520 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:23:37,528 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:23:42,534 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:23:47,541 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:23:52,552 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:23:57,561 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:24:02,594 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:24:07,603 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:24:12,611 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:24:17,634 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:24:22,653 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:24:27,664 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:24:32,693 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:24:37,701 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:24:42,708 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:24:47,715 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:24:52,725 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:24:57,735 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:25:02,763 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:25:07,773 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:25:12,779 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:25:17,786 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:25:22,795 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:25:27,807 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:25:32,824 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:25:37,832 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:25:42,842 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:25:47,851 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:25:52,858 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:25:57,865 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:26:02,883 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:26:07,889 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:26:12,894 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:26:17,900 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:26:22,906 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:26:27,913 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:26:32,934 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:26:37,948 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:26:42,954 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:26:47,959 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:26:52,969 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:26:57,981 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:27:02,999 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:27:08,010 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:27:13,019 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:27:18,024 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:27:23,030 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:27:28,038 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:27:33,066 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:27:38,073 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:27:43,080 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:27:48,089 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:27:53,104 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:27:58,112 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:28:03,130 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:28:08,138 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:28:13,144 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:28:18,151 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:28:23,158 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:28:26,978 - meca_service - INFO - execute_operation:305 - Starting operation meca_pickup_sequence_0_5: pickup_wafer for robot meca
+2025-07-30 14:28:26,980 - meca_service - INFO - _pickup_sequence:1675 - 🔍 PRE-OPERATION CHECK: Validating connection health before pickup sequence 1 to 5
+2025-07-30 14:28:27,005 - meca_service - INFO - ensure_robot_ready:736 - 🔧 Clearing and resuming motion for meca
+2025-07-30 14:28:27,009 - meca_service - INFO - ensure_robot_ready:759 - ✅ Motion cleared and resumed for meca
+2025-07-30 14:28:27,010 - meca_service - INFO - ensure_robot_ready:835 - ✅ Robot meca hardware state verified - Activated: True, Homed: True, Ready for operations
+2025-07-30 14:28:27,011 - meca_service - INFO - _pickup_sequence:1689 - ✅ PRE-OPERATION CHECK: Robot responsive in 0.000s
+2025-07-30 14:28:27,013 - meca_service - INFO - _pickup_sequence:1699 - ✅ PRE-OPERATION CHECK: All connection health checks passed for pickup operation
+2025-07-30 14:28:27,013 - meca_service - INFO - _pickup_sequence:1710 - 🚀 STARTING PICKUP: Beginning pickup sequence for wafers 1 to 5
+2025-07-30 14:28:27,014 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetGripperForce with parameters [100.0]
+2025-07-30 14:28:27,016 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetGripperForce completed in 0.001s
+2025-07-30 14:28:27,017 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetJointAcc with parameters [50.0]
+2025-07-30 14:28:27,018 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetJointAcc completed in 0.001s
+2025-07-30 14:28:27,019 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetTorqueLimits with parameters [40, 40, 40, 40, 40, 40]
+2025-07-30 14:28:27,020 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetTorqueLimits completed in 0.001s
+2025-07-30 14:28:27,021 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetTorqueLimitsCfg with parameters [2, 1]
+2025-07-30 14:28:27,023 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetTorqueLimitsCfg completed in 0.001s
+2025-07-30 14:28:27,023 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetBlending with parameters [0]
+2025-07-30 14:28:27,025 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetBlending completed in 0.001s
+2025-07-30 14:28:27,025 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [20.0]
+2025-07-30 14:28:27,027 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.001s
+2025-07-30 14:28:27,028 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetConf with parameters [1, 1, 1]
+2025-07-30 14:28:27,030 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetConf completed in 0.002s
+2025-07-30 14:28:27,031 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: GripperOpen with parameters []
+2025-07-30 14:28:27,033 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: GripperOpen completed in 0.002s
+2025-07-30 14:28:27,034 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:28,036 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.003s
+2025-07-30 14:28:28,039 - meca_service - INFO - _pickup_sequence:1734 - 🔄 Starting pickup process for wafer 1 (index 0)
+2025-07-30 14:28:28,040 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -174.978, 39.9, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:28,042 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:28:28,063 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -175.178, 27.9714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:28,066 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:28,078 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:28,165 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:28:29,081 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.003s
+2025-07-30 14:28:29,083 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: GripperClose with parameters []
+2025-07-30 14:28:29,086 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: GripperClose completed in 0.003s
+2025-07-30 14:28:29,097 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:30,102 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.005s
+2025-07-30 14:28:30,103 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [35.0]
+2025-07-30 14:28:30,105 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.002s
+2025-07-30 14:28:30,106 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -175.378, 30.7714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:30,109 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:30,109 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetBlending with parameters [100]
+2025-07-30 14:28:30,111 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetBlending completed in 0.001s
+2025-07-30 14:28:30,112 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -176.178, 33.4714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:30,114 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:28:30,115 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MoveLin with parameters [173.562, -187.7375, 64.8714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:30,116 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MoveLin completed in 0.002s
+2025-07-30 14:28:30,118 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetBlending with parameters [0]
+2025-07-30 14:28:30,119 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetBlending completed in 0.001s
+2025-07-30 14:28:30,120 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [135.0, -17.6177, 160.0, 123.2804, 40.9554, -101.3308]
+2025-07-30 14:28:30,122 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:28:30,123 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [20.0]
+2025-07-30 14:28:30,125 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.002s
+2025-07-30 14:28:30,127 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [-47.9793, 159.23, 163.89870000000002, 179.7538, -0.4298, -89.6617]
+2025-07-30 14:28:30,128 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:28:30,130 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [-47.9793, 159.23, 123.4, 179.7538, -0.4298, -89.6617]
+2025-07-30 14:28:30,131 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.001s
+2025-07-30 14:28:30,132 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:31,148 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.016s
+2025-07-30 14:28:31,151 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: GripperOpen with parameters []
+2025-07-30 14:28:31,156 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: GripperOpen completed in 0.005s
+2025-07-30 14:28:31,158 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:32,161 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.003s
+2025-07-30 14:28:32,162 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [-47.9793, 159.23, 179.89870000000002, 179.7538, -0.4298, -89.6617]
+2025-07-30 14:28:32,164 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:28:32,165 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [50.0]
+2025-07-30 14:28:32,167 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.002s
+2025-07-30 14:28:32,167 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [135.0, -17.6177, 160.0, 123.2804, 40.9554, -101.3308]
+2025-07-30 14:28:32,169 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:28:32,171 - meca_service - INFO - _pickup_sequence:1791 - ✅ Successfully completed pickup for wafer 1 (index 0)
+2025-07-30 14:28:32,171 - meca_service - INFO - _pickup_sequence:1734 - 🔄 Starting pickup process for wafer 2 (index 1)
+2025-07-30 14:28:32,174 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -172.27800000000002, 39.9, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:32,177 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:28:32,179 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -172.478, 27.9714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:32,181 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:32,189 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:33,182 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:28:33,194 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.005s
+2025-07-30 14:28:33,207 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: GripperClose with parameters []
+2025-07-30 14:28:33,211 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: GripperClose completed in 0.004s
+2025-07-30 14:28:33,221 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:34,226 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.006s
+2025-07-30 14:28:34,229 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [35.0]
+2025-07-30 14:28:34,233 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.004s
+2025-07-30 14:28:34,239 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -172.678, 30.7714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:34,243 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.005s
+2025-07-30 14:28:34,246 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetBlending with parameters [100]
+2025-07-30 14:28:34,249 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetBlending completed in 0.002s
+2025-07-30 14:28:34,250 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -173.478, 33.4714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:34,251 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:28:34,253 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MoveLin with parameters [173.562, -185.03750000000002, 64.8714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:34,256 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MoveLin completed in 0.003s
+2025-07-30 14:28:34,257 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetBlending with parameters [0]
+2025-07-30 14:28:34,259 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetBlending completed in 0.002s
+2025-07-30 14:28:34,260 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [135.0, -17.6177, 160.0, 123.2804, 40.9554, -101.3308]
+2025-07-30 14:28:34,262 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:28:34,263 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [20.0]
+2025-07-30 14:28:34,265 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.002s
+2025-07-30 14:28:34,267 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [-3.5793, 159.33, 163.89870000000002, 179.7538, -0.4298, -89.6617]
+2025-07-30 14:28:34,269 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:28:34,270 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [-3.5793, 159.33, 123.4, 179.7538, -0.4298, -89.6617]
+2025-07-30 14:28:34,272 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:28:34,274 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:35,279 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.004s
+2025-07-30 14:28:35,281 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: GripperOpen with parameters []
+2025-07-30 14:28:35,284 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: GripperOpen completed in 0.003s
+2025-07-30 14:28:35,288 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:36,294 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.006s
+2025-07-30 14:28:36,300 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [-3.5793, 159.33, 179.89870000000002, 179.7538, -0.4298, -89.6617]
+2025-07-30 14:28:36,304 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.004s
+2025-07-30 14:28:36,307 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [50.0]
+2025-07-30 14:28:36,312 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.004s
+2025-07-30 14:28:36,315 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [135.0, -17.6177, 160.0, 123.2804, 40.9554, -101.3308]
+2025-07-30 14:28:36,319 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.004s
+2025-07-30 14:28:36,322 - meca_service - INFO - _pickup_sequence:1791 - ✅ Successfully completed pickup for wafer 2 (index 1)
+2025-07-30 14:28:36,324 - meca_service - INFO - _pickup_sequence:1734 - 🔄 Starting pickup process for wafer 3 (index 2)
+2025-07-30 14:28:36,328 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -169.578, 39.9, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:36,331 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:36,333 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -169.778, 27.9714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:36,335 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:36,338 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:37,341 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.003s
+2025-07-30 14:28:37,342 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: GripperClose with parameters []
+2025-07-30 14:28:37,344 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: GripperClose completed in 0.002s
+2025-07-30 14:28:37,344 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:38,189 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:28:38,347 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.002s
+2025-07-30 14:28:38,350 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [35.0]
+2025-07-30 14:28:38,351 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.002s
+2025-07-30 14:28:38,353 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -169.978, 30.7714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:38,355 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:38,358 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetBlending with parameters [100]
+2025-07-30 14:28:38,360 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetBlending completed in 0.002s
+2025-07-30 14:28:38,361 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -170.77800000000002, 33.4714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:38,363 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:28:38,364 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MoveLin with parameters [173.562, -182.33750000000003, 64.8714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:38,366 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MoveLin completed in 0.001s
+2025-07-30 14:28:38,366 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetBlending with parameters [0]
+2025-07-30 14:28:38,368 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetBlending completed in 0.001s
+2025-07-30 14:28:38,369 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [135.0, -17.6177, 160.0, 123.2804, 40.9554, -101.3308]
+2025-07-30 14:28:38,370 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:28:38,371 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [20.0]
+2025-07-30 14:28:38,372 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.001s
+2025-07-30 14:28:38,374 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [41.0207, 159.43, 163.89870000000002, 179.7538, -0.4298, -89.6617]
+2025-07-30 14:28:38,375 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.001s
+2025-07-30 14:28:38,377 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [41.0207, 159.43, 123.4, 179.7538, -0.4298, -89.6617]
+2025-07-30 14:28:38,379 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:28:38,380 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:39,384 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.003s
+2025-07-30 14:28:39,386 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: GripperOpen with parameters []
+2025-07-30 14:28:39,389 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: GripperOpen completed in 0.003s
+2025-07-30 14:28:39,391 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:40,396 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.005s
+2025-07-30 14:28:40,398 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [41.0207, 159.43, 179.89870000000002, 179.7538, -0.4298, -89.6617]
+2025-07-30 14:28:40,401 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:40,403 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [50.0]
+2025-07-30 14:28:40,405 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.002s
+2025-07-30 14:28:40,407 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [135.0, -17.6177, 160.0, 123.2804, 40.9554, -101.3308]
+2025-07-30 14:28:40,410 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:40,412 - meca_service - INFO - _pickup_sequence:1791 - ✅ Successfully completed pickup for wafer 3 (index 2)
+2025-07-30 14:28:40,416 - meca_service - INFO - _pickup_sequence:1734 - 🔄 Starting pickup process for wafer 4 (index 3)
+2025-07-30 14:28:40,418 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -166.87800000000001, 39.9, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:40,421 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:40,423 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -167.078, 27.9714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:40,426 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:40,427 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:41,431 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.004s
+2025-07-30 14:28:41,433 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: GripperClose with parameters []
+2025-07-30 14:28:41,436 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: GripperClose completed in 0.003s
+2025-07-30 14:28:41,438 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:42,442 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.004s
+2025-07-30 14:28:42,445 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [35.0]
+2025-07-30 14:28:42,448 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.003s
+2025-07-30 14:28:42,451 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -167.278, 30.7714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:42,455 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.004s
+2025-07-30 14:28:42,459 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetBlending with parameters [100]
+2025-07-30 14:28:42,463 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetBlending completed in 0.004s
+2025-07-30 14:28:42,466 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -168.078, 33.4714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:42,470 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.004s
+2025-07-30 14:28:42,473 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MoveLin with parameters [173.562, -179.6375, 64.8714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:42,478 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MoveLin completed in 0.005s
+2025-07-30 14:28:42,479 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetBlending with parameters [0]
+2025-07-30 14:28:42,482 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetBlending completed in 0.003s
+2025-07-30 14:28:42,484 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [135.0, -17.6177, 160.0, 123.2804, 40.9554, -101.3308]
+2025-07-30 14:28:42,488 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.004s
+2025-07-30 14:28:42,491 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [20.0]
+2025-07-30 14:28:42,495 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.004s
+2025-07-30 14:28:42,498 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [85.5707, 159.43, 163.89870000000002, 179.7538, -0.4298, -89.6617]
+2025-07-30 14:28:42,500 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:42,503 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [85.5707, 159.43, 123.4, 179.7538, -0.4298, -89.6617]
+2025-07-30 14:28:42,510 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.007s
+2025-07-30 14:28:42,512 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:43,196 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:28:43,517 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.004s
+2025-07-30 14:28:43,519 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: GripperOpen with parameters []
+2025-07-30 14:28:43,522 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: GripperOpen completed in 0.002s
+2025-07-30 14:28:43,524 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:44,528 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.004s
+2025-07-30 14:28:44,530 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [85.5707, 159.43, 179.89870000000002, 179.7538, -0.4298, -89.6617]
+2025-07-30 14:28:44,533 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:44,534 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [50.0]
+2025-07-30 14:28:44,537 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.002s
+2025-07-30 14:28:44,539 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [135.0, -17.6177, 160.0, 123.2804, 40.9554, -101.3308]
+2025-07-30 14:28:44,542 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:44,544 - meca_service - INFO - _pickup_sequence:1791 - ✅ Successfully completed pickup for wafer 4 (index 3)
+2025-07-30 14:28:44,545 - meca_service - INFO - _pickup_sequence:1734 - 🔄 Starting pickup process for wafer 5 (index 4)
+2025-07-30 14:28:44,548 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -164.178, 39.9, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:44,549 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:28:44,551 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -164.378, 27.9714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:44,554 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:44,555 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:45,558 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.003s
+2025-07-30 14:28:45,560 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: GripperClose with parameters []
+2025-07-30 14:28:45,563 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: GripperClose completed in 0.004s
+2025-07-30 14:28:45,569 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:46,574 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.005s
+2025-07-30 14:28:46,577 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [35.0]
+2025-07-30 14:28:46,580 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.003s
+2025-07-30 14:28:46,587 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -164.578, 30.7714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:46,589 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:46,606 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetBlending with parameters [100]
+2025-07-30 14:28:46,620 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetBlending completed in 0.014s
+2025-07-30 14:28:46,621 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -165.37800000000001, 33.4714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:46,624 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:28:46,640 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MoveLin with parameters [173.562, -176.9375, 64.8714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:28:46,643 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MoveLin completed in 0.003s
+2025-07-30 14:28:46,651 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetBlending with parameters [0]
+2025-07-30 14:28:46,654 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetBlending completed in 0.003s
+2025-07-30 14:28:46,656 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [135.0, -17.6177, 160.0, 123.2804, 40.9554, -101.3308]
+2025-07-30 14:28:46,659 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:46,672 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [20.0]
+2025-07-30 14:28:46,675 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.003s
+2025-07-30 14:28:46,688 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [130.2207, 159.23, 163.89870000000002, 179.7538, -0.4298, -89.9617]
+2025-07-30 14:28:46,691 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:46,698 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [130.2207, 159.23, 123.4, 179.7538, -0.4298, -89.9617]
+2025-07-30 14:28:46,701 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:46,704 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:47,708 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.004s
+2025-07-30 14:28:47,709 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: GripperOpen with parameters []
+2025-07-30 14:28:47,711 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: GripperOpen completed in 0.002s
+2025-07-30 14:28:47,716 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:28:48,202 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:28:48,719 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 1.004s
+2025-07-30 14:28:48,722 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [130.2207, 159.23, 179.89870000000002, 179.7538, -0.4298, -89.9617]
+2025-07-30 14:28:48,727 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.004s
+2025-07-30 14:28:48,736 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [50.0]
+2025-07-30 14:28:48,740 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.004s
+2025-07-30 14:28:48,743 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: MovePose with parameters [135.0, -17.6177, 160.0, 123.2804, 40.9554, -101.3308]
+2025-07-30 14:28:48,746 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:28:48,748 - meca_service - INFO - _execute_movement_command:2019 - 🤖 EXECUTING COMMAND: Delay with parameters [2.0]
+2025-07-30 14:28:50,753 - meca_service - INFO - _execute_movement_command:2040 - ✅ COMMAND SUCCESS: Delay completed in 2.005s
+2025-07-30 14:28:50,756 - meca_service - INFO - _pickup_sequence:1791 - ✅ Successfully completed pickup for wafer 5 (index 4)
+2025-07-30 14:28:50,758 - meca_service - INFO - _pickup_sequence:1829 - Pickup sequence completed successfully for all 5 wafers (1 to 5)
+2025-07-30 14:28:50,760 - meca_service - INFO - execute_operation:324 - Operation meca_pickup_sequence_0_5 completed successfully in 23.78s
+2025-07-30 14:28:50,775 - meca_service - INFO - execute_operation:305 - Starting operation meca_emergency_stop_1753885730775: emergency_stop for robot meca
+2025-07-30 14:28:50,776 - meca_service - INFO - execute_operation:324 - Operation meca_emergency_stop_1753885730775 completed successfully in 0.00s
+2025-07-30 14:28:53,208 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:28:58,215 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:29:03,241 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:29:08,249 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:29:13,256 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:29:18,273 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:29:23,283 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:29:28,290 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:29:33,316 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:29:38,325 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:29:43,332 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:29:48,337 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:29:53,345 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:29:58,353 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:30:03,376 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:30:08,384 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:30:13,391 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:30:18,398 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:30:23,405 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:30:28,413 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:30:33,448 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:30:38,457 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:30:43,469 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:30:48,477 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:30:53,489 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:30:58,497 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:31:03,514 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:31:08,522 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:31:13,528 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:31:18,537 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:31:23,546 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:31:28,553 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:31:33,572 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:31:38,585 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:31:43,597 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:31:48,604 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:31:53,611 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:31:58,625 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:32:03,645 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:32:08,649 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:32:13,659 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:32:18,671 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:32:23,677 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:32:28,683 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:32:33,704 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:32:38,711 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:32:43,719 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:32:48,730 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:32:53,742 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:32:58,749 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:33:03,767 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:33:08,772 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:33:13,781 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:33:18,788 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:33:23,797 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:33:28,809 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:33:33,823 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:33:38,829 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:33:43,836 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:33:48,845 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:33:53,854 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:33:58,862 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:34:03,893 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:34:08,904 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:34:13,912 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:34:18,922 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:34:23,939 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:34:28,947 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:34:33,966 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:34:38,974 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:34:43,981 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:34:48,990 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:34:53,997 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:34:59,011 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:35:04,037 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:35:09,046 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:35:14,055 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:35:19,062 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:35:24,070 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:35:29,080 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:35:34,111 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:35:39,117 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:35:44,127 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:35:49,135 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:35:54,144 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:35:59,154 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:36:04,166 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:36:09,173 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:36:09,992 - meca_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for MecaService
+2025-07-30 14:36:09,995 - meca_service - INFO - _on_stop:419 - Meca robot service stopped
+2025-07-30 14:36:09,996 - meca_service - INFO - stop:185 - MecaService service stopped
+2025-07-30 14:36:12,704 - meca_service - INFO - _on_start:470 - Registered robot meca with state manager
+2025-07-30 14:36:12,709 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:36:12,721 - meca_service - INFO - _on_start:325 - TCP connection test successful, attempting full robot connection...
+2025-07-30 14:36:12,723 - meca_service - INFO - _on_start:332 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-30 14:36:16,349 - meca_service - INFO - _on_start:338 - 🎉 Full robot connection established during startup for meca
+2025-07-30 14:36:16,351 - meca_service - INFO - _on_start:364 - ✅ Robot meca successfully connected and ready for operations
+2025-07-30 14:36:16,352 - meca_service - INFO - _on_start:375 - Meca robot service started successfully
+2025-07-30 14:36:16,354 - meca_service - INFO - _start_health_monitoring:212 - Started health monitoring for MecaService
+2025-07-30 14:36:16,355 - meca_service - INFO - start:166 - MecaService service started
+2025-07-30 14:36:16,363 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:36:16,367 - meca_service - INFO - _health_monitoring_loop:237 - Robot connection state changed: None -> True
+2025-07-30 14:36:16,370 - meca_service - INFO - _handle_connection_state_change:269 - Meca robot meca connection restored
+2025-07-30 14:36:21,378 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:36:26,387 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:36:31,413 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:36:36,421 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:36:40,474 - meca_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for MecaService
+2025-07-30 14:36:40,475 - meca_service - INFO - _on_stop:419 - Meca robot service stopped
+2025-07-30 14:36:40,476 - meca_service - INFO - stop:185 - MecaService service stopped
+2025-07-30 14:36:43,105 - meca_service - INFO - _on_start:470 - Registered robot meca with state manager
+2025-07-30 14:36:43,108 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:36:43,110 - meca_service - INFO - _on_start:325 - TCP connection test successful, attempting full robot connection...
+2025-07-30 14:36:43,110 - meca_service - INFO - _on_start:332 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-30 14:36:46,701 - meca_service - INFO - _on_start:338 - 🎉 Full robot connection established during startup for meca
+2025-07-30 14:36:46,703 - meca_service - INFO - _on_start:364 - ✅ Robot meca successfully connected and ready for operations
+2025-07-30 14:36:46,705 - meca_service - INFO - _on_start:375 - Meca robot service started successfully
+2025-07-30 14:36:46,706 - meca_service - INFO - _start_health_monitoring:212 - Started health monitoring for MecaService
+2025-07-30 14:36:46,708 - meca_service - INFO - start:166 - MecaService service started
+2025-07-30 14:36:46,713 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:36:46,715 - meca_service - INFO - _health_monitoring_loop:237 - Robot connection state changed: None -> True
+2025-07-30 14:36:46,717 - meca_service - INFO - _handle_connection_state_change:269 - Meca robot meca connection restored
+2025-07-30 14:36:51,723 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:36:56,731 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:37:01,760 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:37:06,768 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:37:11,709 - meca_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for MecaService
+2025-07-30 14:37:11,711 - meca_service - INFO - _on_stop:419 - Meca robot service stopped
+2025-07-30 14:37:11,713 - meca_service - INFO - stop:185 - MecaService service stopped
+2025-07-30 14:37:14,277 - meca_service - INFO - _on_start:470 - Registered robot meca with state manager
+2025-07-30 14:37:14,281 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:37:14,282 - meca_service - INFO - _on_start:325 - TCP connection test successful, attempting full robot connection...
+2025-07-30 14:37:14,289 - meca_service - INFO - _on_start:332 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-30 14:37:17,923 - meca_service - INFO - _on_start:338 - 🎉 Full robot connection established during startup for meca
+2025-07-30 14:37:17,925 - meca_service - INFO - _on_start:364 - ✅ Robot meca successfully connected and ready for operations
+2025-07-30 14:37:17,927 - meca_service - INFO - _on_start:375 - Meca robot service started successfully
+2025-07-30 14:37:17,929 - meca_service - INFO - _start_health_monitoring:212 - Started health monitoring for MecaService
+2025-07-30 14:37:17,931 - meca_service - INFO - start:166 - MecaService service started
+2025-07-30 14:37:17,937 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:37:17,938 - meca_service - INFO - _health_monitoring_loop:237 - Robot connection state changed: None -> True
+2025-07-30 14:37:17,940 - meca_service - INFO - _handle_connection_state_change:269 - Meca robot meca connection restored
+2025-07-30 14:37:22,947 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:37:27,956 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:37:28,967 - meca_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for MecaService
+2025-07-30 14:37:28,971 - meca_service - INFO - _on_stop:419 - Meca robot service stopped
+2025-07-30 14:37:28,974 - meca_service - INFO - stop:185 - MecaService service stopped
+2025-07-30 14:43:43,412 - meca_service - INFO - _on_start:470 - Registered robot meca with state manager
+2025-07-30 14:43:43,419 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:43:43,420 - meca_service - INFO - _on_start:325 - TCP connection test successful, attempting full robot connection...
+2025-07-30 14:43:43,422 - meca_service - INFO - _on_start:332 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-30 14:43:47,022 - meca_service - INFO - _on_start:338 - 🎉 Full robot connection established during startup for meca
+2025-07-30 14:43:47,023 - meca_service - INFO - _on_start:364 - ✅ Robot meca successfully connected and ready for operations
+2025-07-30 14:43:47,025 - meca_service - INFO - _on_start:375 - Meca robot service started successfully
+2025-07-30 14:43:47,026 - meca_service - INFO - _start_health_monitoring:212 - Started health monitoring for MecaService
+2025-07-30 14:43:47,027 - meca_service - INFO - start:166 - MecaService service started
+2025-07-30 14:43:47,033 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:43:47,036 - meca_service - INFO - _health_monitoring_loop:237 - Robot connection state changed: None -> True
+2025-07-30 14:43:47,039 - meca_service - INFO - _handle_connection_state_change:269 - Meca robot meca connection restored
+2025-07-30 14:43:48,227 - meca_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for MecaService
+2025-07-30 14:43:48,228 - meca_service - INFO - _on_stop:419 - Meca robot service stopped
+2025-07-30 14:43:48,229 - meca_service - INFO - stop:185 - MecaService service stopped
+2025-07-30 14:43:52,239 - meca_service - INFO - _on_start:470 - Registered robot meca with state manager
+2025-07-30 14:43:52,244 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:43:52,247 - meca_service - INFO - _on_start:325 - TCP connection test successful, attempting full robot connection...
+2025-07-30 14:43:52,250 - meca_service - INFO - _on_start:332 - 🔄 Attempting mecademicpy Robot.Connect() during startup for meca
+2025-07-30 14:43:55,898 - meca_service - INFO - _on_start:338 - 🎉 Full robot connection established during startup for meca
+2025-07-30 14:43:55,899 - meca_service - INFO - _on_start:364 - ✅ Robot meca successfully connected and ready for operations
+2025-07-30 14:43:55,900 - meca_service - INFO - _on_start:375 - Meca robot service started successfully
+2025-07-30 14:43:55,901 - meca_service - INFO - _start_health_monitoring:212 - Started health monitoring for MecaService
+2025-07-30 14:43:55,902 - meca_service - INFO - start:166 - MecaService service started
+2025-07-30 14:43:55,908 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:43:55,911 - meca_service - INFO - _health_monitoring_loop:237 - Robot connection state changed: None -> True
+2025-07-30 14:43:55,915 - meca_service - INFO - _handle_connection_state_change:269 - Meca robot meca connection restored
+2025-07-30 14:44:00,922 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:44:05,951 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:44:10,958 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:44:15,969 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:44:20,976 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:44:25,984 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:44:30,989 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:44:36,007 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:44:41,015 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:44:46,025 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:44:47,336 - meca_service - INFO - execute_operation:305 - Starting operation meca_pickup_sequence_0_5: pickup_wafer for robot meca
+2025-07-30 14:44:47,337 - meca_service - INFO - _pickup_sequence:1684 - 🔍 PRE-OPERATION CHECK: Validating connection health before pickup sequence 1 to 5
+2025-07-30 14:44:47,352 - meca_service - INFO - ensure_robot_ready:736 - 🔧 Clearing and resuming motion for meca
+2025-07-30 14:44:47,357 - meca_service - INFO - ensure_robot_ready:759 - ✅ Motion cleared and resumed for meca
+2025-07-30 14:44:47,358 - meca_service - INFO - ensure_robot_ready:835 - ✅ Robot meca hardware state verified - Activated: True, Homed: True, Ready for operations
+2025-07-30 14:44:47,360 - meca_service - INFO - _pickup_sequence:1698 - ✅ PRE-OPERATION CHECK: Robot responsive in 0.000s
+2025-07-30 14:44:47,361 - meca_service - INFO - _pickup_sequence:1708 - ✅ PRE-OPERATION CHECK: All connection health checks passed for pickup operation
+2025-07-30 14:44:47,363 - meca_service - INFO - _pickup_sequence:1719 - 🚀 STARTING PICKUP: Beginning pickup sequence for wafers 1 to 5
+2025-07-30 14:44:47,365 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: SetGripperForce with parameters [100.0]
+2025-07-30 14:44:47,366 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: SetGripperForce completed in 0.002s
+2025-07-30 14:44:47,368 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: SetJointAcc with parameters [50.0]
+2025-07-30 14:44:47,369 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: SetJointAcc completed in 0.002s
+2025-07-30 14:44:47,371 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: SetTorqueLimits with parameters [40, 40, 40, 40, 40, 40]
+2025-07-30 14:44:47,373 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: SetTorqueLimits completed in 0.002s
+2025-07-30 14:44:47,374 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: SetTorqueLimitsCfg with parameters [2, 1]
+2025-07-30 14:44:47,376 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: SetTorqueLimitsCfg completed in 0.002s
+2025-07-30 14:44:47,377 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: SetBlending with parameters [0]
+2025-07-30 14:44:47,380 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: SetBlending completed in 0.002s
+2025-07-30 14:44:47,381 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [20.0]
+2025-07-30 14:44:47,383 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.002s
+2025-07-30 14:44:47,384 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: SetConf with parameters [1, 1, 1]
+2025-07-30 14:44:47,386 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: SetConf completed in 0.002s
+2025-07-30 14:44:47,387 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: GripperOpen with parameters []
+2025-07-30 14:44:47,389 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: GripperOpen completed in 0.002s
+2025-07-30 14:44:47,390 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:44:48,392 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: Delay completed in 1.002s
+2025-07-30 14:44:48,397 - meca_service - INFO - _pickup_sequence:1743 - 🔄 Resuming pickup sequence from wafer 1
+2025-07-30 14:44:48,400 - meca_service - INFO - _pickup_sequence:1763 - 🔄 Starting pickup process for wafer 1 (index 0)
+2025-07-30 14:44:48,403 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -174.978, 39.9, 109.5547, 0.2877, -90.059]
+2025-07-30 14:44:48,407 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MovePose completed in 0.004s
+2025-07-30 14:44:48,409 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -175.178, 27.9714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:44:48,413 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MovePose completed in 0.004s
+2025-07-30 14:44:48,416 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:44:49,419 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: Delay completed in 1.003s
+2025-07-30 14:44:49,421 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: GripperClose with parameters []
+2025-07-30 14:44:49,423 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: GripperClose completed in 0.002s
+2025-07-30 14:44:49,424 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:44:50,427 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: Delay completed in 1.002s
+2025-07-30 14:44:50,429 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [35.0]
+2025-07-30 14:44:50,430 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.002s
+2025-07-30 14:44:50,433 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -175.378, 30.7714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:44:50,435 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:44:50,457 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: SetBlending with parameters [100]
+2025-07-30 14:44:50,466 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: SetBlending completed in 0.009s
+2025-07-30 14:44:50,472 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -176.178, 33.4714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:44:50,476 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MovePose completed in 0.004s
+2025-07-30 14:44:50,482 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MoveLin with parameters [173.562, -187.7375, 64.8714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:44:50,485 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MoveLin completed in 0.003s
+2025-07-30 14:44:50,486 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: SetBlending with parameters [0]
+2025-07-30 14:44:50,488 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: SetBlending completed in 0.002s
+2025-07-30 14:44:50,490 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MovePose with parameters [135.0, -17.6177, 160.0, 123.2804, 40.9554, -101.3308]
+2025-07-30 14:44:50,495 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MovePose completed in 0.005s
+2025-07-30 14:44:50,497 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [20.0]
+2025-07-30 14:44:50,499 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.002s
+2025-07-30 14:44:50,501 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MovePose with parameters [-47.9793, 159.23, 163.89870000000002, 179.7538, -0.4298, -89.6617]
+2025-07-30 14:44:50,504 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:44:50,506 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MovePose with parameters [-47.9793, 159.23, 123.4, 179.7538, -0.4298, -89.6617]
+2025-07-30 14:44:50,508 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:44:50,510 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:44:51,037 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:44:51,514 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: Delay completed in 1.004s
+2025-07-30 14:44:51,515 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: GripperOpen with parameters []
+2025-07-30 14:44:51,518 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: GripperOpen completed in 0.002s
+2025-07-30 14:44:51,519 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:44:52,522 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: Delay completed in 1.003s
+2025-07-30 14:44:52,523 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MovePose with parameters [-47.9793, 159.23, 179.89870000000002, 179.7538, -0.4298, -89.6617]
+2025-07-30 14:44:52,526 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:44:52,529 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [50.0]
+2025-07-30 14:44:52,530 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.002s
+2025-07-30 14:44:52,532 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MovePose with parameters [135.0, -17.6177, 160.0, 123.2804, 40.9554, -101.3308]
+2025-07-30 14:44:52,533 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:44:52,534 - meca_service - INFO - _pickup_sequence:1826 - ✅ Successfully completed pickup for wafer 1 (index 0)
+2025-07-30 14:44:52,543 - meca_service - INFO - _pickup_sequence:1751 - ⏸️ Operation paused at wafer 2 (index 1)
+2025-07-30 14:44:56,042 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:45:01,055 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:45:06,077 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:45:07,569 - meca_service - INFO - _pickup_sequence:1760 - ▶️ Operation resumed at wafer 2 (index 1)
+2025-07-30 14:45:07,570 - meca_service - INFO - _pickup_sequence:1763 - 🔄 Starting pickup process for wafer 2 (index 1)
+2025-07-30 14:45:07,571 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -172.27800000000002, 39.9, 109.5547, 0.2877, -90.059]
+2025-07-30 14:45:07,573 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MovePose completed in 0.002s
+2025-07-30 14:45:07,574 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -172.478, 27.9714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:45:07,578 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:45:07,580 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:45:08,584 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: Delay completed in 1.003s
+2025-07-30 14:45:08,585 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: GripperClose with parameters []
+2025-07-30 14:45:08,588 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: GripperClose completed in 0.003s
+2025-07-30 14:45:08,591 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:45:09,594 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: Delay completed in 1.003s
+2025-07-30 14:45:09,596 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [35.0]
+2025-07-30 14:45:09,600 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.003s
+2025-07-30 14:45:09,602 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -172.678, 30.7714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:45:09,605 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:45:09,606 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: SetBlending with parameters [100]
+2025-07-30 14:45:09,609 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: SetBlending completed in 0.002s
+2025-07-30 14:45:09,611 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MovePose with parameters [173.562, -173.478, 33.4714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:45:09,617 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MovePose completed in 0.005s
+2025-07-30 14:45:09,619 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MoveLin with parameters [173.562, -185.03750000000002, 64.8714, 109.5547, 0.2877, -90.059]
+2025-07-30 14:45:09,622 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MoveLin completed in 0.003s
+2025-07-30 14:45:09,625 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: SetBlending with parameters [0]
+2025-07-30 14:45:09,627 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: SetBlending completed in 0.003s
+2025-07-30 14:45:09,629 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MovePose with parameters [135.0, -17.6177, 160.0, 123.2804, 40.9554, -101.3308]
+2025-07-30 14:45:09,632 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:45:09,635 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [20.0]
+2025-07-30 14:45:09,638 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.004s
+2025-07-30 14:45:09,641 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MovePose with parameters [-3.5793, 159.33, 163.89870000000002, 179.7538, -0.4298, -89.6617]
+2025-07-30 14:45:09,646 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MovePose completed in 0.005s
+2025-07-30 14:45:09,648 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MovePose with parameters [-3.5793, 159.33, 123.4, 179.7538, -0.4298, -89.6617]
+2025-07-30 14:45:09,651 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:45:09,653 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:45:10,658 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: Delay completed in 1.004s
+2025-07-30 14:45:10,660 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: GripperOpen with parameters []
+2025-07-30 14:45:10,662 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: GripperOpen completed in 0.002s
+2025-07-30 14:45:10,663 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: Delay with parameters [1]
+2025-07-30 14:45:11,087 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:45:11,666 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: Delay completed in 1.003s
+2025-07-30 14:45:11,668 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MovePose with parameters [-3.5793, 159.33, 179.89870000000002, 179.7538, -0.4298, -89.6617]
+2025-07-30 14:45:11,671 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MovePose completed in 0.003s
+2025-07-30 14:45:11,672 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: SetJointVel with parameters [50.0]
+2025-07-30 14:45:11,674 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: SetJointVel completed in 0.002s
+2025-07-30 14:45:11,678 - meca_service - INFO - _execute_movement_command:2058 - 🤖 EXECUTING COMMAND: MovePose with parameters [135.0, -17.6177, 160.0, 123.2804, 40.9554, -101.3308]
+2025-07-30 14:45:11,692 - meca_service - INFO - _execute_movement_command:2079 - ✅ COMMAND SUCCESS: MovePose completed in 0.014s
+2025-07-30 14:45:11,698 - meca_service - INFO - _pickup_sequence:1826 - ✅ Successfully completed pickup for wafer 2 (index 1)
+2025-07-30 14:45:11,699 - meca_service - INFO - _pickup_sequence:1751 - ⏸️ Operation paused at wafer 3 (index 2)
+2025-07-30 14:45:16,095 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:45:21,102 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:45:26,108 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:45:31,125 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:45:36,157 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:45:41,163 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:45:46,169 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:45:51,178 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:45:56,185 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:46:01,191 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:46:06,213 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:46:11,217 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:46:16,223 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:46:21,230 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:46:26,236 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:46:31,247 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:46:36,277 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:46:41,283 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:46:46,292 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:46:51,298 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:46:56,303 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:47:01,309 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:47:06,333 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:47:11,341 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:47:16,348 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:47:21,359 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:47:26,366 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:47:31,384 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:47:36,391 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
+2025-07-30 14:47:41,397 - meca_service - INFO - _test_robot_connection:447 - Meca robot TCP connection test successful to 192.168.0.100:10000
