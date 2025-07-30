@@ -2473,3 +2473,855 @@
 2025-07-30 11:26:44,866 - meca_driver_meca - INFO - connect:122 - Successfully connected to meca
 2025-07-30 11:27:03,798 - meca_driver_meca - INFO - _disconnect_sync:503 - Disconnected from Mecademic robot meca
 2025-07-30 11:27:03,799 - meca_driver_meca - INFO - disconnect:134 - Disconnected from meca
+2025-07-30 11:27:06,309 - meca_driver_meca - INFO - __init__:63 - Initialized Mecademic driver for meca at 192.168.0.100:10000
+2025-07-30 11:27:06,348 - meca_driver_meca - INFO - _connect_impl:113 - 🔄 Starting MecademicDriver connection process for meca
+2025-07-30 11:27:06,349 - meca_driver_meca - INFO - _connect_impl:117 - 📦 Creating mecademicpy Robot() instance for meca
+2025-07-30 11:27:06,350 - meca_driver_meca - INFO - _connect_impl:121 - ✅ mecademicpy Robot() instance created successfully for meca
+2025-07-30 11:27:06,351 - meca_driver_meca - INFO - _connect_impl:131 - 🔧 Executing connection in thread pool (timeout=30.0s) for meca
+2025-07-30 11:27:06,352 - meca_driver_meca - INFO - _connect_sync:203 - 🔄 Starting mecademicpy Robot.Connect() to 192.168.0.100:10000 for meca
+2025-07-30 11:27:06,353 - meca_driver_meca - INFO - _connect_sync:214 - 📦 Using mecademicpy version: unknown for meca
+2025-07-30 11:27:06,362 - meca_driver_meca - INFO - _connect_sync:219 - 🔧 Connection parameters for meca:
+2025-07-30 11:27:06,365 - meca_driver_meca - INFO - _connect_sync:220 -    - IP Address: 192.168.0.100
+2025-07-30 11:27:06,367 - meca_driver_meca - INFO - _connect_sync:221 -    - Port: 10000 (mecademicpy uses fixed port 10000)
+2025-07-30 11:27:06,369 - meca_driver_meca - INFO - _connect_sync:222 -    - Timeout: 30.0s
+2025-07-30 11:27:06,371 - meca_driver_meca - INFO - _connect_sync:223 -    - Force: 100.0
+2025-07-30 11:27:06,374 - meca_driver_meca - INFO - _connect_sync:224 -    - Speed: 35.0
+2025-07-30 11:27:06,376 - meca_driver_meca - INFO - _connect_sync:225 -    - Acceleration: 50.0
+2025-07-30 11:27:06,378 - meca_driver_meca - WARNING - _connect_sync:232 - ⚠️ Robot meca does not support SetDisconnectOnException
+2025-07-30 11:27:06,380 - meca_driver_meca - INFO - _connect_sync:236 - 🚀 Calling mecademicpy Robot.Connect() with parameters for meca:
+2025-07-30 11:27:06,381 - meca_driver_meca - INFO - _connect_sync:237 -    - address='192.168.0.100'
+2025-07-30 11:27:06,392 - meca_driver_meca - INFO - _connect_sync:238 -    - enable_synchronous_mode=False
+2025-07-30 11:27:06,394 - meca_driver_meca - INFO - _connect_sync:239 -    - disconnect_on_exception=False
+2025-07-30 11:27:06,397 - meca_driver_meca - INFO - _connect_sync:240 -    - timeout=30.0
+2025-07-30 11:27:06,399 - meca_driver_meca - INFO - _connect_sync:257 - 🔄 Attempting connection in async mode for meca
+2025-07-30 11:27:06,423 - meca_driver_meca - INFO - _connect_sync:266 - ✅ Connection successful in async mode for meca
+2025-07-30 11:27:06,424 - meca_driver_meca - INFO - _connect_sync:298 - ⏱️ mecademicpy Robot.Connect() completed in 0.03s for meca
+2025-07-30 11:27:06,426 - meca_driver_meca - INFO - _connect_sync:301 - ⏳ Waiting 0.5s for connection stabilization for meca
+2025-07-30 11:27:06,927 - meca_driver_meca - INFO - _connect_sync:308 - 🔍 mecademicpy Robot.IsConnected() returned: True for meca
+2025-07-30 11:27:06,928 - meca_driver_meca - INFO - _connect_sync:311 - ✅ Successfully connected to Mecademic robot meca
+2025-07-30 11:27:06,930 - meca_driver_meca - INFO - _connect_sync:318 - ✅ Robot status check successful for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 11:27:06,932 - meca_driver_meca - INFO - _connect_impl:155 - 🎉 mecademicpy Robot.Connect() succeeded for meca
+2025-07-30 11:27:06,942 - meca_driver_meca - INFO - _connect_impl:159 - ⏳ Waiting 1s for connection stabilization before activation for meca
+2025-07-30 11:27:07,950 - meca_driver_meca - INFO - _activate_robot_sync_internal:360 - 🔧 Starting robot activation sequence for meca
+2025-07-30 11:27:07,952 - meca_driver_meca - INFO - _activate_robot_sync_internal:366 - 📊 Robot status before activation for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 11:27:07,954 - meca_driver_meca - INFO - _activate_robot_sync_internal:380 - 🔋 Activating robot meca...
+2025-07-30 11:27:07,955 - meca_driver_meca - INFO - _activate_robot_sync_internal:383 - ✅ Robot meca activation command sent
+2025-07-30 11:27:07,957 - meca_driver_meca - INFO - _activate_robot_sync_internal:386 - ⏳ Waiting 2s for activation to complete for meca
+2025-07-30 11:27:09,961 - meca_driver_meca - INFO - _activate_robot_sync_internal:405 - 🏠 Homing robot meca...
+2025-07-30 11:27:09,965 - meca_driver_meca - INFO - _activate_robot_sync_internal:408 - ✅ Robot meca homing command sent
+2025-07-30 11:27:09,967 - meca_driver_meca - INFO - _activate_robot_sync_internal:412 - ⏳ Waiting for robot meca to complete homing...
+2025-07-30 11:27:09,969 - meca_driver_meca - INFO - _activate_robot_sync_internal:415 - ✅ Robot meca homing completed
+2025-07-30 11:27:09,972 - meca_driver_meca - INFO - _activate_robot_sync_internal:439 - 🎉 Robot activation sequence completed for meca
+2025-07-30 11:27:09,975 - meca_driver_meca - INFO - _connect_impl:166 - ✅ Robot activation completed for meca
+2025-07-30 11:27:09,988 - meca_driver_meca - INFO - _set_parameters_sync:477 - Set initial parameters for meca
+2025-07-30 11:27:09,991 - meca_driver_meca - INFO - _connect_impl:176 - ✅ Initial parameters set for meca
+2025-07-30 11:27:09,994 - meca_driver_meca - INFO - _connect_impl:185 - 🏆 MecademicDriver fully initialized and connected for meca
+2025-07-30 11:27:09,997 - meca_driver_meca - INFO - connect:122 - Successfully connected to meca
+2025-07-30 13:35:19,418 - meca_driver_meca - INFO - _disconnect_sync:503 - Disconnected from Mecademic robot meca
+2025-07-30 13:35:19,425 - meca_driver_meca - INFO - disconnect:134 - Disconnected from meca
+2025-07-30 13:35:23,941 - meca_driver_meca - INFO - __init__:63 - Initialized Mecademic driver for meca at 192.168.0.100:10000
+2025-07-30 13:35:23,985 - meca_driver_meca - INFO - _connect_impl:113 - 🔄 Starting MecademicDriver connection process for meca
+2025-07-30 13:35:23,986 - meca_driver_meca - INFO - _connect_impl:117 - 📦 Creating mecademicpy Robot() instance for meca
+2025-07-30 13:35:23,988 - meca_driver_meca - INFO - _connect_impl:121 - ✅ mecademicpy Robot() instance created successfully for meca
+2025-07-30 13:35:23,989 - meca_driver_meca - INFO - _connect_impl:131 - 🔧 Executing connection in thread pool (timeout=30.0s) for meca
+2025-07-30 13:35:23,991 - meca_driver_meca - INFO - _connect_sync:203 - 🔄 Starting mecademicpy Robot.Connect() to 192.168.0.100:10000 for meca
+2025-07-30 13:35:23,992 - meca_driver_meca - INFO - _connect_sync:214 - 📦 Using mecademicpy version: unknown for meca
+2025-07-30 13:35:23,993 - meca_driver_meca - INFO - _connect_sync:219 - 🔧 Connection parameters for meca:
+2025-07-30 13:35:23,994 - meca_driver_meca - INFO - _connect_sync:220 -    - IP Address: 192.168.0.100
+2025-07-30 13:35:23,995 - meca_driver_meca - INFO - _connect_sync:221 -    - Port: 10000 (mecademicpy uses fixed port 10000)
+2025-07-30 13:35:23,996 - meca_driver_meca - INFO - _connect_sync:222 -    - Timeout: 30.0s
+2025-07-30 13:35:23,998 - meca_driver_meca - INFO - _connect_sync:223 -    - Force: 100.0
+2025-07-30 13:35:24,001 - meca_driver_meca - INFO - _connect_sync:224 -    - Speed: 35.0
+2025-07-30 13:35:24,003 - meca_driver_meca - INFO - _connect_sync:225 -    - Acceleration: 50.0
+2025-07-30 13:35:24,005 - meca_driver_meca - WARNING - _connect_sync:232 - ⚠️ Robot meca does not support SetDisconnectOnException
+2025-07-30 13:35:24,006 - meca_driver_meca - INFO - _connect_sync:236 - 🚀 Calling mecademicpy Robot.Connect() with parameters for meca:
+2025-07-30 13:35:24,008 - meca_driver_meca - INFO - _connect_sync:237 -    - address='192.168.0.100'
+2025-07-30 13:35:24,009 - meca_driver_meca - INFO - _connect_sync:238 -    - enable_synchronous_mode=False
+2025-07-30 13:35:24,011 - meca_driver_meca - INFO - _connect_sync:239 -    - disconnect_on_exception=False
+2025-07-30 13:35:24,012 - meca_driver_meca - INFO - _connect_sync:240 -    - timeout=30.0
+2025-07-30 13:35:24,013 - meca_driver_meca - INFO - _connect_sync:257 - 🔄 Attempting connection in async mode for meca
+2025-07-30 13:35:24,036 - meca_driver_meca - INFO - _connect_sync:266 - ✅ Connection successful in async mode for meca
+2025-07-30 13:35:24,038 - meca_driver_meca - INFO - _connect_sync:298 - ⏱️ mecademicpy Robot.Connect() completed in 0.03s for meca
+2025-07-30 13:35:24,040 - meca_driver_meca - INFO - _connect_sync:301 - ⏳ Waiting 0.5s for connection stabilization for meca
+2025-07-30 13:35:24,543 - meca_driver_meca - INFO - _connect_sync:308 - 🔍 mecademicpy Robot.IsConnected() returned: True for meca
+2025-07-30 13:35:24,545 - meca_driver_meca - INFO - _connect_sync:311 - ✅ Successfully connected to Mecademic robot meca
+2025-07-30 13:35:24,549 - meca_driver_meca - INFO - _connect_sync:318 - ✅ Robot status check successful for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:35:24,551 - meca_driver_meca - INFO - _connect_impl:155 - 🎉 mecademicpy Robot.Connect() succeeded for meca
+2025-07-30 13:35:24,556 - meca_driver_meca - INFO - _connect_impl:159 - ⏳ Waiting 1s for connection stabilization before activation for meca
+2025-07-30 13:35:25,559 - meca_driver_meca - INFO - _activate_robot_sync_internal:360 - 🔧 Starting robot activation sequence for meca
+2025-07-30 13:35:25,559 - meca_driver_meca - INFO - _activate_robot_sync_internal:366 - 📊 Robot status before activation for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:35:25,561 - meca_driver_meca - INFO - _activate_robot_sync_internal:380 - 🔋 Activating robot meca...
+2025-07-30 13:35:25,563 - meca_driver_meca - INFO - _activate_robot_sync_internal:383 - ✅ Robot meca activation command sent
+2025-07-30 13:35:25,565 - meca_driver_meca - INFO - _activate_robot_sync_internal:386 - ⏳ Waiting 2s for activation to complete for meca
+2025-07-30 13:35:27,569 - meca_driver_meca - INFO - _activate_robot_sync_internal:405 - 🏠 Homing robot meca...
+2025-07-30 13:35:27,571 - meca_driver_meca - INFO - _activate_robot_sync_internal:408 - ✅ Robot meca homing command sent
+2025-07-30 13:35:27,573 - meca_driver_meca - INFO - _activate_robot_sync_internal:412 - ⏳ Waiting for robot meca to complete homing...
+2025-07-30 13:35:27,576 - meca_driver_meca - INFO - _activate_robot_sync_internal:415 - ✅ Robot meca homing completed
+2025-07-30 13:35:27,578 - meca_driver_meca - INFO - _activate_robot_sync_internal:439 - 🎉 Robot activation sequence completed for meca
+2025-07-30 13:35:27,580 - meca_driver_meca - INFO - _connect_impl:166 - ✅ Robot activation completed for meca
+2025-07-30 13:35:27,583 - meca_driver_meca - INFO - _set_parameters_sync:477 - Set initial parameters for meca
+2025-07-30 13:35:27,586 - meca_driver_meca - INFO - _connect_impl:176 - ✅ Initial parameters set for meca
+2025-07-30 13:35:27,589 - meca_driver_meca - INFO - _connect_impl:185 - 🏆 MecademicDriver fully initialized and connected for meca
+2025-07-30 13:35:27,592 - meca_driver_meca - INFO - connect:122 - Successfully connected to meca
+2025-07-30 13:36:11,729 - meca_driver_meca - INFO - _disconnect_sync:503 - Disconnected from Mecademic robot meca
+2025-07-30 13:36:11,733 - meca_driver_meca - INFO - disconnect:134 - Disconnected from meca
+2025-07-30 13:37:26,587 - meca_driver_meca - INFO - __init__:63 - Initialized Mecademic driver for meca at 192.168.0.100:10000
+2025-07-30 13:37:26,633 - meca_driver_meca - INFO - _connect_impl:113 - 🔄 Starting MecademicDriver connection process for meca
+2025-07-30 13:37:26,635 - meca_driver_meca - INFO - _connect_impl:117 - 📦 Creating mecademicpy Robot() instance for meca
+2025-07-30 13:37:26,637 - meca_driver_meca - INFO - _connect_impl:121 - ✅ mecademicpy Robot() instance created successfully for meca
+2025-07-30 13:37:26,639 - meca_driver_meca - INFO - _connect_impl:131 - 🔧 Executing connection in thread pool (timeout=30.0s) for meca
+2025-07-30 13:37:26,640 - meca_driver_meca - INFO - _connect_sync:203 - 🔄 Starting mecademicpy Robot.Connect() to 192.168.0.100:10000 for meca
+2025-07-30 13:37:26,642 - meca_driver_meca - INFO - _connect_sync:214 - 📦 Using mecademicpy version: unknown for meca
+2025-07-30 13:37:26,643 - meca_driver_meca - INFO - _connect_sync:219 - 🔧 Connection parameters for meca:
+2025-07-30 13:37:26,644 - meca_driver_meca - INFO - _connect_sync:220 -    - IP Address: 192.168.0.100
+2025-07-30 13:37:26,649 - meca_driver_meca - INFO - _connect_sync:221 -    - Port: 10000 (mecademicpy uses fixed port 10000)
+2025-07-30 13:37:26,650 - meca_driver_meca - INFO - _connect_sync:222 -    - Timeout: 30.0s
+2025-07-30 13:37:26,652 - meca_driver_meca - INFO - _connect_sync:223 -    - Force: 100.0
+2025-07-30 13:37:26,653 - meca_driver_meca - INFO - _connect_sync:224 -    - Speed: 35.0
+2025-07-30 13:37:26,655 - meca_driver_meca - INFO - _connect_sync:225 -    - Acceleration: 50.0
+2025-07-30 13:37:26,656 - meca_driver_meca - WARNING - _connect_sync:232 - ⚠️ Robot meca does not support SetDisconnectOnException
+2025-07-30 13:37:26,657 - meca_driver_meca - INFO - _connect_sync:236 - 🚀 Calling mecademicpy Robot.Connect() with parameters for meca:
+2025-07-30 13:37:26,659 - meca_driver_meca - INFO - _connect_sync:237 -    - address='192.168.0.100'
+2025-07-30 13:37:26,660 - meca_driver_meca - INFO - _connect_sync:238 -    - enable_synchronous_mode=False
+2025-07-30 13:37:26,663 - meca_driver_meca - INFO - _connect_sync:239 -    - disconnect_on_exception=False
+2025-07-30 13:37:26,664 - meca_driver_meca - INFO - _connect_sync:240 -    - timeout=30.0
+2025-07-30 13:37:26,665 - meca_driver_meca - INFO - _connect_sync:257 - 🔄 Attempting connection in async mode for meca
+2025-07-30 13:37:26,752 - meca_driver_meca - INFO - _connect_sync:266 - ✅ Connection successful in async mode for meca
+2025-07-30 13:37:26,761 - meca_driver_meca - INFO - _connect_sync:298 - ⏱️ mecademicpy Robot.Connect() completed in 0.10s for meca
+2025-07-30 13:37:26,762 - meca_driver_meca - INFO - _connect_sync:301 - ⏳ Waiting 0.5s for connection stabilization for meca
+2025-07-30 13:37:27,265 - meca_driver_meca - INFO - _connect_sync:308 - 🔍 mecademicpy Robot.IsConnected() returned: True for meca
+2025-07-30 13:37:27,266 - meca_driver_meca - INFO - _connect_sync:311 - ✅ Successfully connected to Mecademic robot meca
+2025-07-30 13:37:27,268 - meca_driver_meca - INFO - _connect_sync:318 - ✅ Robot status check successful for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:37:27,269 - meca_driver_meca - INFO - _connect_impl:155 - 🎉 mecademicpy Robot.Connect() succeeded for meca
+2025-07-30 13:37:27,271 - meca_driver_meca - INFO - _connect_impl:159 - ⏳ Waiting 1s for connection stabilization before activation for meca
+2025-07-30 13:37:28,274 - meca_driver_meca - INFO - _activate_robot_sync_internal:360 - 🔧 Starting robot activation sequence for meca
+2025-07-30 13:37:28,277 - meca_driver_meca - INFO - _activate_robot_sync_internal:366 - 📊 Robot status before activation for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:37:28,280 - meca_driver_meca - INFO - _activate_robot_sync_internal:380 - 🔋 Activating robot meca...
+2025-07-30 13:37:28,283 - meca_driver_meca - INFO - _activate_robot_sync_internal:383 - ✅ Robot meca activation command sent
+2025-07-30 13:37:28,287 - meca_driver_meca - INFO - _activate_robot_sync_internal:386 - ⏳ Waiting 2s for activation to complete for meca
+2025-07-30 13:37:30,305 - meca_driver_meca - INFO - _activate_robot_sync_internal:405 - 🏠 Homing robot meca...
+2025-07-30 13:37:30,306 - meca_driver_meca - INFO - _activate_robot_sync_internal:408 - ✅ Robot meca homing command sent
+2025-07-30 13:37:30,307 - meca_driver_meca - INFO - _activate_robot_sync_internal:412 - ⏳ Waiting for robot meca to complete homing...
+2025-07-30 13:37:30,308 - meca_driver_meca - INFO - _activate_robot_sync_internal:415 - ✅ Robot meca homing completed
+2025-07-30 13:37:30,309 - meca_driver_meca - INFO - _activate_robot_sync_internal:439 - 🎉 Robot activation sequence completed for meca
+2025-07-30 13:37:30,311 - meca_driver_meca - INFO - _connect_impl:166 - ✅ Robot activation completed for meca
+2025-07-30 13:37:30,313 - meca_driver_meca - INFO - _set_parameters_sync:477 - Set initial parameters for meca
+2025-07-30 13:37:30,316 - meca_driver_meca - INFO - _connect_impl:176 - ✅ Initial parameters set for meca
+2025-07-30 13:37:30,318 - meca_driver_meca - INFO - _connect_impl:185 - 🏆 MecademicDriver fully initialized and connected for meca
+2025-07-30 13:37:30,319 - meca_driver_meca - INFO - connect:122 - Successfully connected to meca
+2025-07-30 13:42:16,810 - meca_driver_meca - INFO - _disconnect_sync:503 - Disconnected from Mecademic robot meca
+2025-07-30 13:42:16,813 - meca_driver_meca - INFO - disconnect:134 - Disconnected from meca
+2025-07-30 13:42:19,936 - meca_driver_meca - INFO - __init__:63 - Initialized Mecademic driver for meca at 192.168.0.100:10000
+2025-07-30 13:42:19,980 - meca_driver_meca - INFO - _connect_impl:113 - 🔄 Starting MecademicDriver connection process for meca
+2025-07-30 13:42:19,981 - meca_driver_meca - INFO - _connect_impl:117 - 📦 Creating mecademicpy Robot() instance for meca
+2025-07-30 13:42:19,984 - meca_driver_meca - INFO - _connect_impl:121 - ✅ mecademicpy Robot() instance created successfully for meca
+2025-07-30 13:42:19,986 - meca_driver_meca - INFO - _connect_impl:131 - 🔧 Executing connection in thread pool (timeout=30.0s) for meca
+2025-07-30 13:42:19,988 - meca_driver_meca - INFO - _connect_sync:203 - 🔄 Starting mecademicpy Robot.Connect() to 192.168.0.100:10000 for meca
+2025-07-30 13:42:19,990 - meca_driver_meca - INFO - _connect_sync:214 - 📦 Using mecademicpy version: unknown for meca
+2025-07-30 13:42:19,991 - meca_driver_meca - INFO - _connect_sync:219 - 🔧 Connection parameters for meca:
+2025-07-30 13:42:19,993 - meca_driver_meca - INFO - _connect_sync:220 -    - IP Address: 192.168.0.100
+2025-07-30 13:42:19,995 - meca_driver_meca - INFO - _connect_sync:221 -    - Port: 10000 (mecademicpy uses fixed port 10000)
+2025-07-30 13:42:19,996 - meca_driver_meca - INFO - _connect_sync:222 -    - Timeout: 30.0s
+2025-07-30 13:42:19,998 - meca_driver_meca - INFO - _connect_sync:223 -    - Force: 100.0
+2025-07-30 13:42:20,000 - meca_driver_meca - INFO - _connect_sync:224 -    - Speed: 35.0
+2025-07-30 13:42:20,003 - meca_driver_meca - INFO - _connect_sync:225 -    - Acceleration: 50.0
+2025-07-30 13:42:20,005 - meca_driver_meca - WARNING - _connect_sync:232 - ⚠️ Robot meca does not support SetDisconnectOnException
+2025-07-30 13:42:20,009 - meca_driver_meca - INFO - _connect_sync:236 - 🚀 Calling mecademicpy Robot.Connect() with parameters for meca:
+2025-07-30 13:42:20,011 - meca_driver_meca - INFO - _connect_sync:237 -    - address='192.168.0.100'
+2025-07-30 13:42:20,014 - meca_driver_meca - INFO - _connect_sync:238 -    - enable_synchronous_mode=False
+2025-07-30 13:42:20,017 - meca_driver_meca - INFO - _connect_sync:239 -    - disconnect_on_exception=False
+2025-07-30 13:42:20,020 - meca_driver_meca - INFO - _connect_sync:240 -    - timeout=30.0
+2025-07-30 13:42:20,024 - meca_driver_meca - INFO - _connect_sync:257 - 🔄 Attempting connection in async mode for meca
+2025-07-30 13:42:20,051 - meca_driver_meca - INFO - _connect_sync:266 - ✅ Connection successful in async mode for meca
+2025-07-30 13:42:20,055 - meca_driver_meca - INFO - _connect_sync:298 - ⏱️ mecademicpy Robot.Connect() completed in 0.03s for meca
+2025-07-30 13:42:20,057 - meca_driver_meca - INFO - _connect_sync:301 - ⏳ Waiting 0.5s for connection stabilization for meca
+2025-07-30 13:42:20,560 - meca_driver_meca - INFO - _connect_sync:308 - 🔍 mecademicpy Robot.IsConnected() returned: True for meca
+2025-07-30 13:42:20,562 - meca_driver_meca - INFO - _connect_sync:311 - ✅ Successfully connected to Mecademic robot meca
+2025-07-30 13:42:20,563 - meca_driver_meca - INFO - _connect_sync:318 - ✅ Robot status check successful for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:42:20,565 - meca_driver_meca - INFO - _connect_impl:155 - 🎉 mecademicpy Robot.Connect() succeeded for meca
+2025-07-30 13:42:20,566 - meca_driver_meca - INFO - _connect_impl:159 - ⏳ Waiting 1s for connection stabilization before activation for meca
+2025-07-30 13:42:21,568 - meca_driver_meca - INFO - _activate_robot_sync_internal:360 - 🔧 Starting robot activation sequence for meca
+2025-07-30 13:42:21,571 - meca_driver_meca - INFO - _activate_robot_sync_internal:366 - 📊 Robot status before activation for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:42:21,574 - meca_driver_meca - INFO - _activate_robot_sync_internal:380 - 🔋 Activating robot meca...
+2025-07-30 13:42:21,579 - meca_driver_meca - INFO - _activate_robot_sync_internal:383 - ✅ Robot meca activation command sent
+2025-07-30 13:42:21,582 - meca_driver_meca - INFO - _activate_robot_sync_internal:386 - ⏳ Waiting 2s for activation to complete for meca
+2025-07-30 13:42:23,587 - meca_driver_meca - INFO - _activate_robot_sync_internal:405 - 🏠 Homing robot meca...
+2025-07-30 13:42:23,592 - meca_driver_meca - INFO - _activate_robot_sync_internal:408 - ✅ Robot meca homing command sent
+2025-07-30 13:42:23,594 - meca_driver_meca - INFO - _activate_robot_sync_internal:412 - ⏳ Waiting for robot meca to complete homing...
+2025-07-30 13:42:23,596 - meca_driver_meca - INFO - _activate_robot_sync_internal:415 - ✅ Robot meca homing completed
+2025-07-30 13:42:23,597 - meca_driver_meca - INFO - _activate_robot_sync_internal:439 - 🎉 Robot activation sequence completed for meca
+2025-07-30 13:42:23,598 - meca_driver_meca - INFO - _connect_impl:166 - ✅ Robot activation completed for meca
+2025-07-30 13:42:23,599 - meca_driver_meca - INFO - _set_parameters_sync:477 - Set initial parameters for meca
+2025-07-30 13:42:23,600 - meca_driver_meca - INFO - _connect_impl:176 - ✅ Initial parameters set for meca
+2025-07-30 13:42:23,601 - meca_driver_meca - INFO - _connect_impl:185 - 🏆 MecademicDriver fully initialized and connected for meca
+2025-07-30 13:42:23,602 - meca_driver_meca - INFO - connect:122 - Successfully connected to meca
+2025-07-30 13:42:25,796 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:42:25,797 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:42:25,798 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:42:25,800 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:42:25,801 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:42:25,803 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:42:25,804 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:42:25,806 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:42:25,808 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:42:25,809 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:42:25,810 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:42:25,811 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:42:25,812 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:42:25,813 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:42:25,816 - meca_driver_meca - INFO - clear_motion:932 - 🔧 Clearing motion queue for meca
+2025-07-30 13:42:25,818 - meca_driver_meca - INFO - clear_motion:942 - ✅ ClearMotion() completed for meca
+2025-07-30 13:42:25,821 - meca_driver_meca - INFO - resume_motion:964 - 🔧 Resuming motion for meca
+2025-07-30 13:42:25,824 - meca_driver_meca - INFO - resume_motion:974 - ✅ ResumeMotion() completed for meca
+2025-07-30 13:43:01,985 - meca_driver_meca - INFO - _disconnect_sync:503 - Disconnected from Mecademic robot meca
+2025-07-30 13:43:01,987 - meca_driver_meca - INFO - disconnect:134 - Disconnected from meca
+2025-07-30 13:43:04,669 - meca_driver_meca - INFO - __init__:63 - Initialized Mecademic driver for meca at 192.168.0.100:10000
+2025-07-30 13:43:04,705 - meca_driver_meca - INFO - _connect_impl:113 - 🔄 Starting MecademicDriver connection process for meca
+2025-07-30 13:43:04,706 - meca_driver_meca - INFO - _connect_impl:117 - 📦 Creating mecademicpy Robot() instance for meca
+2025-07-30 13:43:04,709 - meca_driver_meca - INFO - _connect_impl:121 - ✅ mecademicpy Robot() instance created successfully for meca
+2025-07-30 13:43:04,710 - meca_driver_meca - INFO - _connect_impl:131 - 🔧 Executing connection in thread pool (timeout=30.0s) for meca
+2025-07-30 13:43:04,713 - meca_driver_meca - INFO - _connect_sync:203 - 🔄 Starting mecademicpy Robot.Connect() to 192.168.0.100:10000 for meca
+2025-07-30 13:43:04,715 - meca_driver_meca - INFO - _connect_sync:214 - 📦 Using mecademicpy version: unknown for meca
+2025-07-30 13:43:04,717 - meca_driver_meca - INFO - _connect_sync:219 - 🔧 Connection parameters for meca:
+2025-07-30 13:43:04,719 - meca_driver_meca - INFO - _connect_sync:220 -    - IP Address: 192.168.0.100
+2025-07-30 13:43:04,720 - meca_driver_meca - INFO - _connect_sync:221 -    - Port: 10000 (mecademicpy uses fixed port 10000)
+2025-07-30 13:43:04,721 - meca_driver_meca - INFO - _connect_sync:222 -    - Timeout: 30.0s
+2025-07-30 13:43:04,723 - meca_driver_meca - INFO - _connect_sync:223 -    - Force: 100.0
+2025-07-30 13:43:04,725 - meca_driver_meca - INFO - _connect_sync:224 -    - Speed: 35.0
+2025-07-30 13:43:04,726 - meca_driver_meca - INFO - _connect_sync:225 -    - Acceleration: 50.0
+2025-07-30 13:43:04,728 - meca_driver_meca - WARNING - _connect_sync:232 - ⚠️ Robot meca does not support SetDisconnectOnException
+2025-07-30 13:43:04,730 - meca_driver_meca - INFO - _connect_sync:236 - 🚀 Calling mecademicpy Robot.Connect() with parameters for meca:
+2025-07-30 13:43:04,731 - meca_driver_meca - INFO - _connect_sync:237 -    - address='192.168.0.100'
+2025-07-30 13:43:04,733 - meca_driver_meca - INFO - _connect_sync:238 -    - enable_synchronous_mode=False
+2025-07-30 13:43:04,734 - meca_driver_meca - INFO - _connect_sync:239 -    - disconnect_on_exception=False
+2025-07-30 13:43:04,736 - meca_driver_meca - INFO - _connect_sync:240 -    - timeout=30.0
+2025-07-30 13:43:04,737 - meca_driver_meca - INFO - _connect_sync:257 - 🔄 Attempting connection in async mode for meca
+2025-07-30 13:43:04,754 - meca_driver_meca - INFO - _connect_sync:266 - ✅ Connection successful in async mode for meca
+2025-07-30 13:43:04,756 - meca_driver_meca - INFO - _connect_sync:298 - ⏱️ mecademicpy Robot.Connect() completed in 0.02s for meca
+2025-07-30 13:43:04,758 - meca_driver_meca - INFO - _connect_sync:301 - ⏳ Waiting 0.5s for connection stabilization for meca
+2025-07-30 13:43:05,261 - meca_driver_meca - INFO - _connect_sync:308 - 🔍 mecademicpy Robot.IsConnected() returned: True for meca
+2025-07-30 13:43:05,263 - meca_driver_meca - INFO - _connect_sync:311 - ✅ Successfully connected to Mecademic robot meca
+2025-07-30 13:43:05,265 - meca_driver_meca - INFO - _connect_sync:318 - ✅ Robot status check successful for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:43:05,266 - meca_driver_meca - INFO - _connect_impl:155 - 🎉 mecademicpy Robot.Connect() succeeded for meca
+2025-07-30 13:43:05,268 - meca_driver_meca - INFO - _connect_impl:159 - ⏳ Waiting 1s for connection stabilization before activation for meca
+2025-07-30 13:43:06,271 - meca_driver_meca - INFO - _activate_robot_sync_internal:360 - 🔧 Starting robot activation sequence for meca
+2025-07-30 13:43:06,274 - meca_driver_meca - INFO - _activate_robot_sync_internal:366 - 📊 Robot status before activation for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:43:06,276 - meca_driver_meca - INFO - _activate_robot_sync_internal:380 - 🔋 Activating robot meca...
+2025-07-30 13:43:06,277 - meca_driver_meca - INFO - _activate_robot_sync_internal:383 - ✅ Robot meca activation command sent
+2025-07-30 13:43:06,278 - meca_driver_meca - INFO - _activate_robot_sync_internal:386 - ⏳ Waiting 2s for activation to complete for meca
+2025-07-30 13:43:08,279 - meca_driver_meca - INFO - _activate_robot_sync_internal:405 - 🏠 Homing robot meca...
+2025-07-30 13:43:08,287 - meca_driver_meca - INFO - _activate_robot_sync_internal:408 - ✅ Robot meca homing command sent
+2025-07-30 13:43:08,297 - meca_driver_meca - INFO - _activate_robot_sync_internal:412 - ⏳ Waiting for robot meca to complete homing...
+2025-07-30 13:43:08,323 - meca_driver_meca - INFO - _activate_robot_sync_internal:415 - ✅ Robot meca homing completed
+2025-07-30 13:43:08,329 - meca_driver_meca - INFO - _activate_robot_sync_internal:439 - 🎉 Robot activation sequence completed for meca
+2025-07-30 13:43:08,341 - meca_driver_meca - INFO - _connect_impl:166 - ✅ Robot activation completed for meca
+2025-07-30 13:43:08,344 - meca_driver_meca - INFO - _set_parameters_sync:477 - Set initial parameters for meca
+2025-07-30 13:43:08,360 - meca_driver_meca - INFO - _connect_impl:176 - ✅ Initial parameters set for meca
+2025-07-30 13:43:08,364 - meca_driver_meca - INFO - _connect_impl:185 - 🏆 MecademicDriver fully initialized and connected for meca
+2025-07-30 13:43:08,367 - meca_driver_meca - INFO - connect:122 - Successfully connected to meca
+2025-07-30 13:43:20,792 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:43:20,795 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:43:20,797 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:43:20,799 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:43:20,802 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:43:20,803 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:43:20,804 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:43:20,807 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:43:20,809 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:43:20,811 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:43:20,813 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:43:20,816 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:43:20,817 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:43:20,818 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:43:20,821 - meca_driver_meca - INFO - clear_motion:932 - 🔧 Clearing motion queue for meca
+2025-07-30 13:43:20,823 - meca_driver_meca - INFO - clear_motion:942 - ✅ ClearMotion() completed for meca
+2025-07-30 13:43:20,824 - meca_driver_meca - INFO - resume_motion:964 - 🔧 Resuming motion for meca
+2025-07-30 13:43:20,827 - meca_driver_meca - INFO - resume_motion:974 - ✅ ResumeMotion() completed for meca
+2025-07-30 13:44:56,036 - meca_driver_meca - INFO - _disconnect_sync:503 - Disconnected from Mecademic robot meca
+2025-07-30 13:44:56,040 - meca_driver_meca - INFO - disconnect:134 - Disconnected from meca
+2025-07-30 13:44:58,722 - meca_driver_meca - INFO - __init__:63 - Initialized Mecademic driver for meca at 192.168.0.100:10000
+2025-07-30 13:44:58,812 - meca_driver_meca - INFO - _connect_impl:113 - 🔄 Starting MecademicDriver connection process for meca
+2025-07-30 13:44:58,814 - meca_driver_meca - INFO - _connect_impl:117 - 📦 Creating mecademicpy Robot() instance for meca
+2025-07-30 13:44:58,816 - meca_driver_meca - INFO - _connect_impl:121 - ✅ mecademicpy Robot() instance created successfully for meca
+2025-07-30 13:44:58,818 - meca_driver_meca - INFO - _connect_impl:131 - 🔧 Executing connection in thread pool (timeout=30.0s) for meca
+2025-07-30 13:44:58,820 - meca_driver_meca - INFO - _connect_sync:203 - 🔄 Starting mecademicpy Robot.Connect() to 192.168.0.100:10000 for meca
+2025-07-30 13:44:58,822 - meca_driver_meca - INFO - _connect_sync:214 - 📦 Using mecademicpy version: unknown for meca
+2025-07-30 13:44:58,823 - meca_driver_meca - INFO - _connect_sync:219 - 🔧 Connection parameters for meca:
+2025-07-30 13:44:58,825 - meca_driver_meca - INFO - _connect_sync:220 -    - IP Address: 192.168.0.100
+2025-07-30 13:44:58,827 - meca_driver_meca - INFO - _connect_sync:221 -    - Port: 10000 (mecademicpy uses fixed port 10000)
+2025-07-30 13:44:58,828 - meca_driver_meca - INFO - _connect_sync:222 -    - Timeout: 30.0s
+2025-07-30 13:44:58,829 - meca_driver_meca - INFO - _connect_sync:223 -    - Force: 100.0
+2025-07-30 13:44:58,830 - meca_driver_meca - INFO - _connect_sync:224 -    - Speed: 35.0
+2025-07-30 13:44:58,830 - meca_driver_meca - INFO - _connect_sync:225 -    - Acceleration: 50.0
+2025-07-30 13:44:58,832 - meca_driver_meca - WARNING - _connect_sync:232 - ⚠️ Robot meca does not support SetDisconnectOnException
+2025-07-30 13:44:58,833 - meca_driver_meca - INFO - _connect_sync:236 - 🚀 Calling mecademicpy Robot.Connect() with parameters for meca:
+2025-07-30 13:44:58,834 - meca_driver_meca - INFO - _connect_sync:237 -    - address='192.168.0.100'
+2025-07-30 13:44:58,835 - meca_driver_meca - INFO - _connect_sync:238 -    - enable_synchronous_mode=False
+2025-07-30 13:44:58,836 - meca_driver_meca - INFO - _connect_sync:239 -    - disconnect_on_exception=False
+2025-07-30 13:44:58,837 - meca_driver_meca - INFO - _connect_sync:240 -    - timeout=30.0
+2025-07-30 13:44:58,838 - meca_driver_meca - INFO - _connect_sync:257 - 🔄 Attempting connection in async mode for meca
+2025-07-30 13:44:58,852 - meca_driver_meca - INFO - _connect_sync:266 - ✅ Connection successful in async mode for meca
+2025-07-30 13:44:58,853 - meca_driver_meca - INFO - _connect_sync:298 - ⏱️ mecademicpy Robot.Connect() completed in 0.02s for meca
+2025-07-30 13:44:58,854 - meca_driver_meca - INFO - _connect_sync:301 - ⏳ Waiting 0.5s for connection stabilization for meca
+2025-07-30 13:44:59,356 - meca_driver_meca - INFO - _connect_sync:308 - 🔍 mecademicpy Robot.IsConnected() returned: True for meca
+2025-07-30 13:44:59,357 - meca_driver_meca - INFO - _connect_sync:311 - ✅ Successfully connected to Mecademic robot meca
+2025-07-30 13:44:59,358 - meca_driver_meca - INFO - _connect_sync:318 - ✅ Robot status check successful for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:44:59,360 - meca_driver_meca - INFO - _connect_impl:155 - 🎉 mecademicpy Robot.Connect() succeeded for meca
+2025-07-30 13:44:59,361 - meca_driver_meca - INFO - _connect_impl:159 - ⏳ Waiting 1s for connection stabilization before activation for meca
+2025-07-30 13:45:00,364 - meca_driver_meca - INFO - _activate_robot_sync_internal:360 - 🔧 Starting robot activation sequence for meca
+2025-07-30 13:45:00,366 - meca_driver_meca - INFO - _activate_robot_sync_internal:366 - 📊 Robot status before activation for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:45:00,369 - meca_driver_meca - INFO - _activate_robot_sync_internal:380 - 🔋 Activating robot meca...
+2025-07-30 13:45:00,370 - meca_driver_meca - INFO - _activate_robot_sync_internal:383 - ✅ Robot meca activation command sent
+2025-07-30 13:45:00,371 - meca_driver_meca - INFO - _activate_robot_sync_internal:386 - ⏳ Waiting 2s for activation to complete for meca
+2025-07-30 13:45:02,374 - meca_driver_meca - INFO - _activate_robot_sync_internal:405 - 🏠 Homing robot meca...
+2025-07-30 13:45:02,376 - meca_driver_meca - INFO - _activate_robot_sync_internal:408 - ✅ Robot meca homing command sent
+2025-07-30 13:45:02,378 - meca_driver_meca - INFO - _activate_robot_sync_internal:412 - ⏳ Waiting for robot meca to complete homing...
+2025-07-30 13:45:02,379 - meca_driver_meca - INFO - _activate_robot_sync_internal:415 - ✅ Robot meca homing completed
+2025-07-30 13:45:02,381 - meca_driver_meca - INFO - _activate_robot_sync_internal:439 - 🎉 Robot activation sequence completed for meca
+2025-07-30 13:45:02,382 - meca_driver_meca - INFO - _connect_impl:166 - ✅ Robot activation completed for meca
+2025-07-30 13:45:02,384 - meca_driver_meca - INFO - _set_parameters_sync:477 - Set initial parameters for meca
+2025-07-30 13:45:02,386 - meca_driver_meca - INFO - _connect_impl:176 - ✅ Initial parameters set for meca
+2025-07-30 13:45:02,387 - meca_driver_meca - INFO - _connect_impl:185 - 🏆 MecademicDriver fully initialized and connected for meca
+2025-07-30 13:45:02,389 - meca_driver_meca - INFO - connect:122 - Successfully connected to meca
+2025-07-30 13:45:16,415 - meca_driver_meca - INFO - _disconnect_sync:503 - Disconnected from Mecademic robot meca
+2025-07-30 13:45:16,417 - meca_driver_meca - INFO - disconnect:134 - Disconnected from meca
+2025-07-30 13:45:20,580 - meca_driver_meca - INFO - __init__:63 - Initialized Mecademic driver for meca at 192.168.0.100:10000
+2025-07-30 13:45:20,614 - meca_driver_meca - INFO - _connect_impl:113 - 🔄 Starting MecademicDriver connection process for meca
+2025-07-30 13:45:20,616 - meca_driver_meca - INFO - _connect_impl:117 - 📦 Creating mecademicpy Robot() instance for meca
+2025-07-30 13:45:20,619 - meca_driver_meca - INFO - _connect_impl:121 - ✅ mecademicpy Robot() instance created successfully for meca
+2025-07-30 13:45:20,621 - meca_driver_meca - INFO - _connect_impl:131 - 🔧 Executing connection in thread pool (timeout=30.0s) for meca
+2025-07-30 13:45:20,625 - meca_driver_meca - INFO - _connect_sync:203 - 🔄 Starting mecademicpy Robot.Connect() to 192.168.0.100:10000 for meca
+2025-07-30 13:45:20,627 - meca_driver_meca - INFO - _connect_sync:214 - 📦 Using mecademicpy version: unknown for meca
+2025-07-30 13:45:20,630 - meca_driver_meca - INFO - _connect_sync:219 - 🔧 Connection parameters for meca:
+2025-07-30 13:45:20,633 - meca_driver_meca - INFO - _connect_sync:220 -    - IP Address: 192.168.0.100
+2025-07-30 13:45:20,636 - meca_driver_meca - INFO - _connect_sync:221 -    - Port: 10000 (mecademicpy uses fixed port 10000)
+2025-07-30 13:45:20,639 - meca_driver_meca - INFO - _connect_sync:222 -    - Timeout: 30.0s
+2025-07-30 13:45:20,641 - meca_driver_meca - INFO - _connect_sync:223 -    - Force: 100.0
+2025-07-30 13:45:20,644 - meca_driver_meca - INFO - _connect_sync:224 -    - Speed: 35.0
+2025-07-30 13:45:20,646 - meca_driver_meca - INFO - _connect_sync:225 -    - Acceleration: 50.0
+2025-07-30 13:45:20,647 - meca_driver_meca - WARNING - _connect_sync:232 - ⚠️ Robot meca does not support SetDisconnectOnException
+2025-07-30 13:45:20,649 - meca_driver_meca - INFO - _connect_sync:236 - 🚀 Calling mecademicpy Robot.Connect() with parameters for meca:
+2025-07-30 13:45:20,651 - meca_driver_meca - INFO - _connect_sync:237 -    - address='192.168.0.100'
+2025-07-30 13:45:20,653 - meca_driver_meca - INFO - _connect_sync:238 -    - enable_synchronous_mode=False
+2025-07-30 13:45:20,654 - meca_driver_meca - INFO - _connect_sync:239 -    - disconnect_on_exception=False
+2025-07-30 13:45:20,656 - meca_driver_meca - INFO - _connect_sync:240 -    - timeout=30.0
+2025-07-30 13:45:20,658 - meca_driver_meca - INFO - _connect_sync:257 - 🔄 Attempting connection in async mode for meca
+2025-07-30 13:45:20,679 - meca_driver_meca - INFO - _connect_sync:266 - ✅ Connection successful in async mode for meca
+2025-07-30 13:45:20,681 - meca_driver_meca - INFO - _connect_sync:298 - ⏱️ mecademicpy Robot.Connect() completed in 0.02s for meca
+2025-07-30 13:45:20,682 - meca_driver_meca - INFO - _connect_sync:301 - ⏳ Waiting 0.5s for connection stabilization for meca
+2025-07-30 13:45:21,184 - meca_driver_meca - INFO - _connect_sync:308 - 🔍 mecademicpy Robot.IsConnected() returned: True for meca
+2025-07-30 13:45:21,186 - meca_driver_meca - INFO - _connect_sync:311 - ✅ Successfully connected to Mecademic robot meca
+2025-07-30 13:45:21,188 - meca_driver_meca - INFO - _connect_sync:318 - ✅ Robot status check successful for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:45:21,189 - meca_driver_meca - INFO - _connect_impl:155 - 🎉 mecademicpy Robot.Connect() succeeded for meca
+2025-07-30 13:45:21,191 - meca_driver_meca - INFO - _connect_impl:159 - ⏳ Waiting 1s for connection stabilization before activation for meca
+2025-07-30 13:45:22,194 - meca_driver_meca - INFO - _activate_robot_sync_internal:360 - 🔧 Starting robot activation sequence for meca
+2025-07-30 13:45:22,195 - meca_driver_meca - INFO - _activate_robot_sync_internal:366 - 📊 Robot status before activation for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:45:22,197 - meca_driver_meca - INFO - _activate_robot_sync_internal:380 - 🔋 Activating robot meca...
+2025-07-30 13:45:22,198 - meca_driver_meca - INFO - _activate_robot_sync_internal:383 - ✅ Robot meca activation command sent
+2025-07-30 13:45:22,201 - meca_driver_meca - INFO - _activate_robot_sync_internal:386 - ⏳ Waiting 2s for activation to complete for meca
+2025-07-30 13:45:24,206 - meca_driver_meca - INFO - _activate_robot_sync_internal:405 - 🏠 Homing robot meca...
+2025-07-30 13:45:24,209 - meca_driver_meca - INFO - _activate_robot_sync_internal:408 - ✅ Robot meca homing command sent
+2025-07-30 13:45:24,210 - meca_driver_meca - INFO - _activate_robot_sync_internal:412 - ⏳ Waiting for robot meca to complete homing...
+2025-07-30 13:45:24,213 - meca_driver_meca - INFO - _activate_robot_sync_internal:415 - ✅ Robot meca homing completed
+2025-07-30 13:45:24,218 - meca_driver_meca - INFO - _activate_robot_sync_internal:439 - 🎉 Robot activation sequence completed for meca
+2025-07-30 13:45:24,221 - meca_driver_meca - INFO - _connect_impl:166 - ✅ Robot activation completed for meca
+2025-07-30 13:45:24,223 - meca_driver_meca - INFO - _set_parameters_sync:477 - Set initial parameters for meca
+2025-07-30 13:45:24,225 - meca_driver_meca - INFO - _connect_impl:176 - ✅ Initial parameters set for meca
+2025-07-30 13:45:24,240 - meca_driver_meca - INFO - _connect_impl:185 - 🏆 MecademicDriver fully initialized and connected for meca
+2025-07-30 13:45:24,241 - meca_driver_meca - INFO - connect:122 - Successfully connected to meca
+2025-07-30 13:46:03,913 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:46:04,025 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:46:04,035 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:46:04,040 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:46:04,047 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:46:04,053 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:46:04,057 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:46:04,060 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:46:04,062 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:46:04,074 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:46:04,076 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:46:04,085 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:46:04,092 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:46:04,325 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:46:04,373 - meca_driver_meca - INFO - clear_motion:932 - 🔧 Clearing motion queue for meca
+2025-07-30 13:46:04,376 - meca_driver_meca - INFO - clear_motion:942 - ✅ ClearMotion() completed for meca
+2025-07-30 13:46:04,378 - meca_driver_meca - INFO - resume_motion:964 - 🔧 Resuming motion for meca
+2025-07-30 13:46:04,383 - meca_driver_meca - INFO - resume_motion:974 - ✅ ResumeMotion() completed for meca
+2025-07-30 13:46:35,502 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:46:35,507 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:46:35,509 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:46:35,511 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:46:35,513 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:46:35,515 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:46:35,519 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:46:35,523 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:46:35,526 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:46:35,528 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:46:35,531 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:46:35,534 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:46:35,537 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:46:35,539 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:46:35,545 - meca_driver_meca - INFO - clear_motion:932 - 🔧 Clearing motion queue for meca
+2025-07-30 13:46:35,548 - meca_driver_meca - INFO - clear_motion:942 - ✅ ClearMotion() completed for meca
+2025-07-30 13:46:35,551 - meca_driver_meca - INFO - resume_motion:964 - 🔧 Resuming motion for meca
+2025-07-30 13:46:35,555 - meca_driver_meca - INFO - resume_motion:974 - ✅ ResumeMotion() completed for meca
+2025-07-30 13:47:16,473 - meca_driver_meca - INFO - _disconnect_sync:503 - Disconnected from Mecademic robot meca
+2025-07-30 13:47:16,475 - meca_driver_meca - INFO - disconnect:134 - Disconnected from meca
+2025-07-30 13:47:19,467 - meca_driver_meca - INFO - __init__:63 - Initialized Mecademic driver for meca at 192.168.0.100:10000
+2025-07-30 13:47:19,507 - meca_driver_meca - INFO - _connect_impl:113 - 🔄 Starting MecademicDriver connection process for meca
+2025-07-30 13:47:19,508 - meca_driver_meca - INFO - _connect_impl:117 - 📦 Creating mecademicpy Robot() instance for meca
+2025-07-30 13:47:19,510 - meca_driver_meca - INFO - _connect_impl:121 - ✅ mecademicpy Robot() instance created successfully for meca
+2025-07-30 13:47:19,512 - meca_driver_meca - INFO - _connect_impl:131 - 🔧 Executing connection in thread pool (timeout=30.0s) for meca
+2025-07-30 13:47:19,515 - meca_driver_meca - INFO - _connect_sync:203 - 🔄 Starting mecademicpy Robot.Connect() to 192.168.0.100:10000 for meca
+2025-07-30 13:47:19,517 - meca_driver_meca - INFO - _connect_sync:214 - 📦 Using mecademicpy version: unknown for meca
+2025-07-30 13:47:19,518 - meca_driver_meca - INFO - _connect_sync:219 - 🔧 Connection parameters for meca:
+2025-07-30 13:47:19,520 - meca_driver_meca - INFO - _connect_sync:220 -    - IP Address: 192.168.0.100
+2025-07-30 13:47:19,521 - meca_driver_meca - INFO - _connect_sync:221 -    - Port: 10000 (mecademicpy uses fixed port 10000)
+2025-07-30 13:47:19,522 - meca_driver_meca - INFO - _connect_sync:222 -    - Timeout: 30.0s
+2025-07-30 13:47:19,524 - meca_driver_meca - INFO - _connect_sync:223 -    - Force: 100.0
+2025-07-30 13:47:19,526 - meca_driver_meca - INFO - _connect_sync:224 -    - Speed: 35.0
+2025-07-30 13:47:19,527 - meca_driver_meca - INFO - _connect_sync:225 -    - Acceleration: 50.0
+2025-07-30 13:47:19,529 - meca_driver_meca - WARNING - _connect_sync:232 - ⚠️ Robot meca does not support SetDisconnectOnException
+2025-07-30 13:47:19,530 - meca_driver_meca - INFO - _connect_sync:236 - 🚀 Calling mecademicpy Robot.Connect() with parameters for meca:
+2025-07-30 13:47:19,531 - meca_driver_meca - INFO - _connect_sync:237 -    - address='192.168.0.100'
+2025-07-30 13:47:19,532 - meca_driver_meca - INFO - _connect_sync:238 -    - enable_synchronous_mode=False
+2025-07-30 13:47:19,534 - meca_driver_meca - INFO - _connect_sync:239 -    - disconnect_on_exception=False
+2025-07-30 13:47:19,535 - meca_driver_meca - INFO - _connect_sync:240 -    - timeout=30.0
+2025-07-30 13:47:19,537 - meca_driver_meca - INFO - _connect_sync:257 - 🔄 Attempting connection in async mode for meca
+2025-07-30 13:47:19,553 - meca_driver_meca - INFO - _connect_sync:266 - ✅ Connection successful in async mode for meca
+2025-07-30 13:47:19,554 - meca_driver_meca - INFO - _connect_sync:298 - ⏱️ mecademicpy Robot.Connect() completed in 0.02s for meca
+2025-07-30 13:47:19,555 - meca_driver_meca - INFO - _connect_sync:301 - ⏳ Waiting 0.5s for connection stabilization for meca
+2025-07-30 13:47:20,056 - meca_driver_meca - INFO - _connect_sync:308 - 🔍 mecademicpy Robot.IsConnected() returned: True for meca
+2025-07-30 13:47:20,059 - meca_driver_meca - INFO - _connect_sync:311 - ✅ Successfully connected to Mecademic robot meca
+2025-07-30 13:47:20,061 - meca_driver_meca - INFO - _connect_sync:318 - ✅ Robot status check successful for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:47:20,062 - meca_driver_meca - INFO - _connect_impl:155 - 🎉 mecademicpy Robot.Connect() succeeded for meca
+2025-07-30 13:47:20,064 - meca_driver_meca - INFO - _connect_impl:159 - ⏳ Waiting 1s for connection stabilization before activation for meca
+2025-07-30 13:47:21,066 - meca_driver_meca - INFO - _activate_robot_sync_internal:360 - 🔧 Starting robot activation sequence for meca
+2025-07-30 13:47:21,070 - meca_driver_meca - INFO - _activate_robot_sync_internal:366 - 📊 Robot status before activation for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:47:21,074 - meca_driver_meca - INFO - _activate_robot_sync_internal:380 - 🔋 Activating robot meca...
+2025-07-30 13:47:21,076 - meca_driver_meca - INFO - _activate_robot_sync_internal:383 - ✅ Robot meca activation command sent
+2025-07-30 13:47:21,080 - meca_driver_meca - INFO - _activate_robot_sync_internal:386 - ⏳ Waiting 2s for activation to complete for meca
+2025-07-30 13:47:23,085 - meca_driver_meca - INFO - _activate_robot_sync_internal:405 - 🏠 Homing robot meca...
+2025-07-30 13:47:23,087 - meca_driver_meca - INFO - _activate_robot_sync_internal:408 - ✅ Robot meca homing command sent
+2025-07-30 13:47:23,089 - meca_driver_meca - INFO - _activate_robot_sync_internal:412 - ⏳ Waiting for robot meca to complete homing...
+2025-07-30 13:47:23,091 - meca_driver_meca - INFO - _activate_robot_sync_internal:415 - ✅ Robot meca homing completed
+2025-07-30 13:47:23,093 - meca_driver_meca - INFO - _activate_robot_sync_internal:439 - 🎉 Robot activation sequence completed for meca
+2025-07-30 13:47:23,097 - meca_driver_meca - INFO - _connect_impl:166 - ✅ Robot activation completed for meca
+2025-07-30 13:47:23,099 - meca_driver_meca - INFO - _set_parameters_sync:477 - Set initial parameters for meca
+2025-07-30 13:47:23,101 - meca_driver_meca - INFO - _connect_impl:176 - ✅ Initial parameters set for meca
+2025-07-30 13:47:23,104 - meca_driver_meca - INFO - _connect_impl:185 - 🏆 MecademicDriver fully initialized and connected for meca
+2025-07-30 13:47:23,106 - meca_driver_meca - INFO - connect:122 - Successfully connected to meca
+2025-07-30 13:47:39,886 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:47:39,890 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:47:39,892 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:47:39,894 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:47:39,897 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:47:39,899 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:47:39,901 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:47:39,905 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:47:39,907 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:47:39,909 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:47:39,911 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:47:39,913 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:47:39,914 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:47:39,915 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:47:39,918 - meca_driver_meca - INFO - clear_motion:932 - 🔧 Clearing motion queue for meca
+2025-07-30 13:47:39,920 - meca_driver_meca - INFO - clear_motion:942 - ✅ ClearMotion() completed for meca
+2025-07-30 13:47:39,922 - meca_driver_meca - INFO - resume_motion:964 - 🔧 Resuming motion for meca
+2025-07-30 13:47:39,923 - meca_driver_meca - INFO - resume_motion:974 - ✅ ResumeMotion() completed for meca
+2025-07-30 13:48:44,790 - meca_driver_meca - INFO - _disconnect_sync:503 - Disconnected from Mecademic robot meca
+2025-07-30 13:48:44,792 - meca_driver_meca - INFO - disconnect:134 - Disconnected from meca
+2025-07-30 13:48:47,252 - meca_driver_meca - INFO - __init__:63 - Initialized Mecademic driver for meca at 192.168.0.100:10000
+2025-07-30 13:48:47,300 - meca_driver_meca - INFO - _connect_impl:113 - 🔄 Starting MecademicDriver connection process for meca
+2025-07-30 13:48:47,307 - meca_driver_meca - INFO - _connect_impl:117 - 📦 Creating mecademicpy Robot() instance for meca
+2025-07-30 13:48:47,310 - meca_driver_meca - INFO - _connect_impl:121 - ✅ mecademicpy Robot() instance created successfully for meca
+2025-07-30 13:48:47,314 - meca_driver_meca - INFO - _connect_impl:131 - 🔧 Executing connection in thread pool (timeout=30.0s) for meca
+2025-07-30 13:48:47,317 - meca_driver_meca - INFO - _connect_sync:203 - 🔄 Starting mecademicpy Robot.Connect() to 192.168.0.100:10000 for meca
+2025-07-30 13:48:47,320 - meca_driver_meca - INFO - _connect_sync:214 - 📦 Using mecademicpy version: unknown for meca
+2025-07-30 13:48:47,322 - meca_driver_meca - INFO - _connect_sync:219 - 🔧 Connection parameters for meca:
+2025-07-30 13:48:47,324 - meca_driver_meca - INFO - _connect_sync:220 -    - IP Address: 192.168.0.100
+2025-07-30 13:48:47,326 - meca_driver_meca - INFO - _connect_sync:221 -    - Port: 10000 (mecademicpy uses fixed port 10000)
+2025-07-30 13:48:47,329 - meca_driver_meca - INFO - _connect_sync:222 -    - Timeout: 30.0s
+2025-07-30 13:48:47,332 - meca_driver_meca - INFO - _connect_sync:223 -    - Force: 100.0
+2025-07-30 13:48:47,333 - meca_driver_meca - INFO - _connect_sync:224 -    - Speed: 35.0
+2025-07-30 13:48:47,336 - meca_driver_meca - INFO - _connect_sync:225 -    - Acceleration: 50.0
+2025-07-30 13:48:47,338 - meca_driver_meca - WARNING - _connect_sync:232 - ⚠️ Robot meca does not support SetDisconnectOnException
+2025-07-30 13:48:47,340 - meca_driver_meca - INFO - _connect_sync:236 - 🚀 Calling mecademicpy Robot.Connect() with parameters for meca:
+2025-07-30 13:48:47,343 - meca_driver_meca - INFO - _connect_sync:237 -    - address='192.168.0.100'
+2025-07-30 13:48:47,345 - meca_driver_meca - INFO - _connect_sync:238 -    - enable_synchronous_mode=False
+2025-07-30 13:48:47,347 - meca_driver_meca - INFO - _connect_sync:239 -    - disconnect_on_exception=False
+2025-07-30 13:48:47,350 - meca_driver_meca - INFO - _connect_sync:240 -    - timeout=30.0
+2025-07-30 13:48:47,353 - meca_driver_meca - INFO - _connect_sync:257 - 🔄 Attempting connection in async mode for meca
+2025-07-30 13:48:47,377 - meca_driver_meca - INFO - _connect_sync:266 - ✅ Connection successful in async mode for meca
+2025-07-30 13:48:47,379 - meca_driver_meca - INFO - _connect_sync:298 - ⏱️ mecademicpy Robot.Connect() completed in 0.03s for meca
+2025-07-30 13:48:47,382 - meca_driver_meca - INFO - _connect_sync:301 - ⏳ Waiting 0.5s for connection stabilization for meca
+2025-07-30 13:48:47,884 - meca_driver_meca - INFO - _connect_sync:308 - 🔍 mecademicpy Robot.IsConnected() returned: True for meca
+2025-07-30 13:48:47,885 - meca_driver_meca - INFO - _connect_sync:311 - ✅ Successfully connected to Mecademic robot meca
+2025-07-30 13:48:47,887 - meca_driver_meca - INFO - _connect_sync:318 - ✅ Robot status check successful for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:48:47,901 - meca_driver_meca - INFO - _connect_impl:155 - 🎉 mecademicpy Robot.Connect() succeeded for meca
+2025-07-30 13:48:47,907 - meca_driver_meca - INFO - _connect_impl:159 - ⏳ Waiting 1s for connection stabilization before activation for meca
+2025-07-30 13:48:48,911 - meca_driver_meca - INFO - _activate_robot_sync_internal:360 - 🔧 Starting robot activation sequence for meca
+2025-07-30 13:48:48,914 - meca_driver_meca - INFO - _activate_robot_sync_internal:366 - 📊 Robot status before activation for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:48:48,915 - meca_driver_meca - INFO - _activate_robot_sync_internal:380 - 🔋 Activating robot meca...
+2025-07-30 13:48:48,917 - meca_driver_meca - INFO - _activate_robot_sync_internal:383 - ✅ Robot meca activation command sent
+2025-07-30 13:48:48,920 - meca_driver_meca - INFO - _activate_robot_sync_internal:386 - ⏳ Waiting 2s for activation to complete for meca
+2025-07-30 13:48:50,924 - meca_driver_meca - INFO - _activate_robot_sync_internal:405 - 🏠 Homing robot meca...
+2025-07-30 13:48:50,936 - meca_driver_meca - INFO - _activate_robot_sync_internal:408 - ✅ Robot meca homing command sent
+2025-07-30 13:48:50,938 - meca_driver_meca - INFO - _activate_robot_sync_internal:412 - ⏳ Waiting for robot meca to complete homing...
+2025-07-30 13:48:50,941 - meca_driver_meca - INFO - _activate_robot_sync_internal:415 - ✅ Robot meca homing completed
+2025-07-30 13:48:50,943 - meca_driver_meca - INFO - _activate_robot_sync_internal:439 - 🎉 Robot activation sequence completed for meca
+2025-07-30 13:48:50,946 - meca_driver_meca - INFO - _connect_impl:166 - ✅ Robot activation completed for meca
+2025-07-30 13:48:50,948 - meca_driver_meca - INFO - _set_parameters_sync:477 - Set initial parameters for meca
+2025-07-30 13:48:50,950 - meca_driver_meca - INFO - _connect_impl:176 - ✅ Initial parameters set for meca
+2025-07-30 13:48:50,954 - meca_driver_meca - INFO - _connect_impl:185 - 🏆 MecademicDriver fully initialized and connected for meca
+2025-07-30 13:48:50,957 - meca_driver_meca - INFO - connect:122 - Successfully connected to meca
+2025-07-30 13:48:52,944 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:48:52,945 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:48:52,948 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:48:52,950 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:48:52,952 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:48:52,953 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:48:52,955 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:48:52,956 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:48:52,957 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:48:52,959 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:48:52,959 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:48:52,960 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:48:52,961 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:48:52,962 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:48:52,964 - meca_driver_meca - INFO - clear_motion:932 - 🔧 Clearing motion queue for meca
+2025-07-30 13:48:52,966 - meca_driver_meca - INFO - clear_motion:942 - ✅ ClearMotion() completed for meca
+2025-07-30 13:48:52,967 - meca_driver_meca - INFO - resume_motion:964 - 🔧 Resuming motion for meca
+2025-07-30 13:48:52,968 - meca_driver_meca - INFO - resume_motion:974 - ✅ ResumeMotion() completed for meca
+2025-07-30 13:49:47,201 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:49:47,202 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:49:47,203 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:49:47,205 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:49:47,205 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:49:47,206 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:49:47,207 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:49:47,210 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:49:47,211 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:49:47,213 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:49:47,214 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:49:47,217 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:49:47,218 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:49:47,219 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:49:47,222 - meca_driver_meca - INFO - clear_motion:932 - 🔧 Clearing motion queue for meca
+2025-07-30 13:49:47,223 - meca_driver_meca - INFO - clear_motion:942 - ✅ ClearMotion() completed for meca
+2025-07-30 13:49:47,224 - meca_driver_meca - INFO - resume_motion:964 - 🔧 Resuming motion for meca
+2025-07-30 13:49:47,225 - meca_driver_meca - INFO - resume_motion:974 - ✅ ResumeMotion() completed for meca
+2025-07-30 13:51:01,588 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:51:01,589 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:51:01,591 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:51:01,593 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:51:01,596 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:51:01,597 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:51:01,599 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:51:01,602 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:51:01,603 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:51:01,604 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:51:01,605 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:51:01,607 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:51:01,608 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:51:01,609 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:51:01,614 - meca_driver_meca - INFO - clear_motion:932 - 🔧 Clearing motion queue for meca
+2025-07-30 13:51:01,616 - meca_driver_meca - INFO - clear_motion:942 - ✅ ClearMotion() completed for meca
+2025-07-30 13:51:01,617 - meca_driver_meca - INFO - resume_motion:964 - 🔧 Resuming motion for meca
+2025-07-30 13:51:01,619 - meca_driver_meca - INFO - resume_motion:974 - ✅ ResumeMotion() completed for meca
+2025-07-30 13:52:42,197 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:52:42,198 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:52:42,199 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:52:42,200 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:52:42,200 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:52:42,202 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:52:42,203 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:52:42,204 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:52:42,205 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:52:42,206 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:52:42,207 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:52:42,208 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:52:42,208 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:52:42,209 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:52:42,211 - meca_driver_meca - INFO - clear_motion:932 - 🔧 Clearing motion queue for meca
+2025-07-30 13:52:42,213 - meca_driver_meca - INFO - clear_motion:942 - ✅ ClearMotion() completed for meca
+2025-07-30 13:52:42,213 - meca_driver_meca - INFO - resume_motion:964 - 🔧 Resuming motion for meca
+2025-07-30 13:52:42,214 - meca_driver_meca - INFO - resume_motion:974 - ✅ ResumeMotion() completed for meca
+2025-07-30 13:57:55,485 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: True, pause motion: True, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:57:55,486 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:57:55,487 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:57:55,488 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:57:55,489 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:57:55,490 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:57:55,491 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: True
+2025-07-30 13:57:55,493 - meca_driver_meca - INFO - reset_error:1025 - 🔧 Resetting error state for meca (attempt 1)
+2025-07-30 13:57:55,495 - meca_driver_meca - INFO - reset_error:1034 - ✅ ResetError() completed for meca
+2025-07-30 13:57:57,498 - meca_driver_meca - INFO - reset_error:1045 - ✅ ResumeMotion() completed for meca
+2025-07-30 13:57:59,516 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:57:59,519 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:57:59,522 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:57:59,525 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:57:59,527 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:57:59,531 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:57:59,533 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:57:59,555 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:57:59,556 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:57:59,558 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:57:59,560 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:57:59,562 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:57:59,563 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:57:59,565 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:57:59,568 - meca_driver_meca - INFO - clear_motion:932 - 🔧 Clearing motion queue for meca
+2025-07-30 13:57:59,571 - meca_driver_meca - INFO - clear_motion:942 - ✅ ClearMotion() completed for meca
+2025-07-30 13:57:59,573 - meca_driver_meca - INFO - resume_motion:964 - 🔧 Resuming motion for meca
+2025-07-30 13:57:59,575 - meca_driver_meca - INFO - resume_motion:974 - ✅ ResumeMotion() completed for meca
+2025-07-30 13:58:13,927 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: True, pause motion: True, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:58:13,928 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:58:13,930 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:58:13,933 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:58:13,934 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:58:13,936 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:58:13,937 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: True
+2025-07-30 13:58:13,943 - meca_driver_meca - INFO - reset_error:1025 - 🔧 Resetting error state for meca (attempt 1)
+2025-07-30 13:58:13,944 - meca_driver_meca - INFO - reset_error:1034 - ✅ ResetError() completed for meca
+2025-07-30 13:58:15,946 - meca_driver_meca - INFO - reset_error:1045 - ✅ ResumeMotion() completed for meca
+2025-07-30 13:58:17,955 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:58:17,958 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:58:17,961 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:58:17,964 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:58:17,967 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:58:17,969 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:58:17,972 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:58:17,977 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:58:17,980 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:58:17,983 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:58:17,986 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:58:17,988 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:58:17,991 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:58:17,994 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:58:18,004 - meca_driver_meca - INFO - clear_motion:932 - 🔧 Clearing motion queue for meca
+2025-07-30 13:58:18,007 - meca_driver_meca - INFO - clear_motion:942 - ✅ ClearMotion() completed for meca
+2025-07-30 13:58:18,011 - meca_driver_meca - INFO - resume_motion:964 - 🔧 Resuming motion for meca
+2025-07-30 13:58:18,015 - meca_driver_meca - INFO - resume_motion:974 - ✅ ResumeMotion() completed for meca
+2025-07-30 13:59:03,829 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: True, pause motion: True, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:59:03,830 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:59:03,832 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:59:03,833 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:59:03,834 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:59:03,835 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:59:03,836 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: True
+2025-07-30 13:59:03,840 - meca_driver_meca - INFO - reset_error:1025 - 🔧 Resetting error state for meca (attempt 1)
+2025-07-30 13:59:03,842 - meca_driver_meca - INFO - reset_error:1034 - ✅ ResetError() completed for meca
+2025-07-30 13:59:05,845 - meca_driver_meca - INFO - reset_error:1045 - ✅ ResumeMotion() completed for meca
+2025-07-30 13:59:07,849 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:59:07,850 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:59:07,852 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:59:07,854 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:59:07,855 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:59:07,858 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:59:07,860 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:59:07,862 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:59:07,864 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:59:07,865 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:59:07,867 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:59:07,868 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:59:07,870 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:59:07,871 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:59:07,877 - meca_driver_meca - INFO - clear_motion:932 - 🔧 Clearing motion queue for meca
+2025-07-30 13:59:07,879 - meca_driver_meca - INFO - clear_motion:942 - ✅ ClearMotion() completed for meca
+2025-07-30 13:59:07,881 - meca_driver_meca - INFO - resume_motion:964 - 🔧 Resuming motion for meca
+2025-07-30 13:59:07,882 - meca_driver_meca - INFO - resume_motion:974 - ✅ ResumeMotion() completed for meca
+2025-07-30 13:59:23,334 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:59:23,335 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:59:23,336 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:59:23,337 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:59:23,339 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:59:23,340 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:59:23,341 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:59:23,343 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 13:59:23,345 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 13:59:23,347 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 13:59:23,348 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 13:59:23,349 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 13:59:23,350 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 13:59:23,352 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 13:59:23,358 - meca_driver_meca - INFO - clear_motion:932 - 🔧 Clearing motion queue for meca
+2025-07-30 13:59:23,360 - meca_driver_meca - INFO - clear_motion:942 - ✅ ClearMotion() completed for meca
+2025-07-30 13:59:23,362 - meca_driver_meca - INFO - resume_motion:964 - 🔧 Resuming motion for meca
+2025-07-30 13:59:23,364 - meca_driver_meca - INFO - resume_motion:974 - ✅ ResumeMotion() completed for meca
+2025-07-30 14:02:46,265 - meca_driver_meca - INFO - _disconnect_sync:503 - Disconnected from Mecademic robot meca
+2025-07-30 14:02:46,267 - meca_driver_meca - INFO - disconnect:134 - Disconnected from meca
+2025-07-30 14:02:49,256 - meca_driver_meca - INFO - __init__:63 - Initialized Mecademic driver for meca at 192.168.0.100:10000
+2025-07-30 14:02:49,299 - meca_driver_meca - INFO - _connect_impl:113 - 🔄 Starting MecademicDriver connection process for meca
+2025-07-30 14:02:49,300 - meca_driver_meca - INFO - _connect_impl:117 - 📦 Creating mecademicpy Robot() instance for meca
+2025-07-30 14:02:49,303 - meca_driver_meca - INFO - _connect_impl:121 - ✅ mecademicpy Robot() instance created successfully for meca
+2025-07-30 14:02:49,305 - meca_driver_meca - INFO - _connect_impl:131 - 🔧 Executing connection in thread pool (timeout=30.0s) for meca
+2025-07-30 14:02:49,306 - meca_driver_meca - INFO - _connect_sync:203 - 🔄 Starting mecademicpy Robot.Connect() to 192.168.0.100:10000 for meca
+2025-07-30 14:02:49,308 - meca_driver_meca - INFO - _connect_sync:214 - 📦 Using mecademicpy version: unknown for meca
+2025-07-30 14:02:49,309 - meca_driver_meca - INFO - _connect_sync:219 - 🔧 Connection parameters for meca:
+2025-07-30 14:02:49,311 - meca_driver_meca - INFO - _connect_sync:220 -    - IP Address: 192.168.0.100
+2025-07-30 14:02:49,312 - meca_driver_meca - INFO - _connect_sync:221 -    - Port: 10000 (mecademicpy uses fixed port 10000)
+2025-07-30 14:02:49,314 - meca_driver_meca - INFO - _connect_sync:222 -    - Timeout: 30.0s
+2025-07-30 14:02:49,315 - meca_driver_meca - INFO - _connect_sync:223 -    - Force: 100.0
+2025-07-30 14:02:49,317 - meca_driver_meca - INFO - _connect_sync:224 -    - Speed: 35.0
+2025-07-30 14:02:49,318 - meca_driver_meca - INFO - _connect_sync:225 -    - Acceleration: 50.0
+2025-07-30 14:02:49,321 - meca_driver_meca - WARNING - _connect_sync:232 - ⚠️ Robot meca does not support SetDisconnectOnException
+2025-07-30 14:02:49,323 - meca_driver_meca - INFO - _connect_sync:236 - 🚀 Calling mecademicpy Robot.Connect() with parameters for meca:
+2025-07-30 14:02:49,326 - meca_driver_meca - INFO - _connect_sync:237 -    - address='192.168.0.100'
+2025-07-30 14:02:49,329 - meca_driver_meca - INFO - _connect_sync:238 -    - enable_synchronous_mode=False
+2025-07-30 14:02:49,332 - meca_driver_meca - INFO - _connect_sync:239 -    - disconnect_on_exception=False
+2025-07-30 14:02:49,337 - meca_driver_meca - INFO - _connect_sync:240 -    - timeout=30.0
+2025-07-30 14:02:49,341 - meca_driver_meca - INFO - _connect_sync:257 - 🔄 Attempting connection in async mode for meca
+2025-07-30 14:02:49,377 - meca_driver_meca - INFO - _connect_sync:266 - ✅ Connection successful in async mode for meca
+2025-07-30 14:02:49,379 - meca_driver_meca - INFO - _connect_sync:298 - ⏱️ mecademicpy Robot.Connect() completed in 0.04s for meca
+2025-07-30 14:02:49,383 - meca_driver_meca - INFO - _connect_sync:301 - ⏳ Waiting 0.5s for connection stabilization for meca
+2025-07-30 14:02:49,886 - meca_driver_meca - INFO - _connect_sync:308 - 🔍 mecademicpy Robot.IsConnected() returned: True for meca
+2025-07-30 14:02:49,891 - meca_driver_meca - INFO - _connect_sync:311 - ✅ Successfully connected to Mecademic robot meca
+2025-07-30 14:02:49,893 - meca_driver_meca - INFO - _connect_sync:318 - ✅ Robot status check successful for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: True, pause motion: True, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 14:02:49,896 - meca_driver_meca - INFO - _connect_impl:155 - 🎉 mecademicpy Robot.Connect() succeeded for meca
+2025-07-30 14:02:49,898 - meca_driver_meca - INFO - _connect_impl:159 - ⏳ Waiting 1s for connection stabilization before activation for meca
+2025-07-30 14:02:50,900 - meca_driver_meca - INFO - _activate_robot_sync_internal:360 - 🔧 Starting robot activation sequence for meca
+2025-07-30 14:02:50,901 - meca_driver_meca - INFO - _activate_robot_sync_internal:366 - 📊 Robot status before activation for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: True, pause motion: True, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 14:02:50,903 - meca_driver_meca - WARNING - _activate_robot_sync_internal:370 - ⚠️ Robot meca is in error state before activation
+2025-07-30 14:02:50,904 - meca_driver_meca - INFO - _activate_robot_sync_internal:374 - ✅ Error reset attempted for meca
+2025-07-30 14:02:50,906 - meca_driver_meca - INFO - _activate_robot_sync_internal:380 - 🔋 Activating robot meca...
+2025-07-30 14:02:50,908 - meca_driver_meca - INFO - _activate_robot_sync_internal:383 - ✅ Robot meca activation command sent
+2025-07-30 14:02:50,910 - meca_driver_meca - INFO - _activate_robot_sync_internal:386 - ⏳ Waiting 2s for activation to complete for meca
+2025-07-30 14:02:52,914 - meca_driver_meca - INFO - _activate_robot_sync_internal:405 - 🏠 Homing robot meca...
+2025-07-30 14:02:52,916 - meca_driver_meca - INFO - _activate_robot_sync_internal:408 - ✅ Robot meca homing command sent
+2025-07-30 14:02:52,919 - meca_driver_meca - INFO - _activate_robot_sync_internal:412 - ⏳ Waiting for robot meca to complete homing...
+2025-07-30 14:02:52,921 - meca_driver_meca - INFO - _activate_robot_sync_internal:415 - ✅ Robot meca homing completed
+2025-07-30 14:02:52,923 - meca_driver_meca - INFO - _activate_robot_sync_internal:439 - 🎉 Robot activation sequence completed for meca
+2025-07-30 14:02:52,926 - meca_driver_meca - INFO - _connect_impl:166 - ✅ Robot activation completed for meca
+2025-07-30 14:02:52,929 - meca_driver_meca - INFO - _set_parameters_sync:477 - Set initial parameters for meca
+2025-07-30 14:02:52,931 - meca_driver_meca - INFO - _connect_impl:176 - ✅ Initial parameters set for meca
+2025-07-30 14:02:52,935 - meca_driver_meca - INFO - _connect_impl:185 - 🏆 MecademicDriver fully initialized and connected for meca
+2025-07-30 14:02:52,939 - meca_driver_meca - INFO - connect:122 - Successfully connected to meca
+2025-07-30 14:03:02,261 - meca_driver_meca - INFO - _disconnect_sync:503 - Disconnected from Mecademic robot meca
+2025-07-30 14:03:02,264 - meca_driver_meca - INFO - disconnect:134 - Disconnected from meca
+2025-07-30 14:03:04,711 - meca_driver_meca - INFO - __init__:63 - Initialized Mecademic driver for meca at 192.168.0.100:10000
+2025-07-30 14:03:04,745 - meca_driver_meca - INFO - _connect_impl:113 - 🔄 Starting MecademicDriver connection process for meca
+2025-07-30 14:03:04,746 - meca_driver_meca - INFO - _connect_impl:117 - 📦 Creating mecademicpy Robot() instance for meca
+2025-07-30 14:03:04,747 - meca_driver_meca - INFO - _connect_impl:121 - ✅ mecademicpy Robot() instance created successfully for meca
+2025-07-30 14:03:04,749 - meca_driver_meca - INFO - _connect_impl:131 - 🔧 Executing connection in thread pool (timeout=30.0s) for meca
+2025-07-30 14:03:04,751 - meca_driver_meca - INFO - _connect_sync:203 - 🔄 Starting mecademicpy Robot.Connect() to 192.168.0.100:10000 for meca
+2025-07-30 14:03:04,753 - meca_driver_meca - INFO - _connect_sync:214 - 📦 Using mecademicpy version: unknown for meca
+2025-07-30 14:03:04,755 - meca_driver_meca - INFO - _connect_sync:219 - 🔧 Connection parameters for meca:
+2025-07-30 14:03:04,757 - meca_driver_meca - INFO - _connect_sync:220 -    - IP Address: 192.168.0.100
+2025-07-30 14:03:04,759 - meca_driver_meca - INFO - _connect_sync:221 -    - Port: 10000 (mecademicpy uses fixed port 10000)
+2025-07-30 14:03:04,761 - meca_driver_meca - INFO - _connect_sync:222 -    - Timeout: 30.0s
+2025-07-30 14:03:04,763 - meca_driver_meca - INFO - _connect_sync:223 -    - Force: 100.0
+2025-07-30 14:03:04,766 - meca_driver_meca - INFO - _connect_sync:224 -    - Speed: 35.0
+2025-07-30 14:03:04,768 - meca_driver_meca - INFO - _connect_sync:225 -    - Acceleration: 50.0
+2025-07-30 14:03:04,771 - meca_driver_meca - WARNING - _connect_sync:232 - ⚠️ Robot meca does not support SetDisconnectOnException
+2025-07-30 14:03:04,773 - meca_driver_meca - INFO - _connect_sync:236 - 🚀 Calling mecademicpy Robot.Connect() with parameters for meca:
+2025-07-30 14:03:04,775 - meca_driver_meca - INFO - _connect_sync:237 -    - address='192.168.0.100'
+2025-07-30 14:03:04,778 - meca_driver_meca - INFO - _connect_sync:238 -    - enable_synchronous_mode=False
+2025-07-30 14:03:04,780 - meca_driver_meca - INFO - _connect_sync:239 -    - disconnect_on_exception=False
+2025-07-30 14:03:04,783 - meca_driver_meca - INFO - _connect_sync:240 -    - timeout=30.0
+2025-07-30 14:03:04,786 - meca_driver_meca - INFO - _connect_sync:257 - 🔄 Attempting connection in async mode for meca
+2025-07-30 14:03:04,809 - meca_driver_meca - INFO - _connect_sync:266 - ✅ Connection successful in async mode for meca
+2025-07-30 14:03:04,810 - meca_driver_meca - INFO - _connect_sync:298 - ⏱️ mecademicpy Robot.Connect() completed in 0.02s for meca
+2025-07-30 14:03:04,811 - meca_driver_meca - INFO - _connect_sync:301 - ⏳ Waiting 0.5s for connection stabilization for meca
+2025-07-30 14:03:05,313 - meca_driver_meca - INFO - _connect_sync:308 - 🔍 mecademicpy Robot.IsConnected() returned: True for meca
+2025-07-30 14:03:05,314 - meca_driver_meca - INFO - _connect_sync:311 - ✅ Successfully connected to Mecademic robot meca
+2025-07-30 14:03:05,315 - meca_driver_meca - INFO - _connect_sync:318 - ✅ Robot status check successful for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: True, EOB: False, brakes engaged: False, connection watchdog: disabled
+2025-07-30 14:03:05,317 - meca_driver_meca - INFO - _connect_impl:155 - 🎉 mecademicpy Robot.Connect() succeeded for meca
+2025-07-30 14:03:05,330 - meca_driver_meca - INFO - _connect_impl:159 - ⏳ Waiting 1s for connection stabilization before activation for meca
+2025-07-30 14:03:06,333 - meca_driver_meca - INFO - _activate_robot_sync_internal:360 - 🔧 Starting robot activation sequence for meca
+2025-07-30 14:03:06,336 - meca_driver_meca - INFO - _activate_robot_sync_internal:366 - 📊 Robot status before activation for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: True, EOB: False, brakes engaged: False, connection watchdog: disabled
+2025-07-30 14:03:06,338 - meca_driver_meca - INFO - _activate_robot_sync_internal:380 - 🔋 Activating robot meca...
+2025-07-30 14:03:06,340 - meca_driver_meca - INFO - _activate_robot_sync_internal:383 - ✅ Robot meca activation command sent
+2025-07-30 14:03:06,344 - meca_driver_meca - INFO - _activate_robot_sync_internal:386 - ⏳ Waiting 2s for activation to complete for meca
+2025-07-30 14:03:08,348 - meca_driver_meca - INFO - _activate_robot_sync_internal:405 - 🏠 Homing robot meca...
+2025-07-30 14:03:08,350 - meca_driver_meca - INFO - _activate_robot_sync_internal:408 - ✅ Robot meca homing command sent
+2025-07-30 14:03:08,351 - meca_driver_meca - INFO - _activate_robot_sync_internal:412 - ⏳ Waiting for robot meca to complete homing...
+2025-07-30 14:03:08,354 - meca_driver_meca - INFO - _activate_robot_sync_internal:415 - ✅ Robot meca homing completed
+2025-07-30 14:03:08,355 - meca_driver_meca - INFO - _activate_robot_sync_internal:439 - 🎉 Robot activation sequence completed for meca
+2025-07-30 14:03:08,356 - meca_driver_meca - INFO - _connect_impl:166 - ✅ Robot activation completed for meca
+2025-07-30 14:03:08,359 - meca_driver_meca - INFO - _set_parameters_sync:477 - Set initial parameters for meca
+2025-07-30 14:03:08,361 - meca_driver_meca - INFO - _connect_impl:176 - ✅ Initial parameters set for meca
+2025-07-30 14:03:08,364 - meca_driver_meca - INFO - _connect_impl:185 - 🏆 MecademicDriver fully initialized and connected for meca
+2025-07-30 14:03:08,365 - meca_driver_meca - INFO - connect:122 - Successfully connected to meca
+2025-07-30 14:03:13,161 - meca_driver_meca - INFO - _disconnect_sync:503 - Disconnected from Mecademic robot meca
+2025-07-30 14:03:13,163 - meca_driver_meca - INFO - disconnect:134 - Disconnected from meca
+2025-07-30 14:03:16,921 - meca_driver_meca - INFO - __init__:63 - Initialized Mecademic driver for meca at 192.168.0.100:10000
+2025-07-30 14:03:16,950 - meca_driver_meca - INFO - _connect_impl:113 - 🔄 Starting MecademicDriver connection process for meca
+2025-07-30 14:03:16,952 - meca_driver_meca - INFO - _connect_impl:117 - 📦 Creating mecademicpy Robot() instance for meca
+2025-07-30 14:03:16,954 - meca_driver_meca - INFO - _connect_impl:121 - ✅ mecademicpy Robot() instance created successfully for meca
+2025-07-30 14:03:16,955 - meca_driver_meca - INFO - _connect_impl:131 - 🔧 Executing connection in thread pool (timeout=30.0s) for meca
+2025-07-30 14:03:16,956 - meca_driver_meca - INFO - _connect_sync:203 - 🔄 Starting mecademicpy Robot.Connect() to 192.168.0.100:10000 for meca
+2025-07-30 14:03:16,958 - meca_driver_meca - INFO - _connect_sync:214 - 📦 Using mecademicpy version: unknown for meca
+2025-07-30 14:03:16,959 - meca_driver_meca - INFO - _connect_sync:219 - 🔧 Connection parameters for meca:
+2025-07-30 14:03:16,960 - meca_driver_meca - INFO - _connect_sync:220 -    - IP Address: 192.168.0.100
+2025-07-30 14:03:16,962 - meca_driver_meca - INFO - _connect_sync:221 -    - Port: 10000 (mecademicpy uses fixed port 10000)
+2025-07-30 14:03:16,963 - meca_driver_meca - INFO - _connect_sync:222 -    - Timeout: 30.0s
+2025-07-30 14:03:16,964 - meca_driver_meca - INFO - _connect_sync:223 -    - Force: 100.0
+2025-07-30 14:03:16,965 - meca_driver_meca - INFO - _connect_sync:224 -    - Speed: 35.0
+2025-07-30 14:03:16,966 - meca_driver_meca - INFO - _connect_sync:225 -    - Acceleration: 50.0
+2025-07-30 14:03:16,967 - meca_driver_meca - WARNING - _connect_sync:232 - ⚠️ Robot meca does not support SetDisconnectOnException
+2025-07-30 14:03:16,969 - meca_driver_meca - INFO - _connect_sync:236 - 🚀 Calling mecademicpy Robot.Connect() with parameters for meca:
+2025-07-30 14:03:16,970 - meca_driver_meca - INFO - _connect_sync:237 -    - address='192.168.0.100'
+2025-07-30 14:03:16,972 - meca_driver_meca - INFO - _connect_sync:238 -    - enable_synchronous_mode=False
+2025-07-30 14:03:16,975 - meca_driver_meca - INFO - _connect_sync:239 -    - disconnect_on_exception=False
+2025-07-30 14:03:16,976 - meca_driver_meca - INFO - _connect_sync:240 -    - timeout=30.0
+2025-07-30 14:03:16,979 - meca_driver_meca - INFO - _connect_sync:257 - 🔄 Attempting connection in async mode for meca
+2025-07-30 14:03:16,999 - meca_driver_meca - INFO - _connect_sync:266 - ✅ Connection successful in async mode for meca
+2025-07-30 14:03:17,001 - meca_driver_meca - INFO - _connect_sync:298 - ⏱️ mecademicpy Robot.Connect() completed in 0.02s for meca
+2025-07-30 14:03:17,004 - meca_driver_meca - INFO - _connect_sync:301 - ⏳ Waiting 0.5s for connection stabilization for meca
+2025-07-30 14:03:17,507 - meca_driver_meca - INFO - _connect_sync:308 - 🔍 mecademicpy Robot.IsConnected() returned: True for meca
+2025-07-30 14:03:17,509 - meca_driver_meca - INFO - _connect_sync:311 - ✅ Successfully connected to Mecademic robot meca
+2025-07-30 14:03:17,510 - meca_driver_meca - INFO - _connect_sync:318 - ✅ Robot status check successful for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: True, EOB: False, brakes engaged: False, connection watchdog: disabled
+2025-07-30 14:03:17,511 - meca_driver_meca - INFO - _connect_impl:155 - 🎉 mecademicpy Robot.Connect() succeeded for meca
+2025-07-30 14:03:17,512 - meca_driver_meca - INFO - _connect_impl:159 - ⏳ Waiting 1s for connection stabilization before activation for meca
+2025-07-30 14:03:18,514 - meca_driver_meca - INFO - _activate_robot_sync_internal:360 - 🔧 Starting robot activation sequence for meca
+2025-07-30 14:03:18,516 - meca_driver_meca - INFO - _activate_robot_sync_internal:366 - 📊 Robot status before activation for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: True, EOB: False, brakes engaged: False, connection watchdog: disabled
+2025-07-30 14:03:18,528 - meca_driver_meca - INFO - _activate_robot_sync_internal:380 - 🔋 Activating robot meca...
+2025-07-30 14:03:18,535 - meca_driver_meca - INFO - _activate_robot_sync_internal:383 - ✅ Robot meca activation command sent
+2025-07-30 14:03:18,540 - meca_driver_meca - INFO - _activate_robot_sync_internal:386 - ⏳ Waiting 2s for activation to complete for meca
+2025-07-30 14:03:20,552 - meca_driver_meca - INFO - _activate_robot_sync_internal:405 - 🏠 Homing robot meca...
+2025-07-30 14:03:20,555 - meca_driver_meca - INFO - _activate_robot_sync_internal:408 - ✅ Robot meca homing command sent
+2025-07-30 14:03:20,558 - meca_driver_meca - INFO - _activate_robot_sync_internal:412 - ⏳ Waiting for robot meca to complete homing...
+2025-07-30 14:03:20,569 - meca_driver_meca - INFO - _activate_robot_sync_internal:415 - ✅ Robot meca homing completed
+2025-07-30 14:03:20,572 - meca_driver_meca - INFO - _activate_robot_sync_internal:439 - 🎉 Robot activation sequence completed for meca
+2025-07-30 14:03:20,576 - meca_driver_meca - INFO - _connect_impl:166 - ✅ Robot activation completed for meca
+2025-07-30 14:03:20,593 - meca_driver_meca - INFO - _set_parameters_sync:477 - Set initial parameters for meca
+2025-07-30 14:03:20,596 - meca_driver_meca - INFO - _connect_impl:176 - ✅ Initial parameters set for meca
+2025-07-30 14:03:20,598 - meca_driver_meca - INFO - _connect_impl:185 - 🏆 MecademicDriver fully initialized and connected for meca
+2025-07-30 14:03:20,601 - meca_driver_meca - INFO - connect:122 - Successfully connected to meca
+2025-07-30 14:04:10,377 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: True, EOB: False, brakes engaged: False, connection watchdog: disabled
+2025-07-30 14:04:10,378 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 14:04:10,380 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 14:04:10,381 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 14:04:10,382 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 14:04:10,385 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 14:04:10,386 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 14:04:10,389 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: True, EOB: False, brakes engaged: False, connection watchdog: disabled
+2025-07-30 14:04:10,391 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 14:04:10,393 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 14:04:10,395 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 14:04:10,398 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 14:04:10,401 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 14:04:10,403 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 14:04:10,408 - meca_driver_meca - INFO - clear_motion:932 - 🔧 Clearing motion queue for meca
+2025-07-30 14:04:10,411 - meca_driver_meca - INFO - clear_motion:942 - ✅ ClearMotion() completed for meca
+2025-07-30 14:04:10,415 - meca_driver_meca - INFO - resume_motion:964 - 🔧 Resuming motion for meca
+2025-07-30 14:04:10,418 - meca_driver_meca - INFO - resume_motion:974 - ✅ ResumeMotion() completed for meca
+2025-07-30 14:07:49,198 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 14:07:49,200 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 14:07:49,202 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 14:07:49,203 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 14:07:49,205 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 14:07:49,207 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 14:07:49,208 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 14:07:49,211 - meca_driver_meca - INFO - _get_status_sync:600 - 🔍 RAW robot_status object for meca: Activated: True, homed: True, sim: 0, recovery mode: False, error: False, pause motion: False, EOB: True, brakes engaged: False, connection watchdog: disabled
+2025-07-30 14:07:49,213 - meca_driver_meca - INFO - _get_status_sync:601 - 🔍 robot_status type: <class 'mecademicpy.robot_classes.RobotStatus'>
+2025-07-30 14:07:49,215 - meca_driver_meca - INFO - _get_status_sync:602 - 🔍 robot_status attributes: ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__slotnames__', '__str__', '__subclasshook__', '__weakref__', 'activation_state', 'brakes_engaged', 'can_move', 'connection_watchdog_enabled', 'end_of_block_status', 'error_code', 'error_status', 'estopState', 'homing_state', 'pause_motion_status', 'pstop2State', 'recovery_mode', 'simulation_mode']
+2025-07-30 14:07:49,216 - meca_driver_meca - INFO - _get_status_sync:610 - 🔍 Fixed attribute access for meca:
+2025-07-30 14:07:49,217 - meca_driver_meca - INFO - _get_status_sync:611 -   - activation_state: True
+2025-07-30 14:07:49,220 - meca_driver_meca - INFO - _get_status_sync:612 -   - homing_state: True
+2025-07-30 14:07:49,221 - meca_driver_meca - INFO - _get_status_sync:613 -   - error_status: False
+2025-07-30 14:07:49,226 - meca_driver_meca - INFO - clear_motion:932 - 🔧 Clearing motion queue for meca
+2025-07-30 14:07:49,228 - meca_driver_meca - INFO - clear_motion:942 - ✅ ClearMotion() completed for meca
+2025-07-30 14:07:49,229 - meca_driver_meca - INFO - resume_motion:964 - 🔧 Resuming motion for meca
+2025-07-30 14:07:49,231 - meca_driver_meca - INFO - resume_motion:974 - ✅ ResumeMotion() completed for meca

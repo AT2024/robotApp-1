@@ -423,3 +423,114 @@ async def process_wafer_batch(
     except Exception as e:
         logger.error(f"Error in batch processing: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/debug-connection-state")
+async def debug_connection_state(service: MecaService = MecaServiceDep()):
+    """
+    Debug endpoint to expose comprehensive connection diagnostics.
+    Returns detailed information about robot connection status, driver state,
+    socket status, activation status, homing status, and error status.
+    """
+    try:
+        from core.state_manager import RobotState
+        import time
+        
+        # Get basic service state
+        robot_info = await service.state_manager.get_robot_state(service.robot_id)
+        current_state = robot_info.current_state if robot_info else None
+        robot_id = service.robot_id
+        
+        debug_info = {
+            "timestamp": time.time(),
+            "robot_id": robot_id,
+            "service_state": current_state.name if hasattr(current_state, 'name') else str(current_state),
+            "service_ready": False,
+            "driver_available": False,
+            "robot_instance_available": False,
+            "socket_connected": False,
+            "activation_status": False,
+            "homing_status": False,
+            "error_status": False,
+            "paused_status": False,
+            "last_connection_time": None,
+            "connection_details": {},
+            "errors": []
+        }
+        
+        try:
+            # Check if service considers itself ready
+            debug_info["service_ready"] = await service.ensure_robot_ready(allow_busy=True)
+        except Exception as e:
+            debug_info["errors"].append(f"Service readiness check failed: {str(e)}")
+        
+        # Check driver availability
+        if hasattr(service.async_wrapper, 'robot_driver'):
+            debug_info["driver_available"] = True
+            driver = service.async_wrapper.robot_driver
+            
+            try:
+                # Check robot instance
+                robot_instance = driver.get_robot_instance() if hasattr(driver, 'get_robot_instance') else None
+                debug_info["robot_instance_available"] = robot_instance is not None
+                
+                if robot_instance:
+                    # Check socket connection status - try multiple approaches
+                    if hasattr(robot_instance, 'is_connected'):
+                        debug_info["socket_connected"] = robot_instance.is_connected()
+                    elif hasattr(robot_instance, '_socket') and robot_instance._socket:
+                        debug_info["socket_connected"] = True
+                    elif hasattr(robot_instance, 'connected') and robot_instance.connected:
+                        debug_info["socket_connected"] = True
+                    elif hasattr(driver, '_connected') and driver._connected:
+                        debug_info["socket_connected"] = True
+                    else:
+                        # If we can get status, assume connected
+                        try:
+                            test_status = await driver.get_status()
+                            debug_info["socket_connected"] = test_status.get('connected', False)
+                        except:
+                            debug_info["socket_connected"] = False
+                    
+                    # Get detailed robot status
+                    try:
+                        status = await driver.get_status()
+                        debug_info["activation_status"] = status.get('activation_status', False)
+                        debug_info["homing_status"] = status.get('homing_status', False)
+                        debug_info["error_status"] = status.get('error_status', False)
+                        debug_info["paused_status"] = status.get('paused', False)
+                        debug_info["connection_details"] = status
+                    except Exception as e:
+                        debug_info["errors"].append(f"Status retrieval failed: {str(e)}")
+                
+            except Exception as e:
+                debug_info["errors"].append(f"Driver instance check failed: {str(e)}")
+        
+        # Check for last successful connection time (if available)
+        try:
+            if hasattr(service, '_last_successful_connection'):
+                debug_info["last_connection_time"] = service._last_successful_connection
+        except:
+            pass
+        
+        return {
+            "status": "success",
+            "debug_info": debug_info,
+            "summary": {
+                "overall_health": (
+                    debug_info["service_ready"] and 
+                    debug_info["driver_available"] and 
+                    debug_info["robot_instance_available"] and 
+                    debug_info["socket_connected"] and 
+                    debug_info["activation_status"] and 
+                    debug_info["homing_status"] and 
+                    not debug_info["error_status"]
+                ),
+                "connection_ready": debug_info["socket_connected"] and debug_info["robot_instance_available"],
+                "robot_operational": debug_info["activation_status"] and debug_info["homing_status"] and not debug_info["error_status"]
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"Error in debug connection state: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Debug endpoint error: {str(e)}")

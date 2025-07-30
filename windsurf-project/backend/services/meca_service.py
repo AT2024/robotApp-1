@@ -772,8 +772,27 @@ class MecaService(RobotService):
                     # Log error but don't fail - robot is still technically ready
                     self.logger.error(f"⚠️ Failed to clear/resume motion for {self.robot_id}: {str(e)}", exc_info=True)
             
-            # Final verification of robot readiness
-            final_status = await driver.get_status()
+            # Final verification of robot readiness - ensure robot is truly responsive
+            self.debug_log(self.robot_id, "ensure_robot_ready", "final_verification", 
+                          "Starting final robot responsiveness verification")
+            
+            # Test robot responsiveness with a quick status query
+            try:
+                response_start = time.time()
+                final_status = await driver.get_status()
+                response_time = time.time() - response_start
+                
+                self.debug_log(self.robot_id, "ensure_robot_ready", "response_test", 
+                              f"Robot response test completed", {"response_time": f"{response_time:.3f}s"})
+                
+                if response_time > 5.0:  # If response takes more than 5 seconds, consider it problematic
+                    self.logger.warning(f"⚠️ Robot {self.robot_id} response time slow: {response_time:.3f}s")
+                    
+            except Exception as e:
+                error_msg = f"Robot {self.robot_id} failed responsiveness test: {str(e)}"
+                self.logger.error(error_msg)
+                raise HardwareError(error_msg, robot_id=self.robot_id)
+            
             final_activation = final_status.get('activation_status', False)
             final_homing = final_status.get('homing_status', False)
             error_status = final_status.get('error_status', False)
@@ -1241,6 +1260,7 @@ class MecaService(RobotService):
         )
         
         async def _connect():
+            self.logger.info(f"🔄 CONNECTING: Starting connection process for robot {self.robot_id}")
             await self.update_robot_state(
                 RobotState.CONNECTING,
                 reason="Attempting to connect to robot"
@@ -1250,16 +1270,25 @@ class MecaService(RobotService):
                 # Get the underlying Mecademic driver
                 if hasattr(self.async_wrapper, 'robot_driver'):
                     driver = self.async_wrapper.robot_driver
+                    self.logger.info(f"🔌 CONNECTING: Driver found for robot {self.robot_id}, attempting TCP connection")
                     
                     # Attempt connection
                     connected = await driver.connect()
+                    self.logger.info(f"🔗 CONNECTION RESULT: Robot {self.robot_id} connection attempt returned: {connected}")
                     
                     if connected:
+                        self.logger.info(f"✅ CONNECTION SUCCESS: Robot {self.robot_id} connected successfully")
+                        
                         # Reset backoff state on successful connection
                         self._reset_reconnect_backoff()
                         
                         # Capture initial position
-                        await self.capture_current_position()
+                        self.logger.info(f"📍 POSITION CAPTURE: Capturing current position for robot {self.robot_id}")
+                        position_result = await self.capture_current_position()
+                        if position_result.success:
+                            self.logger.info(f"📍 POSITION CAPTURED: Successfully captured position for robot {self.robot_id}")
+                        else:
+                            self.logger.warning(f"⚠️ POSITION CAPTURE FAILED: Could not capture position for robot {self.robot_id}: {position_result.error}")
                         
                         # Update state to idle
                         await self.update_robot_state(
@@ -1267,9 +1296,10 @@ class MecaService(RobotService):
                             reason="Successfully connected to robot"
                         )
                         
-                        self.logger.info(f"Successfully connected to robot {self.robot_id}")
+                        self.logger.info(f"🎯 READY: Robot {self.robot_id} is now IDLE and ready for operations")
                         return True
                     else:
+                        self.logger.error(f"❌ CONNECTION FAILED: Robot {self.robot_id} driver.connect() returned False")
                         await self.update_robot_state(
                             RobotState.ERROR,
                             reason="Failed to connect to robot"
@@ -1777,9 +1807,43 @@ class MecaService(RobotService):
         )
         
         async def _pickup_sequence():
+            # Pre-operation connection health check
+            self.logger.info(f"🔍 PRE-OPERATION CHECK: Validating connection health before pickup sequence {start+1} to {start+count}")
+            
+            # Ensure robot is ready (includes comprehensive connection validation)
             await self.ensure_robot_ready()
             
-            self.logger.info(f"Starting pickup sequence for wafers {start+1} to {start+count}")
+            # Additional connection health verification for critical operations
+            if hasattr(self.async_wrapper, 'robot_driver'):
+                driver = self.async_wrapper.robot_driver
+                try:
+                    # Quick status query to verify robot is responsive
+                    pre_op_start = time.time()
+                    pre_status = await driver.get_status()
+                    response_time = time.time() - pre_op_start
+                    
+                    self.logger.info(f"✅ PRE-OPERATION CHECK: Robot responsive in {response_time:.3f}s")
+                    
+                    # Verify critical status indicators
+                    if not pre_status.get('activation_status', False):
+                        raise HardwareError(f"Robot {self.robot_id} not activated for pickup operation", robot_id=self.robot_id)
+                    if not pre_status.get('homing_status', False):
+                        raise HardwareError(f"Robot {self.robot_id} not homed for pickup operation", robot_id=self.robot_id)
+                    if pre_status.get('error_status', False):
+                        raise HardwareError(f"Robot {self.robot_id} in error state for pickup operation", robot_id=self.robot_id)
+                    
+                    self.logger.info(f"✅ PRE-OPERATION CHECK: All connection health checks passed for pickup operation")
+                    
+                except Exception as e:
+                    error_msg = f"Pre-operation connection health check failed for {self.robot_id}: {str(e)}"
+                    self.logger.error(error_msg)
+                    raise HardwareError(error_msg, robot_id=self.robot_id)
+            else:
+                error_msg = f"No robot driver available for pre-operation check on {self.robot_id}"
+                self.logger.error(error_msg)
+                raise HardwareError(error_msg, robot_id=self.robot_id)
+            
+            self.logger.info(f"🚀 STARTING PICKUP: Beginning pickup sequence for wafers {start+1} to {start+count}")
             
             # Initial statements for first wafer
             if start == 0:
@@ -2086,8 +2150,48 @@ class MecaService(RobotService):
                 parameters={"values": parameters} if parameters else {}
             )
         
+        # Enhanced logging for pickup sequence debugging
+        command_start = time.time()
+        self.logger.info(f"🤖 EXECUTING COMMAND: {command_type} with parameters {parameters}")
+        
+        # Check socket/driver status before command
+        if hasattr(self.async_wrapper, 'robot_driver'):
+            driver = self.async_wrapper.robot_driver
+            try:
+                # Quick pre-command status check
+                robot_instance = driver.get_robot_instance() if hasattr(driver, 'get_robot_instance') else None
+                if robot_instance:
+                    self.logger.debug(f"🔗 SOCKET STATUS: Robot instance available for command {command_type}")
+                else:
+                    self.logger.warning(f"⚠️ SOCKET STATUS: No robot instance for command {command_type}")
+            except Exception as e:
+                self.logger.warning(f"⚠️ SOCKET CHECK: Could not verify socket status before {command_type}: {e}")
+        
+        # Execute the command
         result = await self.async_wrapper.execute_movement(command)
-        if not result.success:
+        command_duration = time.time() - command_start
+        
+        # Enhanced response logging  
+        if result.success:
+            self.logger.info(f"✅ COMMAND SUCCESS: {command_type} completed in {command_duration:.3f}s")
+            if hasattr(result, 'data') and result.data:
+                self.logger.debug(f"📊 COMMAND RESULT: {command_type} returned data: {result.data}")
+        else:
+            self.logger.error(f"❌ COMMAND FAILED: {command_type} failed after {command_duration:.3f}s - Error: {result.error}")
+            
+            # Additional socket diagnosis on failure
+            if hasattr(self.async_wrapper, 'robot_driver'):
+                driver = self.async_wrapper.robot_driver
+                try:
+                    robot_instance = driver.get_robot_instance() if hasattr(driver, 'get_robot_instance') else None
+                    if robot_instance:
+                        post_failure_status = await driver.get_status()
+                        self.logger.error(f"🔍 POST-FAILURE STATUS: {post_failure_status}")
+                    else:
+                        self.logger.error(f"🔗 SOCKET DROPPED: No robot instance after {command_type} failure")
+                except Exception as diag_e:
+                    self.logger.error(f"🔍 DIAGNOSTIC FAILED: Could not get post-failure status: {diag_e}")
+            
             raise HardwareError(f"Movement command {command_type} failed: {result.error}", robot_id=self.robot_id)
     
     async def execute_drop_sequence(self, start: int, count: int) -> ServiceResult[Dict[str, Any]]:

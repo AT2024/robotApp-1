@@ -421,3 +421,131 @@
 2025-07-30 11:27:03,788 - ot2_service - INFO - stop:185 - OT2Service service stopped
 2025-07-30 11:27:03,790 - protocol_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for ProtocolExecutionService
 2025-07-30 11:27:03,794 - protocol_service - INFO - stop:185 - ProtocolExecutionService service stopped
+2025-07-30 11:27:10,022 - ot2_service - INFO - _on_start:470 - Registered robot ot2 with state manager
+2025-07-30 11:27:10,095 - ot2_service - INFO - _on_start:226 - OT2 robot ot2 connected successfully
+2025-07-30 11:27:10,192 - ot2_service - INFO - _start_health_monitoring:212 - Started health monitoring for OT2Service
+2025-07-30 11:27:10,194 - ot2_service - INFO - start:166 - OT2Service service started
+2025-07-30 11:27:10,219 - protocol_service - INFO - start:166 - ProtocolExecutionService service started
+2025-07-30 11:27:10,301 - ot2_service - INFO - _health_monitoring_loop:237 - Robot connection state changed: None -> True
+2025-07-30 11:27:10,303 - ot2_service - INFO - _handle_connection_state_change:150 - OT2 robot ot2 connection restored
+2025-07-30 13:35:19,392 - ot2_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for OT2Service
+2025-07-30 13:35:19,395 - ot2_service - INFO - stop:185 - OT2Service service stopped
+2025-07-30 13:35:19,399 - protocol_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for ProtocolExecutionService
+2025-07-30 13:35:19,402 - protocol_service - INFO - stop:185 - ProtocolExecutionService service stopped
+2025-07-30 13:35:27,605 - ot2_service - INFO - _on_start:470 - Registered robot ot2 with state manager
+2025-07-30 13:35:27,679 - ot2_service - INFO - _on_start:226 - OT2 robot ot2 connected successfully
+2025-07-30 13:35:27,776 - ot2_service - INFO - _start_health_monitoring:212 - Started health monitoring for OT2Service
+2025-07-30 13:35:27,777 - ot2_service - INFO - start:166 - OT2Service service started
+2025-07-30 13:35:27,788 - protocol_service - INFO - start:166 - ProtocolExecutionService service started
+2025-07-30 13:35:27,880 - ot2_service - INFO - _health_monitoring_loop:237 - Robot connection state changed: None -> True
+2025-07-30 13:35:27,881 - ot2_service - INFO - _handle_connection_state_change:150 - OT2 robot ot2 connection restored
+2025-07-30 13:36:11,675 - ot2_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for OT2Service
+2025-07-30 13:36:11,676 - ot2_service - INFO - stop:185 - OT2Service service stopped
+2025-07-30 13:36:11,678 - protocol_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for ProtocolExecutionService
+2025-07-30 13:36:11,700 - protocol_service - INFO - stop:185 - ProtocolExecutionService service stopped
+2025-07-30 13:37:30,326 - ot2_service - INFO - _on_start:470 - Registered robot ot2 with state manager
+2025-07-30 13:37:31,390 - ot2_service - INFO - _on_start:226 - OT2 robot ot2 connected successfully
+2025-07-30 13:37:31,490 - ot2_service - INFO - _start_health_monitoring:212 - Started health monitoring for OT2Service
+2025-07-30 13:37:31,511 - ot2_service - INFO - start:166 - OT2Service service started
+2025-07-30 13:37:31,544 - protocol_service - INFO - start:166 - ProtocolExecutionService service started
+2025-07-30 13:37:31,645 - ot2_service - INFO - _health_monitoring_loop:237 - Robot connection state changed: None -> True
+2025-07-30 13:37:31,648 - ot2_service - INFO - _handle_connection_state_change:150 - OT2 robot ot2 connection restored
+2025-07-30 13:42:16,798 - ot2_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for OT2Service
+2025-07-30 13:42:16,800 - ot2_service - INFO - stop:185 - OT2Service service stopped
+2025-07-30 13:42:16,803 - protocol_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for ProtocolExecutionService
+2025-07-30 13:42:16,805 - protocol_service - INFO - stop:185 - ProtocolExecutionService service stopped
+2025-07-30 13:42:23,609 - ot2_service - INFO - _on_start:470 - Registered robot ot2 with state manager
+2025-07-30 13:42:23,681 - ot2_service - INFO - _on_start:226 - OT2 robot ot2 connected successfully
+2025-07-30 13:42:23,788 - ot2_service - INFO - _start_health_monitoring:212 - Started health monitoring for OT2Service
+2025-07-30 13:42:23,789 - ot2_service - INFO - start:166 - OT2Service service started
+2025-07-30 13:42:23,804 - protocol_service - INFO - start:166 - ProtocolExecutionService service started
+2025-07-30 13:42:23,897 - ot2_service - INFO - _health_monitoring_loop:237 - Robot connection state changed: None -> True
+2025-07-30 13:42:23,900 - ot2_service - INFO - _handle_connection_state_change:150 - OT2 robot ot2 connection restored
+2025-07-30 13:43:01,976 - ot2_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for OT2Service
+2025-07-30 13:43:01,977 - ot2_service - INFO - stop:185 - OT2Service service stopped
+2025-07-30 13:43:01,979 - protocol_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for ProtocolExecutionService
+2025-07-30 13:43:01,981 - protocol_service - INFO - stop:185 - ProtocolExecutionService service stopped
+2025-07-30 13:43:08,381 - ot2_service - INFO - _on_start:470 - Registered robot ot2 with state manager
+2025-07-30 13:43:08,459 - ot2_service - INFO - _on_start:226 - OT2 robot ot2 connected successfully
+2025-07-30 13:43:08,591 - ot2_service - INFO - _start_health_monitoring:212 - Started health monitoring for OT2Service
+2025-07-30 13:43:08,593 - ot2_service - INFO - start:166 - OT2Service service started
+2025-07-30 13:43:08,716 - protocol_service - INFO - start:166 - ProtocolExecutionService service started
+2025-07-30 13:43:08,840 - ot2_service - INFO - _health_monitoring_loop:237 - Robot connection state changed: None -> True
+2025-07-30 13:43:08,844 - ot2_service - INFO - _handle_connection_state_change:150 - OT2 robot ot2 connection restored
+2025-07-30 13:44:56,026 - ot2_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for OT2Service
+2025-07-30 13:44:56,028 - ot2_service - INFO - stop:185 - OT2Service service stopped
+2025-07-30 13:44:56,030 - protocol_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for ProtocolExecutionService
+2025-07-30 13:44:56,032 - protocol_service - INFO - stop:185 - ProtocolExecutionService service stopped
+2025-07-30 13:45:02,403 - ot2_service - INFO - _on_start:470 - Registered robot ot2 with state manager
+2025-07-30 13:45:02,478 - ot2_service - INFO - _on_start:226 - OT2 robot ot2 connected successfully
+2025-07-30 13:45:02,579 - ot2_service - INFO - _start_health_monitoring:212 - Started health monitoring for OT2Service
+2025-07-30 13:45:02,581 - ot2_service - INFO - start:166 - OT2Service service started
+2025-07-30 13:45:02,609 - protocol_service - INFO - start:166 - ProtocolExecutionService service started
+2025-07-30 13:45:02,718 - ot2_service - INFO - _health_monitoring_loop:237 - Robot connection state changed: None -> True
+2025-07-30 13:45:02,720 - ot2_service - INFO - _handle_connection_state_change:150 - OT2 robot ot2 connection restored
+2025-07-30 13:45:16,407 - ot2_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for OT2Service
+2025-07-30 13:45:16,409 - ot2_service - INFO - stop:185 - OT2Service service stopped
+2025-07-30 13:45:16,410 - protocol_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for ProtocolExecutionService
+2025-07-30 13:45:16,411 - protocol_service - INFO - stop:185 - ProtocolExecutionService service stopped
+2025-07-30 13:45:24,258 - ot2_service - INFO - _on_start:470 - Registered robot ot2 with state manager
+2025-07-30 13:45:24,330 - ot2_service - INFO - _on_start:226 - OT2 robot ot2 connected successfully
+2025-07-30 13:45:24,429 - ot2_service - INFO - _start_health_monitoring:212 - Started health monitoring for OT2Service
+2025-07-30 13:45:24,433 - ot2_service - INFO - start:166 - OT2Service service started
+2025-07-30 13:45:24,461 - protocol_service - INFO - start:166 - ProtocolExecutionService service started
+2025-07-30 13:45:24,546 - ot2_service - INFO - _health_monitoring_loop:237 - Robot connection state changed: None -> True
+2025-07-30 13:45:24,549 - ot2_service - INFO - _handle_connection_state_change:150 - OT2 robot ot2 connection restored
+2025-07-30 13:47:16,465 - ot2_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for OT2Service
+2025-07-30 13:47:16,467 - ot2_service - INFO - stop:185 - OT2Service service stopped
+2025-07-30 13:47:16,468 - protocol_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for ProtocolExecutionService
+2025-07-30 13:47:16,470 - protocol_service - INFO - stop:185 - ProtocolExecutionService service stopped
+2025-07-30 13:47:23,123 - ot2_service - INFO - _on_start:470 - Registered robot ot2 with state manager
+2025-07-30 13:47:23,235 - ot2_service - INFO - _on_start:226 - OT2 robot ot2 connected successfully
+2025-07-30 13:47:23,334 - ot2_service - INFO - _start_health_monitoring:212 - Started health monitoring for OT2Service
+2025-07-30 13:47:23,337 - ot2_service - INFO - start:166 - OT2Service service started
+2025-07-30 13:47:23,374 - protocol_service - INFO - start:166 - ProtocolExecutionService service started
+2025-07-30 13:47:23,484 - ot2_service - INFO - _health_monitoring_loop:237 - Robot connection state changed: None -> True
+2025-07-30 13:47:23,486 - ot2_service - INFO - _handle_connection_state_change:150 - OT2 robot ot2 connection restored
+2025-07-30 13:48:44,774 - ot2_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for OT2Service
+2025-07-30 13:48:44,777 - ot2_service - INFO - stop:185 - OT2Service service stopped
+2025-07-30 13:48:44,780 - protocol_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for ProtocolExecutionService
+2025-07-30 13:48:44,785 - protocol_service - INFO - stop:185 - ProtocolExecutionService service stopped
+2025-07-30 13:48:50,969 - ot2_service - INFO - _on_start:470 - Registered robot ot2 with state manager
+2025-07-30 13:48:51,077 - ot2_service - INFO - _on_start:226 - OT2 robot ot2 connected successfully
+2025-07-30 13:48:51,176 - ot2_service - INFO - _start_health_monitoring:212 - Started health monitoring for OT2Service
+2025-07-30 13:48:51,177 - ot2_service - INFO - start:166 - OT2Service service started
+2025-07-30 13:48:51,187 - protocol_service - INFO - start:166 - ProtocolExecutionService service started
+2025-07-30 13:48:51,267 - ot2_service - INFO - _health_monitoring_loop:237 - Robot connection state changed: None -> True
+2025-07-30 13:48:51,269 - ot2_service - INFO - _handle_connection_state_change:150 - OT2 robot ot2 connection restored
+2025-07-30 14:02:46,247 - ot2_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for OT2Service
+2025-07-30 14:02:46,252 - ot2_service - INFO - stop:185 - OT2Service service stopped
+2025-07-30 14:02:46,255 - protocol_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for ProtocolExecutionService
+2025-07-30 14:02:46,259 - protocol_service - INFO - stop:185 - ProtocolExecutionService service stopped
+2025-07-30 14:02:52,954 - ot2_service - INFO - _on_start:470 - Registered robot ot2 with state manager
+2025-07-30 14:02:53,025 - ot2_service - INFO - _on_start:226 - OT2 robot ot2 connected successfully
+2025-07-30 14:02:53,127 - ot2_service - INFO - _start_health_monitoring:212 - Started health monitoring for OT2Service
+2025-07-30 14:02:53,130 - ot2_service - INFO - start:166 - OT2Service service started
+2025-07-30 14:02:53,160 - protocol_service - INFO - start:166 - ProtocolExecutionService service started
+2025-07-30 14:02:53,261 - ot2_service - INFO - _health_monitoring_loop:237 - Robot connection state changed: None -> True
+2025-07-30 14:02:53,263 - ot2_service - INFO - _handle_connection_state_change:150 - OT2 robot ot2 connection restored
+2025-07-30 14:03:02,247 - ot2_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for OT2Service
+2025-07-30 14:03:02,249 - ot2_service - INFO - stop:185 - OT2Service service stopped
+2025-07-30 14:03:02,252 - protocol_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for ProtocolExecutionService
+2025-07-30 14:03:02,257 - protocol_service - INFO - stop:185 - ProtocolExecutionService service stopped
+2025-07-30 14:03:08,376 - ot2_service - INFO - _on_start:470 - Registered robot ot2 with state manager
+2025-07-30 14:03:08,449 - ot2_service - INFO - _on_start:226 - OT2 robot ot2 connected successfully
+2025-07-30 14:03:08,568 - ot2_service - INFO - _start_health_monitoring:212 - Started health monitoring for OT2Service
+2025-07-30 14:03:08,573 - ot2_service - INFO - start:166 - OT2Service service started
+2025-07-30 14:03:08,600 - protocol_service - INFO - start:166 - ProtocolExecutionService service started
+2025-07-30 14:03:08,691 - ot2_service - INFO - _health_monitoring_loop:237 - Robot connection state changed: None -> True
+2025-07-30 14:03:08,696 - ot2_service - INFO - _handle_connection_state_change:150 - OT2 robot ot2 connection restored
+2025-07-30 14:03:13,153 - ot2_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for OT2Service
+2025-07-30 14:03:13,155 - ot2_service - INFO - stop:185 - OT2Service service stopped
+2025-07-30 14:03:13,156 - protocol_service - INFO - _stop_health_monitoring:222 - Stopped health monitoring for ProtocolExecutionService
+2025-07-30 14:03:13,157 - protocol_service - INFO - stop:185 - ProtocolExecutionService service stopped
+2025-07-30 14:03:20,645 - ot2_service - INFO - _on_start:470 - Registered robot ot2 with state manager
+2025-07-30 14:03:20,783 - ot2_service - INFO - _on_start:226 - OT2 robot ot2 connected successfully
+2025-07-30 14:03:20,893 - ot2_service - INFO - _start_health_monitoring:212 - Started health monitoring for OT2Service
+2025-07-30 14:03:20,896 - ot2_service - INFO - start:166 - OT2Service service started
+2025-07-30 14:03:20,924 - protocol_service - INFO - start:166 - ProtocolExecutionService service started
+2025-07-30 14:03:21,008 - ot2_service - INFO - _health_monitoring_loop:237 - Robot connection state changed: None -> True
+2025-07-30 14:03:21,011 - ot2_service - INFO - _handle_connection_state_change:150 - OT2 robot ot2 connection restored
