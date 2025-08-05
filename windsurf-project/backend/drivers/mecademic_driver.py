@@ -8,6 +8,7 @@ import time
 import logging
 from typing import Dict, Any, Optional
 from concurrent.futures import ThreadPoolExecutor
+import mecademicpy
 
 try:
     from mecademicpy.robot import Robot as MecademicRobot
@@ -670,18 +671,61 @@ class MecademicDriver(BaseRobotDriver):
             return False
     
     def _emergency_stop_sync(self):
-        """Synchronous emergency stop implementation"""
+        """
+        Synchronous emergency stop implementation using proper Mecademic API methods.
+        
+        Uses ClearMotion() as primary method (closest to hardware e-stop behavior):
+        - Stops robot movement immediately
+        - Clears all planned movements from queue
+        - Follows Mecademic recommended emergency stop sequence
+        """
         try:
-            if hasattr(self._robot, 'EmergencyStop'):
-                self._robot.EmergencyStop()
-                self.logger.critical(f"Emergency stop executed for {self.robot_id}")
-            elif hasattr(self._robot, 'PauseMotion'):
+            emergency_executed = False
+            
+            # STEP 1: Immediate stop current movement
+            if hasattr(self._robot, 'PauseMotion'):
+                self.logger.critical(f"🚨 Executing PauseMotion() for immediate stop on {self.robot_id}")
                 self._robot.PauseMotion()
-                self.logger.critical(f"Motion paused for {self.robot_id} (emergency stop)")
+                emergency_executed = True
+                self.logger.critical(f"✅ PauseMotion() immediate stop executed for {self.robot_id}")
+
+            # STEP 2: Clear remaining movement queue
+            if hasattr(self._robot, 'ClearMotion'):
+                self.logger.critical(f"🚨 Executing ClearMotion() to clear queue on {self.robot_id}")
+                self._robot.ClearMotion()
+                emergency_executed = True
+                self.logger.critical(f"✅ ClearMotion() queue cleared for {self.robot_id}")
+                
+                # Also engage brakes if available for additional safety
+                if hasattr(self._robot, 'BrakesOn'):
+                    try:
+                        self._robot.BrakesOn()
+                        self.logger.critical(f"✅ Emergency brakes engaged for {self.robot_id}")
+                    except Exception as brake_error:
+                        self.logger.warning(f"⚠️ Could not engage brakes during emergency stop: {brake_error}")
+                        
+            # STEP 3: Fallback if neither method available
+            if not emergency_executed and hasattr(self._robot, 'StopMotion'):
+                self.logger.critical(f"🚨 Executing StopMotion() fallback for emergency stop on {self.robot_id}")
+                self._robot.StopMotion()
+                emergency_executed = True
+                self.logger.critical(f"✅ StopMotion() fallback executed for {self.robot_id}")
+                
             else:
-                self.logger.warning(f"No emergency stop method available for {self.robot_id}")
+                self.logger.error(f"❌ No emergency stop methods available for {self.robot_id}")
+                self.logger.error(f"💡 Available methods: {[attr for attr in dir(self._robot) if 'Motion' in attr or 'Stop' in attr or 'Brake' in attr]}")
+                
+            if emergency_executed:
+                self.logger.critical(f"🛑 Emergency stop completed for {self.robot_id} - robot halted in place")
+                # Note: Connection preserved, no movement to safe position, gripper state unchanged
+            else:
+                self.logger.error(f"❌ Emergency stop FAILED for {self.robot_id} - no suitable methods available")
+                
         except Exception as e:
-            self.logger.error(f"Error during emergency stop for {self.robot_id}: {e}")
+            self.logger.error(f"❌ Critical error during emergency stop for {self.robot_id}: {type(e).__name__}: {e}")
+            # Log detailed error info for debugging
+            import traceback
+            self.logger.error(f"Emergency stop error traceback:\n{traceback.format_exc()}")
             raise
     
     async def home_robot(self) -> bool:

@@ -21,16 +21,21 @@ const SecondaryButton = ({ children, className = "", ...props }) => (
   </button>
 );
 
-const EmergencyButton = ({ active, className = "", ...props }) => (
+const EmergencyButton = ({ active, stopping, disabled, className = "", ...props }) => (
   <button
     className={`${baseButtonClasses} ${
-      active 
-        ? "bg-red-600 text-white"
-        : "bg-red-500 text-white hover:bg-red-600"
-    } focus:ring-red-500 ${className}`}
+      stopping
+        ? "bg-orange-600 text-white animate-pulse border-2 border-orange-700 shadow-lg shadow-orange-500/50"
+        : active 
+        ? "bg-red-700 text-white animate-pulse border-2 border-red-900 shadow-lg shadow-red-500/50"
+        : disabled
+        ? "bg-gray-400 text-white cursor-not-allowed"
+        : "bg-red-500 text-white hover:bg-red-600 border-2 border-red-600 hover:shadow-lg hover:shadow-red-500/30"
+    } focus:ring-red-500 font-bold ${className}`}
+    disabled={disabled || stopping}
     {...props}
   >
-    Emergency Stop
+    {stopping ? "⏹️ STOPPING..." : active ? "🚨 EMERGENCY ACTIVE" : "🛑 Emergency Stop"}
   </button>
 );
 
@@ -75,4 +80,18 @@ const ResumeButton = ({ paused, className = "", ...props }) => (
   </button>
 );
 
-export { PrimaryButton, SecondaryButton, EmergencyButton, StepButton, PauseButton, ResumeButton };
+const ResetButton = ({ disabled, className = "", ...props }) => (
+  <button
+    className={`${baseButtonClasses} ${
+      disabled
+        ? "bg-gray-400 text-white cursor-not-allowed"
+        : "bg-blue-500 text-white hover:bg-blue-600 border-2 border-blue-600 hover:shadow-lg hover:shadow-blue-500/30"
+    } focus:ring-blue-500 font-medium ${className}`}
+    disabled={disabled}
+    {...props}
+  >
+    🔄 Reset Emergency
+  </button>
+);
+
+export { PrimaryButton, SecondaryButton, EmergencyButton, StepButton, PauseButton, ResumeButton, ResetButton };

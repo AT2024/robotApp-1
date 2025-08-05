@@ -7,7 +7,7 @@ import asyncio
 import time
 import traceback
 import uuid
-from typing import Dict, Any, Optional, List, Union, Callable
+from typing import Dict, Any, Optional, List, Union, Callable, TYPE_CHECKING
 from dataclasses import dataclass, field
 from enum import Enum
 
@@ -17,6 +17,9 @@ from core.resource_lock import ResourceLockManager
 from core.settings import RoboticsSettings
 from .base import BaseService, ServiceResult, OperationContext
 from utils.logger import get_logger
+
+if TYPE_CHECKING:
+    from .orchestrator import RobotOrchestrator
 
 
 class CommandType(Enum):
@@ -709,9 +712,15 @@ class RobotCommandService(BaseService):
             
             # Transform parameters for specific command types
             if command.command_type == CommandType.PROTOCOL_EXECUTION:
-                # Transform WebSocket parameters to method parameters
-                transformed_params = await self._transform_protocol_execution_params(command.parameters)
-                return await method(transformed_params)
+                # DISABLED: This interferes with the proper orchestrated protocol execution
+                # The proper protocol execution should go through ProtocolExecutionService
+                # via the /api/ot2/run-protocol endpoint, not through command service
+                self.logger.warning(f"PROTOCOL_EXECUTION command ignored to prevent interference with orchestrated execution")
+                return {"status": "ignored", "reason": "Use orchestrated protocol execution instead"}
+                
+                # OLD CODE (commented out to prevent interference):
+                # transformed_params = await self._transform_protocol_execution_params(command.parameters)
+                # return await method(transformed_params)
             else:
                 # For other commands, use parameters directly
                 return await method(**command.parameters)

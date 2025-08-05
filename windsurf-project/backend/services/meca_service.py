@@ -1371,19 +1371,144 @@ class MecaService(RobotService):
     
     async def _execute_emergency_stop(self) -> bool:
         """Emergency stop implementation for Mecademic robot"""
+        self.logger.critical(f"🚨 Executing emergency stop for Meca robot {self.robot_id}")
+        
+        emergency_success = False
+        
         try:
-            # Emergency stop through hardware
-            if hasattr(self.async_wrapper.robot_driver, 'EmergencyStop'):
+            # Primary method: Emergency stop through AsyncRobotWrapper (now has handler)
+            try:
                 await self.async_wrapper.execute_movement(
                     MovementCommand(command_type="emergency_stop")
                 )
+                emergency_success = True
+                self.logger.critical(f"✅ Emergency stop executed via AsyncRobotWrapper for {self.robot_id}")
+            except Exception as wrapper_error:
+                self.logger.error(f"AsyncRobotWrapper emergency stop failed: {wrapper_error}")
+                
+                # Fallback method: Direct driver emergency stop
+                try:
+                    if hasattr(self.async_wrapper.robot_driver, '_emergency_stop_impl'):
+                        await self.async_wrapper.robot_driver._emergency_stop_impl()
+                        emergency_success = True
+                        self.logger.critical(f"✅ Emergency stop executed via direct driver for {self.robot_id}")
+                    else:
+                        self.logger.error(f"❌ No emergency stop implementation available for {self.robot_id}")
+                except Exception as driver_error:
+                    self.logger.error(f"Direct driver emergency stop failed: {driver_error}")
             
-            # Open gripper for safety
-            await self._open_gripper()
+            # Note: Gripper state preserved (no automatic opening during emergency stop)
+            # Robot halts in place without any additional movements to prevent damage
             
-            return True
+            # CRITICAL: Validate connection after emergency stop
+            connection_preserved = await self._validate_connection_after_emergency_stop()
+            
+            if emergency_success:
+                self.logger.critical(f"🚨 Emergency stop completed for Meca robot {self.robot_id}")
+                if connection_preserved:
+                    self.logger.critical(f"✅ Connection preserved after emergency stop for {self.robot_id}")
+                else:
+                    self.logger.warning(f"⚠️ Connection may be compromised after emergency stop for {self.robot_id}")
+            else:
+                self.logger.error(f"❌ Emergency stop FAILED for Meca robot {self.robot_id}")
+            
+            return emergency_success
+            
         except Exception as e:
-            self.logger.error(f"Emergency stop failed: {e}")
+            self.logger.error(f"Emergency stop failed with unexpected error: {e}")
+            return False
+    
+    async def _validate_connection_after_emergency_stop(self) -> bool:
+        """
+        Validate and preserve connection after emergency stop.
+        
+        Returns:
+            bool: True if connection is preserved, False if compromised
+        """
+        try:
+            self.logger.info(f"🔍 Validating connection after emergency stop for {self.robot_id}")
+            
+            # Test connection with robot status check
+            status = await self.async_wrapper.get_status()
+            
+            if status.get("connected", False):
+                self.logger.info(f"✅ Connection validated - robot {self.robot_id} still connected")
+                
+                # Additional validation: ensure robot is accessible
+                if hasattr(self.async_wrapper.robot_driver, '_robot'):
+                    robot_instance = self.async_wrapper.robot_driver._robot
+                    if robot_instance and hasattr(robot_instance, 'IsConnected'):
+                        try:
+                            loop = asyncio.get_event_loop()
+                            is_connected = await loop.run_in_executor(
+                                None, robot_instance.IsConnected
+                            )
+                            if is_connected:
+                                self.logger.info(f"✅ Deep connection validation passed for {self.robot_id}")
+                                return True
+                            else:
+                                self.logger.warning(f"⚠️ Robot reports disconnected after emergency stop")
+                        except Exception as check_error:
+                            self.logger.warning(f"⚠️ Connection check failed: {check_error}")
+                
+                return True
+                
+            else:
+                self.logger.warning(f"⚠️ Connection lost after emergency stop for {self.robot_id}")
+                
+                # Attempt reconnection if connection is lost
+                reconnection_success = await self._attempt_emergency_reconnection()
+                if reconnection_success:
+                    self.logger.info(f"✅ Connection restored after emergency stop for {self.robot_id}")
+                    return True
+                else:
+                    self.logger.error(f"❌ Failed to restore connection after emergency stop for {self.robot_id}")
+                    return False
+                    
+        except Exception as e:
+            self.logger.error(f"❌ Connection validation failed after emergency stop: {e}")
+            return False
+    
+    async def _attempt_emergency_reconnection(self) -> bool:
+        """
+        Attempt to reconnect robot after emergency stop if connection is lost.
+        
+        Returns:
+            bool: True if reconnection successful, False otherwise
+        """
+        try:
+            self.logger.info(f"🔄 Attempting emergency reconnection for {self.robot_id}")
+            
+            # Try to reconnect the driver
+            if hasattr(self.async_wrapper.robot_driver, 'connect'):
+                reconnect_success = await self.async_wrapper.robot_driver.connect()
+                
+                if reconnect_success:
+                    self.logger.info(f"✅ Emergency reconnection successful for {self.robot_id}")
+                    
+                    # Update robot state to reflect reconnection
+                    await self.update_robot_state(
+                        RobotState.IDLE,
+                        reason="Reconnected after emergency stop"
+                    )
+                    
+                    return True
+                else:
+                    self.logger.error(f"❌ Emergency reconnection failed for {self.robot_id}")
+                    
+                    # Update robot state to reflect disconnection
+                    await self.update_robot_state(
+                        RobotState.ERROR,
+                        reason="Connection lost after emergency stop"
+                    )
+                    
+                    return False
+            else:
+                self.logger.error(f"❌ No reconnect method available for {self.robot_id}")
+                return False
+                
+        except Exception as e:
+            self.logger.error(f"❌ Emergency reconnection attempt failed: {e}")
             return False
     
     
@@ -1759,6 +1884,12 @@ class MecaService(RobotService):
                         await asyncio.sleep(1.0)  # Check every second
                     self.logger.info(f"▶️ Operation resumed at {step_context}")
                 
+                # Check for emergency stop before processing each wafer
+                robot_info = await self.state_manager.get_robot_state(self.robot_id)
+                if robot_info and robot_info.current_state == RobotState.EMERGENCY_STOP:
+                    self.logger.critical(f"🚨 Emergency stop detected - aborting pickup sequence at {step_context}")
+                    break  # Exit the wafer processing loop immediately
+                
                 try:
                     self.logger.info(f"🔄 Starting pickup process for {step_context}")
                     
@@ -1983,6 +2114,12 @@ class MecaService(RobotService):
         """
         if parameters is None:
             parameters = []
+            
+        # Check for emergency stop before executing any movement
+        robot_info = await self.state_manager.get_robot_state(self.robot_id)
+        if robot_info and robot_info.current_state == RobotState.EMERGENCY_STOP:
+            self.logger.critical(f"🚨 Emergency stop active - aborting movement: {command_type}")
+            raise RuntimeError(f"Emergency stop activated during {command_type}")
         
         # Validate parameters before sending to robot
         try:

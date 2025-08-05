@@ -11,6 +11,8 @@ services:
       - /app/__pycache__
     environment:
       - ENVIRONMENT=development
+      - ROBOTICS_ENV=development
+      - ROBOTICS_LOG_LEVEL=DEBUG
       - PORT=8000
       - PYTHONPATH=/app
     restart: unless-stopped

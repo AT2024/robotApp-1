@@ -490,6 +490,51 @@ class AsyncRobotWrapper:
                 else:
                     self.logger.warning(f"Unknown configuration command: {config_type} with values {values} for {self.robot_id}")
             
+            elif command.command_type == "emergency_stop":
+                # EMERGENCY STOP: Immediate halt using proper Mecademic API methods
+                self.logger.critical(f"🚨 EMERGENCY STOP triggered for {self.robot_id}")
+                
+                emergency_executed = False
+                
+                # STEP 1: Immediate stop current movement
+                if hasattr(actual_robot, 'PauseMotion'):
+                    actual_robot.PauseMotion()
+                    self.logger.critical(f"✅ PauseMotion() immediate stop executed for {self.robot_id}")
+                    emergency_executed = True
+
+                # STEP 2: Clear remaining movement queue  
+                if hasattr(actual_robot, 'ClearMotion'):
+                    actual_robot.ClearMotion()
+                    self.logger.critical(f"✅ ClearMotion() queue cleared for {self.robot_id}")
+                    emergency_executed = True
+                    
+                    # Also engage brakes if available for additional safety
+                    if hasattr(actual_robot, 'BrakesOn'):
+                        try:
+                            actual_robot.BrakesOn()
+                            self.logger.critical(f"✅ Emergency brakes engaged for {self.robot_id}")
+                        except Exception as brake_error:
+                            self.logger.warning(f"⚠️ Could not engage brakes during emergency stop: {brake_error}")
+                
+                # STEP 3: Fallback if neither PauseMotion nor ClearMotion available
+                if not emergency_executed and hasattr(actual_robot, 'StopMotion'):
+                    actual_robot.StopMotion()
+                    self.logger.critical(f"✅ StopMotion() fallback executed for {self.robot_id}")
+                    emergency_executed = True
+                
+                else:
+                    self.logger.error(f"❌ No emergency stop methods available for {self.robot_id}")
+                    # Try alternative stop methods if available
+                    if hasattr(actual_robot, 'StopMotion'):
+                        actual_robot.StopMotion()
+                        self.logger.warning(f"⚠️ StopMotion() used as fallback for {self.robot_id}")
+                        emergency_executed = True
+                
+                if emergency_executed:
+                    self.logger.critical(f"🛑 Emergency stop completed for {self.robot_id} - robot halted in place")
+                    # Note: No gripper state change, no movement to safe position (as requested)
+                else:
+                    self.logger.error(f"❌ Emergency stop FAILED for {self.robot_id} - no suitable methods available")
             
             else:
                 self.logger.warning(f"Unknown command type: {command.command_type} for robot {self.robot_id}")

@@ -1,2 +1,0 @@
-2025-07-10 11:35:54,619 - test_prod - ERROR - <module>:8 - This error SHOULD appear in production
-2025-07-10 11:35:54,621 - test_prod - CRITICAL - <module>:9 - This critical SHOULD appear in production

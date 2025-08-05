@@ -265,7 +265,7 @@ class HttpHelper:
         }
         
         if api_version:
-            headers["opentrons-version"] = api_version
+            headers["Opentrons-Version"] = api_version
         
         return headers
     

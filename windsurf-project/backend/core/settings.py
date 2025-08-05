@@ -104,13 +104,31 @@ class RoboticsSettings(BaseSettings):
     ot2_http_total_timeout: float = Field(default=30.0, gt=0)  # Total timeout for HTTP requests
     ot2_http_connect_timeout: float = Field(default=10.0, gt=0)  # Connection timeout
     ot2_http_connector_limit: int = Field(default=10, ge=1)  # TCP connector limit
-    ot2_api_version: str = Field(default="4")  # Opentrons API version
+    ot2_api_version: str = Field(default="2")  # Opentrons API version
     
     # OT2 Protocol Configuration
     ot2_protocol_directory: str = Field(default="protocols/")  # Default protocol directory
     ot2_default_protocol_file: str = Field(default="ot2Protocole.py")  # Default protocol filename
     ot2_protocol_execution_timeout: float = Field(default=3600.0, gt=0)  # 1 hour for protocol execution
     ot2_protocol_monitoring_interval: float = Field(default=2.0, gt=0)  # Status monitoring interval
+    
+    # OT2 Protocol Runtime Parameters (configurable via environment variables)
+    ot2_num_generators: int = Field(default=5, ge=1, le=20)  # Number of generators
+    ot2_radioactive_vol: float = Field(default=6.6, gt=0)  # Radioactive volume in µL
+    ot2_sds_vol: float = Field(default=1.0, gt=0)  # SDS volume in µL  
+    ot2_cur: int = Field(default=2, ge=1)  # Current setting
+    ot2_tip_location: str = Field(default="1")  # Tip location
+    ot2_tray_number: int = Field(default=1, ge=1)  # Tray number
+    ot2_vial_number: int = Field(default=1, ge=1)  # Vial number
+    
+    # OT2 Protocol Coordinate Parameters (JSON strings for complex data)
+    ot2_sds_location: str = Field(default="[287.0, 226.0, 40.0]")  # SDS location coordinates
+    ot2_generators_locations: str = Field(default="[[4.0, 93.0, 133.0], [4.0, 138.0, 133.0], [4.0, 183.0, 133.0], [4.0, 228.0, 133.0], [4.0, 273.0, 133.0]]")  # Generator positions
+    ot2_home_location: str = Field(default="[350.0, 350.0, 147.0]")  # Home position
+    ot2_temp_location: str = Field(default="[8.0, 350.0, 147.0]")  # Temporary position
+    ot2_height_home_location: str = Field(default="[302.0, 302.0, 147.0]")  # High home position
+    ot2_height_temp_location: str = Field(default="[8.0, 228.0, 147.0]")  # High temp position
+    ot2_radioactive_location: str = Field(default="[354.0, 225.0, 40.0]")  # Radioactive/thorium location
 
     # Arduino Configuration
     arduino_enabled: bool = Field(default=True)
@@ -316,6 +334,23 @@ class RoboticsSettings(BaseSettings):
                     "default_file": self.ot2_default_protocol_file,
                     "execution_timeout": self.ot2_protocol_execution_timeout,
                     "monitoring_interval": self.ot2_protocol_monitoring_interval,
+                },
+                "protocol_parameters": {
+                    "NUM_OF_GENERATORS": self.ot2_num_generators,
+                    "radioactive_VOL": self.ot2_radioactive_vol,
+                    "SDS_VOL": self.ot2_sds_vol,
+                    "CUR": self.ot2_cur,
+                    "tip_location": self.ot2_tip_location,
+                    "trayNumber": self.ot2_tray_number,
+                    "vialNumber": self.ot2_vial_number,
+                    "sds_lct": self._parse_position_json(self.ot2_sds_location),
+                    "generators_locations": self._parse_position_json(self.ot2_generators_locations),
+                    "home_lct": self._parse_position_json(self.ot2_home_location),
+                    "temp_lct": self._parse_position_json(self.ot2_temp_location),
+                    "hight_home_lct": self._parse_position_json(self.ot2_height_home_location),
+                    "hight_temp_lct": self._parse_position_json(self.ot2_height_temp_location),
+                    "radioactive_lct": self._parse_position_json(self.ot2_radioactive_location),
+                    "thorium_lct": self._parse_position_json(self.ot2_radioactive_location),  # Alias for compatibility
                 },
             },
             "arduino": {

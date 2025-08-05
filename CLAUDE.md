@@ -20,7 +20,7 @@ cd windsurf-project && docker-compose up -d
 
 # Access points
 # Frontend: http://localhost:3000 (maps to container port 5173)
-# Backend: http://localhost:8000
+# Backend: http://localhost:8080
 
 # View logs
 docker-compose logs frontend
@@ -52,7 +52,7 @@ Analysis Need → Tool Selection:
 - **Strategy**: Launch multiple agents concurrently for complex analysis
 
 ### **Gemini Integration (Code Review Only)**
-- **Trigger**: Context too large for Claude analysis
+- **Trigger**: Context is large 
 - **Tasks**: Code structure analysis, implementation verification, pattern identification  
 - **NOT for**: Architecture decisions, implementation strategy, debugging approach
 

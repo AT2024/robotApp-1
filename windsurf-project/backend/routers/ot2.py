@@ -41,7 +41,7 @@ class RunRequest(BaseModel):
 
 
 @router.get("/robot-status")
-async def get_ot2_robot_status(ot2_service: OT2Service = OT2ServiceDep()):
+async def get_ot2_robot_status(ot2_service: OT2Service = Depends(OT2ServiceDep)):
     """Get current status of the OT2 robot"""
     try:
         result = await ot2_service.get_robot_status()
@@ -56,7 +56,7 @@ async def get_ot2_robot_status(ot2_service: OT2Service = OT2ServiceDep()):
 
 
 @router.post("/connect")
-async def connect_ot2(ot2_service: OT2Service = OT2ServiceDep()):
+async def connect_ot2(ot2_service: OT2Service = Depends(OT2ServiceDep)):
     """Connect to OT2 robot"""
     try:
         result = await ot2_service.connect()
@@ -71,7 +71,7 @@ async def connect_ot2(ot2_service: OT2Service = OT2ServiceDep()):
 
 
 @router.post("/disconnect")
-async def disconnect_ot2(ot2_service: OT2Service = OT2ServiceDep()):
+async def disconnect_ot2(ot2_service: OT2Service = Depends(OT2ServiceDep)):
     """Disconnect from OT2 robot"""
     try:
         result = await ot2_service.disconnect()
@@ -86,7 +86,7 @@ async def disconnect_ot2(ot2_service: OT2Service = OT2ServiceDep()):
 
 
 @router.post("/home")
-async def home_ot2(command_service: RobotCommandService = CommandServiceDep()):
+async def home_ot2(command_service: RobotCommandService = Depends(CommandServiceDep)):
     """Send OT2 robot to home position"""
     try:
         result = await command_service.submit_command(
@@ -114,7 +114,7 @@ async def home_ot2(command_service: RobotCommandService = CommandServiceDep()):
 
 @router.post("/emergency-stop")
 async def emergency_stop_ot2(
-    command_service: RobotCommandService = CommandServiceDep(),
+    command_service: RobotCommandService = Depends(CommandServiceDep),
 ):
     """Emergency stop the OT2 robot"""
     try:
@@ -143,7 +143,7 @@ async def emergency_stop_ot2(
 
 @router.post("/pause/{execution_id}")
 async def pause_protocol(
-    execution_id: str, protocol_service: ProtocolExecutionService = ProtocolServiceDep()
+    execution_id: str, protocol_service: ProtocolExecutionService = Depends(ProtocolServiceDep)
 ):
     """Pause an OT2 protocol execution"""
     try:
@@ -166,7 +166,7 @@ async def pause_protocol(
 
 @router.post("/resume/{execution_id}")
 async def resume_protocol(
-    execution_id: str, protocol_service: ProtocolExecutionService = ProtocolServiceDep()
+    execution_id: str, protocol_service: ProtocolExecutionService = Depends(ProtocolServiceDep)
 ):
     """Resume a paused OT2 protocol execution"""
     try:
@@ -368,7 +368,7 @@ async def check_run_status(robot_manager, run_id: str) -> str:
 @router.post("/run-protocol")
 async def run_ot2_protocol(
     request_data: ProtocolRequest = Body(default_factory=ProtocolRequest),
-    protocol_service: ProtocolExecutionService = ProtocolServiceDep(),
+    protocol_service: ProtocolExecutionService = Depends(ProtocolServiceDep),
 ):
     """Run the OT2 protocol using the new service layer.
 
@@ -424,7 +424,7 @@ async def run_ot2_protocol(
 
 @router.get("/status/{execution_id}")
 async def get_protocol_status(
-    execution_id: str, protocol_service: ProtocolExecutionService = ProtocolServiceDep()
+    execution_id: str, protocol_service: ProtocolExecutionService = Depends(ProtocolServiceDep)
 ):
     """Get the current status of a protocol execution.
 
@@ -449,7 +449,7 @@ async def get_protocol_status(
 
 @router.post("/stop/{execution_id}")
 async def stop_protocol(
-    execution_id: str, protocol_service: ProtocolExecutionService = ProtocolServiceDep()
+    execution_id: str, protocol_service: ProtocolExecutionService = Depends(ProtocolServiceDep)
 ):
     """Stop an OT2 protocol execution.
 
@@ -480,7 +480,7 @@ async def stop_protocol(
 
 @router.get("/protocols")
 async def list_active_protocols(
-    protocol_service: ProtocolExecutionService = ProtocolServiceDep(),
+    protocol_service: ProtocolExecutionService = Depends(ProtocolServiceDep),
 ):
     """List all active protocol executions.
 
@@ -505,7 +505,7 @@ async def list_active_protocols(
 
 @router.get("/executions")
 async def list_protocol_executions(
-    protocol_service: ProtocolExecutionService = ProtocolServiceDep(),
+    protocol_service: ProtocolExecutionService = Depends(ProtocolServiceDep),
 ):
     """List all protocol executions.
 
@@ -524,4 +524,85 @@ async def list_protocol_executions(
     except Exception as e:
         error_msg = f"Failed to list executions: {str(e)}"
         logger.error(error_msg)
+        raise HTTPException(status_code=500, detail=error_msg)
+
+
+@router.get("/debug/connectivity")
+async def debug_ot2_connectivity(
+    ot2_service: OT2Service = Depends(OT2ServiceDep),
+):
+    """Debug endpoint to test OT2 robot connectivity and API communication."""
+    try:
+        logger.info("Testing OT2 connectivity...")
+        
+        # Test basic connectivity
+        health_result = await ot2_service._get_health_status()
+        
+        # Get detailed status
+        status_result = await ot2_service.get_robot_status()
+        
+        return {
+            "status": "success",
+            "connectivity": "connected",
+            "health": health_result,
+            "robot_status": status_result.data if status_result.success else status_result.error,
+            "base_url": ot2_service.base_url,
+        }
+        
+    except Exception as e:
+        error_msg = f"OT2 connectivity test failed: {str(e)}"
+        logger.error(error_msg, exc_info=True)
+        return {
+            "status": "error",
+            "connectivity": "failed",
+            "error": error_msg,
+            "base_url": getattr(ot2_service, 'base_url', 'unknown'),
+        }
+
+
+@router.post("/run-protocol-direct")
+async def run_protocol_direct(
+    request_data: ProtocolRequest = Body(default_factory=ProtocolRequest),
+    ot2_service: OT2Service = Depends(OT2ServiceDep),
+):
+    """Run OT2 protocol directly through OT2Service (bypasses ProtocolExecutionService).
+    
+    This endpoint provides a direct path to OT2Service.run_protocol() for simpler 
+    protocol execution without the complexity of the ProtocolExecutionService.
+    """
+    try:
+        logger.info("Starting direct OT2 protocol execution")
+        
+        # Prepare protocol parameters
+        parameters = {}
+        if request_data.trayInfo:
+            parameters.update(request_data.trayInfo)
+        if request_data.vialNumber:
+            parameters["vialNumber"] = request_data.vialNumber
+        if request_data.trayNumber:
+            parameters["trayNumber"] = request_data.trayNumber
+        if request_data.parameters:
+            parameters.update(request_data.parameters)
+        
+        logger.info(f"Protocol parameters: {parameters}")
+        
+        # Call OT2Service.run_protocol directly
+        result = await ot2_service.run_protocol(**parameters)
+        
+        if not result.success:
+            raise HTTPException(status_code=500, detail=result.error)
+        
+        logger.info("Direct OT2 protocol execution completed successfully")
+        return {
+            "message": "OT2 protocol executed successfully",
+            "status": "success",
+            "result": result.data,
+            "parameters": parameters,
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        error_msg = f"Failed to execute protocol directly: {str(e)}"
+        logger.error(error_msg, exc_info=True)
         raise HTTPException(status_code=500, detail=error_msg)

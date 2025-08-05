@@ -178,6 +178,7 @@ class AtomicStateManager:
             RobotState.EMERGENCY_STOP
         },
         RobotState.EMERGENCY_STOP: {
+            RobotState.IDLE,
             RobotState.MAINTENANCE,
             RobotState.DISCONNECTED
         }

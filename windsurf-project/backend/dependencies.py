@@ -180,6 +180,8 @@ class DependencyContainer:
         self._protocol_service = ProtocolExecutionService(
             self._settings, self._state_manager, self._lock_manager, self._orchestrator
         )
+        #print(f"*** DEPENDENCIES DEBUG: Created protocol service: {self._protocol_service}")
+        #print(f"*** DEPENDENCIES DEBUG: Protocol service type: {type(self._protocol_service)}")
 
         # Command service - create AFTER robot services are in registry
         self._command_service = RobotCommandService(
@@ -188,12 +190,19 @@ class DependencyContainer:
 
     async def _register_services(self):
         """Register services with orchestrator"""
+        print(f"*** DEPENDENCIES DEBUG: Starting service registration")
+        print(f"*** DEPENDENCIES DEBUG: Orchestrator before registration: {self._orchestrator}")
+        print(f"*** DEPENDENCIES DEBUG: Protocol service to register: {self._protocol_service}")
+        
         # Register robot services
         for robot_id, service in self._robot_services.items():
             self._orchestrator.register_robot_service(robot_id, service)
+            print(f"*** DEPENDENCIES DEBUG: Registered robot service {robot_id}: {service}")
 
         # Register other services
+        print(f"*** DEPENDENCIES DEBUG: Registering protocol service...")
         self._orchestrator.register_protocol_service(self._protocol_service)
+        print(f"*** DEPENDENCIES DEBUG: Protocol service registered. Orchestrator._protocol_service: {getattr(self._orchestrator, '_protocol_service', 'NOT_FOUND')}")
 
     async def _start_services(self):
         """Start all services"""

@@ -443,7 +443,7 @@ async def get_or_create_pool(
             max_connections_per_host=5,
             connection_timeout=10.0,
             request_timeout=30.0,
-            headers={"opentrons-version": "4"},
+            headers={"Opentrons-Version": "2"},
             **config_kwargs
         )
     

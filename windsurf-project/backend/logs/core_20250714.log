@@ -1,5 +1,0 @@
-2025-07-14 07:13:04,709 - hardware_manager - INFO - __init__:61 - Initialized Mecademic driver for meca at 192.168.0.100:10000
-2025-07-14 07:13:04,718 - hardware_manager - INFO - register_robot_driver:283 - Registered robot driver: meca
-2025-07-14 07:13:04,741 - hardware_manager - INFO - start:231 - HardwareConnectionManager started
-2025-07-14 07:27:42,981 - hardware_manager - INFO - disconnect:134 - Disconnected from meca
-2025-07-14 07:27:43,004 - hardware_manager - INFO - stop:262 - HardwareConnectionManager stopped

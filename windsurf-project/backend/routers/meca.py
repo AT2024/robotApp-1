@@ -534,3 +534,151 @@ async def debug_connection_state(service: MecaService = MecaServiceDep()):
     except Exception as e:
         logger.error(f"Error in debug connection state: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Debug endpoint error: {str(e)}")
+
+
+@router.get("/test-tcp-connection")
+async def test_tcp_connection():
+    """
+    Test direct TCP connection to Meca robot.
+    This bypasses all service layers to test raw network connectivity.
+    """
+    import socket
+    import time
+    from core.settings import get_settings
+    
+    settings = get_settings()
+    robot_config = settings.get_robot_config("meca")
+    host = robot_config.get("ip", "192.168.0.100")
+    port = robot_config.get("port", 10000)
+    timeout = 10.0
+    
+    test_results = {
+        "timestamp": time.time(),
+        "target": f"{host}:{port}",
+        "network_ping": "unknown",
+        "tcp_connection": "unknown",
+        "socket_details": {},
+        "error_details": [],
+        "recommendations": []
+    }
+    
+    try:
+        # Test 1: Network ping using raw socket (ICMP simulation)
+        try:
+            # Quick TCP connect test to verify network reachability
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as ping_sock:
+                ping_sock.settimeout(2.0)
+                ping_result = ping_sock.connect_ex((host, 80))  # Test common port
+                if ping_result == 0:
+                    test_results["network_ping"] = "reachable"
+                else:
+                    test_results["network_ping"] = "timeout"
+        except Exception as ping_error:
+            test_results["network_ping"] = f"error: {str(ping_error)}"
+        
+        # Test 2: Direct TCP connection to Meca port
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tcp_sock:
+                tcp_sock.settimeout(timeout)
+                start_time = time.time()
+                
+                logger.info(f"🔍 Testing TCP connection to {host}:{port} with {timeout}s timeout")
+                connect_result = tcp_sock.connect_ex((host, port))
+                connect_time = time.time() - start_time
+                
+                test_results["socket_details"] = {
+                    "connect_result_code": connect_result,
+                    "connect_time_seconds": round(connect_time, 3),
+                    "socket_family": str(tcp_sock.family),
+                    "socket_type": str(tcp_sock.type)
+                }
+                
+                if connect_result == 0:
+                    test_results["tcp_connection"] = "success"
+                    logger.info(f"✅ TCP connection successful in {connect_time:.3f}s")
+                    
+                    # Try to get socket info
+                    try:
+                        local_addr = tcp_sock.getsockname()
+                        peer_addr = tcp_sock.getpeername()
+                        test_results["socket_details"].update({
+                            "local_address": f"{local_addr[0]}:{local_addr[1]}",
+                            "peer_address": f"{peer_addr[0]}:{peer_addr[1]}",
+                            "connection_established": True
+                        })
+                    except Exception as sock_info_error:
+                        test_results["error_details"].append(f"Socket info error: {str(sock_info_error)}")
+                    
+                elif connect_result == 10061:  # Windows WSAECONNREFUSED
+                    test_results["tcp_connection"] = "connection_refused"
+                    test_results["error_details"].append("Connection refused - robot software not listening on port")
+                    test_results["recommendations"].extend([
+                        "Check if Mecademic robot software is running",
+                        "Verify robot is not in error/fault state",
+                        "Check robot display for connection status",
+                        "Try power cycling the robot controller"
+                    ])
+                elif connect_result == 10060:  # Windows WSAETIMEDOUT
+                    test_results["tcp_connection"] = "timeout"
+                    test_results["error_details"].append("Connection timeout - network or firewall issue")
+                    test_results["recommendations"].extend([
+                        "Check network firewall settings",
+                        "Verify robot network configuration",
+                        "Test with different timeout values"
+                    ])
+                else:
+                    test_results["tcp_connection"] = f"failed_code_{connect_result}"
+                    test_results["error_details"].append(f"Connection failed with code: {connect_result}")
+                    
+        except socket.timeout:
+            test_results["tcp_connection"] = "timeout_exception"
+            test_results["error_details"].append(f"Socket timeout after {timeout}s")
+            test_results["recommendations"].extend([
+                "Increase connection timeout",
+                "Check robot network settings",
+                "Verify robot is powered on and operational"
+            ])
+        except Exception as tcp_error:
+            test_results["tcp_connection"] = f"error: {str(tcp_error)}"
+            test_results["error_details"].append(f"TCP connection error: {str(tcp_error)}")
+        
+        # Test 3: Port scan to check what's actually listening
+        try:
+            common_ports = [10000, 10001, 80, 22, 23, 443]
+            open_ports = []
+            
+            for test_port in common_ports:
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as scan_sock:
+                    scan_sock.settimeout(2.0)
+                    if scan_sock.connect_ex((host, test_port)) == 0:
+                        open_ports.append(test_port)
+            
+            test_results["socket_details"]["open_ports"] = open_ports
+            
+            if 10000 not in open_ports and open_ports:
+                test_results["recommendations"].append(f"Robot listening on ports {open_ports} but not 10000 - check robot configuration")
+            elif not open_ports:
+                test_results["recommendations"].append("No common ports open - robot may be in standby/error state")
+                
+        except Exception as scan_error:
+            test_results["error_details"].append(f"Port scan error: {str(scan_error)}")
+        
+        # Generate final diagnosis
+        if test_results["tcp_connection"] == "success":
+            test_results["diagnosis"] = "✅ TCP connection successful - robot should be accessible"
+        elif test_results["tcp_connection"] == "connection_refused":
+            test_results["diagnosis"] = "❌ Robot hardware reachable but software not listening - check robot status"
+        elif "timeout" in test_results["tcp_connection"]:
+            test_results["diagnosis"] = "⏱️ Connection timeout - check network/firewall settings"
+        else:
+            test_results["diagnosis"] = "❓ Unknown connection issue - see error details"
+            
+        return {
+            "status": "success",
+            "test_results": test_results,
+            "summary": test_results["diagnosis"]
+        }
+        
+    except Exception as e:
+        logger.error(f"TCP connection test failed: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Connection test error: {str(e)}")

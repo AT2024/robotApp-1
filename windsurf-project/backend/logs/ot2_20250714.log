@@ -1,7 +1,0 @@
-2025-07-14 07:13:04,750 - ot2_service - INFO - _on_start:356 - Registered robot ot2 with state manager
-2025-07-14 07:13:04,758 - ot2_service - WARNING - _on_start:153 - OT2 robot ot2 connection failed: OT2 connection error: Cannot connect to host 169.254.49.202:31950 ssl:default [Connection refused]
-2025-07-14 07:13:04,764 - ot2_service - ERROR - _check_for_active_runs:731 - Failed to check for active runs: OT2 connection error: Cannot connect to host 169.254.49.202:31950 ssl:default [Connection refused]
-2025-07-14 07:13:04,766 - ot2_service - INFO - start:132 - OT2Service service started
-2025-07-14 07:13:04,782 - protocol_service - INFO - start:132 - ProtocolExecutionService service started
-2025-07-14 07:27:42,973 - ot2_service - INFO - stop:148 - OT2Service service stopped
-2025-07-14 07:27:42,977 - protocol_service - INFO - stop:148 - ProtocolExecutionService service stopped

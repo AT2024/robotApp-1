@@ -8,7 +8,7 @@ import json
 import time
 import uuid
 from typing import Dict, Any, Optional, List, Union, TYPE_CHECKING
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from enum import Enum
 from pathlib import Path
 
@@ -434,13 +434,29 @@ class ProtocolExecutionService(BaseService):
         if not self.orchestrator:
             raise ConfigurationError("Orchestrator not available for robot validation")
 
+        self.logger.info(f"Validating robot availability for required robots: {required_robots}")
         available_robots = await self.orchestrator.get_available_robots()
+        self.logger.info(f"Available robots from orchestrator: {available_robots}")
 
         for robot_id in required_robots:
+            self.logger.info(f"Checking availability of robot: {robot_id}")
+            
             if robot_id not in available_robots:
+                self.logger.warning(f"Robot {robot_id} not in available robots list")
+                
+                # Double-check with state manager directly
                 robot_info = await self.state_manager.get_robot_state(robot_id)
-                if not robot_info or not robot_info.is_operational:
-                    raise ValidationError(f"Required robot not available: {robot_id}")
+                if robot_info:
+                    self.logger.info(f"Robot {robot_id} direct state check - state: {robot_info.current_state}, operational: {robot_info.is_operational}")
+                    if not robot_info.is_operational:
+                        raise ValidationError(f"Required robot not available: {robot_id} (state: {robot_info.current_state})")
+                    else:
+                        self.logger.warning(f"Robot {robot_id} is operational but not reported as available by orchestrator")
+                else:
+                    self.logger.error(f"No state information found for robot: {robot_id}")
+                    raise ValidationError(f"Required robot not available: {robot_id} (no state information)")
+            else:
+                self.logger.info(f"Robot {robot_id} is available for protocol execution")
 
     async def _execute_protocol(self, execution: ProtocolExecution):
         """Execute protocol steps"""
@@ -538,27 +554,55 @@ class ProtocolExecutionService(BaseService):
             step.start_time = time.time()
             execution.current_step = step.step_id
 
-            self.logger.info(f"Executing step {step.step_id} on robot {step.robot_id}")
+            self.logger.info(f"Executing step {step.step_id} on robot {step.robot_id} with operation {step.operation_type}")
+            self.logger.info(f"Step parameters: {step.parameters}")
 
-            # Get robot service from orchestrator
+            # DEBUG: Check orchestrator availability
+            self.logger.info(f"Orchestrator available: {self.orchestrator is not None}")
             if not self.orchestrator:
+                self.logger.error("CRITICAL: Orchestrator not available in ProtocolExecutionService")
                 raise ConfigurationError("Orchestrator not available")
 
+            # DEBUG: Get robot service from orchestrator
+            self.logger.info(f"Getting robot service for robot_id: {step.robot_id}")
             robot_service = await self.orchestrator.get_robot_service(step.robot_id)
+            self.logger.info(f"Robot service retrieved: {robot_service is not None}")
+            self.logger.info(f"Robot service type: {type(robot_service).__name__ if robot_service else 'None'}")
+            
             if not robot_service:
+                self.logger.error(f"CRITICAL: Robot service not found for robot_id: {step.robot_id}")
+                # DEBUG: List available robot services
+                available_services = await self.orchestrator.get_available_robots()
+                self.logger.error(f"Available robot services: {available_services}")
                 raise ValidationError(f"Robot service not found: {step.robot_id}")
 
-            # Execute the operation
-            if hasattr(robot_service, step.operation_type):
+            # DEBUG: Check if method exists
+            self.logger.info(f"Checking if robot service has method: {step.operation_type}")
+            has_method = hasattr(robot_service, step.operation_type)
+            self.logger.info(f"Method {step.operation_type} exists: {has_method}")
+            
+            if has_method:
+                # DEBUG: Get method and check if it's callable
                 method = getattr(robot_service, step.operation_type)
+                self.logger.info(f"Method type: {type(method)}")
+                self.logger.info(f"Method callable: {callable(method)}")
+                
+                # DEBUG: Log method execution attempt
+                self.logger.info(f"Executing method {step.operation_type} with parameters: {step.parameters}")
 
                 # Set timeout if specified
                 if step.timeout:
+                    self.logger.info(f"Executing with timeout: {step.timeout}s")
                     result = await asyncio.wait_for(
                         method(**step.parameters), timeout=step.timeout
                     )
                 else:
+                    self.logger.info("Executing without timeout")
                     result = await method(**step.parameters)
+
+                # DEBUG: Log result
+                self.logger.info(f"Method execution result: {result}")
+                self.logger.info(f"Result type: {type(result)}")
 
                 # Store result
                 execution.results[step.step_id] = result
@@ -568,6 +612,9 @@ class ProtocolExecutionService(BaseService):
                 self.logger.info(f"Step {step.step_id} completed successfully")
 
             else:
+                # DEBUG: List available methods
+                available_methods = [method for method in dir(robot_service) if not method.startswith('_')]
+                self.logger.error(f"Available methods on {type(robot_service).__name__}: {available_methods}")
                 raise ValidationError(
                     f"Operation {step.operation_type} not supported by robot {step.robot_id}"
                 )
@@ -802,7 +849,10 @@ class ProtocolExecutionService(BaseService):
             "total_steps": execution.total_steps,
             "completed_steps": execution.completed_steps,
             "failed_steps": execution.failed_steps,
-            "results": execution.results,
+            "results": {
+                step_id: asdict(result) if hasattr(result, '__dataclass_fields__') else result
+                for step_id, result in execution.results.items()
+            },
             "error": execution.error,
         }
 

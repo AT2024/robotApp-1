@@ -125,7 +125,10 @@ class RobotOrchestrator(BaseService):
     
     def register_protocol_service(self, service: 'ProtocolExecutionService'):
         """Register the protocol execution service"""
+        self.logger.info(f"*** ORCHESTRATOR DEBUG: Registering protocol service: {service}")
+        self.logger.info(f"*** ORCHESTRATOR DEBUG: Service type: {type(service)}")
         self._protocol_service = service
+        self.logger.info(f"*** ORCHESTRATOR DEBUG: Protocol service registered. self._protocol_service: {self._protocol_service}")
         self.logger.info("Registered protocol execution service")
     
     def register_monitoring_service(self, service: 'MonitoringService'):
@@ -189,38 +192,78 @@ class RobotOrchestrator(BaseService):
         )
         
         async def _emergency_stop_all():
-            async with self._system_lock:
-                self._emergency_stop_active = True
+            # EMERGENCY BYPASS: Skip system lock for maximum speed
+            self.logger.critical(f"🚨 Emergency stop bypassing system lock for immediate execution")
+            self._emergency_stop_active = True
+            
+            # Update system state (non-blocking)
+            asyncio.create_task(self.state_manager.update_system_state(
+                SystemState.ERROR,
+                reason=f"Emergency stop: {reason}"
+            ))
+            
+            # Execute all emergency stops in PARALLEL for maximum speed
+            emergency_tasks = []
+            
+            # Hardware manager emergency stop
+            if hasattr(self.hardware_manager, 'emergency_stop_all'):
+                hardware_task = asyncio.create_task(self.hardware_manager.emergency_stop_all())
+                emergency_tasks.append(("hardware_manager", hardware_task))
+            
+            # Service emergency stops - all in parallel
+            for robot_id, service in self._robot_services.items():
+                service_task = asyncio.create_task(self._execute_service_emergency_stop(robot_id, service))
+                emergency_tasks.append((robot_id, service_task))
+            
+            # Wait for all emergency stops with timeout
+            service_results = {}
+            hardware_results = {}
+            
+            if emergency_tasks:
+                self.logger.critical(f"🚨 Executing {len(emergency_tasks)} emergency stops in parallel")
                 
-                # Update system state
-                await self.state_manager.update_system_state(
-                    SystemState.ERROR,
-                    reason=f"Emergency stop: {reason}"
+                # Execute with 2-second timeout per task to prevent hanging
+                results = await asyncio.gather(
+                    *[asyncio.wait_for(task, timeout=2.0) for name, task in emergency_tasks],
+                    return_exceptions=True
                 )
                 
-                # Stop all robots through hardware manager
-                hardware_results = await self.hardware_manager.emergency_stop_all()
-                
-                # Stop all robots through services
-                service_results = {}
-                for robot_id, service in self._robot_services.items():
-                    try:
-                        result = await service.emergency_stop()
-                        service_results[robot_id] = result.success
-                    except Exception as e:
-                        self.logger.error(f"Emergency stop failed for {robot_id}: {e}")
-                        service_results[robot_id] = False
-                
-                # Combine results
-                all_results = {**hardware_results, **service_results}
-                
-                self.logger.critical(
-                    f"Emergency stop executed. Results: {all_results}. Reason: {reason}"
-                )
-                
-                return all_results
+                # Process results
+                for i, (name, task) in enumerate(emergency_tasks):
+                    result = results[i]
+                    
+                    if isinstance(result, asyncio.TimeoutError):
+                        self.logger.error(f"⏱️ Emergency stop timeout for {name}")
+                        service_results[name] = False
+                    elif isinstance(result, Exception):
+                        self.logger.error(f"❌ Emergency stop error for {name}: {result}")
+                        service_results[name] = False
+                    elif name == "hardware_manager":
+                        hardware_results = result if isinstance(result, dict) else {"hardware": bool(result)}
+                    else:
+                        service_results[name] = result
+            
+            # Combine results
+            all_results = {**hardware_results, **service_results}
+            
+            self.logger.critical(
+                f"🛑 Emergency stop completed in parallel. Results: {all_results}. Reason: {reason}"
+            )
+            
+            return all_results
         
         return await self.execute_operation(context, _emergency_stop_all)
+    
+    async def _execute_service_emergency_stop(self, robot_id: str, service) -> bool:
+        """Execute emergency stop for a single service"""
+        try:
+            result = await service.emergency_stop()
+            success = result.success if hasattr(result, 'success') else bool(result)
+            self.logger.critical(f"✅ Emergency stop completed for {robot_id}: {success}")
+            return success
+        except Exception as e:
+            self.logger.error(f"❌ Emergency stop failed for {robot_id}: {e}")
+            return False
     
     async def reset_emergency_stop(self) -> ServiceResult[bool]:
         """Reset emergency stop state"""
@@ -375,13 +418,25 @@ class RobotOrchestrator(BaseService):
         """Get list of available robots, optionally filtered by type"""
         available = []
         
+        self.logger.info(f"Checking available robots (filter: {robot_type})")
+        
         for robot_id, service in self._robot_services.items():
+            self.logger.debug(f"Checking robot {robot_id} (type: {service.robot_type})")
+            
             if robot_type and service.robot_type != robot_type:
+                self.logger.debug(f"Skipping robot {robot_id} - type mismatch ({service.robot_type} != {robot_type})")
                 continue
             
             robot_info = await self.state_manager.get_robot_state(robot_id)
-            if robot_info and robot_info.is_operational:
-                available.append(robot_id)
+            if robot_info:
+                self.logger.info(f"Robot {robot_id} state: {robot_info.current_state}, operational: {robot_info.is_operational}")
+                if robot_info.is_operational:
+                    available.append(robot_id)
+                    self.logger.info(f"Added robot {robot_id} to available list")
+                else:
+                    self.logger.warning(f"Robot {robot_id} not operational (state: {robot_info.current_state})")
+            else:
+                self.logger.error(f"No state information available for robot {robot_id}")
         
         return available
     

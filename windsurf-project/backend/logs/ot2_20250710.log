@@ -1,6 +1,0 @@
-2025-07-10 11:34:24,499 - ot2_router - INFO - <module>:14 - Testing ot2_router logger - this is an info message
-2025-07-10 11:34:24,501 - ot2_router - ERROR - <module>:15 - Testing ot2_router logger - this is an error message
-2025-07-10 11:34:24,525 - ot2_service - INFO - <module>:14 - Testing ot2_service logger - this is an info message
-2025-07-10 11:34:24,526 - ot2_service - ERROR - <module>:15 - Testing ot2_service logger - this is an error message
-2025-07-10 11:34:24,565 - protocol_service - INFO - <module>:14 - Testing protocol_service logger - this is an info message
-2025-07-10 11:34:24,567 - protocol_service - ERROR - <module>:15 - Testing protocol_service logger - this is an error message

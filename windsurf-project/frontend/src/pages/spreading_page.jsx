@@ -5,7 +5,7 @@ import websocketService from '../utils/services/websocketService';
 import logger from '../utils/logger';
 import { SystemStatus } from '../components/status';
 import { ProgressSteps, StepContent } from '../components/steps';
-import { EmergencyButton, SecondaryButton, PauseButton, ResumeButton } from '../components/buttons';
+import { EmergencyButton, SecondaryButton, PauseButton, ResumeButton, ResetButton } from '../components/buttons';
 import { ConfirmationModal } from '../components/common';
 
 const ROBOT_MAP = {
@@ -28,6 +28,7 @@ const SpreadingPage = () => {
   });
   const [trayInfo, setTrayInfo] = useState(null);
   const [emergencyStopActive, setEmergencyStopActive] = useState(false);
+  const [emergencyStopStopping, setEmergencyStopStopping] = useState(false);
   const [stepConfirmations, setStepConfirmations] = useState({});
   const [ot2Status, setOt2Status] = useState('idle');
   const [connectionError, setConnectionError] = useState(false);
@@ -297,6 +298,71 @@ const SpreadingPage = () => {
             setSystemPaused(false);
             setPauseReason('');
             setPausedOperations([]);
+          } else if (message.command_type === 'emergency_stop') {
+            if (message.status === 'acknowledged') {
+              logger.log('🚨 Emergency stop acknowledged by backend - validating robot states');
+              // Keep showing stopping state until completion
+            } else if (message.status === 'validating') {
+              logger.log('🔍 Emergency stop validating robot connections:', message.data);
+              const { operational_robots, unavailable_robots } = message.data || {};
+              if (unavailable_robots && unavailable_robots.length > 0) {
+                logger.warn(`⚠️  Warning: ${unavailable_robots.length} robots unavailable: ${unavailable_robots.join(', ')}`);
+              }
+              if (operational_robots && operational_robots.length > 0) {
+                logger.log(`✅ Found ${operational_robots.length} operational robots: ${operational_robots.join(', ')}`);
+              }
+            } else if (message.status === 'success') {
+              logger.log('✅ Emergency stop completed successfully');
+              setEmergencyStopStopping(false);
+              setEmergencyStopActive(true);
+              
+              // Show success details
+              const data = message.data || {};
+              if (data.total_stopped > 0) {
+                setLastError(`Emergency stop successful: ${data.total_stopped} robot(s) stopped`);
+                // Clear error after 5 seconds for success messages
+                setTimeout(() => setLastError(''), 5000);
+              }
+            } else if (message.status === 'partial_success') {
+              logger.warn('⚠️  Emergency stop partially successful');
+              setEmergencyStopStopping(false);
+              setEmergencyStopActive(true);
+              
+              // Show partial success details
+              const data = message.data || {};
+              const errorMsg = `Partial emergency stop: ${data.total_stopped || 0} stopped, ${(data.failed_stops || []).length} failed, ${(data.unavailable_robots || []).length} unavailable`;
+              setLastError(errorMsg);
+              logger.warn(errorMsg);
+            } else if (message.status === 'error') {
+              logger.error('❌ Emergency stop failed:', message.message);
+              setEmergencyStopStopping(false);
+              setEmergencyStopActive(false); // Reset to allow retry
+              
+              // Show detailed error information
+              const data = message.data || {};
+              let errorMsg = message.message || 'Emergency stop failed';
+              
+              if (data.error_type === 'no_operational_robots') {
+                errorMsg = 'EMERGENCY STOP FAILED: No robots are connected or operational!';
+                if (data.robot_statuses) {
+                  const statusDetails = Object.entries(data.robot_statuses)
+                    .map(([robot, status]) => `${robot}: ${status.backend_state}`)
+                    .join(', ');
+                  logger.error(`Robot states: ${statusDetails}`);
+                }
+              } else if (data.failed_stops && data.failed_stops.length > 0) {
+                const failedRobots = data.failed_stops.map(f => `${f.robot_id}: ${f.error}`).join('; ');
+                errorMsg += ` | Failed robots: ${failedRobots}`;
+              }
+              
+              setLastError(errorMsg);
+              setConnectionError(data.error_type === 'no_operational_robots');
+            } else if (message.status === 'completed') {
+              // Legacy status for backward compatibility
+              logger.log('Emergency stop completed (legacy status)');
+              setEmergencyStopStopping(false);
+              setEmergencyStopActive(true);
+            }
           }
         } else {
           logger.error('Command failed:', message.error);
@@ -384,51 +450,102 @@ const SpreadingPage = () => {
     [isRobotConnected, stepConfirmations]
   );
 
+  // Debug current state
+  React.useEffect(() => {
+    console.log('*** STATE DEBUG: Component state updated');
+    console.log('*** STATE DEBUG: activeStep:', activeStep);
+    console.log('*** STATE DEBUG: steps.length:', steps.length);
+    console.log('*** STATE DEBUG: current step:', steps[activeStep]);
+    console.log('*** STATE DEBUG: systemStatus:', systemStatus);
+    console.log('*** STATE DEBUG: emergencyStopActive:', emergencyStopActive);
+    if (activeStep < steps.length) {
+      console.log('*** STATE DEBUG: robotConnected for current step:', isRobotConnected(steps[activeStep].robot));
+      console.log('*** STATE DEBUG: canExecute for current step:', canExecuteStep(activeStep));
+    }
+  }, [activeStep, systemStatus, emergencyStopActive]);
+
   // Handle OT2 protocol execution
   const handleOT2Protocol = async () => {
     try {
+      console.log('*** OT2 PROTOCOL DEBUG: handleOT2Protocol() called');
+      console.log('*** OT2 PROTOCOL DEBUG: trayInfo:', trayInfo);
+      console.log('*** OT2 PROTOCOL DEBUG: websocketService:', websocketService);
+      
       logger.log('Starting OT2 protocol with tray info:', trayInfo);
 
-      // Make sure we're sending just the trayInfo without nesting it inside parameters
-      websocketService.send({
+      const message = {
         type: 'command',
         command_type: 'ot2_protocol',
         commandId: Date.now().toString(), // Add a unique ID for tracking
         data: trayInfo || {}, // Send tray info directly without additional nesting
-      });
+      };
+
+      console.log('*** OT2 PROTOCOL DEBUG: Prepared message:', message);
+      console.log('*** OT2 PROTOCOL DEBUG: About to call websocketService.send()');
+
+      // Make sure we're sending just the trayInfo without nesting it inside parameters
+      websocketService.send(message);
+
+      console.log('*** OT2 PROTOCOL DEBUG: websocketService.send() completed');
 
       // Update UI state to indicate the protocol is running
       setOt2Status('running');
+      console.log('*** OT2 PROTOCOL DEBUG: OT2 status set to running');
     } catch (error) {
+      console.error('*** OT2 PROTOCOL DEBUG: Error in handleOT2Protocol:', error);
       logger.error('Failed to start OT2 protocol:', error);
       setOt2Status('error');
       setLastError('Failed to start OT2 protocol: ' + (error.message || 'Unknown error'));
     }
   };
 
-  // Handle emergency stop with confirmation
+  // Handle emergency stop - IMMEDIATE execution without confirmation
   const handleEmergencyStop = useCallback(() => {
-    showConfirmation(
-      'Emergency Stop',
-      'This will immediately stop all robot operations. This action cannot be undone. Are you sure?',
-      () => {
-        logger.log('Emergency stop activated');
-        setEmergencyStopActive(true);
-        websocketService.send({
-          type: 'command',
-          command_type: 'emergency_stop',
-          data: {
-            robots: {
-              meca: systemStatus.meca === 'connected',
-              ot2: systemStatus.ot2 === 'connected',
-              arduino: systemStatus.arduino === 'connected',
-            },
-          },
-        });
+    logger.log('🚨 Emergency stop activated - immediate execution');
+    
+    // IMMEDIATE visual feedback - show stopping state
+    setEmergencyStopStopping(true);
+    
+    // Send emergency stop command immediately
+    websocketService.send({
+      type: 'command',
+      command_type: 'emergency_stop',
+      data: {
+        robots: {
+          meca: systemStatus.meca === 'connected',
+          ot2: systemStatus.ot2 === 'connected',
+          arduino: systemStatus.arduino === 'connected',
+        },
       },
-      'danger'
-    );
+    });
+    
+    logger.log('✅ Emergency stop command sent - robots should halt immediately');
+    
+    // Auto-clear stopping state after 3 seconds if no response received
+    setTimeout(() => {
+      setEmergencyStopStopping(false);
+      setEmergencyStopActive(true);
+      logger.log('⏱️ Emergency stop timeout - assuming completed');
+    }, 3000);
+    
   }, [systemStatus]);
+
+  // Handle emergency stop reset - IMMEDIATE execution without confirmation
+  const handleEmergencyReset = useCallback(() => {
+    logger.log('🔄 Emergency stop reset requested - immediate execution');
+    
+    // Send reset command immediately
+    websocketService.send({
+      type: 'command',
+      command_type: 'emergency_reset',
+      data: {}
+    });
+    
+    // Update local state
+    setEmergencyStopActive(false);
+    
+    logger.log('✅ Emergency stop reset command sent');
+  }, []);
 
   // Confirmation modal handlers
   const showConfirmation = (title, message, action, variant = 'primary') => {
@@ -511,14 +628,26 @@ const SpreadingPage = () => {
   // Handle step execution
   const handlePress = async (stepIndex) => {
     try {
+      console.log('*** HANDLE PRESS DEBUG: handlePress called with stepIndex:', stepIndex);
+      console.log('*** HANDLE PRESS DEBUG: activeStep:', activeStep);
+      console.log('*** HANDLE PRESS DEBUG: steps[stepIndex]:', steps[stepIndex]);
+      console.log('*** HANDLE PRESS DEBUG: steps[stepIndex].label:', steps[stepIndex]?.label);
+      
       logger.log(`Executing step ${stepIndex}: ${steps[stepIndex].label}`);
 
       if (stepIndex === 2) {
+        console.log('*** HANDLE PRESS DEBUG: stepIndex === 2, calling handleOT2Protocol()');
         await handleOT2Protocol();
+        console.log('*** HANDLE PRESS DEBUG: handleOT2Protocol() completed');
       } else if (steps[stepIndex].onClick) {
+        console.log('*** HANDLE PRESS DEBUG: calling steps[stepIndex].onClick()');
         await steps[stepIndex].onClick();
+        console.log('*** HANDLE PRESS DEBUG: steps[stepIndex].onClick() completed');
+      } else {
+        console.log('*** HANDLE PRESS DEBUG: No action for this step');
       }
     } catch (error) {
+      console.error('*** HANDLE PRESS DEBUG: Error in handlePress:', error);
       logger.error(`Error executing step ${stepIndex}:`, error);
       setLastError(`Failed to execute step ${stepIndex + 1}`);
     }
@@ -596,7 +725,15 @@ const SpreadingPage = () => {
             stepIndex={activeStep}
             robotConnected={isRobotConnected(steps[activeStep].robot)}
             canExecute={canExecuteStep(activeStep)}
-            onPress={() => handlePress(activeStep)}
+            onPress={() => {
+              console.log('*** BUTTON CLICK DEBUG: Button clicked!');
+              console.log('*** BUTTON CLICK DEBUG: activeStep:', activeStep);
+              console.log('*** BUTTON CLICK DEBUG: robotConnected:', isRobotConnected(steps[activeStep].robot));
+              console.log('*** BUTTON CLICK DEBUG: canExecute:', canExecuteStep(activeStep));
+              console.log('*** BUTTON CLICK DEBUG: emergencyStopActive:', emergencyStopActive);
+              console.log('*** BUTTON CLICK DEBUG: About to call handlePress');
+              handlePress(activeStep);
+            }}
             onSkip={handleSkip}
             onConfirmationChange={(checked) => handleConfirmationChange(activeStep, checked)}
             confirmationChecked={stepConfirmations[activeStep] || false}
@@ -609,8 +746,14 @@ const SpreadingPage = () => {
         <div className='flex flex-col sm:flex-row gap-4'>
           <EmergencyButton
             active={emergencyStopActive}
+            stopping={emergencyStopStopping}
             onClick={handleEmergencyStop}
             disabled={emergencyStopActive}
+            className='w-full sm:w-auto'
+          />
+          <ResetButton
+            disabled={!emergencyStopActive}
+            onClick={handleEmergencyReset}
             className='w-full sm:w-auto'
           />
           <PauseButton

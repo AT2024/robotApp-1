@@ -25,15 +25,25 @@ def get_logger(name: str) -> logging.Logger:
         env_log_level = os.getenv('ROBOTICS_LOG_LEVEL', 'INFO').upper()
         is_production = os.getenv('ROBOTICS_ENV', 'development').lower() == 'production'
         
-        # Set logger level based on environment
+        # Set logger level based on environment and env variables
+        log_level_map = {
+            'DEBUG': logging.DEBUG,
+            'INFO': logging.INFO,
+            'WARNING': logging.WARNING,
+            'ERROR': logging.ERROR,
+            'CRITICAL': logging.CRITICAL
+        }
+        
         if is_production:
             logger.setLevel(logging.ERROR)
             file_log_level = logging.ERROR
             console_log_level = logging.ERROR
         else:
-            logger.setLevel(logging.DEBUG)
-            file_log_level = logging.INFO
-            console_log_level = logging.INFO
+            # Use environment variable for log level in development
+            desired_level = log_level_map.get(env_log_level, logging.INFO)
+            logger.setLevel(desired_level)
+            file_log_level = desired_level
+            console_log_level = desired_level
 
         # Create logs directory if it doesn't exist
         logs_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'logs')

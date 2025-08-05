@@ -165,14 +165,25 @@ class WebSocketService {
   }
 
   send(message) {
+    console.log('*** WEBSOCKET DEBUG: send() called with message:', message);
+    console.log('*** WEBSOCKET DEBUG: WebSocket connection state:', this.socket?.readyState);
+    console.log('*** WEBSOCKET DEBUG: isConnected():', this.isConnected());
+    
     if (!this.isConnected()) {
-      throw new Error('Cannot send message - WebSocket is not connected');
+      const error = 'Cannot send message - WebSocket is not connected';
+      console.error('*** WEBSOCKET DEBUG: CONNECTION ERROR:', error);
+      logger.error(error);
+      throw new Error(error);
     }
 
     try {
-      this.socket.send(JSON.stringify(message));
+      const jsonMessage = JSON.stringify(message);
+      console.log('*** WEBSOCKET DEBUG: Sending JSON message:', jsonMessage);
+      this.socket.send(jsonMessage);
+      console.log('*** WEBSOCKET DEBUG: Message sent successfully');
       logger.log('Sent WebSocket message:', message);
     } catch (error) {
+      console.error('*** WEBSOCKET DEBUG: Send error:', error);
       logger.error('Error sending WebSocket message:', error);
       throw error;
     }
