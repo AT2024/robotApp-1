@@ -346,17 +346,9 @@ class OT2Service(RobotService):
                 except Exception as monitor_error:
                     self.logger.warning(f"Could not cancel monitoring task: {monitor_error}")
             
-            # 4. Try to home the robot for safety (fallback position)
-            try:
-                home_success = await self._home_robot()
-                if home_success:
-                    stopped_operations.append("robot_homing")
-                    self.logger.critical(f"🏠 Robot homed successfully for safety")
-                    emergency_success = True  # Consider success if we can at least home
-                else:
-                    self.logger.warning(f"⚠️  Robot homing failed during emergency stop")
-            except Exception as home_error:
-                self.logger.error(f"Robot homing failed during emergency stop: {home_error}")
+            # 4. Emergency stop should NOT move the robot - stay in current position
+            # Removed robot homing to prevent movement during emergency stop
+            emergency_success = len(stopped_operations) > 0  # Success if we stopped any operations
             
             # 5. Clear current run state
             self._current_run = None
