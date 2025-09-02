@@ -6,6 +6,7 @@ Handles precise positioning, wafer manipulation, and carousel interactions.
 import asyncio
 import copy
 import math
+import threading
 import time
 from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass
@@ -156,33 +157,44 @@ class MecaService(RobotService):
     async def _check_robot_connection(self) -> bool:
         """Check if Meca robot is connected and accessible, attempt reconnection if needed"""
         try:
-            # First check basic TCP connectivity
-            await self._test_robot_connection()
-            
-            # Check if we have a full robot connection (not just TCP)
+            # Check if we have a native driver (avoids TCP connection conflicts)
             if hasattr(self.async_wrapper, 'robot_driver'):
                 driver = self.async_wrapper.robot_driver
+                
+                # PRIORITY: For native driver, check connection status directly and RETURN immediately
+                # This prevents fallthrough to the slower robot_instance check that causes timeouts
+                if hasattr(driver, '_native_driver') and driver._native_driver:
+                    native_driver = driver._native_driver
+                    is_connected = native_driver.is_connected
+                    
+                    if is_connected:
+                        self.logger.debug(f"Native driver reports connected for {self.robot_id}")
+                        return True
+                    else:
+                        self.logger.debug(f"Native driver reports disconnected for {self.robot_id}")
+                        # Don't attempt reconnection during health checks to avoid timeouts
+                        # Health checks should be fast - let explicit connection attempts handle reconnection
+                        return False
+                
+                # ONLY reach here if NO native driver exists - check for old mecademicpy-style robot instance
                 robot_instance = driver.get_robot_instance() if hasattr(driver, 'get_robot_instance') else None
                 
-                if not robot_instance:
-                    # TCP is working but no robot instance - check if we should attempt reconnection
-                    current_time = time.time()
-                    if current_time >= self._next_reconnect_time:
-                        self.logger.info(f"TCP connection OK but no robot instance for {self.robot_id} - attempting reconnection (attempt {self._reconnect_attempt_count + 1})")
-                        reconnected = await self._attempt_robot_reconnection()
-                        if reconnected:
-                            self.logger.info(f"🎉 Successfully reconnected to robot {self.robot_id}")
-                            return True
-                        else:
-                            self.logger.debug(f"Robot reconnection attempt failed for {self.robot_id}")
-                            return True  # TCP is working, just no full connection yet
-                    else:
-                        # Still in backoff period
-                        remaining = self._next_reconnect_time - current_time
-                        self.logger.debug(f"Robot {self.robot_id} reconnection in backoff - {remaining:.1f}s remaining")
-                        return True  # TCP is working, just waiting for next retry
+                if robot_instance:
+                    # Old mecademicpy driver - use TCP test only as fallback
+                    # NOTE: This should NOT be reached when native driver is present
+                    self.logger.debug(f"Using fallback mecademicpy robot instance check for {self.robot_id}")
+                    try:
+                        await self._test_robot_connection()
+                        return True
+                    except Exception:
+                        # TCP test failed - don't attempt reconnection during health checks
+                        self.logger.debug(f"TCP connection test failed for {self.robot_id} during health check")
+                        return False
+                else:
+                    self.logger.debug(f"No robot driver instance available for {self.robot_id}")
+                    return False
                         
-            return True
+            return False
         except Exception as e:
             self.logger.debug(f"Meca connection check failed: {e}")
             return False
@@ -313,80 +325,98 @@ class MecaService(RobotService):
         await super()._on_start()
         
         try:
+            # Check if robot is already connected (from dependencies.py initialization)
+            already_connected = False
+            if hasattr(self.async_wrapper, 'robot_driver'):
+                driver = self.async_wrapper.robot_driver
+                
+                # Check if native driver is already connected
+                if hasattr(driver, '_native_driver') and driver._native_driver:
+                    native_driver = driver._native_driver
+                    if native_driver.is_connected:
+                        self.logger.info(f"✅ Robot {self.robot_id} already connected via native driver - skipping duplicate connection attempt")
+                        already_connected = True
+                
+                # Fallback check for non-native drivers
+                if not already_connected and hasattr(driver, 'get_robot_instance'):
+                    robot_instance = driver.get_robot_instance()
+                    if robot_instance:
+                        self.logger.info(f"✅ Robot {self.robot_id} already connected via driver instance - skipping duplicate connection attempt")
+                        already_connected = True
+            
+            if already_connected:
+                # Robot already connected - just verify and set to IDLE
+                self.logger.info(f"🎯 Robot {self.robot_id} connection verified, setting to IDLE state")
+                
+                # Capture current position
+                await self.capture_current_position()
+                
+                # Update robot state to idle
+                await self.update_robot_state(
+                    RobotState.IDLE,
+                    reason="Meca robot service started with existing connection"
+                )
+                
+                self.logger.info("Meca robot service started successfully with existing connection")
+                return
+            
+            # Robot not connected - attempt connection
+            self.logger.info(f"🔄 Robot {self.robot_id} not connected - attempting connection during startup")
+            
             # Update to connecting state first
             await self.update_robot_state(
                 RobotState.CONNECTING,
                 reason="Attempting to connect to Meca robot"
             )
             
-            # Test robot connection using status check
+            # Attempt robot connection
+            robot_connection_established = False
             try:
-                await self._test_robot_connection()
-                self.logger.info("TCP connection test successful, attempting full robot connection...")
-                
-                # Attempt full robot connection (mecademicpy Robot.Connect)
-                robot_connection_established = False
-                try:
-                    if hasattr(self.async_wrapper, 'robot_driver'):
-                        driver = self.async_wrapper.robot_driver
-                        self.logger.info(f"🔄 Attempting mecademicpy Robot.Connect() during startup for {self.robot_id}")
-                        
-                        # Attempt connection
-                        connected = await driver.connect()
-                        
-                        if connected:
-                            self.logger.info(f"🎉 Full robot connection established during startup for {self.robot_id}")
-                            # Reset backoff state on successful connection
-                            self._reset_reconnect_backoff()
-                            robot_connection_established = True
-                        else:
-                            self.logger.error(f"❌ Robot connection failed during startup for {self.robot_id}")
-                            self.logger.error(f"💡 Check network connectivity and robot status at {driver.ip_address}:{driver.port}")
+                if hasattr(self.async_wrapper, 'robot_driver'):
+                    driver = self.async_wrapper.robot_driver
+                    self.logger.info(f"🔄 Attempting robot connection during startup for {self.robot_id}")
+                    
+                    # Attempt connection
+                    connected = await driver.connect()
+                    
+                    if connected:
+                        self.logger.info(f"🎉 Robot connection established during startup for {self.robot_id}")
+                        # Reset backoff state on successful connection
+                        self._reset_reconnect_backoff()
+                        robot_connection_established = True
                     else:
-                        self.logger.error(f"❌ No robot_driver available for connection for {self.robot_id}")
-                        self.logger.error(f"💡 Check robot driver initialization in async_wrapper")
-                        
-                except Exception as robot_conn_error:
-                    self.logger.error(f"❌ mecademicpy Robot.Connect() failed during startup for {self.robot_id}: {robot_conn_error}")
-                    self.logger.error(f"💡 See detailed connection logs above for troubleshooting information")
-                
-                # CRITICAL: Only proceed if robot connection is established
-                if not robot_connection_established:
-                    self.logger.error(f"🚫 Robot {self.robot_id} connection failed - service cannot start without hardware connection")
-                    # Set to error state instead of continuing
-                    await self.update_robot_state(
-                        RobotState.ERROR,
-                        reason=f"Robot connection failed during startup"
-                    )
-                    # Don't raise exception here, just log the failure and let health monitoring handle reconnection
-                    self.logger.error(f"💡 Health monitoring will attempt reconnection for {self.robot_id}")
+                        self.logger.error(f"❌ Robot connection failed during startup for {self.robot_id}")
+                        if hasattr(driver, 'ip_address') and hasattr(driver, 'port'):
+                            self.logger.error(f"💡 Check network connectivity and robot status at {driver.ip_address}:{driver.port}")
                 else:
-                    self.logger.info(f"✅ Robot {self.robot_id} successfully connected and ready for operations")
+                    self.logger.error(f"❌ No robot_driver available for connection for {self.robot_id}")
+                    self.logger.error(f"💡 Check robot driver initialization in async_wrapper")
+                    
+            except Exception as robot_conn_error:
+                self.logger.error(f"❌ Robot connection failed during startup for {self.robot_id}: {robot_conn_error}")
+                self.logger.error(f"💡 See detailed connection logs above for troubleshooting information")
+            
+            # Handle connection result
+            if not robot_connection_established:
+                self.logger.error(f"🚫 Robot {self.robot_id} connection failed - setting to ERROR state")
+                await self.update_robot_state(
+                    RobotState.ERROR,
+                    reason=f"Robot connection failed during startup"
+                )
+                self.logger.error(f"💡 Health monitoring will attempt reconnection for {self.robot_id}")
+            else:
+                self.logger.info(f"✅ Robot {self.robot_id} successfully connected and ready for operations")
                 
                 # Capture current position
                 await self.capture_current_position()
                 
-                # Update robot state to idle if connection successful
+                # Update robot state to idle
                 await self.update_robot_state(
                     RobotState.IDLE,
                     reason="Meca robot service started and connected"
                 )
                 
                 self.logger.info("Meca robot service started successfully")
-                
-            except Exception as conn_error:
-                self.logger.error(f"❌ Meca robot connection failed: {type(conn_error).__name__}: {conn_error}")
-                self.logger.error(f"💡 Connection troubleshooting for {self.robot_id}:")
-                robot_config = self.robot_config
-                self.logger.error(f"   - Robot IP: {robot_config.get('ip', 'N/A')}")
-                self.logger.error(f"   - Robot Port: {robot_config.get('port', 'N/A')}")
-                self.logger.error(f"   - Timeout: {robot_config.get('timeout', 'N/A')}s")
-                self.logger.error(f"   - Check robot power and network accessibility")
-                # Set to error state from connecting state
-                await self.update_robot_state(
-                    RobotState.ERROR,
-                    reason=f"Connection failed: {str(conn_error)}"
-                )
             
         except Exception as e:
             self.logger.error(f"💥 Failed to start Meca robot service: {type(e).__name__}: {e}")
@@ -425,10 +455,30 @@ class MecaService(RobotService):
     async def _test_robot_connection(self):
         """Test if robot connection is working using real TCP connection"""
         try:
+            # IMPORTANT: Skip TCP test if using native driver to avoid connection conflicts
+            if hasattr(self.async_wrapper, 'robot_driver'):
+                driver = self.async_wrapper.robot_driver
+                if hasattr(driver, '_native_driver') and driver._native_driver:
+                    # Native driver maintains persistent connections - use its status instead
+                    self.logger.debug(f"Skipping TCP test for {self.robot_id} - using native driver connection status")
+                    native_driver = driver._native_driver
+                    if native_driver.is_connected:
+                        self.logger.debug(f"✅ Native driver reports connected for {self.robot_id}")
+                        return True
+                    else:
+                        self.logger.debug(f"❌ Native driver reports disconnected for {self.robot_id}")
+                        # Return False instead of raising error to allow connection attempts
+                        return False
+            
+            # Fallback: Traditional TCP connection test for non-native drivers
             # Get robot configuration from settings
             meca_ip = self.settings.meca_ip
             meca_port = self.settings.meca_port
             connection_timeout = 5.0  # Short timeout for connection test
+            
+            # 🐛 DEBUG: Enhanced connection diagnostics
+            self.logger.info(f"🚀 DEBUG: Testing TCP connection to {meca_ip}:{meca_port} (timeout: {connection_timeout}s)")
+            connection_start = time.time()
             
             # Attempt TCP connection to robot
             reader = None
@@ -439,25 +489,47 @@ class MecaService(RobotService):
                     timeout=connection_timeout
                 )
                 
+                connection_duration = time.time() - connection_start
+                
                 # Connection successful, close it immediately
                 if writer:
                     writer.close()
                     await writer.wait_closed()
                     
-                self.logger.info(f"Meca robot TCP connection test successful to {meca_ip}:{meca_port}")
+                self.logger.info(f"✅ Meca robot TCP connection test successful to {meca_ip}:{meca_port} in {connection_duration:.3f}s")
                 return True
                 
             except asyncio.TimeoutError:
+                connection_duration = time.time() - connection_start
+                self.logger.error(f"❌ Connection timeout to {meca_ip}:{meca_port} after {connection_duration:.3f}s")
+                self.logger.error(f"💡 Troubleshooting: Robot control software may not be running")
+                self.logger.error(f"💡 Try: Check robot web interface at http://{meca_ip}")
+                self.logger.error(f"💡 Try: Restart robot control software or reboot robot")
+                
+                # Test if host is reachable at all
+                await self._diagnose_network_connectivity(meca_ip)
+                
                 raise HardwareError(
-                    f"Connection timeout to Meca robot at {meca_ip}:{meca_port}",
+                    f"Connection timeout to Meca robot at {meca_ip}:{meca_port} - robot control software may not be running",
                     robot_id=self.robot_id
                 )
             except ConnectionRefusedError:
+                connection_duration = time.time() - connection_start
+                self.logger.error(f"❌ Connection refused by {meca_ip}:{meca_port} after {connection_duration:.3f}s")
+                self.logger.error(f"💡 Robot is reachable but port {meca_port} is closed or blocked")
+                
+                await self._diagnose_network_connectivity(meca_ip)
+                
                 raise HardwareError(
-                    f"Connection refused by Meca robot at {meca_ip}:{meca_port}",
+                    f"Connection refused by Meca robot at {meca_ip}:{meca_port} - port is closed or blocked",
                     robot_id=self.robot_id
                 )
             except OSError as e:
+                connection_duration = time.time() - connection_start
+                self.logger.error(f"❌ Network error to {meca_ip}:{meca_port} after {connection_duration:.3f}s: {e}")
+                
+                await self._diagnose_network_connectivity(meca_ip)
+                
                 # Network unreachable, host unreachable, etc.
                 raise HardwareError(
                     f"Network error connecting to Meca robot at {meca_ip}:{meca_port}: {e}",
@@ -472,6 +544,91 @@ class MecaService(RobotService):
                 f"Unexpected error testing Meca robot connection: {str(e)}",
                 robot_id=self.robot_id
             )
+    
+    async def _diagnose_network_connectivity(self, host: str):
+        """Perform network diagnostics to help troubleshoot connection issues"""
+        try:
+            self.logger.info(f"🔍 NETWORK DIAGNOSTICS for {host}:")
+            
+            # Test basic ping connectivity
+            ping_start = time.time()
+            try:
+                # Use subprocess to test ping (works on Windows/Linux)
+                import subprocess
+                ping_result = await asyncio.wait_for(
+                    asyncio.create_subprocess_exec(
+                        'ping', '-c', '1', host,  # Linux/Mac
+                        stdout=asyncio.subprocess.PIPE,
+                        stderr=asyncio.subprocess.PIPE
+                    ),
+                    timeout=3.0
+                )
+                stdout, stderr = await ping_result.communicate()
+                
+                if ping_result.returncode == 0:
+                    ping_duration = time.time() - ping_start
+                    self.logger.info(f"✅ Ping to {host}: SUCCESS in {ping_duration:.3f}s")
+                else:
+                    self.logger.error(f"❌ Ping to {host}: FAILED - {stderr.decode()}")
+            except FileNotFoundError:
+                # Try Windows ping
+                try:
+                    ping_result = await asyncio.wait_for(
+                        asyncio.create_subprocess_exec(
+                            'ping', '-n', '1', host,  # Windows
+                            stdout=asyncio.subprocess.PIPE,
+                            stderr=asyncio.subprocess.PIPE
+                        ),
+                        timeout=3.0
+                    )
+                    stdout, stderr = await ping_result.communicate()
+                    
+                    if ping_result.returncode == 0:
+                        ping_duration = time.time() - ping_start
+                        self.logger.info(f"✅ Ping to {host}: SUCCESS in {ping_duration:.3f}s")
+                    else:
+                        self.logger.error(f"❌ Ping to {host}: FAILED - {stderr.decode()}")
+                except Exception as e:
+                    self.logger.error(f"❌ Ping test failed: {e}")
+            except Exception as e:
+                self.logger.error(f"❌ Ping test error: {e}")
+            
+            # Test common Mecademic ports
+            common_ports = [10000, 10001, 10002, 80, 8080, 23, 443]
+            self.logger.info(f"🔍 Testing common robot ports on {host}:")
+            
+            for port in common_ports:
+                try:
+                    port_start = time.time()
+                    reader, writer = await asyncio.wait_for(
+                        asyncio.open_connection(host, port),
+                        timeout=2.0
+                    )
+                    port_duration = time.time() - port_start
+                    
+                    if writer:
+                        writer.close()
+                        await writer.wait_closed()
+                    
+                    self.logger.info(f"✅ Port {port}: OPEN (connected in {port_duration:.3f}s)")
+                    
+                except asyncio.TimeoutError:
+                    self.logger.info(f"❌ Port {port}: TIMEOUT")
+                except ConnectionRefusedError:
+                    self.logger.info(f"❌ Port {port}: CLOSED")
+                except Exception as e:
+                    self.logger.info(f"❌ Port {port}: ERROR ({e})")
+            
+            # Provide troubleshooting recommendations
+            self.logger.error(f"🛠️ TROUBLESHOOTING RECOMMENDATIONS:")
+            self.logger.error(f"   1. Check robot power and LED status")
+            self.logger.error(f"   2. Access robot web interface: http://{host}")
+            self.logger.error(f"   3. Restart robot control software")
+            self.logger.error(f"   4. Reboot robot if control software is unresponsive")
+            self.logger.error(f"   5. Check network cables and switch connectivity")
+            
+        except Exception as e:
+            self.logger.error(f"Network diagnostics failed: {e}")
     
     def _initialize_carousel_positions(self):
         """Initialize carousel position mappings"""
@@ -630,8 +787,31 @@ class MecaService(RobotService):
                         
                         # Wait and verify activation completed
                         await asyncio.sleep(2.0)  # Give time for activation to complete
+                        
+                        # 🐛 DEBUG: Status verification with comprehensive logging
+                        self.logger.info(f"🚀 DEBUG: About to verify activation status for robot {self.robot_id}")
                         verification_status = await driver.get_status()
-                        if not verification_status.get('activation_status', False):
+                        self.logger.info(f"🚀 DEBUG: Raw status response: {verification_status}")
+                        self.logger.info(f"🚀 DEBUG: Status type: {type(verification_status)}")
+                        
+                        # Log all status keys for debugging
+                        if isinstance(verification_status, dict):
+                            status_keys = list(verification_status.keys())
+                            self.logger.info(f"🚀 DEBUG: Available status keys: {status_keys}")
+                            
+                            # Check for various activation status field names
+                            activation_checks = {
+                                'activation_status': verification_status.get('activation_status'),
+                                'is_activated': verification_status.get('is_activated'),
+                                'activated': verification_status.get('activated'),
+                                'Activated': verification_status.get('Activated')
+                            }
+                            self.logger.info(f"🚀 DEBUG: Activation field checks: {activation_checks}")
+                        
+                        activation_status = verification_status.get('activation_status', False)
+                        self.logger.info(f"🚀 DEBUG: Final activation_status value: {activation_status} (type: {type(activation_status)})")
+                        
+                        if not activation_status:
                             if attempt < max_retries - 1:
                                 self.logger.warning(f"⚠️ Robot {self.robot_id} activation verification failed on attempt {attempt + 1}, retrying...")
                                 continue
@@ -771,6 +951,26 @@ class MecaService(RobotService):
                                   f"Motion clear/resume failed", {"error": str(e)})
                     # Log error but don't fail - robot is still technically ready
                     self.logger.error(f"⚠️ Failed to clear/resume motion for {self.robot_id}: {str(e)}", exc_info=True)
+            
+            # Initialize robot parameters after successful activation and homing
+            if homing_status and activation_status:
+                self.logger.info(f"🔧 Initializing robot parameters for {self.robot_id} after activation and homing")
+                try:
+                    # Access native driver to initialize parameters
+                    if hasattr(self.async_wrapper.robot_driver, 'native_driver'):
+                        native_driver = self.async_wrapper.robot_driver.native_driver
+                        if hasattr(native_driver, 'initialize_robot_parameters'):
+                            param_success = await native_driver.initialize_robot_parameters()
+                            if param_success:
+                                self.logger.info(f"✅ Robot parameters initialized successfully for {self.robot_id}")
+                            else:
+                                self.logger.warning(f"⚠️ Robot parameter initialization failed for {self.robot_id}")
+                        else:
+                            self.logger.debug(f"Native driver for {self.robot_id} does not have initialize_robot_parameters method")
+                    else:
+                        self.logger.debug(f"Robot driver for {self.robot_id} does not have native_driver")
+                except Exception as e:
+                    self.logger.error(f"Error initializing robot parameters for {self.robot_id}: {e}")
             
             # Final verification of robot readiness - ensure robot is truly responsive
             self.debug_log(self.robot_id, "ensure_robot_ready", "final_verification", 
@@ -1123,6 +1323,13 @@ class MecaService(RobotService):
                 error=f"Position capture failed: {str(e)}",
                 error_code="POSITION_CAPTURE_FAILED"
             )
+    
+    async def home_robot(self, force_homing: bool = False) -> ServiceResult[Dict[str, Any]]:
+        """
+        Home robot method expected by command service.
+        Maps to controlled_homing_sequence for compatibility.
+        """
+        return await self.controlled_homing_sequence(force_homing=force_homing)
     
     async def controlled_homing_sequence(self, force_homing: bool = False) -> ServiceResult[Dict[str, Any]]:
         """
@@ -1787,6 +1994,11 @@ class MecaService(RobotService):
             start: Starting wafer index (0-based)
             count: Number of wafers to process
         """
+        # 🐛 DEBUG: Method entry point
+        self.logger.info(f"🚀 DEBUG: execute_pickup_sequence ENTRY - start={start}, count={count}")
+        self.logger.info(f"🚀 DEBUG: Thread info - current thread: {threading.current_thread().name}")
+        self.logger.info(f"🚀 DEBUG: Service state - robot_id: {self.robot_id}")
+        
         context = OperationContext(
             operation_id=f"{self.robot_id}_pickup_sequence_{start}_{count}",
             robot_id=self.robot_id,
@@ -1795,8 +2007,14 @@ class MecaService(RobotService):
             metadata={"start": start, "count": count}
         )
         
+        self.logger.info(f"🚀 DEBUG: OperationContext created - operation_id: {context.operation_id}")
+        
         async def _pickup_sequence():
+            # 🐛 DEBUG: Inner function entry point
+            self.logger.info(f"🚀 DEBUG: _pickup_sequence INNER FUNCTION ENTRY")
+            
             # Start step tracking
+            self.logger.info(f"🚀 DEBUG: About to call start_step")
             await self.state_manager.start_step(
                 robot_id=self.robot_id,
                 step_index=0,  # This will be updated from WebSocket handler
@@ -1999,6 +2217,7 @@ class MecaService(RobotService):
             
             return result
         
+        self.logger.info(f"🚀 DEBUG: About to call execute_operation with context: {context.operation_id}")
         return await self.execute_operation(context, _pickup_sequence)
     
     def _validate_robot_parameters(self, command_type: str, parameters: List[Any]) -> bool:

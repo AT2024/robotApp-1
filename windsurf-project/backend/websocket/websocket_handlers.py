@@ -220,14 +220,23 @@ class WebsocketHandler:
                     }
                     
                     # Update robot statuses based on actual robot states
+                    # Connected means TCP reachable - includes error states that are still connected
+                    connected_states = ["idle", "busy", "error", "homing", "paused", "connecting", "activated"]
+                    disconnected_states = ["disconnected", "unavailable", "offline"]
+                    
                     for robot_id, robot_info in system_status.robot_details.items():
-                        robot_type = robot_info.get("state", "disconnected")
+                        robot_state = robot_info.get("state", "disconnected")
+                        
+                        # Determine connection status based on actual connectivity, not just operational status
+                        is_connected = robot_state in connected_states
+                        status = "connected" if is_connected else "disconnected"
+                        
                         if "meca" in robot_id.lower():
-                            robot_statuses["meca"] = "connected" if robot_type in ["idle", "busy"] else "disconnected"
+                            robot_statuses["meca"] = status
                         elif "ot2" in robot_id.lower():
-                            robot_statuses["ot2"] = "connected" if robot_type in ["idle", "busy"] else "disconnected"
+                            robot_statuses["ot2"] = status
                         elif "arduino" in robot_id.lower():
-                            robot_statuses["arduino"] = "connected" if robot_type in ["idle", "busy"] else "disconnected"
+                            robot_statuses["arduino"] = status
                     
                     # Send individual robot status updates
                     for robot_type, status in robot_statuses.items():

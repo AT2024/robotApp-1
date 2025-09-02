@@ -12,7 +12,7 @@ services:
     environment:
       - ENVIRONMENT=development
       - ROBOTICS_ENV=development
-      - ROBOTICS_LOG_LEVEL=DEBUG
+      - ROBOTICS_LOG_LEVEL=INFO
       - PORT=8000
       - PYTHONPATH=/app
     restart: unless-stopped

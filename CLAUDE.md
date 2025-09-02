@@ -14,6 +14,7 @@ Laboratory automation system controlling multiple robotic hardware:
 
 ## Quick Start
 
+### Original Windsurf Project
 ```bash
 # Development environment
 cd windsurf-project && docker-compose up -d
@@ -26,6 +27,41 @@ cd windsurf-project && docker-compose up -d
 docker-compose logs frontend
 docker-compose logs backend
 ```
+
+### **NEW: Native Mecademic Integration** 🤖
+
+**Standalone backend with NIC-binding transport and native TCP protocol implementation.**
+
+```bash
+# Installation (Python ≥ 3.11 required)
+pip install -e .
+
+# Configuration
+cp .env.example .env
+# Edit .env for your robot IP and network interface
+
+# Launch backend (auto-detects environment)
+./run_backend.sh dev        # Development with debug logging
+./run_backend.sh test       # Testing with fake robot
+./run_backend.sh prod       # Production mode
+
+# API endpoints
+curl http://localhost:8000/api/health
+curl http://localhost:8000/api/status
+
+# WebSocket monitoring
+websocat ws://localhost:8000/ws/status
+
+# Testing
+pytest -q backend/tests/test_meca_driver.py
+```
+
+**Port Mapping**:
+- `8000`: FastAPI backend (configurable)
+- `10000/10001`: Real Mecademic robot (control/monitor)  
+- `10010/10011`: Fake robot for testing (control/monitor)
+
+**Safety**: Always test with fake robot first (`ENABLE_FAKE_ROBOT=true`)
 
 ## Tool Usage & Decision Framework
 
@@ -55,6 +91,14 @@ Analysis Need → Tool Selection:
 - **Trigger**: Context is large 
 - **Tasks**: Code structure analysis, implementation verification, pattern identification  
 - **NOT for**: Architecture decisions, implementation strategy, debugging approach
+
+### **MCP Tool Resource Management**
+- **Close After Use**: Always close MCP tools when task is complete to free resources and context tokens
+- **Browser Sessions**: Use `mcp__playwright__browser_close` after UI testing/automation tasks
+- **Context Monitoring**: Run `/context` command to check resource usage and identify unused tools
+- **Token Optimization**: MCP tools consume context tokens even when inactive - close to optimize
+- **Resource Cleanup**: Proactively manage tool lifecycles to maintain system performance
+- **Best Practice**: Close tools immediately after completing specific tasks (testing, web fetch, etc.)
 
 ## Development Standards
 
@@ -311,8 +355,190 @@ windsurf-project/
 
 ---
 
+## Native Mecademic Implementation
+
+### **Architecture Overview**
+
+**Direct TCP implementation with NIC-binding transport for precise network control.**
+
+```
+Client → FastAPI → MecaService → MecademicDriver → BoundTCPClient → Robot
+                 ↑                              ↓
+             Lease Mgmt                    Control (10000)
+                 ↑                         Monitor (10001)
+             WebSocket ←─────────────────── Status Stream
+```
+
+### **Key Components**
+
+**1. Transport Layer** (`backend/drivers/transport.py`)
+- `BoundTCPClient`: NIC-specific socket binding
+- Network interface resolution (`netifaces` integration)
+- Connection pooling and retry logic
+- Socket-level configuration (TCP_NODELAY, keepalive)
+
+**2. Native Driver** (`backend/drivers/mecademic.py`)
+- Direct ASCII protocol implementation
+- Dual TCP connections (control + monitoring)
+- Real-time status parsing and position tracking
+- Command serialization without mecademicpy dependency
+
+**3. Service Layer** (`backend/services/meca_service.py`)
+- Exclusive robot control through lease system
+- Command queuing and serialization
+- Heartbeat-based lease management
+- Safety interlocks and error recovery
+
+**4. API Layer** (`backend/app/main.py`)
+- RESTful robot control endpoints
+- WebSocket status streaming (~10Hz)
+- Pydantic validation and error handling
+- CORS and security configuration
+
+### **Configuration Guide**
+
+**Environment Variables**:
+```bash
+# Network binding (choose one)
+ROBOT_NIC_INTERFACE=eth0        # Bind to specific NIC
+ROBOT_BIND_IP=192.168.1.100    # Bind to specific IP
+
+# Robot connection  
+MECA_ROBOT_IP=192.168.0.100
+MECA_CONTROL_PORT=10000
+MECA_MONITOR_PORT=10001
+
+# Safety & performance
+MECA_CONNECTION_TIMEOUT=10.0
+ROBOT_LEASE_DURATION=300.0
+WEBSOCKET_STATUS_INTERVAL=0.1
+```
+
+**NIC Binding Examples**:
+```bash
+# Linux
+ROBOT_NIC_INTERFACE=eth0
+ROBOT_NIC_INTERFACE=enp2s0
+
+# macOS  
+ROBOT_NIC_INTERFACE=en0
+
+# Windows
+ROBOT_NIC_INTERFACE="Ethernet"
+
+# Direct IP (any platform)
+ROBOT_BIND_IP=192.168.1.50
+```
+
+### **API Reference**
+
+**Health & Status**:
+- `GET /api/health` - Service health check
+- `GET /api/status` - Robot and service status
+- `WebSocket /ws/status` - Real-time status stream
+
+**Lease Management**:
+- `POST /api/lease/acquire` - Acquire robot control lease
+- `POST /api/lease/release` - Release robot lease  
+- `POST /api/lease/heartbeat` - Maintain lease with heartbeat
+
+**Robot Control**:
+- `POST /api/robot/activate` - Activate robot for operation
+- `POST /api/robot/home` - Home robot to reference position
+- `POST /api/robot/move` - Move to Cartesian pose
+- `POST /api/robot/set_velocity` - Set joint velocity (0.1-100%)
+- `POST /api/robot/clear_motion` - Clear motion queue
+- `POST /api/robot/pause_motion` / `resume_motion` - Motion control
+
+### **Testing Strategy**
+
+**Fake Server** (`backend/tests/fakes/fake_meca_server.py`):
+- Simulates Mecademic robot behavior
+- Dual-port TCP server (control + monitor)
+- Movement simulation with position interpolation
+- Configurable response timing and error injection
+
+**Test Coverage**:
+```bash
+# Transport layer tests
+pytest backend/tests/test_meca_driver.py::test_transport_*
+
+# Driver integration tests  
+pytest backend/tests/test_meca_driver.py::test_driver_*
+
+# Service layer tests
+pytest backend/tests/test_meca_driver.py::test_service_*
+
+# Full integration
+pytest backend/tests/test_meca_driver.py::test_full_integration_scenario
+```
+
+### **Safety & Recovery**
+
+**Lease System**:
+- Exclusive robot control with configurable duration
+- Heartbeat requirement to maintain lease
+- Automatic lease expiration and cleanup
+- Client identification and conflict resolution
+
+**Error Handling**:
+- Connection-level retry with exponential backoff
+- Command-level timeouts and error recovery
+- Status monitoring for error detection
+- Emergency stop and motion clearing
+
+**Network Resilience**:
+- NIC-specific routing for network segmentation
+- Connection pooling and keepalive
+- Transport-level error detection and recovery
+- Fallback to default routing if NIC binding fails
+
+### **Troubleshooting**
+
+**Connection Issues**:
+```bash
+# Test transport connectivity
+python -c "
+from backend.drivers.transport import test_connectivity
+import asyncio
+result = asyncio.run(test_connectivity('192.168.0.100', 10000))
+print(result)
+"
+
+# Validate NIC binding
+python -c "
+from backend.drivers.transport import BoundTCPClient
+client = BoundTCPClient.get_available_interfaces()
+print('Available interfaces:', client)
+"
+
+# Check fake robot
+python backend/tests/fakes/fake_meca_server.py 127.0.0.1 10010 10011
+```
+
+**Status Monitoring**:
+```bash
+# WebSocket status stream
+websocat ws://localhost:8000/ws/status
+
+# Direct status check
+curl http://localhost:8000/api/status | jq .
+
+# Health check with diagnostics
+curl http://localhost:8000/api/health | jq .
+```
+
+**Performance Tuning**:
+- Adjust `WEBSOCKET_STATUS_INTERVAL` for monitoring frequency
+- Configure `ROBOT_LEASE_DURATION` based on operation patterns
+- Tune `MECA_CONNECTION_TIMEOUT` for network conditions
+- Monitor connection statistics via `/api/status`
+
+---
+
 ## Development Notes
 
+### Original Windsurf Project
 - **Port Config**: Frontend runs on 5173 internally, mapped to 3000 externally
 - **Architecture**: Always use service layer, never direct robot access
 - **State Management**: All state changes through AtomicStateManager
@@ -320,4 +546,14 @@ windsurf-project/
 - **Performance**: Use AsyncRobotWrapper for non-blocking operations
 - **Configuration**: Use settings.get_robot_config() for all robot config
 - **Testing**: Mock hardware for unit tests, real hardware for integration
-- **Documentation**: Keep this CLAUDE.md updated with any architectural changes
+
+### Native Mecademic Implementation  
+- **Dual Implementation**: Native implementation alongside existing mecademicpy-based system
+- **Transport Binding**: NIC-specific routing for network isolation and performance
+- **Safety First**: Always test with fake robot before hardware operations
+- **Lease Management**: Mandatory exclusive control prevents command conflicts
+- **Protocol Direct**: ASCII command protocol without external library dependencies
+- **Monitoring**: Real-time status streaming with configurable update rates
+- **Recovery**: Comprehensive error handling and connection recovery mechanisms
+
+**Documentation**: Keep this CLAUDE.md updated with any architectural changes

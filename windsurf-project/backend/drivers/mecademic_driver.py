@@ -1,44 +1,29 @@
 """
 Mecademic Robot Driver Implementation.
-Provides async wrapper for mecademicpy.Robot with proper error handling and connection management.
+Native TCP implementation with NIC-binding transport for precise network control.
 """
 
 import asyncio
 import time
-import logging
 from typing import Dict, Any, Optional
-from concurrent.futures import ThreadPoolExecutor
-import mecademicpy
-
-try:
-    from mecademicpy.robot import Robot as MecademicRobot
-    mecademicpy_available = True
-except ImportError:
-    MecademicRobot = None
-    mecademicpy_available = False
 
 from core.exceptions import ConnectionError, HardwareError, ConfigurationError
 from core.hardware_manager import BaseRobotDriver
 from utils.logger import get_logger
+from .native_mecademic import NativeMecademicDriver, MecademicConfig, RobotState as NativeRobotState
 
 
 class MecademicDriver(BaseRobotDriver):
     """
     Mecademic robot driver implementing BaseRobotDriver interface.
     
-    Provides async wrapper around mecademicpy.Robot with proper connection
-    management, error handling, and thread-safe operations.
+    Uses native TCP implementation with NIC-binding transport for 
+    precise network control and improved performance.
     """
     
     def __init__(self, robot_id: str, config: Dict[str, Any]):
         super().__init__(robot_id, config)
         self.logger = get_logger(f"meca_driver_{robot_id}")
-        
-        if not mecademicpy_available:
-            raise ConfigurationError(
-                "mecademicpy library not available. Install with: pip install mecademicpy",
-                robot_id=robot_id
-            )
         
         # Extract configuration
         self.ip_address = config.get("ip", "192.168.0.100")
@@ -52,16 +37,35 @@ class MecademicDriver(BaseRobotDriver):
         self.acceleration = config.get("acceleration", 25.0)
         self.speed = config.get("speed", 25.0)
         
-        # Mecademic robot instance
-        self._robot: Optional[mecademicpy.Robot] = None
-        self._executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix=f"meca_{robot_id}")
+        # Network binding configuration
+        self.bind_interface = config.get("bind_interface", None)
+        self.bind_ip = config.get("bind_ip", None)
+        
+        # Create native driver configuration
+        native_config = MecademicConfig(
+            robot_ip=self.ip_address,
+            control_port=self.port,
+            monitor_port=config.get("monitor_port", 10001),
+            bind_interface=self.bind_interface,
+            bind_ip=self.bind_ip,
+            connect_timeout=self.timeout,
+            command_timeout=config.get("command_timeout", 30.0),
+            default_speed=self.speed,
+            default_acceleration=self.acceleration,
+        )
+        
+        # Native Mecademic driver instance
+        self._native_driver = NativeMecademicDriver(native_config)
         
         # Connection state
         self._last_status = {}
         self._last_status_time = 0.0
         self._status_cache_duration = 1.0  # Cache for 1 second
         
-        self.logger.info(f"Initialized Mecademic driver for {robot_id} at {self.ip_address}:{self.port}")
+        self.logger.info(
+            f"Initialized Native Mecademic driver for {robot_id} at {self.ip_address}:{self.port}"
+            f"{f' via {self.bind_interface or self.bind_ip}' if (self.bind_interface or self.bind_ip) else ''}"
+        )
     
     def set_settings(self, settings):
         """Set settings reference for debug logging"""
@@ -103,444 +107,75 @@ class MecademicDriver(BaseRobotDriver):
             if self._connected:
                 await self.disconnect()
         finally:
-            # Shutdown executor
-            self._executor.shutdown(wait=True)
+            # Disconnect native driver
+            if self._native_driver:
+                await self._native_driver.disconnect()
             self.logger.info(f"Mecademic driver for {self.robot_id} shutdown complete")
     
     async def _connect_impl(self) -> bool:
-        """Implementation-specific connection logic"""
+        """Implementation-specific connection logic using native driver"""
         try:
-            self.debug_log("_connect_impl", "entry", "Starting MecademicDriver connection process")
-            self.logger.info(f"🔄 Starting MecademicDriver connection process for {self.robot_id}")
+            self.debug_log("_connect_impl", "entry", "Starting Native MecademicDriver connection process")
+            self.logger.info(f"🔄 Starting Native MecademicDriver connection process for {self.robot_id}")
             
-            # Create robot instance
-            self.debug_log("_connect_impl", "create_instance", "Creating mecademicpy Robot() instance")
-            self.logger.info(f"📦 Creating mecademicpy Robot() instance for {self.robot_id}")
-            try:
-                self._robot = MecademicRobot()
-                self.debug_log("_connect_impl", "instance_success", "mecademicpy instance created successfully")
-                self.logger.info(f"✅ mecademicpy Robot() instance created successfully for {self.robot_id}")
-            except Exception as robot_create_error:
-                self.debug_log("_connect_impl", "instance_failure", f"Robot instance creation failed", 
-                              {"error": str(robot_create_error)})
-                self.logger.error(f"❌ Failed to create mecademicpy Robot instance for {self.robot_id}: {robot_create_error}")
-                self.logger.error(f"💡 Troubleshooting: Check mecademicpy library installation")
-                return False
+            # Connect using native driver
+            self.debug_log("_connect_impl", "native_connect", "Connecting via native TCP driver")
+            self.logger.info(f"📡 Connecting via native TCP driver to {self.ip_address}:{self.port} for {self.robot_id}")
             
-            # Connect in thread pool to avoid blocking
-            self.debug_log("_connect_impl", "thread_pool", "Submitting connection to thread pool executor")
-            self.logger.info(f"🔧 Executing connection in thread pool (timeout={self.timeout}s) for {self.robot_id}")
-            loop = asyncio.get_event_loop()
-            
-            try:
-                self.debug_log("_connect_impl", "connection_attempt", 
-                              f"Starting TCP connection attempt", 
-                              {"ip": self.ip_address, "port": self.port, "timeout": self.timeout})
-                connect_success = await asyncio.wait_for(
-                    loop.run_in_executor(
-                        self._executor,
-                        self._connect_sync
-                    ),
-                    timeout=self.timeout + 5.0  # Add 5s buffer for thread pool overhead
-                )
-                self.debug_log("_connect_impl", "connection_complete", 
-                              f"TCP connection attempt completed", {"success": connect_success})
-            except asyncio.TimeoutError:
-                self.logger.error(f"⏱️ Connection timeout ({self.timeout}s + 5s buffer) for {self.robot_id}")
-                self.logger.error(f"💡 Troubleshooting: Robot may be unresponsive or network latency is high")
-                self._robot = None
-                return False
+            connect_success = await self._native_driver.connect()
             
             if connect_success:
-                self.debug_log("_connect_impl", "tcp_success", "mecademicpy Robot.Connect() succeeded")
-                self.logger.info(f"🎉 mecademicpy Robot.Connect() succeeded for {self.robot_id}")
-                
-                # Activate robot before setting parameters
-                self.debug_log("_connect_impl", "stabilization", "Waiting for connection stabilization")
-                self.logger.info(f"⏳ Waiting 1s for connection stabilization before activation for {self.robot_id}")
-                await asyncio.sleep(1.0)  # Give connection more time to stabilize
-                
-                try:
-                    self.debug_log("_connect_impl", "activation_start", "Starting robot activation sequence")
-                    await self._activate_robot_after_connect()
-                    self.debug_log("_connect_impl", "activation_success", "Robot activation completed successfully")
-                    self.logger.info(f"✅ Robot activation completed for {self.robot_id}")
-                except Exception as activation_error:
-                    self.debug_log("_connect_impl", "activation_failure", 
-                                  f"Robot activation failed", {"error": str(activation_error)})
-                    self.logger.warning(f"⚠️ Robot activation failed for {self.robot_id}: {activation_error}")
-                    self.logger.warning(f"💡 Connection successful but robot may need manual activation")
-                
-                # Set initial parameters
-                try:
-                    await self._set_initial_parameters()
-                    self.logger.info(f"✅ Initial parameters set for {self.robot_id}")
-                except Exception as params_error:
-                    self.logger.warning(f"⚠️ Failed to set initial parameters for {self.robot_id}: {params_error}")
-                    self.logger.warning(f"💡 Connection successful but parameters may need manual configuration")
+                self.debug_log("_connect_impl", "native_success", "Native driver connection succeeded")
+                self.logger.info(f"🎉 Native driver connection succeeded for {self.robot_id}")
                 
                 # Clear status cache to ensure fresh status on next get_status() call
                 self.debug_log("_connect_impl", "cache_clear", "Clearing status cache after successful connection")
                 self.clear_status_cache()
                 
-                self.logger.info(f"🏆 MecademicDriver fully initialized and connected for {self.robot_id}")
+                self.logger.info(f"🏆 Native MecademicDriver fully initialized and connected for {self.robot_id}")
                 return True
             else:
-                self.logger.error(f"❌ mecademicpy Robot.Connect() failed for {self.robot_id}")
-                self.logger.error(f"💡 Check detailed logs above for specific failure reason")
-                self._robot = None
+                self.logger.error(f"❌ Native driver connection failed for {self.robot_id}")
                 return False
                 
         except Exception as e:
             self.logger.error(f"💥 Critical connection failure for {self.robot_id}: {type(e).__name__}: {e}")
-            import traceback
-            self.logger.error(f"Full connection traceback for {self.robot_id}:\n{traceback.format_exc()}")
-            self._robot = None
             return False
-    
-    def _connect_sync(self) -> bool:
-        """Synchronous connection implementation"""
-        try:
-            self.logger.info(f"🔄 Starting mecademicpy Robot.Connect() to {self.ip_address}:{self.port} for {self.robot_id}")
-            
-            # Verify robot instance exists
-            if not self._robot:
-                self.logger.error(f"❌ No mecademicpy Robot instance available for {self.robot_id}")
-                return False
-            
-            # Log mecademicpy library info
-            try:
-                import mecademicpy
-                version = getattr(mecademicpy, '__version__', 'unknown')
-                self.logger.info(f"📦 Using mecademicpy version: {version} for {self.robot_id}")
-            except Exception:
-                self.logger.warning(f"⚠️ Could not determine mecademicpy version for {self.robot_id}")
-            
-            # Log connection parameters for debugging
-            self.logger.info(f"🔧 Connection parameters for {self.robot_id}:")
-            self.logger.info(f"   - IP Address: {self.ip_address}")
-            self.logger.info(f"   - Port: {self.port} (mecademicpy uses fixed port 10000)")
-            self.logger.info(f"   - Timeout: {self.timeout}s")
-            self.logger.info(f"   - Force: {self.force}")
-            self.logger.info(f"   - Speed: {self.speed}")
-            self.logger.info(f"   - Acceleration: {self.acceleration}")
-            
-            # Disable auto-disconnect on exception to prevent premature disconnection
-            if hasattr(self._robot, 'SetDisconnectOnException'):
-                self._robot.SetDisconnectOnException(False)
-                self.logger.info(f"🔧 Disabled auto-disconnect on exception for {self.robot_id}")
-            else:
-                self.logger.warning(f"⚠️ Robot {self.robot_id} does not support SetDisconnectOnException")
-            
-            # Connect to robot with detailed logging  
-            # Note: mecademicpy Connect() only takes address parameter, not port (port is fixed at 10000)
-            self.logger.info(f"🚀 Calling mecademicpy Robot.Connect() with parameters for {self.robot_id}:")
-            self.logger.info(f"   - address='{self.ip_address}'")
-            self.logger.info(f"   - enable_synchronous_mode=False")
-            self.logger.info(f"   - disconnect_on_exception=False")
-            self.logger.info(f"   - timeout={self.timeout}")
-            
-            start_time = time.time()
-            
-            # Attempt connection with specific exception handling - try both async and sync modes
-            connection_succeeded = False
-            last_error = None
-            connection_modes = [
-                {"enable_synchronous_mode": False, "mode_name": "async"},
-                {"enable_synchronous_mode": True, "mode_name": "sync"}
-            ]
-            
-            for mode_config in connection_modes:
-                try:
-                    mode_name = mode_config["mode_name"]
-                    enable_sync = mode_config["enable_synchronous_mode"]
-                    
-                    self.logger.info(f"🔄 Attempting connection in {mode_name} mode for {self.robot_id}")
-                    
-                    self._robot.Connect(
-                        address=self.ip_address,
-                        enable_synchronous_mode=enable_sync,
-                        disconnect_on_exception=False,  # We handle disconnections manually
-                        timeout=self.timeout
-                    )
-                    
-                    self.logger.info(f"✅ Connection successful in {mode_name} mode for {self.robot_id}")
-                    connection_succeeded = True
-                    break
-                    
-                except Exception as mode_e:
-                    last_error = mode_e
-                    self.logger.warning(f"⚠️ Connection failed in {mode_name} mode for {self.robot_id}: {type(mode_e).__name__}: {mode_e}")
-            
-            # If both connection modes failed, handle the error
-            if not connection_succeeded:
-                if last_error:
-                    if isinstance(last_error, ConnectionRefusedError):
-                        self.logger.error(f"🚫 Connection refused by robot {self.robot_id}: {last_error}")
-                        self.logger.error(f"💡 Troubleshooting: Check if robot is powered on and network is accessible")
-                    elif isinstance(last_error, (TimeoutError, asyncio.TimeoutError)):
-                        self.logger.error(f"⏱️ Connection timeout for robot {self.robot_id}: {last_error}")
-                        self.logger.error(f"💡 Troubleshooting: Check network latency or increase timeout (current: {self.timeout}s)")
-                    elif isinstance(last_error, OSError):
-                        self.logger.error(f"🌐 Network error connecting to robot {self.robot_id}: {last_error}")
-                        self.logger.error(f"💡 Troubleshooting: Check network connectivity to {self.ip_address}")
-                    elif isinstance(last_error, ImportError):
-                        self.logger.error(f"📦 mecademicpy library error for robot {self.robot_id}: {last_error}")
-                        self.logger.error(f"💡 Troubleshooting: Check mecademicpy installation")
-                    else:
-                        self.logger.error(f"❌ Unexpected error during Robot.Connect() for {self.robot_id}: {type(last_error).__name__}: {last_error}")
-                        import traceback
-                        self.logger.error(f"Full connection traceback for {self.robot_id}:\n{traceback.format_exc()}")
-                else:
-                    self.logger.error(f"❌ Connection failed in both async and sync modes for {self.robot_id} with no specific error")
-                return False
-            
-            connect_duration = time.time() - start_time
-            self.logger.info(f"⏱️ mecademicpy Robot.Connect() completed in {connect_duration:.2f}s for {self.robot_id}")
-            
-            # Wait for connection to be established
-            self.logger.info(f"⏳ Waiting 0.5s for connection stabilization for {self.robot_id}")
-            time.sleep(0.5)
-            
-            # Check if connected
-            if hasattr(self._robot, 'IsConnected'):
-                try:
-                    is_connected = self._robot.IsConnected()
-                    self.logger.info(f"🔍 mecademicpy Robot.IsConnected() returned: {is_connected} for {self.robot_id}")
-                    
-                    if is_connected:
-                        self.logger.info(f"✅ Successfully connected to Mecademic robot {self.robot_id}")
-                        
-                        # Additional connection validation
-                        try:
-                            # Try to get robot status to validate connection
-                            if hasattr(self._robot, 'GetStatusRobot'):
-                                status = self._robot.GetStatusRobot()
-                                self.logger.info(f"✅ Robot status check successful for {self.robot_id}: {status}")
-                            else:
-                                self.logger.warning(f"⚠️ GetStatusRobot not available for validation on {self.robot_id}")
-                        except Exception as status_e:
-                            self.logger.warning(f"⚠️ Could not validate connection with status check for {self.robot_id}: {status_e}")
-                            
-                        return True
-                    else:
-                        self.logger.error(f"❌ mecademicpy connection failed - IsConnected() returned False for {self.robot_id}")
-                        self.logger.error(f"💡 Troubleshooting: Robot may be in error state or require activation")
-                        return False
-                except Exception as check_e:
-                    self.logger.error(f"❌ Error checking connection status for {self.robot_id}: {check_e}")
-                    return False
-            else:
-                self.logger.warning(f"⚠️ mecademicpy Robot instance lacks IsConnected() method for {self.robot_id}")
-                # Assume connection succeeded if no exception was thrown
-                self.logger.info(f"✅ Assuming successful connection to Mecademic robot {self.robot_id} (no IsConnected method)")
-                return True
-                
-        except Exception as e:
-            self.logger.error(f"💥 Critical error in _connect_sync for {self.robot_id}: {type(e).__name__}: {e}")
-            import traceback
-            self.logger.error(f"Full critical error traceback for {self.robot_id}:\n{traceback.format_exc()}")
-            return False
-    
-    async def _activate_robot_after_connect(self):
-        """Activate robot immediately after connection"""
-        try:
-            if self._robot:
-                loop = asyncio.get_event_loop()
-                await loop.run_in_executor(
-                    self._executor,
-                    self._activate_robot_sync_internal
-                )
-        except Exception as e:
-            self.logger.warning(f"Failed to activate robot after connect for {self.robot_id}: {e}")
-            # Don't raise exception - allow connection to proceed
-    
-    def _activate_robot_sync_internal(self):
-        """Internal activation and homing for connection process (per mecademicpy best practices)"""
-        try:
-            self.logger.info(f"🔧 Starting robot activation sequence for {self.robot_id}")
-            
-            # Check robot status before activation
-            try:
-                if hasattr(self._robot, 'GetStatusRobot'):
-                    status = self._robot.GetStatusRobot()
-                    self.logger.info(f"📊 Robot status before activation for {self.robot_id}: {status}")
-                    
-                    # Check if robot is in error state
-                    if hasattr(status, 'error_status') and status.error_status:
-                        self.logger.warning(f"⚠️ Robot {self.robot_id} is in error state before activation")
-                        # Try to reset errors if possible
-                        if hasattr(self._robot, 'ResetError'):
-                            self._robot.ResetError()
-                            self.logger.info(f"✅ Error reset attempted for {self.robot_id}")
-            except Exception as status_e:
-                self.logger.warning(f"⚠️ Could not check robot status before activation for {self.robot_id}: {status_e}")
-            
-            # Step 1: Activate Robot
-            if hasattr(self._robot, 'ActivateRobot'):
-                self.logger.info(f"🔋 Activating robot {self.robot_id}...")
-                try:
-                    self._robot.ActivateRobot()
-                    self.logger.info(f"✅ Robot {self.robot_id} activation command sent")
-                    
-                    # Wait for activation to complete
-                    self.logger.info(f"⏳ Waiting 2s for activation to complete for {self.robot_id}")
-                    time.sleep(2.0)
-                    
-                    # Verify activation if possible
-                    if hasattr(self._robot, 'GetStatusRobot'):
-                        try:
-                            status = self._robot.GetStatusRobot()
-                            if hasattr(status, 'activation_status'):
-                                self.logger.info(f"📊 Robot {self.robot_id} activation status: {status.activation_status}")
-                        except Exception:
-                            pass
-                except Exception as activate_e:
-                    self.logger.error(f"❌ Robot activation failed for {self.robot_id}: {activate_e}")
-                    raise
-            else:
-                self.logger.warning(f"⚠️ Robot {self.robot_id} does not support ActivateRobot method")
-            
-            # Step 2: Home Robot (required before movements per mecademicpy docs)
-            if hasattr(self._robot, 'Home'):
-                self.logger.info(f"🏠 Homing robot {self.robot_id}...")
-                try:
-                    self._robot.Home()
-                    self.logger.info(f"✅ Robot {self.robot_id} homing command sent")
-                    
-                    # Wait for homing or use WaitHomed if available
-                    if hasattr(self._robot, 'WaitHomed'):
-                        self.logger.info(f"⏳ Waiting for robot {self.robot_id} to complete homing...")
-                        try:
-                            self._robot.WaitHomed(timeout=30.0)  # 30 second timeout for homing
-                            self.logger.info(f"✅ Robot {self.robot_id} homing completed")
-                        except Exception as wait_e:
-                            self.logger.warning(f"⚠️ WaitHomed timeout/error for {self.robot_id}: {wait_e}")
-                            self.logger.info(f"⏳ Fallback: waiting 5s for homing to complete")
-                            time.sleep(5.0)
-                    else:
-                        # Fallback: wait a reasonable time for homing
-                        self.logger.info(f"⏳ Waiting 5s for robot {self.robot_id} homing (no WaitHomed method)")
-                        time.sleep(5.0)
-                        
-                    # Verify homing if possible
-                    if hasattr(self._robot, 'GetStatusRobot'):
-                        try:
-                            status = self._robot.GetStatusRobot()
-                            if hasattr(status, 'homing_status'):
-                                self.logger.info(f"📊 Robot {self.robot_id} homing status: {status.homing_status}")
-                        except Exception:
-                            pass
-                except Exception as home_e:
-                    self.logger.error(f"❌ Robot homing failed for {self.robot_id}: {home_e}")
-                    raise
-            else:
-                self.logger.warning(f"⚠️ Robot {self.robot_id} does not support Home method")
-            
-            self.logger.info(f"🎉 Robot activation sequence completed for {self.robot_id}")
-                
-        except Exception as e:
-            self.logger.error(f"❌ Error in robot activation sequence for {self.robot_id}: {e}")
-            raise
-    
-    async def _set_initial_parameters(self):
-        """Set initial robot parameters after connection"""
-        try:
-            if self._robot:
-                loop = asyncio.get_event_loop()
-                await loop.run_in_executor(
-                    self._executor,
-                    self._set_parameters_sync
-                )
-        except Exception as e:
-            self.logger.warning(f"Failed to set initial parameters for {self.robot_id}: {e}")
-    
-    def _set_parameters_sync(self):
-        """Set robot parameters synchronously"""
-        try:
-            # Set movement parameters
-            if hasattr(self._robot, 'SetJointVel'):
-                self._robot.SetJointVel(self.speed)
-            
-            if hasattr(self._robot, 'SetJointAcc'):
-                self._robot.SetJointAcc(self.acceleration)
-            
-            if hasattr(self._robot, 'SetCartVel'):
-                self._robot.SetCartVel(self.speed)
-            
-            if hasattr(self._robot, 'SetCartAcc'):
-                self._robot.SetCartAcc(self.acceleration)
-            
-            # Set force if available
-            if hasattr(self._robot, 'SetForce') and self.force > 0:
-                self._robot.SetForce(self.force)
-            
-            self.logger.info(f"Set initial parameters for {self.robot_id}")
-            
-        except Exception as e:
-            self.logger.error(f"Error setting parameters for {self.robot_id}: {e}")
     
     async def _disconnect_impl(self) -> bool:
         """Implementation-specific disconnection logic"""
         try:
-            if self._robot:
-                loop = asyncio.get_event_loop()
-                await loop.run_in_executor(
-                    self._executor,
-                    self._disconnect_sync
-                )
+            self.debug_log("_disconnect_impl", "entry", "Starting disconnection process")
+            self.logger.info(f"🔄 Disconnecting from robot {self.robot_id}")
+            
+            if self._native_driver:
+                await self._native_driver.disconnect()
+                self.debug_log("_disconnect_impl", "success", "Native driver disconnected successfully")
+                self.logger.info(f"✅ Successfully disconnected from robot {self.robot_id}")
+            
             return True
         except Exception as e:
             self.logger.error(f"Error during disconnection for {self.robot_id}: {e}")
             return False
-        finally:
-            self._robot = None
-    
-    def _disconnect_sync(self):
-        """Synchronous disconnection implementation"""
-        try:
-            if self._robot and hasattr(self._robot, 'Disconnect'):
-                self._robot.Disconnect()
-                self.logger.info(f"Disconnected from Mecademic robot {self.robot_id}")
-        except Exception as e:
-            self.logger.error(f"Error disconnecting from {self.robot_id}: {e}")
     
     async def _ping_impl(self) -> float:
         """Implementation-specific ping logic"""
         start_time = time.time()
         
         try:
-            if not self._robot:
-                raise ConnectionError(f"Robot {self.robot_id} not connected")
+            if not self._native_driver or not self._native_driver.is_connected:
+                raise ConnectionError("Robot not connected")
             
-            # Use status check as ping
-            loop = asyncio.get_event_loop()
-            await loop.run_in_executor(
-                self._executor,
-                self._ping_sync
-            )
+            # Use native driver status check as ping
+            status = self._native_driver.status
+            ping_time = time.time() - start_time
             
-            return time.time() - start_time
+            self.debug_log("_ping_impl", "success", f"Ping successful", {"ping_time": ping_time})
+            return ping_time
             
         except Exception as e:
-            self.logger.warning(f"Ping failed for {self.robot_id}: {e}")
-            raise
-    
-    def _ping_sync(self):
-        """Synchronous ping implementation"""
-        try:
-            if hasattr(self._robot, 'GetStatusRobot'):
-                # This will raise exception if robot is not responsive
-                status = self._robot.GetStatusRobot()
-                return status
-            else:
-                # Fallback: check if still connected
-                if hasattr(self._robot, 'IsConnected'):
-                    if not self._robot.IsConnected():
-                        raise ConnectionError(f"Robot {self.robot_id} lost connection")
-                return True
-        except Exception as e:
-            raise ConnectionError(f"Ping failed for {self.robot_id}: {e}")
+            self.logger.error(f"Ping failed for {self.robot_id}: {e}")
+            raise ConnectionError(f"Ping failed: {e}", robot_id=self.robot_id)
     
     async def _get_status_impl(self) -> Dict[str, Any]:
         """Implementation-specific status logic"""
@@ -548,614 +183,272 @@ class MecademicDriver(BaseRobotDriver):
         
         self.debug_log("_get_status_impl", "entry", "Getting robot status")
         
-        # Use cached status if available and fresh
+        # Check cache first
         if (self._last_status and 
             current_time - self._last_status_time < self._status_cache_duration):
-            self.debug_log("_get_status_impl", "cache_hit", 
-                          f"Using cached status", {"age": current_time - self._last_status_time})
-            return self._last_status.copy()
-        
-        self.debug_log("_get_status_impl", "cache_miss", "Status cache expired or empty - fetching fresh status")
+            self.debug_log("_get_status_impl", "cache_hit", "Returning cached status")
+            return self._last_status
         
         try:
-            if not self._robot:
-                self.debug_log("_get_status_impl", "no_robot", "No robot instance available")
-                return {"connected": False, "error": "Robot not initialized"}
+            if not self._native_driver or not self._native_driver.is_connected:
+                return {
+                    "connected": False,
+                    "error": "Robot not connected",
+                    "timestamp": current_time
+                }
             
-            self.debug_log("_get_status_impl", "fetching", "Executing status fetch in thread pool")
-            loop = asyncio.get_event_loop()
-            status = await loop.run_in_executor(
-                self._executor,
-                self._get_status_sync
-            )
+            # Get status from native driver
+            native_status = self._native_driver.status
             
-            self.debug_log("_get_status_impl", "status_received", 
-                          f"Fresh status retrieved", {"status": status})
+            # Convert native status to windsurf format
+            status = {
+                "connected": self._native_driver.is_connected,
+                "state": native_status.state.value,
+                "position": native_status.position.to_dict(),
+                "is_activated": native_status.is_activated,
+                "is_homed": native_status.is_homed,
+                "is_in_error": native_status.is_in_error,
+                "is_moving": native_status.is_moving,
+                "is_paused": native_status.is_paused,
+                # Add service-expected field names for compatibility
+                "activation_status": native_status.is_activated,
+                "homing_status": native_status.is_homed,
+                "error_status": native_status.is_in_error,
+                "paused": native_status.is_paused,
+                "error_code": native_status.error_code,
+                "error_message": native_status.error_message,
+                "timestamp": current_time,
+                "connection_info": self._native_driver.connection_info
+            }
             
-            # Cache the result
+            # Cache the status
             self._last_status = status
             self._last_status_time = current_time
             
+            self.debug_log("_get_status_impl", "success", "Status retrieved successfully")
             return status
             
         except Exception as e:
-            self.logger.error(f"Status check failed for {self.robot_id}: {e}")
-            return {
+            self.logger.error(f"Failed to get status for {self.robot_id}: {e}")
+            error_status = {
                 "connected": False,
                 "error": str(e),
                 "timestamp": current_time
             }
-    
-    def _get_status_sync(self) -> Dict[str, Any]:
-        """Synchronous status check implementation"""
-        try:
-            status = {
-                "connected": True,
-                "timestamp": time.time(),
-                "robot_id": self.robot_id
-            }
-            
-            # Get robot status if available
-            if hasattr(self._robot, 'GetStatusRobot'):
-                robot_status = self._robot.GetStatusRobot()
-                self.logger.info(f"🔍 RAW robot_status object for {self.robot_id}: {robot_status}")
-                self.logger.info(f"🔍 robot_status type: {type(robot_status)}")
-                self.logger.info(f"🔍 robot_status attributes: {dir(robot_status) if robot_status else 'None'}")
-                
-                if robot_status:
-                    # Use correct mecademicpy attribute names
-                    activation_status = getattr(robot_status, 'activation_state', False)
-                    homing_status = getattr(robot_status, 'homing_state', False)
-                    error_status = getattr(robot_status, 'error_status', False)
-                    
-                    self.logger.info(f"🔍 Fixed attribute access for {self.robot_id}:")
-                    self.logger.info(f"  - activation_state: {activation_status}")
-                    self.logger.info(f"  - homing_state: {homing_status}")
-                    self.logger.info(f"  - error_status: {error_status}")
-                    
-                    status.update({
-                        "activation_status": activation_status,  # Keep API consistent
-                        "homing_status": homing_status,        # Keep API consistent  
-                        "error_status": error_status,
-                        "paused": getattr(robot_status, 'pause_motion_status', False),
-                        "end_of_cycle": getattr(robot_status, 'end_of_block_status', False),
-                        "motion_complete": getattr(robot_status, 'end_of_block_status', False)
-                    })
-            
-            # Get position data if available
-            if hasattr(self._robot, 'GetRobotRtData'):
-                try:
-                    rt_data = self._robot.GetRobotRtData()
-                    if rt_data:
-                        status['position'] = {
-                            'x': getattr(rt_data, 'x', 0.0),
-                            'y': getattr(rt_data, 'y', 0.0),
-                            'z': getattr(rt_data, 'z', 0.0),
-                            'alpha': getattr(rt_data, 'alpha', 0.0),
-                            'beta': getattr(rt_data, 'beta', 0.0),
-                            'gamma': getattr(rt_data, 'gamma', 0.0)
-                        }
-                except Exception as e:
-                    self.logger.warning(f"Failed to get position data for {self.robot_id}: {e}")
-            
-            # Check connection status
-            if hasattr(self._robot, 'IsConnected'):
-                status['connected'] = self._robot.IsConnected()
-            
-            return status
-            
-        except Exception as e:
-            self.logger.error(f"Error getting status for {self.robot_id}: {e}")
-            return {
-                "connected": False,
-                "error": str(e),
-                "timestamp": time.time()
-            }
+            # Cache error status briefly
+            self._last_status = error_status
+            self._last_status_time = current_time
+            return error_status
     
     async def _emergency_stop_impl(self) -> bool:
         """Implementation-specific emergency stop logic"""
         try:
-            if not self._robot:
+            if not self._native_driver or not self._native_driver.is_connected:
                 return False
             
-            loop = asyncio.get_event_loop()
-            await loop.run_in_executor(
-                self._executor,
-                self._emergency_stop_sync
-            )
+            self.debug_log("_emergency_stop_impl", "entry", "Executing emergency stop")
+            self.logger.warning(f"🚨 Emergency stop activated for {self.robot_id}")
             
-            return True
+            # Clear motion and pause
+            success = True
+            
+            try:
+                await self._native_driver.clear_motion()
+                self.debug_log("_emergency_stop_impl", "clear_motion", "Motion cleared")
+            except Exception as e:
+                self.logger.error(f"Failed to clear motion during emergency stop: {e}")
+                success = False
+            
+            try:
+                await self._native_driver.pause_motion()
+                self.debug_log("_emergency_stop_impl", "pause_motion", "Motion paused")
+            except Exception as e:
+                self.logger.error(f"Failed to pause motion during emergency stop: {e}")
+                success = False
+            
+            if success:
+                self.logger.info(f"✅ Emergency stop completed for {self.robot_id}")
+            else:
+                self.logger.error(f"❌ Emergency stop partially failed for {self.robot_id}")
+            
+            return success
             
         except Exception as e:
             self.logger.error(f"Emergency stop failed for {self.robot_id}: {e}")
             return False
     
-    def _emergency_stop_sync(self):
-        """
-        Synchronous emergency stop implementation using proper Mecademic API methods.
-        
-        Uses ClearMotion() as primary method (closest to hardware e-stop behavior):
-        - Stops robot movement immediately
-        - Clears all planned movements from queue
-        - Follows Mecademic recommended emergency stop sequence
-        """
-        try:
-            emergency_executed = False
-            
-            # STEP 1: Immediate stop current movement
-            if hasattr(self._robot, 'PauseMotion'):
-                self.logger.critical(f"🚨 Executing PauseMotion() for immediate stop on {self.robot_id}")
-                self._robot.PauseMotion()
-                emergency_executed = True
-                self.logger.critical(f"✅ PauseMotion() immediate stop executed for {self.robot_id}")
-
-            # STEP 2: Clear remaining movement queue
-            if hasattr(self._robot, 'ClearMotion'):
-                self.logger.critical(f"🚨 Executing ClearMotion() to clear queue on {self.robot_id}")
-                self._robot.ClearMotion()
-                emergency_executed = True
-                self.logger.critical(f"✅ ClearMotion() queue cleared for {self.robot_id}")
-                
-                # Also engage brakes if available for additional safety
-                if hasattr(self._robot, 'BrakesOn'):
-                    try:
-                        self._robot.BrakesOn()
-                        self.logger.critical(f"✅ Emergency brakes engaged for {self.robot_id}")
-                    except Exception as brake_error:
-                        self.logger.warning(f"⚠️ Could not engage brakes during emergency stop: {brake_error}")
-                        
-            # STEP 3: Fallback if neither method available
-            if not emergency_executed and hasattr(self._robot, 'StopMotion'):
-                self.logger.critical(f"🚨 Executing StopMotion() fallback for emergency stop on {self.robot_id}")
-                self._robot.StopMotion()
-                emergency_executed = True
-                self.logger.critical(f"✅ StopMotion() fallback executed for {self.robot_id}")
-                
-            else:
-                self.logger.error(f"❌ No emergency stop methods available for {self.robot_id}")
-                self.logger.error(f"💡 Available methods: {[attr for attr in dir(self._robot) if 'Motion' in attr or 'Stop' in attr or 'Brake' in attr]}")
-                
-            if emergency_executed:
-                self.logger.critical(f"🛑 Emergency stop completed for {self.robot_id} - robot halted in place")
-                # Note: Connection preserved, no movement to safe position, gripper state unchanged
-            else:
-                self.logger.error(f"❌ Emergency stop FAILED for {self.robot_id} - no suitable methods available")
-                
-        except Exception as e:
-            self.logger.error(f"❌ Critical error during emergency stop for {self.robot_id}: {type(e).__name__}: {e}")
-            # Log detailed error info for debugging
-            import traceback
-            self.logger.error(f"Emergency stop error traceback:\n{traceback.format_exc()}")
-            raise
-    
-    async def home_robot(self) -> bool:
-        """Home the robot to its reference position"""
-        try:
-            if not self._robot:
-                raise ConnectionError(f"Robot {self.robot_id} not connected")
-            
-            loop = asyncio.get_event_loop()
-            await loop.run_in_executor(
-                self._executor,
-                self._home_robot_sync
-            )
-            
-            return True
-            
-        except Exception as e:
-            self.logger.error(f"Homing failed for {self.robot_id}: {e}")
-            raise HardwareError(f"Homing failed: {e}", robot_id=self.robot_id)
-    
-    def _home_robot_sync(self):
-        """Synchronous robot homing implementation"""
-        try:
-            if hasattr(self._robot, 'Home'):
-                self._robot.Home()
-                self.logger.info(f"Homing initiated for {self.robot_id}")
-                
-                # Wait for homing to complete if method available
-                if hasattr(self._robot, 'WaitHomed'):
-                    self._robot.WaitHomed(timeout=60.0)
-                    self.logger.info(f"Homing completed for {self.robot_id}")
-                else:
-                    # Fallback: wait a bit and check status
-                    time.sleep(2.0)
-            else:
-                self.logger.warning(f"Homing not available for {self.robot_id}")
-        except Exception as e:
-            self.logger.error(f"Homing error for {self.robot_id}: {e}")
-            raise
+    # Additional methods that may be used by the service layer
     
     async def activate_robot(self) -> bool:
-        """Activate the robot for operation with connection validation and retry"""
-        self.logger.info(f"🚀 NEW ACTIVATION LOGIC CALLED for {self.robot_id}")
-        max_retries = 2
-        
-        for attempt in range(max_retries):
-            try:
-                if not self._robot:
-                    raise ConnectionError(f"Robot {self.robot_id} not connected")
-                
-                # Check connection status before activation attempt
-                await self._validate_connection_before_activation(attempt + 1)
-                
-                loop = asyncio.get_event_loop()
-                await loop.run_in_executor(
-                    self._executor,
-                    self._activate_robot_sync
-                )
-                
-                self.logger.info(f"✅ Robot {self.robot_id} activation successful on attempt {attempt + 1}")
-                return True
-                
-            except Exception as e:
-                error_str = str(e)
-                self.logger.warning(f"⚠️ Activation attempt {attempt + 1} failed for {self.robot_id}: {error_str}")
-                
-                # Check if this is a socket/connection error that we can retry
-                if attempt < max_retries - 1 and any(err in error_str.lower() for err in 
-                    ['socket was closed', 'connection', 'disconnect', 'communication']):
-                    
-                    self.logger.info(f"🔄 Connection issue detected, attempting reconnection for {self.robot_id}")
-                    
-                    # Try to reconnect
-                    try:
-                        await self._reconnect_for_activation()
-                        self.logger.info(f"🎯 Reconnection successful, retrying activation for {self.robot_id}")
-                        continue  # Retry activation
-                    except Exception as reconnect_error:
-                        self.logger.error(f"❌ Reconnection failed for {self.robot_id}: {reconnect_error}")
-                
-                # If this is the last attempt or not a connection error, raise the exception
-                if attempt == max_retries - 1:
-                    self.logger.error(f"❌ All activation attempts failed for {self.robot_id}: {e}")
-                    raise HardwareError(f"Activation failed after {max_retries} attempts: {e}", robot_id=self.robot_id)
-    
-    async def _validate_connection_before_activation(self, attempt_num: int):
-        """Validate connection status before attempting activation"""
-        self.logger.info(f"🔍 Validating connection before activation attempt {attempt_num} for {self.robot_id}")
-        
-        if not self._robot:
-            raise ConnectionError(f"No robot instance available for {self.robot_id}")
-        
-        # Check if robot reports as connected
-        if hasattr(self._robot, 'IsConnected'):
-            loop = asyncio.get_event_loop()
-            is_connected = await loop.run_in_executor(
-                self._executor,
-                lambda: self._robot.IsConnected()
-            )
-            
-            self.logger.info(f"📊 Robot {self.robot_id} IsConnected() reports: {is_connected}")
-            
-            if not is_connected:
-                raise ConnectionError(f"Robot {self.robot_id} reports as not connected")
-        else:
-            self.logger.warning(f"⚠️ Robot {self.robot_id} lacks IsConnected() method")
-        
-        # Clear robot occupation state before activation
-        await self._clear_robot_occupation_state(attempt_num)
-    
-    async def _clear_robot_occupation_state(self, attempt_num: int):
-        """Clear robot occupation state to allow activation"""
-        self.logger.info(f"🧹 Clearing robot occupation state for attempt {attempt_num} on {self.robot_id}")
-        
-        if not self._robot:
-            self.logger.warning(f"⚠️ No robot instance to clear state for {self.robot_id}")
-            return
-        
-        loop = asyncio.get_event_loop()
-        
+        """Activate the robot for operation"""
         try:
-            # First check current robot status to see if clearing is needed
-            if hasattr(self._robot, 'GetStatusRobot'):
-                try:
-                    current_status = self._robot.GetStatusRobot()
-                    activated = getattr(current_status, 'activation_state', False)
-                    homed = getattr(current_status, 'homing_state', False)
-                    error = getattr(current_status, 'error_status', False)
-                    
-                    self.logger.info(f"🔍 Current robot state before clearing: activated={activated}, homed={homed}, error={error}")
-                    
-                    # If robot is already activated and homed with no errors, don't clear
-                    if activated and homed and not error:
-                        self.logger.info(f"✅ Robot {self.robot_id} already in good state, skipping occupation clearing")
-                        return
-                    
-                    # If robot just has error but is activated/homed, only reset error, don't deactivate
-                    if activated and homed and error:
-                        self.logger.info(f"🔧 Robot {self.robot_id} activated/homed but has error, only resetting error")
-                        if hasattr(self._robot, 'ResetError'):
-                            await loop.run_in_executor(self._executor, self._robot.ResetError)
-                            self.logger.info(f"✅ Error reset for {self.robot_id}")
-                        return
-                        
-                except Exception as status_e:
-                    self.logger.warning(f"⚠️ Could not check robot status, proceeding with clearing: {status_e}")
+            if not self._native_driver or not self._native_driver.is_connected:
+                raise ConnectionError("Robot not connected")
             
-            # Step 1: Deactivate robot if it's activated/occupied (only if needed)
-            if hasattr(self._robot, 'DeactivateRobot'):
-                self.logger.info(f"🔧 Calling DeactivateRobot() to clear occupation for {self.robot_id}")
-                await loop.run_in_executor(
-                    self._executor,
-                    self._robot.DeactivateRobot
-                )
-                self.logger.info(f"✅ DeactivateRobot() completed for {self.robot_id}")
-                
-                # Wait for deactivation to complete
-                await asyncio.sleep(1.0)
-            else:
-                self.logger.warning(f"⚠️ DeactivateRobot() not available for {self.robot_id}")
-            
-            # Step 2: Clear any pending motions
-            if hasattr(self._robot, 'ClearMotion'):
-                self.logger.info(f"🔧 Calling ClearMotion() for {self.robot_id}")
-                await loop.run_in_executor(
-                    self._executor,
-                    self._robot.ClearMotion
-                )
-                self.logger.info(f"✅ ClearMotion() completed for {self.robot_id}")
-            else:
-                self.logger.warning(f"⚠️ ClearMotion() not available for {self.robot_id}")
-            
-            # Step 3: Reset any error states
-            if hasattr(self._robot, 'ResetError'):
-                self.logger.info(f"🔧 Calling ResetError() for {self.robot_id}")
-                await loop.run_in_executor(
-                    self._executor,
-                    self._robot.ResetError
-                )
-                self.logger.info(f"✅ ResetError() completed for {self.robot_id}")
-            else:
-                self.logger.warning(f"⚠️ ResetError() not available for {self.robot_id}")
-            
-            # Wait a moment for all clearing operations to take effect
-            await asyncio.sleep(0.5)
-            self.logger.info(f"🎯 Robot occupation state cleared for {self.robot_id}")
-            
+            result = await self._native_driver.activate()
+            self.clear_status_cache()  # Clear cache after state change
+            return result
         except Exception as e:
-            self.logger.warning(f"⚠️ Error during occupation state clearing for {self.robot_id}: {e}")
-            # Don't raise the exception - we'll still try activation
+            self.logger.error(f"Failed to activate robot {self.robot_id}: {e}")
+            return False
     
-    async def _reconnect_for_activation(self):
-        """Attempt to reconnect the robot for activation"""
-        self.logger.info(f"🔄 Starting reconnection process for {self.robot_id}")
-        
-        # First disconnect if still connected
+    async def deactivate_robot(self) -> bool:
+        """Deactivate the robot"""
         try:
-            if self._robot and hasattr(self._robot, 'Disconnect'):
-                loop = asyncio.get_event_loop()
-                await loop.run_in_executor(
-                    self._executor,
-                    self._robot.Disconnect
-                )
-                self.logger.info(f"🔌 Disconnected stale connection for {self.robot_id}")
-        except Exception as disconnect_error:
-            self.logger.warning(f"⚠️ Error during disconnect for {self.robot_id}: {disconnect_error}")
-        
-        # Wait a moment for cleanup
-        await asyncio.sleep(1.0)
-        
-        # Attempt fresh connection
-        self._robot = None
-        self._connected = False
-        
-        connection_success = await self._connect_impl()
-        if not connection_success:
-            raise ConnectionError(f"Failed to re-establish connection for {self.robot_id}")
-        
-        self.logger.info(f"✅ Fresh connection established for {self.robot_id}")
-
-    def _activate_robot_sync(self):
-        """Synchronous robot activation implementation"""
-        try:
-            if hasattr(self._robot, 'ActivateRobot'):
-                self.logger.info(f"🔧 Calling ActivateRobot() for {self.robot_id}")
-                self._robot.ActivateRobot()
-                self.logger.info(f"✅ ActivateRobot() completed for {self.robot_id}")
-                
-                # Wait for activation to complete
-                time.sleep(1.0)
-            else:
-                self.logger.warning(f"⚠️ ActivateRobot() not available for {self.robot_id}")
+            if not self._native_driver or not self._native_driver.is_connected:
+                raise ConnectionError("Robot not connected")
+            
+            result = await self._native_driver.deactivate()
+            self.clear_status_cache()  # Clear cache after state change
+            return result
         except Exception as e:
-            self.logger.error(f"❌ Activation error for {self.robot_id}: {type(e).__name__}: {e}")
-            raise
+            self.logger.error(f"Failed to deactivate robot {self.robot_id}: {e}")
+            return False
+    
+    async def home_robot(self) -> bool:
+        """Home the robot to reference position"""
+        try:
+            if not self._native_driver or not self._native_driver.is_connected:
+                raise ConnectionError("Robot not connected")
+            
+            result = await self._native_driver.home()
+            self.clear_status_cache()  # Clear cache after state change
+            return result
+        except Exception as e:
+            self.logger.error(f"Failed to home robot {self.robot_id}: {e}")
+            return False
+    
+    async def move_pose(self, x: float, y: float, z: float, 
+                       alpha: float = 0.0, beta: float = 0.0, gamma: float = 0.0) -> bool:
+        """Move robot to specified pose"""
+        try:
+            if not self._native_driver or not self._native_driver.is_connected:
+                raise ConnectionError("Robot not connected")
+            
+            result = await self._native_driver.move_pose(x, y, z, alpha, beta, gamma)
+            self.clear_status_cache()  # Clear cache after movement command
+            return result
+        except Exception as e:
+            self.logger.error(f"Failed to move robot {self.robot_id} to pose: {e}")
+            return False
+    
+    async def set_velocity(self, velocity: float) -> bool:
+        """Set joint velocity percentage"""
+        try:
+            if not self._native_driver or not self._native_driver.is_connected:
+                raise ConnectionError("Robot not connected")
+            
+            return await self._native_driver.set_joint_vel(velocity)
+        except Exception as e:
+            self.logger.error(f"Failed to set velocity for robot {self.robot_id}: {e}")
+            return False
+    
+    async def set_acceleration(self, acceleration: float) -> bool:
+        """Set joint acceleration percentage"""
+        try:
+            if not self._native_driver or not self._native_driver.is_connected:
+                raise ConnectionError("Robot not connected")
+            
+            return await self._native_driver.set_joint_acc(acceleration)
+        except Exception as e:
+            self.logger.error(f"Failed to set acceleration for robot {self.robot_id}: {e}")
+            return False
     
     async def clear_motion(self) -> bool:
-        """Clear robot motion queue"""
+        """Clear motion queue"""
         try:
-            self.debug_log("clear_motion", "entry", "Starting clear motion sequence")
+            if not self._native_driver or not self._native_driver.is_connected:
+                raise ConnectionError("Robot not connected")
             
-            if not self._robot:
-                self.debug_log("clear_motion", "no_robot", "No robot connection available")
-                self.logger.warning(f"⚠️ No robot connection to clear motion for {self.robot_id}")
-                return False
-                
-            self.debug_log("clear_motion", "clearing", "Calling ClearMotion() on robot instance")
-            self.logger.info(f"🔧 Clearing motion queue for {self.robot_id}")
-            loop = asyncio.get_event_loop()
-            
-            if hasattr(self._robot, 'ClearMotion'):
-                self.debug_log("clear_motion", "executing", "Executing ClearMotion() in thread pool")
-                await loop.run_in_executor(
-                    self._executor,
-                    self._robot.ClearMotion
-                )
-                self.debug_log("clear_motion", "success", "ClearMotion() completed successfully")
-                self.logger.info(f"✅ ClearMotion() completed for {self.robot_id}")
-                return True
-            else:
-                self.debug_log("clear_motion", "unavailable", "ClearMotion() method not available")
-                self.logger.warning(f"⚠️ ClearMotion() not available for {self.robot_id}")
-                return False
-                
+            result = await self._native_driver.clear_motion()
+            self.clear_status_cache()  # Clear cache after state change
+            return result
         except Exception as e:
-            self.logger.error(f"❌ Clear motion error for {self.robot_id}: {type(e).__name__}: {e}")
+            self.logger.error(f"Failed to clear motion for robot {self.robot_id}: {e}")
             return False
-
+    
+    async def pause_motion(self) -> bool:
+        """Pause robot motion"""
+        try:
+            if not self._native_driver or not self._native_driver.is_connected:
+                raise ConnectionError("Robot not connected")
+            
+            result = await self._native_driver.pause_motion()
+            self.clear_status_cache()  # Clear cache after state change
+            return result
+        except Exception as e:
+            self.logger.error(f"Failed to pause motion for robot {self.robot_id}: {e}")
+            return False
+    
     async def resume_motion(self) -> bool:
-        """Resume robot motion after pause"""
+        """Resume robot motion"""
         try:
-            self.debug_log("resume_motion", "entry", "Starting resume motion sequence")
+            if not self._native_driver or not self._native_driver.is_connected:
+                raise ConnectionError("Robot not connected")
             
-            if not self._robot:
-                self.debug_log("resume_motion", "no_robot", "No robot connection available")
-                self.logger.warning(f"⚠️ No robot connection to resume motion for {self.robot_id}")
-                return False
-                
-            self.debug_log("resume_motion", "resuming", "Calling ResumeMotion() on robot instance")
-            self.logger.info(f"🔧 Resuming motion for {self.robot_id}")
-            loop = asyncio.get_event_loop()
-            
-            if hasattr(self._robot, 'ResumeMotion'):
-                self.debug_log("resume_motion", "executing", "Executing ResumeMotion() in thread pool")
-                await loop.run_in_executor(
-                    self._executor,
-                    self._robot.ResumeMotion
-                )
-                self.debug_log("resume_motion", "success", "ResumeMotion() completed successfully")
-                self.logger.info(f"✅ ResumeMotion() completed for {self.robot_id}")
-                return True
-            else:
-                self.debug_log("resume_motion", "unavailable", "ResumeMotion() method not available")
-                self.logger.warning(f"⚠️ ResumeMotion() not available for {self.robot_id}")
-                return False
-                
+            result = await self._native_driver.resume_motion()
+            self.clear_status_cache()  # Clear cache after state change
+            return result
         except Exception as e:
-            self.logger.error(f"❌ Resume motion error for {self.robot_id}: {type(e).__name__}: {e}")
+            self.logger.error(f"Failed to resume motion for robot {self.robot_id}: {e}")
             return False
-
-    async def wait_idle(self, timeout: float = 30.0) -> bool:
-        """Wait for robot to become idle (motion complete)"""
-        try:
-            if not self._robot:
-                self.logger.warning(f"⚠️ No robot connection to wait for idle for {self.robot_id}")
-                return False
-                
-            self.logger.info(f"⏳ Waiting for robot {self.robot_id} to become idle (timeout: {timeout}s)")
-            loop = asyncio.get_event_loop()
-            
-            if hasattr(self._robot, 'WaitIdle'):
-                # WaitIdle expects timeout in milliseconds
-                timeout_ms = int(timeout * 1000)
-                await loop.run_in_executor(
-                    self._executor,
-                    self._robot.WaitIdle,
-                    timeout_ms
-                )
-                self.logger.info(f"✅ Robot {self.robot_id} is now idle")
-                return True
-            else:
-                self.logger.warning(f"⚠️ WaitIdle() not available for {self.robot_id}")
-                # Fallback: wait and check status
-                await asyncio.sleep(timeout)
-                return False
-                
-        except Exception as e:
-            self.logger.error(f"❌ Wait idle error for {self.robot_id}: {type(e).__name__}: {e}")
-            return False
-
+    
     async def reset_error(self) -> bool:
-        """Reset robot error state with connection recovery"""
-        max_attempts = 3
+        """Reset robot error state"""
+        try:
+            if not self._native_driver or not self._native_driver.is_connected:
+                raise ConnectionError("Robot not connected")
+            
+            result = await self._native_driver.reset_error()
+            self.clear_status_cache()  # Clear cache after state change
+            return result
+        except Exception as e:
+            self.logger.error(f"Failed to reset error for robot {self.robot_id}: {e}")
+            return False
+    
+    def get_robot_instance(self):
+        """
+        Get robot instance for service layer compatibility.
         
-        for attempt in range(max_attempts):
-            try:
-                if not self._robot:
-                    self.logger.warning(f"⚠️ No robot connection to reset error for {self.robot_id}")
-                    return False
-                    
-                self.logger.info(f"🔧 Resetting error state for {self.robot_id} (attempt {attempt + 1})")
-                loop = asyncio.get_event_loop()
-                
-                # Reset errors
-                if hasattr(self._robot, 'ResetError'):
-                    await loop.run_in_executor(
-                        self._executor,
-                        self._robot.ResetError
-                    )
-                    self.logger.info(f"✅ ResetError() completed for {self.robot_id}")
-                    
-                    # Wait for reset to take effect
-                    await asyncio.sleep(2.0)
-                    
-                    # Resume motion if paused
-                    if hasattr(self._robot, 'ResumeMotion'):
-                        await loop.run_in_executor(
-                            self._executor,
-                            self._robot.ResumeMotion
-                        )
-                        self.logger.info(f"✅ ResumeMotion() completed for {self.robot_id}")
-                    
-                    return True
-                else:
-                    self.logger.warning(f"⚠️ ResetError() not available for {self.robot_id}")
-                    return False
-                    
-            except Exception as e:
-                error_str = str(e)
-                self.logger.warning(f"⚠️ Error reset attempt {attempt + 1} failed for {self.robot_id}: {error_str}")
-                
-                # Check if this is a connection error that we can recover from
-                if "socket was closed" in error_str.lower() or "connection" in error_str.lower():
-                    if attempt < max_attempts - 1:
-                        self.logger.info(f"🔄 Connection lost during error reset, attempting to reconnect for {self.robot_id}")
-                        try:
-                            # Try to reconnect
-                            await self._force_reconnection()
-                            await asyncio.sleep(1.0)
-                            continue
-                        except Exception as reconnect_e:
-                            self.logger.warning(f"⚠️ Reconnection failed: {reconnect_e}")
-                
-                # If last attempt or non-recoverable error, fail
-                if attempt == max_attempts - 1:
-                    self.logger.error(f"❌ All error reset attempts failed for {self.robot_id}")
-                    return False
-                    
+        Returns the native driver instance when connected, providing
+        compatibility with the service layer's robot instance checks.
+        
+        Returns:
+            NativeMecademicDriver instance if connected, None otherwise
+        """
+        if self._native_driver:
+            return self._native_driver.get_robot_instance()
+        return None
+    
+    async def wait_idle(self, timeout: float = 30.0) -> bool:
+        """Wait for robot to finish motion."""
+        if self._native_driver:
+            return await self._native_driver.wait_idle(timeout)
         return False
     
-    def get_robot_instance(self) -> Optional[Any]:
-        """Get the underlying mecademicpy.Robot instance"""
-        return self._robot
-    
-    def get_connection_info(self) -> Dict[str, Any]:
-        """Get connection information"""
-        return {
-            "robot_id": self.robot_id,
-            "ip_address": self.ip_address,
-            "port": self.port,
-            "timeout": self.timeout,
-            "connected": self._connected,
-            "config": self.config
-        }
+    @property
+    def native_driver(self) -> NativeMecademicDriver:
+        """Access to underlying native driver for advanced operations"""
+        return self._native_driver
 
 
 class MecademicDriverFactory:
-    """Factory for creating Mecademic drivers"""
+    """
+    Factory class for creating Mecademic drivers.
+    Provides a standardized interface for driver instantiation.
+    """
     
     @staticmethod
-    def create_driver(robot_id: str, settings: Any) -> MecademicDriver:
+    def create_driver(robot_id: str, settings) -> MecademicDriver:
         """
-        Create a Mecademic driver from settings.
+        Create a Mecademic driver instance with configuration from settings.
         
         Args:
-            robot_id: Robot identifier
-            settings: RoboticsSettings instance
+            robot_id: Unique identifier for the robot
+            settings: RoboticsSettings instance with configuration
             
         Returns:
             Configured MecademicDriver instance
         """
-        config = {
-            "ip": settings.meca_ip,
-            "port": settings.meca_port,
-            "timeout": settings.meca_timeout,
-            "retry_attempts": settings.meca_retry_attempts,
-            "retry_delay": settings.meca_retry_delay,
-            "force": settings.meca_force,
-            "acceleration": settings.meca_acceleration,
-            "speed": settings.meca_speed
-        }
-        
+        config = settings.get_robot_config("meca")
         return MecademicDriver(robot_id, config)

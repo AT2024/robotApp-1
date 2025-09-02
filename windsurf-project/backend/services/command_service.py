@@ -660,8 +660,13 @@ class RobotCommandService(BaseService):
             # Transform parameters for specific command types
             if command.command_type == CommandType.PICKUP_SEQUENCE:
                 # Transform WebSocket parameters to method parameters
+                self.logger.info(f"🚀 DEBUG: About to transform pickup_sequence params: {command.parameters}")
                 transformed_params = await self._transform_pickup_sequence_params(command.parameters)
-                return await method(**transformed_params)
+                self.logger.info(f"🚀 DEBUG: Transformed params: {transformed_params}")
+                self.logger.info(f"🚀 DEBUG: About to call method: {method} with params: {transformed_params}")
+                result = await method(**transformed_params)
+                self.logger.info(f"🚀 DEBUG: Method call completed with result: {type(result)}")
+                return result
             elif command.command_type == CommandType.DROP_SEQUENCE:
                 # Transform WebSocket parameters to method parameters  
                 transformed_params = await self._transform_drop_sequence_params(command.parameters)

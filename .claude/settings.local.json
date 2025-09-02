@@ -16,5 +16,6 @@
       "Bash(gemini:*)"
     ],
     "deny": []
-  }
+  },
+  "outputStyle": "Explanatory"
 }

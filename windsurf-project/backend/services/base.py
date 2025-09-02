@@ -298,8 +298,11 @@ class BaseService(ABC):
             )
         
         # Register operation
+        self.logger.info(f"🚀 DEBUG: About to acquire operation_lock for {context.operation_id}")
         async with self._operation_lock:
+            self.logger.info(f"🚀 DEBUG: Acquired operation_lock for {context.operation_id}")
             self._operations[context.operation_id] = context
+        self.logger.info(f"🚀 DEBUG: Released operation_lock for {context.operation_id}")
         
         try:
             self.logger.info(
@@ -307,14 +310,21 @@ class BaseService(ABC):
                 f"for robot {context.robot_id}"
             )
             
+            # 🐛 DEBUG: About to execute operation function
+            self.logger.info(f"🚀 DEBUG: execute_operation about to call {operation_func} with timeout={context.timeout}")
+            
             # Execute with timeout if specified
             if context.timeout:
+                self.logger.info(f"🚀 DEBUG: Using asyncio.wait_for with timeout {context.timeout}s")
                 result = await asyncio.wait_for(
                     operation_func(*args, **kwargs),
                     timeout=context.timeout
                 )
             else:
+                self.logger.info(f"🚀 DEBUG: Calling operation_func directly (no timeout)")
                 result = await operation_func(*args, **kwargs)
+            
+            self.logger.info(f"🚀 DEBUG: operation_func completed successfully")
             
             execution_time = time.time() - start_time
             

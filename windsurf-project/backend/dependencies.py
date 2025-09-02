@@ -161,6 +161,9 @@ class DependencyContainer:
                 lock_manager=self._lock_manager,
                 async_wrapper=meca_wrapper,
             )
+            
+            # Auto-connect to the robot on startup
+            await self._meca_service.connect()
 
             # Register the driver with hardware manager
             self._hardware_manager.register_robot_driver("meca", meca_driver)

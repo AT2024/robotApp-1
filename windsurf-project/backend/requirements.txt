@@ -31,6 +31,9 @@ python-multipart==0.0.6
 # Logging
 loguru==0.7.2
 
+# Network utilities
+netifaces>=0.11.0  # For NIC interface detection
+
 # Robot control libraries
 mecademicpy>=1.4.0
 opentrons==7.2.2

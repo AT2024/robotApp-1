@@ -66,9 +66,15 @@ class RoboticsSettings(BaseSettings):
     meca_enabled: bool = Field(default=True)
     meca_ip: str = Field(default="192.168.0.100")
     meca_port: int = Field(default=10000, ge=1, le=65535)
+    meca_monitor_port: int = Field(default=10001, ge=1, le=65535)
     meca_timeout: float = Field(default=30.0, gt=0)
+    meca_command_timeout: float = Field(default=30.0, gt=0)
     meca_retry_attempts: int = Field(default=3, ge=1)
     meca_retry_delay: float = Field(default=1.0, gt=0)
+    
+    # Meca Network Binding (Native Driver)
+    meca_bind_interface: Optional[str] = Field(default=None, description="Network interface to bind to (e.g. 'eth0', 'en0')")
+    meca_bind_ip: Optional[str] = Field(default=None, description="IP address to bind to (takes precedence over interface)")
 
     # Meca Movement Parameters (from legacy Meca_FullCode.py)
     meca_force: float = Field(default=100.0, gt=0)  # Gripper force
@@ -179,7 +185,7 @@ class RoboticsSettings(BaseSettings):
 
     # Monitoring and Health Checks
     health_check_interval: float = Field(default=30.0, gt=0)
-    robot_status_check_interval: float = Field(default=5.0, gt=0)
+    robot_status_check_interval: float = Field(default=30.0, gt=0)
 
     # CORS Configuration
     cors_origins: List[str] = Field(
@@ -290,9 +296,13 @@ class RoboticsSettings(BaseSettings):
                 "enabled": self.meca_enabled,
                 "ip": self.meca_ip,
                 "port": self.meca_port,
+                "monitor_port": self.meca_monitor_port,
                 "timeout": self.meca_timeout,
+                "command_timeout": self.meca_command_timeout,
                 "retry_attempts": self.meca_retry_attempts,
                 "retry_delay": self.meca_retry_delay,
+                "bind_interface": self.meca_bind_interface,
+                "bind_ip": self.meca_bind_ip,
                 "movement_params": {
                     "force": self.meca_force,
                     "acceleration": self.meca_acceleration,

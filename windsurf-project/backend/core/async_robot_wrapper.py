@@ -166,9 +166,15 @@ class AsyncRobotWrapper:
         status_start_time = time.time()
         self.logger.debug(f"Requesting fresh status from robot {self.robot_id}")
         
+        # 🐛 DEBUG: Status query tracking
+        self.logger.info(f"🚀 DEBUG: AsyncRobotWrapper.get_status() called for {self.robot_id}")
+        self.logger.info(f"🚀 DEBUG: use_cache={use_cache}, timeout={self.command_timeout}")
+        
         try:
             # Execute in thread pool to avoid blocking
             loop = asyncio.get_event_loop()
+            self.logger.info(f"🚀 DEBUG: About to call _get_status_sync in thread pool")
+            
             status = await asyncio.wait_for(
                 loop.run_in_executor(
                     self.executor,
@@ -179,11 +185,18 @@ class AsyncRobotWrapper:
             
             status_duration = time.time() - status_start_time
             
+            # 🐛 DEBUG: Detailed status analysis  
+            self.logger.info(f"🚀 DEBUG: Raw status from _get_status_sync: {status}")
+            self.logger.info(f"🚀 DEBUG: Status type: {type(status)}")
+            if isinstance(status, dict):
+                self.logger.info(f"🚀 DEBUG: Status keys: {list(status.keys())}")
+            
             # Update cache
             self._status_cache = status
             self._last_status_check = current_time
             
             self.logger.debug(f"Robot {self.robot_id} status retrieved in {status_duration:.3f}s: {status}")
+            self.logger.info(f"🚀 DEBUG: Status successfully cached and returning: {status}")
             
             return status
             
@@ -200,9 +213,23 @@ class AsyncRobotWrapper:
     
     def _get_status_sync(self) -> Dict[str, Any]:
         """Synchronous status check (runs in thread pool)"""
+        # 🐛 DEBUG: Synchronous status check entry point
+        self.logger.info(f"🚀 DEBUG: _get_status_sync called for robot {self.robot_id}")
+        
+        # Check if this is the old mecademicpy driver
         if hasattr(self.robot_driver, 'GetStatusRobot'):
+            self.logger.info(f"🚀 DEBUG: Using old mecademicpy interface (GetStatusRobot)")
             status = self.robot_driver.GetStatusRobot()
-            return {
+            self.logger.info(f"🚀 DEBUG: GetStatusRobot returned: {status}")
+            self.logger.info(f"🚀 DEBUG: Status object type: {type(status)}")
+            
+            if status:
+                self.logger.info(f"🚀 DEBUG: Status object attributes: error_status={getattr(status, 'error_status', 'N/A')}, "
+                               f"homing_status={getattr(status, 'homing_status', 'N/A')}, "
+                               f"activation_status={getattr(status, 'activation_status', 'N/A')}, "
+                               f"paused={getattr(status, 'paused', 'N/A')}")
+            
+            result = {
                 "connected": True,
                 "error_status": status.error_status if status else False,
                 "homing_status": status.homing_status if status else False,
@@ -210,8 +237,59 @@ class AsyncRobotWrapper:
                 "paused": status.paused if status else False,
                 "end_of_cycle": status.end_of_cycle if status else False
             }
+            
+            self.logger.info(f"🚀 DEBUG: _get_status_sync returning: {result}")
+            return result
+            
+        # Check if this is the new BaseRobotDriver interface
+        elif hasattr(self.robot_driver, '_get_status_impl'):
+            self.logger.info(f"🚀 DEBUG: Using new BaseRobotDriver interface (_get_status_impl)")
+            
+            # Since _get_status_impl is async, we need to run it in an event loop
+            # But we're in a thread pool, so we need to create a new event loop
+            import asyncio
+            
+            try:
+                # Get the current event loop, or create a new one if none exists
+                try:
+                    loop = asyncio.get_event_loop()
+                    if loop.is_running():
+                        # We're in a running loop, need to use run_coroutine_threadsafe
+                        # But since we're in a thread pool, we need a new loop
+                        loop = None
+                except RuntimeError:
+                    loop = None
+                
+                if loop is None:
+                    # Create a new event loop for this thread
+                    loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(loop)
+                    
+                # Run the async method
+                status = loop.run_until_complete(self.robot_driver._get_status_impl())
+                self.logger.info(f"🚀 DEBUG: _get_status_impl returned: {status}")
+                self.logger.info(f"🚀 DEBUG: Status type: {type(status)}")
+                
+                # The BaseRobotDriver._get_status_impl should return the status dict directly
+                if isinstance(status, dict):
+                    self.logger.info(f"🚀 DEBUG: Status keys: {list(status.keys())}")
+                    self.logger.info(f"🚀 DEBUG: _get_status_sync returning: {status}")
+                    return status
+                else:
+                    self.logger.error(f"🚀 DEBUG: Unexpected status type: {type(status)}")
+                    fallback_result = {"connected": self._connected, "status": "error", "error": "Unexpected status format"}
+                    return fallback_result
+                    
+            except Exception as e:
+                self.logger.error(f"🚀 DEBUG: Error in _get_status_impl: {e}")
+                fallback_result = {"connected": self._connected, "status": "error", "error": str(e)}
+                return fallback_result
         else:
-            return {"connected": self._connected, "status": "unknown"}
+            self.logger.info(f"🚀 DEBUG: Robot driver has no known status method")
+            self.logger.info(f"🚀 DEBUG: Available methods: {[attr for attr in dir(self.robot_driver) if not attr.startswith('_')]}")
+            fallback_result = {"connected": self._connected, "status": "unknown"}
+            self.logger.info(f"🚀 DEBUG: _get_status_sync returning fallback: {fallback_result}")
+            return fallback_result
     
     async def delay(self, milliseconds: int):
         """Non-blocking delay operation"""
