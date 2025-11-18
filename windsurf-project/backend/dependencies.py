@@ -525,11 +525,11 @@ def validate_dependencies_config() -> Dict[str, Any]:
         }
 
         # Check for potential issues
-        if settings.meca_ip == "192.168.0.100":
-            validation_results["issues"].append("Using default Meca IP address")
+        if not settings.meca_ip:
+            validation_results["issues"].append("Meca IP address not configured")
 
-        if settings.ot2_ip == "169.254.49.202":
-            validation_results["issues"].append("Using default OT2 IP address")
+        if not settings.ot2_ip:
+            validation_results["issues"].append("OT2 IP address not configured")
 
         return validation_results
 

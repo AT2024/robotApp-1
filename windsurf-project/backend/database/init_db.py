@@ -42,7 +42,7 @@ def seed_initial_data():
         # Example: Add some configurations
         # For MECA robot
         meca_configs = [
-            Config(id=meca_robot.id, param="ip", value="192.168.0.100"),
+            Config(id=meca_robot.id, param="ip", value="192.168.1.100"),
             Config(id=meca_robot.id, param="port", value="10000"),
         ]
 

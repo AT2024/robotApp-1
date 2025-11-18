@@ -888,9 +888,9 @@ class OT2Service(RobotService):
             raise HardwareError(f"OT2 connection error: {e}", robot_id=self.robot_id)
 
     async def _upload_protocol(self, protocol_config: ProtocolConfig) -> str:
-        """Upload protocol to OT2 using dual-structure format (Python file + JSON metadata)
-
-        This matches the working robot manager approach that properly enables hardware recognition.
+        """Upload protocol to OT2 using official API format (Python file only)
+        
+        This follows the official Opentrons HTTP API documentation approach.
         """
         protocol_file = Path(protocol_config.protocol_file)
 
@@ -915,34 +915,11 @@ class OT2Service(RobotService):
             timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
             protocol_content = f"# Generated at: {timestamp}\n{protocol_content}"
 
-            # CRITICAL: Create JSON metadata structure exactly like working robot manager
-            # This is what enables proper hardware recognition during protocol analysis
-            protocol_data = {
-                "labwareDefinitions": {},
-                "pipetteDefinitions": {},
-                "designerApplication": {
-                    "name": "opentrons/protocol-designer",
-                    "version": "5.1.0",
-                },
-                "metadata": {
-                    "protocolName": protocol_config.protocol_name,
-                    "author": "System",
-                    "description": "Generated protocol for hardware recognition",
-                    "apiLevel": "2.9",  # Match the protocol's API level
-                },
-                "defaultValues": {"forecastLabwareReagents": False},
-                "parameters": protocol_config.parameters or {},
-                "commands": [],
-            }
-
-            # Convert JSON metadata to string
-            protocol_json_str = json.dumps(protocol_data)
-
-            # CRITICAL: Upload using dual-structure format (Python file + JSON metadata)
-            # This is the exact format that worked in the robot manager
+            # Create FormData with ONLY the Python file (no JSON metadata)
+            # This follows the official Opentrons API documentation
             data = aiohttp.FormData()
 
-            # Add Python protocol file
+            # Add Python protocol file using the "files" field name expected by OT-2 API
             data.add_field(
                 "files",
                 protocol_content.encode("utf-8"),
@@ -950,13 +927,10 @@ class OT2Service(RobotService):
                 content_type="text/x-python",
             )
 
-            # Add JSON metadata - this is what enables hardware recognition!
-            data.add_field("data", protocol_json_str, content_type="application/json")
-
             headers = {"Opentrons-Version": "2"}
 
             self.logger.info(
-                f"Uploading protocol with dual structure: {protocol_file.name}"
+                f"Uploading protocol using official API format: {protocol_file.name}"
             )
             self.logger.info(
                 f"Protocol parameters: {json.dumps(protocol_config.parameters or {}, indent=2)}"
@@ -982,7 +956,7 @@ class OT2Service(RobotService):
                 protocol_id = response_data["data"]["id"]
 
                 self.logger.info(
-                    f"Protocol uploaded successfully with dual structure: {protocol_id}"
+                    f"Protocol uploaded successfully using official API: {protocol_id}"
                 )
                 return protocol_id
 

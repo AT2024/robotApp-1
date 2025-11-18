@@ -112,7 +112,7 @@ settings = get_settings()
 meca_config = settings.get_robot_config("meca")
 
 # ❌ Hard-coded Values (Never)
-MECA_IP = "192.168.0.100"  # Don't do this
+MECA_IP = "192.168.1.100"  # Don't do this
 ```
 
 **Type Annotations** (Required for Service Interfaces)
@@ -170,7 +170,7 @@ async def operation_name(data: dict = Body(default={}),
 ```bash
 # All settings use ROBOTICS_ prefix
 ROBOTICS_ENVIRONMENT=development
-ROBOTICS_MECA_IP=192.168.0.100
+ROBOTICS_MECA_IP=192.168.1.100
 ROBOTICS_MECA_PORT=10000
 ROBOTICS_OT2_IP=169.254.49.202
 ROBOTICS_OT2_PORT=31950
@@ -185,7 +185,7 @@ settings = get_settings()
 robot_config = settings.get_robot_config("meca")
 
 # ❌ Never hard-code
-IP_ADDRESS = "192.168.0.100"  # Don't do this
+IP_ADDRESS = "192.168.1.100"  # Don't do this
 ```
 
 ## Safety & Performance Standards
@@ -293,8 +293,8 @@ windsurf-project/
 - Verify `opentrons-version: 4` header in requests
 - Ensure `pydantic<2.0.0` compatibility
 
-### **Mecademic Connection Issues**  
-- Verify IP: 192.168.0.100, Port: 10000
+### **Mecademic Connection Issues**
+- Verify IP: 192.168.1.100, Port: 10000
 - Check TCP connection and motion parameters
 - Review safety system activation
 

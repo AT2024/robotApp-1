@@ -64,7 +64,7 @@ class RoboticsSettings(BaseSettings):
 
     # Meca Robot Configuration
     meca_enabled: bool = Field(default=True)
-    meca_ip: str = Field(default="192.168.0.100")
+    meca_ip: str  # Required field from environment - no default to enforce explicit configuration
     meca_port: int = Field(default=10000, ge=1, le=65535)
     meca_timeout: float = Field(default=30.0, gt=0)
     meca_retry_attempts: int = Field(default=3, ge=1)

@@ -40,8 +40,8 @@ class MecademicDriver(BaseRobotDriver):
                 robot_id=robot_id
             )
         
-        # Extract configuration
-        self.ip_address = config.get("ip", "192.168.0.100")
+        # Extract configuration - fail fast if required config is missing
+        self.ip_address = config["ip"]  # Required - no default
         self.port = config.get("port", 10000)
         self.timeout = config.get("timeout", 30.0)
         self.retry_attempts = config.get("retry_attempts", 3)

@@ -548,7 +548,7 @@ async def test_tcp_connection():
     
     settings = get_settings()
     robot_config = settings.get_robot_config("meca")
-    host = robot_config.get("ip", "192.168.0.100")
+    host = robot_config["ip"]  # Required - no default
     port = robot_config.get("port", 10000)
     timeout = 10.0
     
