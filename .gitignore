@@ -266,6 +266,9 @@ Thumbs.db
 
 # Windows
 *.bat
+!windsurf-project/first-run-setup.bat
+!windsurf-project/run.bat
+!windsurf-project/run-prod.bat
 *.cmd
 *.exe
 *.msi
