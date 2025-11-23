@@ -17,7 +17,7 @@ class ConfigService {
 
     // Listen for config-related messages
     websocketService.onMessage((message) => {
-      if (message.type === 'config_data' || message.type === 'config_update') {
+      if (message.type === 'config_data' || message.type === 'config_update' || message.type === 'config_updated') {
         this.configListeners.forEach(listener => listener(message));
       }
     });

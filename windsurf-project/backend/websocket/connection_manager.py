@@ -82,14 +82,74 @@ class ConnectionManager:
                 "message": f"Failed to load configuration: {str(e)}"
             })
 
+    async def handle_config_save(self, websocket: WebSocket, config_type: str, data: dict):
+        """Handle save_config messages from WebSocket clients."""
+        try:
+            from utils.config_manager import get_config_manager
+            from core.settings import reload_settings
+
+            logger.info(f"Received config save request for {config_type}")
+
+            # Save to runtime.json using config_manager
+            config_manager = get_config_manager()
+            success = await config_manager.save_runtime_config(config_type, data)
+
+            if not success:
+                await websocket.send_json({
+                    "type": "save_config_response",
+                    "success": False,
+                    "message": f"Failed to save configuration for {config_type}"
+                })
+                return
+
+            # Reload settings from JSON file
+            new_settings = reload_settings()
+            self.settings = new_settings  # Update connection manager settings
+
+            # Get the updated config data
+            updated_config = new_settings.get_robot_config(config_type)
+
+            # Send success response
+            await websocket.send_json({
+                "type": "save_config_response",
+                "success": True,
+                "message": f"Configuration for {config_type} saved successfully"
+            })
+
+            # Broadcast update to all clients WITH the updated data
+            await self.broadcast({
+                "type": "config_updated",
+                "config_type": config_type,
+                "data": {
+                    "config_type": config_type,
+                    "content": updated_config
+                }
+            })
+
+            logger.info(f"Configuration for {config_type} saved and broadcasted successfully")
+
+        except Exception as e:
+            logger.error(f"Error saving config: {e}", exc_info=True)
+            await websocket.send_json({
+                "type": "save_config_response",
+                "success": False,
+                "message": f"Error saving configuration: {str(e)}"
+            })
+
     async def handle_message(self, websocket: WebSocket, message: dict):
         """Handle incoming WebSocket messages."""
         try:
             msg_type = message.get('type')
             if msg_type == 'get_config':
                 await self.handle_config_request(
-                    websocket, 
+                    websocket,
                     message.get('config_type')
+                )
+            elif msg_type == 'save_config':
+                await self.handle_config_save(
+                    websocket,
+                    message.get('config_type'),
+                    message.get('data')
                 )
             elif msg_type == 'status_update':
                 await self.broadcast_server_status()
