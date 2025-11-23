@@ -67,8 +67,8 @@ const SpreadingPage = () => {
             type: 'command',
             command_type: 'meca_pickup',
             data: {
-              current_step: activeStep,
-              step_name: steps[activeStep].label
+              start: 0,
+              count: 5
             },
           });
         } catch (error) {

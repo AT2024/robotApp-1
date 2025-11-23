@@ -292,7 +292,65 @@ class AsyncRobotWrapper:
                 error=str(e),
                 execution_time=execution_time
             )
-    
+
+    async def wait_idle(self, timeout: float = 30.0) -> None:
+        """Wait for all queued robot motions to complete with timeout protection.
+
+        This method blocks until the robot's motion queue is empty,
+        ensuring all previously queued commands have finished executing.
+        Critical for preventing buffer overflow when queuing many commands.
+
+        Args:
+            timeout: Maximum time to wait in seconds (default: 30s, matches mecademicpy WaitHomed pattern)
+
+        Raises:
+            HardwareError: If timeout occurs or robot is in error/paused state
+        """
+        self.logger.debug(f"Waiting for robot {self.robot_id} motion queue (timeout={timeout}s)")
+
+        try:
+            robot = self.robot_driver.get_robot_instance()
+            if robot and hasattr(robot, 'WaitIdle'):
+                loop = asyncio.get_event_loop()
+
+                # Add timeout protection to prevent infinite hang
+                # If robot hits obstacle or enters error state, motion queue never completes
+                await asyncio.wait_for(
+                    loop.run_in_executor(
+                        self.executor,
+                        robot.WaitIdle
+                    ),
+                    timeout=timeout
+                )
+                self.logger.debug(f"Robot {self.robot_id} motion queue completed")
+            else:
+                self.logger.warning(f"WaitIdle not available for robot {self.robot_id}")
+
+        except asyncio.TimeoutError:
+            # Check robot status to diagnose why timeout occurred
+            error_msg = f"WaitIdle timeout after {timeout}s for robot {self.robot_id}"
+
+            if robot and hasattr(robot, 'GetStatusRobot'):
+                try:
+                    status = robot.GetStatusRobot()
+                    error_status = getattr(status, 'error_status', False)
+                    paused = getattr(status, 'pause_motion_status', False)
+
+                    error_msg += f" - Robot status: error={error_status}, paused={paused}"
+
+                    if error_status or paused:
+                        error_msg += " (Likely collision or torque limit exceeded)"
+
+                except Exception as status_e:
+                    error_msg += f" (Could not read robot status: {status_e})"
+
+            self.logger.error(error_msg)
+            raise HardwareError(error_msg, robot_id=self.robot_id)
+
+        except Exception as e:
+            self.logger.error(f"Error waiting for robot {self.robot_id} to idle: {e}")
+            raise
+
     def _execute_movement_sync(self, command: MovementCommand) -> Any:
         """Execute movement command synchronously (runs in thread pool)"""
         try:

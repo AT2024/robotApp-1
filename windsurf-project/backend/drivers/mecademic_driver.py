@@ -436,9 +436,40 @@ class MecademicDriver(BaseRobotDriver):
                     raise
             else:
                 self.logger.warning(f"⚠️ Robot {self.robot_id} does not support Home method")
-            
+
+            # Step 3: Resume Motion if Paused (critical per mecademicpy docs)
+            # After connection/activation/homing, robot may be in paused state
+            # Commands will fail with "Socket was closed" if motion is paused
+            try:
+                if hasattr(self._robot, 'GetStatusRobot'):
+                    status = self._robot.GetStatusRobot()
+                    paused = getattr(status, 'pause_motion_status', False)
+
+                    if paused:
+                        self.logger.info(f"🔧 Robot {self.robot_id} is paused (pause_motion_status: True) - calling ResumeMotion()...")
+                        if hasattr(self._robot, 'ResumeMotion'):
+                            self._robot.ResumeMotion()
+                            self.logger.info(f"✅ ResumeMotion() completed for {self.robot_id}")
+
+                            # Wait briefly and verify motion resumed
+                            time.sleep(1.0)
+                            verify_status = self._robot.GetStatusRobot()
+                            verify_paused = getattr(verify_status, 'pause_motion_status', True)
+
+                            if verify_paused:
+                                self.logger.warning(f"⚠️ Motion still paused after ResumeMotion() for {self.robot_id}")
+                            else:
+                                self.logger.info(f"✅ Motion resume verified (pause_motion_status: False) for {self.robot_id}")
+                        else:
+                            self.logger.warning(f"⚠️ ResumeMotion() not available for {self.robot_id}")
+                    else:
+                        self.logger.info(f"✅ Robot {self.robot_id} not paused (pause_motion_status: False)")
+            except Exception as resume_e:
+                self.logger.warning(f"⚠️ Error checking/resuming motion for {self.robot_id}: {resume_e}")
+                # Don't raise - allow activation to proceed
+
             self.logger.info(f"🎉 Robot activation sequence completed for {self.robot_id}")
-                
+
         except Exception as e:
             self.logger.error(f"❌ Error in robot activation sequence for {self.robot_id}: {e}")
             raise
