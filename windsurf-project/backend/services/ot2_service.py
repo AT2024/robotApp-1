@@ -1458,7 +1458,7 @@ class OT2Service(RobotService):
                 "   • Try running the protocol directly from the OT2 interface",
                 "   • This will show specific error messages about missing hardware",
                 "",
-                f"🌐 Robot Interface: http://{self.ot2_config.get('ip', '169.254.49.202')}:31950",
+                f"🌐 Robot Interface: http://{self.ot2_config['ip']}:{self.ot2_config['port']}",
                 "",
                 "After resolving hardware issues, try running the protocol again.",
             ]
@@ -1541,7 +1541,7 @@ class OT2Service(RobotService):
                 "   • Try running a simple test protocol to verify hardware",
                 "   • Check the OT2 logs for specific error messages",
                 "",
-                f"🌐 Robot Interface: http://{self.ot2_config.get('ip', '169.254.49.202')}:31950",
+                f"🌐 Robot Interface: http://{self.ot2_config['ip']}:{self.ot2_config['port']}",
                 "",
                 "Check the robot's interface for specific error messages and hardware status.",
             ]

@@ -40,17 +40,17 @@ class MecademicDriver(BaseRobotDriver):
                 robot_id=robot_id
             )
         
-        # Extract configuration
-        self.ip_address = config.get("ip", "192.168.0.100")
-        self.port = config.get("port", 10000)
-        self.timeout = config.get("timeout", 30.0)
-        self.retry_attempts = config.get("retry_attempts", 3)
-        self.retry_delay = config.get("retry_delay", 1.0)
-        
+        # Extract configuration - all required from config (no fallbacks)
+        self.ip_address = config["ip"]
+        self.port = config["port"]
+        self.timeout = config["timeout"]
+        self.retry_attempts = config["retry_attempts"]
+        self.retry_delay = config["retry_delay"]
+
         # Movement parameters
-        self.force = config.get("force", 50.0)
-        self.acceleration = config.get("acceleration", 25.0)
-        self.speed = config.get("speed", 25.0)
+        self.force = config["force"]
+        self.acceleration = config["acceleration"]
+        self.speed = config["speed"]
         
         # Mecademic robot instance
         self._robot: Optional[mecademicpy.Robot] = None

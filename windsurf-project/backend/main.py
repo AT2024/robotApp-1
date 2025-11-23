@@ -255,11 +255,13 @@ async def get_system_status():
 
 if __name__ == "__main__":
     import uvicorn
+    from core.settings import get_settings
+    settings = get_settings()
     logger.info("Starting Robotics Control System Server...")
     uvicorn.run(
-        app, 
-        host="127.0.0.1", 
-        port=8000,
+        app,
+        host="127.0.0.1",
+        port=settings.port,
         log_level="info",
         access_log=True
     )

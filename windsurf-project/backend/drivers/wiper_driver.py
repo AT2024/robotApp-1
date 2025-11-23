@@ -58,10 +58,10 @@ class WiperDriver(BaseRobotDriver):
         super().__init__(config)
         self.logger = get_logger("WiperDriver")
         
-        # Connection parameters
-        self.ip = config.get("ip", "192.168.0.200")
-        self.port = config.get("port", 8080)
-        self.timeout = config.get("timeout", 30.0)
+        # Connection parameters - all required from config (no fallbacks)
+        self.ip = config["ip"]
+        self.port = config["port"]
+        self.timeout = config["timeout"]
         self.base_url = f"http://{self.ip}:{self.port}"
         
         # Cleaning parameters

@@ -1,5 +1,6 @@
 from .db_config import engine, Base, SessionLocal
 from .models import Robot, Config, ProcessLog, ThoriumVial, Wafer, BakingTray, Carousel
+from core.settings import get_settings
 import logging
 
 logger = logging.getLogger(__name__)
@@ -39,17 +40,20 @@ def seed_initial_data():
         db.refresh(meca_robot)
         db.refresh(ot2_robot)
 
+        # Get settings for configuration values
+        settings = get_settings()
+
         # Example: Add some configurations
         # For MECA robot
         meca_configs = [
-            Config(id=meca_robot.id, param="ip", value="192.168.0.100"),
-            Config(id=meca_robot.id, param="port", value="10000"),
+            Config(id=meca_robot.id, param="ip", value=str(settings.meca_ip)),
+            Config(id=meca_robot.id, param="port", value=str(settings.meca_port)),
         ]
 
         # For OT2 robot
         ot2_configs = [
-            Config(id=ot2_robot.id, param="ip", value="169.254.49.202"),
-            Config(id=ot2_robot.id, param="port", value="31950"),
+            Config(id=ot2_robot.id, param="ip", value=str(settings.ot2_ip)),
+            Config(id=ot2_robot.id, param="port", value=str(settings.ot2_port)),
         ]
 
         db.add_all(meca_configs + ot2_configs)

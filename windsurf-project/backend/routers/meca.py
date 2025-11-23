@@ -548,9 +548,9 @@ async def test_tcp_connection():
     
     settings = get_settings()
     robot_config = settings.get_robot_config("meca")
-    host = robot_config.get("ip", "192.168.0.100")
-    port = robot_config.get("port", 10000)
-    timeout = 10.0
+    host = robot_config["ip"]
+    port = robot_config["port"]
+    timeout = robot_config.get("timeout", 30.0)
     
     test_results = {
         "timestamp": time.time(),
@@ -644,19 +644,20 @@ async def test_tcp_connection():
         
         # Test 3: Port scan to check what's actually listening
         try:
-            common_ports = [10000, 10001, 80, 22, 23, 443]
+            # Scan configured port and common alternatives
+            common_ports = [port, port + 1, 80, 22, 23, 443]
             open_ports = []
-            
+
             for test_port in common_ports:
                 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as scan_sock:
                     scan_sock.settimeout(2.0)
                     if scan_sock.connect_ex((host, test_port)) == 0:
                         open_ports.append(test_port)
-            
+
             test_results["socket_details"]["open_ports"] = open_ports
-            
-            if 10000 not in open_ports and open_ports:
-                test_results["recommendations"].append(f"Robot listening on ports {open_ports} but not 10000 - check robot configuration")
+
+            if port not in open_ports and open_ports:
+                test_results["recommendations"].append(f"Robot listening on ports {open_ports} but not {port} - check robot configuration")
             elif not open_ports:
                 test_results["recommendations"].append("No common ports open - robot may be in standby/error state")
                 
