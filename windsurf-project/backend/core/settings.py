@@ -5,6 +5,7 @@ Provides environment-specific configuration with validation and type safety.
 
 import os
 import json
+from pathlib import Path
 from typing import Optional, List, Dict, Any
 from pydantic import BaseSettings, Field, validator, root_validator
 from enum import Enum
@@ -28,6 +29,55 @@ class LogLevel(str, Enum):
     WARNING = "WARNING"
     ERROR = "ERROR"
     CRITICAL = "CRITICAL"
+
+
+def load_runtime_config() -> Dict[str, Any]:
+    """Load configuration from runtime.json file."""
+    try:
+        # Default path: backend/config/runtime.json
+        config_path = Path(__file__).parent.parent / "config" / "runtime.json"
+
+        if not config_path.exists():
+            return {}
+
+        with open(config_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
+def flatten_runtime_config(runtime_config: Dict[str, Any]) -> Dict[str, Any]:
+    """Flatten nested runtime config to match Pydantic field names."""
+    flattened = {}
+
+    for robot_type, robot_config in runtime_config.items():
+        for key, value in robot_config.items():
+            if isinstance(value, dict):
+                for nested_key, nested_value in value.items():
+                    # Special handling for positions.gen_drop
+                    if key == "positions" and nested_key == "gen_drop":
+                        flat_key = f"{robot_type}_gen_drop_positions"
+                    # Special handling for safety.torque_limits array
+                    elif key == "safety" and nested_key == "torque_limits":
+                        if isinstance(nested_value, list) and len(nested_value) == 6:
+                            for i, limit in enumerate(nested_value, 1):
+                                flattened[f"{robot_type}_torque_limit_j{i}"] = limit
+                        continue
+                    else:
+                        flat_key = f"{robot_type}_{nested_key}"
+
+                    if isinstance(nested_value, list):
+                        flattened[flat_key] = json.dumps(nested_value)
+                    else:
+                        flattened[flat_key] = nested_value
+            else:
+                flat_key = f"{robot_type}_{key}"
+                if isinstance(value, list):
+                    flattened[flat_key] = json.dumps(value)
+                else:
+                    flattened[flat_key] = value
+
+    return flattened
 
 
 class RoboticsSettings(BaseSettings):
@@ -215,6 +265,26 @@ class RoboticsSettings(BaseSettings):
             "database_url": {"env": ["DATABASE_URL", "ROBOTICS_DATABASE_URL"]},
             "secret_key": {"env": ["SECRET_KEY", "ROBOTICS_SECRET_KEY"]},
         }
+
+    def __init__(self, **kwargs):
+        """
+        Custom initialization to load runtime.json BEFORE Pydantic field initialization.
+
+        Priority (highest to lowest):
+        1. Explicit kwargs passed to __init__
+        2. Environment variables (ROBOTICS_* prefix)
+        3. runtime.json values
+        4. Pydantic Field defaults
+        """
+        # Load runtime configuration
+        runtime_config = load_runtime_config()
+        flattened_config = flatten_runtime_config(runtime_config)
+
+        # Merge: runtime.json values as base, then override with explicit kwargs
+        merged_values = {**flattened_config, **kwargs}
+
+        # Call parent __init__ with merged values
+        super().__init__(**merged_values)
 
     @validator("environment", pre=True)
     def validate_environment(cls, v):
