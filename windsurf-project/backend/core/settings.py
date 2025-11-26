@@ -63,6 +63,13 @@ def flatten_runtime_config(runtime_config: Dict[str, Any]) -> Dict[str, Any]:
                             for i, limit in enumerate(nested_value, 1):
                                 flattened[f"{robot_type}_torque_limit_j{i}"] = limit
                         continue
+                    # http_config & protocol_config: include parent prefix (e.g., ot2_http_total_timeout)
+                    elif key in ["http_config", "protocol_config"]:
+                        parent = key.replace("_config", "")
+                        flat_key = f"{robot_type}_{parent}_{nested_key}"
+                    # protocol_parameters: map directly without prefix (e.g., ot2_num_generators)
+                    elif key == "protocol_parameters":
+                        flat_key = f"{robot_type}_{nested_key}"
                     else:
                         flat_key = f"{robot_type}_{nested_key}"
 
@@ -154,11 +161,11 @@ class RoboticsSettings(BaseSettings):
     ot2_http_total_timeout: float = Field(default=30.0, gt=0)  # Total timeout for HTTP requests
     ot2_http_connect_timeout: float = Field(default=10.0, gt=0)  # Connection timeout
     ot2_http_connector_limit: int = Field(default=10, ge=1)  # TCP connector limit
-    ot2_api_version: str = Field(default="2")  # Opentrons API version
+    ot2_http_api_version: str = Field(default="2")  # Opentrons API version
     
     # OT2 Protocol Configuration
     ot2_protocol_directory: str = Field(default="protocols/")  # Default protocol directory
-    ot2_default_protocol_file: str = Field(default="ot2Protocole.py")  # Default protocol filename
+    ot2_protocol_default_file: str = Field(default="ot2Protocole.py")  # Default protocol filename
     ot2_protocol_execution_timeout: float = Field(default=3600.0, gt=0)  # 1 hour for protocol execution
     ot2_protocol_monitoring_interval: float = Field(default=2.0, gt=0)  # Status monitoring interval
     
@@ -397,11 +404,11 @@ class RoboticsSettings(BaseSettings):
                     "total_timeout": self.ot2_http_total_timeout,
                     "connect_timeout": self.ot2_http_connect_timeout,
                     "connector_limit": self.ot2_http_connector_limit,
-                    "api_version": self.ot2_api_version,
+                    "api_version": self.ot2_http_api_version,
                 },
                 "protocol_config": {
                     "directory": self.ot2_protocol_directory,
-                    "default_file": self.ot2_default_protocol_file,
+                    "default_file": self.ot2_protocol_default_file,
                     "execution_timeout": self.ot2_protocol_execution_timeout,
                     "monitoring_interval": self.ot2_protocol_monitoring_interval,
                 },

@@ -439,6 +439,18 @@ class OT2Service(RobotService):
                     "Hardware validation passed - proceeding with protocol execution"
                 )
 
+                # Step 2.75: Pre-run homing to ensure hardware is fully initialized
+                # Research shows protocols can hang if hardware isn't properly homed before execution
+                self.logger.info("Performing pre-run homing to initialize hardware...")
+                home_success = await self._home_robot()
+                if home_success:
+                    self.logger.info("Pre-run homing successful, waiting for stabilization...")
+                    # Wait 20 seconds for homing to complete (successful runs show ~18s homing time)
+                    await asyncio.sleep(20)
+                    self.logger.info("Hardware stabilized, ready for protocol execution")
+                else:
+                    self.logger.warning("Pre-run homing failed, but continuing with protocol execution")
+
                 # Step 3: Create and start run (only after analysis completes)
                 run_id = await self._create_run(protocol_id, protocol_config.parameters)
 
@@ -695,8 +707,19 @@ class OT2Service(RobotService):
             if not protocol_file_path.exists():
                 raise ValidationError(f"Protocol file not found: {protocol_file_path}")
 
-            # Get correct protocol parameters from settings
-            ot2_config_params = self.ot2_config.get("protocol_parameters", {})
+            # Get correct protocol parameters from settings (defaults from runtime.json)
+            ot2_config_params = self.ot2_config.get("protocol_parameters", {}).copy()
+
+            # Merge: runtime.json defaults + API parameters override
+            # Log parameter sources for debugging
+            api_overrides = {k: v for k, v in protocol_parameters.items() if k in ot2_config_params}
+            if api_overrides:
+                self.logger.info(f"API parameters overriding defaults: {api_overrides}")
+                ot2_config_params.update(api_overrides)
+            else:
+                self.logger.info("Using all parameters from runtime.json (no API overrides)")
+
+            self.logger.info(f"Final protocol parameters: {ot2_config_params}")
 
             # Create a default protocol config for the standard OT2 protocol
             protocol_config = ProtocolConfig(
@@ -895,11 +918,101 @@ class OT2Service(RobotService):
             self.logger.error(f"OT2 connection error for {method} {url}: {e}")
             raise HardwareError(f"OT2 connection error: {e}", robot_id=self.robot_id)
 
+    async def _clear_protocol_cache(self):
+        """Clear protocol cache by deleting all existing protocols.
+
+        This prevents OT2 v7.0.0+ protocol cache from reusing stale analysis.
+        """
+        try:
+            self.logger.info("Clearing protocol cache...")
+            protocols_response = await self._api_request("GET", "/protocols")
+            protocols = protocols_response.get("data", [])
+
+            for protocol in protocols:
+                protocol_id = protocol.get("id")
+                if protocol_id:
+                    try:
+                        await self._api_request("DELETE", f"/protocols/{protocol_id}")
+                        self.logger.debug(f"Deleted cached protocol: {protocol_id}")
+                    except Exception as e:
+                        self.logger.warning(f"Failed to delete protocol {protocol_id}: {e}")
+
+            self.logger.info(f"Cleared {len(protocols)} cached protocol(s)")
+        except Exception as e:
+            self.logger.warning(f"Failed to clear protocol cache: {e}")
+            # Don't fail if cache clearing fails - it's a best-effort optimization
+
+    def _inject_runtime_values(self, protocol_content: str) -> str:
+        """Inject runtime.json values into protocol constants.
+
+        This allows users to configure protocol parameters via runtime.json
+        while keeping the protocol file simple (like the working version).
+        """
+        import re
+
+        # Get values from OT2 config (which comes from runtime.json)
+        num_generators = self.ot2_config.get("num_generators", 5)
+        radioactive_vol = self.ot2_config.get("radioactive_vol", 6.6)
+        sds_vol = self.ot2_config.get("sds_vol", 1.0)
+        cur = self.ot2_config.get("cur", 2)
+        tip_location = self.ot2_config.get("tip_location", "1")
+
+        # Parse JSON string arrays from config
+        try:
+            sds_location = json.loads(self.ot2_config.get("sds_location", "[287, 226, 40]"))
+            radioactive_location = json.loads(self.ot2_config.get("radioactive_location", "[354, 225, 40]"))
+            generators_locations = json.loads(self.ot2_config.get("generators_locations", "[[4, 93, 133], [4, 138, 133], [4, 183, 133], [4, 228, 133], [4, 273, 133]]"))
+            home_location = json.loads(self.ot2_config.get("home_location", "[350, 350, 147]"))
+            temp_location = json.loads(self.ot2_config.get("temp_location", "[8, 350, 147]"))
+            height_home_location = json.loads(self.ot2_config.get("height_home_location", "[302, 302, 147]"))
+            height_temp_location = json.loads(self.ot2_config.get("height_temp_location", "[8, 228, 147]"))
+        except json.JSONDecodeError as e:
+            self.logger.warning(f"Failed to parse location JSON from config: {e}, using defaults")
+            sds_location = [287, 226, 40]
+            radioactive_location = [354, 225, 40]
+            generators_locations = [[4, 93, 133], [4, 138, 133], [4, 183, 133], [4, 228, 133], [4, 273, 133]]
+            home_location = [350, 350, 147]
+            temp_location = [8, 350, 147]
+            height_home_location = [302, 302, 147]
+            height_temp_location = [8, 228, 147]
+
+        # Replace constant values in protocol
+        protocol_content = re.sub(r'NUM_OF_GENERATORS = \d+', f'NUM_OF_GENERATORS = {num_generators}', protocol_content)
+        protocol_content = re.sub(r'THORIUM_VOL = [\d.]+', f'THORIUM_VOL = {radioactive_vol}', protocol_content)
+        protocol_content = re.sub(r'SDS_VOL = [\d.]+', f'SDS_VOL = {sds_vol}', protocol_content)
+        protocol_content = re.sub(r'CUR = \d+', f'CUR = {cur}', protocol_content)
+        protocol_content = re.sub(r'tip_location = "[^"]*"', f'tip_location = "{tip_location}"', protocol_content)
+
+        # Replace location arrays
+        protocol_content = re.sub(r'sds_lct = \[[^\]]+\]', f'sds_lct = {sds_location}', protocol_content)
+        protocol_content = re.sub(r'thorium_lct = \[[^\]]+\]', f'thorium_lct = {radioactive_location}', protocol_content)
+        protocol_content = re.sub(r'home_lct = \[[^\]]+\]', f'home_lct = {home_location}', protocol_content)
+        protocol_content = re.sub(r'temp_lct = \[[^\]]+\]', f'temp_lct = {temp_location}', protocol_content)
+        protocol_content = re.sub(r'hight_home_lct = \[[^\]]+\]', f'hight_home_lct = {height_home_location}', protocol_content)
+        protocol_content = re.sub(r'hight_temp_lct = \[[^\]]+\]', f'hight_temp_lct = {height_temp_location}', protocol_content)
+
+        # Replace generators_locations - match the entire line since it's a nested array
+        # The pattern matches: generators_locations = [...anything until end of line...]
+        generators_str = str(generators_locations)
+        protocol_content = re.sub(
+            r'generators_locations = \[.*\]$',
+            f'generators_locations = {generators_str}',
+            protocol_content,
+            flags=re.MULTILINE
+        )
+
+        self.logger.info(f"Injected runtime values: num_generators={num_generators}, radioactive_vol={radioactive_vol}, sds_vol={sds_vol}")
+
+        return protocol_content
+
     async def _upload_protocol(self, protocol_config: ProtocolConfig) -> str:
         """Upload protocol to OT2 using dual-structure format (Python file + JSON metadata)
 
         This matches the working robot manager approach that properly enables hardware recognition.
         """
+        # Clear protocol cache first to prevent v7.0.0+ stale analysis issues
+        await self._clear_protocol_cache()
+
         protocol_file = Path(protocol_config.protocol_file)
 
         # Protocol file should already be absolute path and validated
@@ -916,6 +1029,11 @@ class OT2Service(RobotService):
             # Read the protocol file content
             with open(protocol_file, "r") as file_handle:
                 protocol_content = file_handle.read()
+
+            # Inject runtime.json values into protocol constants
+            # This embeds user-configurable values (from runtime.json) directly into the protocol code
+            # Required because OT2 runTimeParameterValues only supports scalar types, not arrays
+            protocol_content = self._inject_runtime_values(protocol_content)
 
             # Add timestamp to protocol content
             import time
@@ -936,7 +1054,9 @@ class OT2Service(RobotService):
                     "protocolName": protocol_config.protocol_name,
                     "author": "System",
                     "description": "Generated protocol for hardware recognition",
-                    "apiLevel": "2.9",  # Match the protocol's API level
+                    # Note: apiLevel removed to avoid conflict with Python protocol file's apiLevel
+                    # OT2 API rule: "You may only put apiLevel in the metadata dict or the requirements dict, not both"
+                    # The Python protocol file (ot2Protocole.py) already contains apiLevel in its metadata
                 },
                 "defaultValues": {"forecastLabwareReagents": False},
                 "parameters": protocol_config.parameters or {},
@@ -946,11 +1066,12 @@ class OT2Service(RobotService):
             # Convert JSON metadata to string
             protocol_json_str = json.dumps(protocol_data)
 
-            # CRITICAL: Upload using dual-structure format (Python file + JSON metadata)
-            # This is the exact format that worked in the robot manager
+            # CRITICAL: Upload using correct Opentrons API format
+            # Field name must be "files" per actual Opentrons robot-server API (v7.x)
+            # Note: Old docs say "protocolFile" but modern OT-2 firmware expects "files"
             data = aiohttp.FormData()
 
-            # Add Python protocol file
+            # Add Python protocol file - using "files" per actual robot-server source code
             data.add_field(
                 "files",
                 protocol_content.encode("utf-8"),
@@ -958,13 +1079,10 @@ class OT2Service(RobotService):
                 content_type="text/x-python",
             )
 
-            # Add JSON metadata - this is what enables hardware recognition!
-            data.add_field("data", protocol_json_str, content_type="application/json")
-
             headers = {"Opentrons-Version": "2"}
 
             self.logger.info(
-                f"Uploading protocol with dual structure: {protocol_file.name}"
+                f"Uploading protocol: {protocol_file.name}"
             )
             self.logger.info(
                 f"Protocol parameters: {json.dumps(protocol_config.parameters or {}, indent=2)}"
@@ -990,7 +1108,7 @@ class OT2Service(RobotService):
                 protocol_id = response_data["data"]["id"]
 
                 self.logger.info(
-                    f"Protocol uploaded successfully with dual structure: {protocol_id}"
+                    f"Protocol uploaded successfully: {protocol_id}"
                 )
                 return protocol_id
 
@@ -1070,14 +1188,24 @@ class OT2Service(RobotService):
         return True  # Proceed anyway after max attempts
 
     async def _create_run(self, protocol_id: str, parameters: Dict[str, Any]) -> str:
-        """Create a new protocol run"""
-        data = {"data": {"type": "Run", "attributes": {"protocolId": protocol_id}}}
+        """Create a new protocol run
 
-        if parameters:
-            data["data"]["attributes"]["runTimeParameterValues"] = parameters
-            self.logger.info(f"Creating run with parameters: {parameters}")
-        else:
-            self.logger.info("Creating run without parameters")
+        Uses correct OT2 API format per OpenAPI spec at /openapi.json:
+        {"data": {"protocolId": "..."}}
+
+        Note: Runtime parameters are NOT passed here because:
+        1. OT2 runTimeParameterValues only supports scalar types (int, float, bool, str)
+        2. Our config includes arrays (sds_lct, generators_locations) which are not supported
+        3. All values are embedded directly in the protocol file via _inject_runtime_values()
+
+        Previous format with "type": "Run" and "attributes" wrapper was incorrect
+        and caused runs to be created without protocol link (0 commands executed).
+        """
+        data = {"data": {"protocolId": protocol_id}}
+
+        # Note: Don't pass parameters to runTimeParameterValues - they are embedded in protocol file
+        # OT2 API only supports scalar types for runtime parameters, not arrays
+        self.logger.info(f"Creating run for protocol {protocol_id} (parameters embedded in protocol file)")
 
         try:
             response = await self._api_request("POST", "/runs", data)
