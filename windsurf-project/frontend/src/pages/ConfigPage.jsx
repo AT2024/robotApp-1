@@ -62,7 +62,8 @@ const ConfigPage = () => {
         data: editedConfig,
       });
 
-      await configService.requestConfig(type);
+      const configResponse = await configService.requestConfig(type);
+      handleConfigUpdate(configResponse);
       setEditingPath(null);
       setSaveMessage({
         type: 'success',

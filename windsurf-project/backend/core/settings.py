@@ -263,6 +263,7 @@ class RoboticsSettings(BaseSettings):
         env_file = ".env"
         env_file_encoding = "utf-8"
         case_sensitive = False
+        extra = "ignore"  # Allow extra fields from runtime.json without crashing
 
         # Environment variable prefix
         env_prefix = "ROBOTICS_"

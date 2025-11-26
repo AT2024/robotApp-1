@@ -118,5 +118,96 @@
         ]
       ]
     }
+  },
+  "ot2": {
+    "enabled": true,
+    "ip": "169.254.49.202",
+    "port": 31950,
+    "timeout": 30,
+    "retry_attempts": 3,
+    "retry_delay": 1,
+    "http_config": {
+      "total_timeout": 30,
+      "connect_timeout": 10,
+      "connector_limit": 10,
+      "api_version": "2"
+    },
+    "protocol_config": {
+      "directory": "protocols/",
+      "default_file": "ot2Protocole.py",
+      "execution_timeout": 3600,
+      "monitoring_interval": 2
+    },
+    "protocol_parameters": {
+      "NUM_OF_GENERATORS": 5,
+      "radioactive_VOL": 6.6,
+      "SDS_VOL": 1,
+      "CUR": 2,
+      "tip_location": "1",
+      "trayNumber": 1,
+      "vialNumber": 1,
+      "sds_lct": [
+        287,
+        226,
+        40
+      ],
+      "generators_locations": [
+        [
+          4,
+          93,
+          133
+        ],
+        [
+          4,
+          138,
+          133
+        ],
+        [
+          4,
+          183,
+          133
+        ],
+        [
+          4,
+          228,
+          133
+        ],
+        [
+          4,
+          273,
+          133
+        ]
+      ],
+      "home_lct": [
+        350,
+        350,
+        147
+      ],
+      "temp_lct": [
+        8,
+        350,
+        147
+      ],
+      "hight_home_lct": [
+        302,
+        302,
+        147
+      ],
+      "hight_temp_lct": [
+        8,
+        228,
+        147
+      ],
+      "radioactive_lct": [
+        354,
+        225,
+        40
+      ],
+      "thorium_lct": [
+        354,
+        225,
+        40
+      ]
+    }
   }
 }

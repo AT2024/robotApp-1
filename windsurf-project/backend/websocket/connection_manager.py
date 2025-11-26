@@ -12,23 +12,23 @@ class ConnectionManager:
         self.server_status = 'Disconnected'
         self.settings = settings or RoboticsSettings()
     async def handle_config_request(self, websocket: WebSocket, config_type: str):
-        """Handle requests for configuration data using new settings system."""
+        """Handle requests for configuration data - reads directly from runtime.json for accuracy."""
         try:
+            from utils.config_manager import get_config_manager
+
             config_data = None
-            if config_type == 'meca':
-                # Get comprehensive Meca configuration from settings
-                config_data = self.settings.get_robot_config("meca")
-            elif config_type == 'ot2':
-                # Get comprehensive OT2 configuration from settings
-                config_data = self.settings.get_robot_config("ot2")
-            elif config_type == 'arduino':
-                # Get Arduino configuration from settings
-                config_data = self.settings.get_robot_config("arduino")
-            elif config_type == 'wiper':
-                # Get Wiper configuration from settings
-                config_data = self.settings.get_robot_config("wiper")
+
+            # For robot configs, read directly from runtime.json to ensure fresh data
+            if config_type in ['meca', 'ot2', 'arduino', 'wiper']:
+                config_manager = get_config_manager()
+                all_config = await config_manager.load_runtime_config()
+                config_data = all_config.get(config_type, {})
+            elif config_type == 'all' or config_type == 'robots':
+                # Get all robot configurations directly from runtime.json
+                config_manager = get_config_manager()
+                config_data = await config_manager.load_runtime_config()
             elif config_type == 'system':
-                # Get comprehensive system configuration
+                # System config from settings (not in runtime.json)
                 config_data = {
                     "environment": self.settings.environment.value,
                     "debug": self.settings.debug,
@@ -52,16 +52,8 @@ class ConnectionManager:
                         "connection_timeout": self.settings.connection_timeout,
                     }
                 }
-            elif config_type == 'all' or config_type == 'robots':
-                # Get all robot configurations
-                config_data = {
-                    "meca": self.settings.get_robot_config("meca"),
-                    "ot2": self.settings.get_robot_config("ot2"),
-                    "arduino": self.settings.get_robot_config("arduino"),
-                    "wiper": self.settings.get_robot_config("wiper"),
-                }
-            
-            if config_data:
+
+            if config_data is not None:
                 await websocket.send_json({
                     "type": "config_data",
                     "data": {
@@ -69,7 +61,7 @@ class ConnectionManager:
                         "content": config_data
                     }
                 })
-                logger.info(f"Sent {config_type} configuration to client")
+                logger.info(f"Sent {config_type} configuration to client (from runtime.json)")
             else:
                 await websocket.send_json({
                     "type": "error",
