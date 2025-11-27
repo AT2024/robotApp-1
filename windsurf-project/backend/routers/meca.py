@@ -683,3 +683,92 @@ async def test_tcp_connection():
     except Exception as e:
         logger.error(f"TCP connection test failed: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Connection test error: {str(e)}")
+
+
+# -----------------------------------------------------------------------------
+# Sequence Configuration Endpoints
+# -----------------------------------------------------------------------------
+
+
+@router.post("/validate-sequence-config")
+async def validate_sequence_config(meca_service: MecaService = MecaServiceDep()):
+    """
+    Validate sequence configuration for all 55 wafers before running.
+    Returns validation status and any errors found in the configuration.
+    """
+    try:
+        errors = meca_service.wafer_config_manager.validate_all_wafers()
+        return {
+            "status": "valid" if not errors else "invalid",
+            "errors": errors,
+            "config_version": meca_service.wafer_config_manager.config_version,
+            "total_wafers_validated": 55
+        }
+    except Exception as e:
+        logger.error(f"Error validating sequence config: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/preview-wafer-positions")
+async def preview_wafer_positions(
+    data: dict = Body(default={}),
+    meca_service: MecaService = MecaServiceDep()
+):
+    """
+    Preview calculated positions for specified wafers.
+    Useful for verifying position calculations before running sequences.
+
+    Body parameters:
+        wafer_indices: List of wafer indices (0-based) to preview. Default: [0, 27, 54]
+    """
+    try:
+        wafer_indices = data.get("wafer_indices", [0, 27, 54])
+
+        # Validate indices
+        invalid_indices = [i for i in wafer_indices if i < 0 or i > 54]
+        if invalid_indices:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid wafer indices (must be 0-54): {invalid_indices}"
+            )
+
+        preview = meca_service.wafer_config_manager.preview_wafer_positions(
+            wafer_indices=wafer_indices,
+            first_wafer=meca_service.FIRST_WAFER,
+            first_baking=meca_service.FIRST_BAKING_TRAY
+        )
+
+        return {
+            "status": "success",
+            "preview": preview,
+            "config_version": meca_service.wafer_config_manager.config_version
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error previewing wafer positions: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/reload-sequence-config")
+async def reload_sequence_config(meca_service: MecaService = MecaServiceDep()):
+    """
+    Reload sequence configuration from runtime.json.
+    Useful for mid-run adjustments without restarting the service.
+    """
+    try:
+        result = await meca_service.reload_sequence_config()
+
+        if not result.success:
+            raise HTTPException(status_code=500, detail=result.error)
+
+        return {
+            "status": "reloaded",
+            "data": result.data,
+            "message": "Sequence configuration reloaded successfully"
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error reloading sequence config: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
