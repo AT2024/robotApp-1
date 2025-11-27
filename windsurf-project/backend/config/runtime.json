@@ -1,7 +1,7 @@
 {
   "meca": {
     "enabled": true,
-    "ip": "192.168.0.10",
+    "ip": "192.168.0.100",
     "port": 10000,
     "timeout": 30,
     "retry_attempts": 3,
@@ -182,16 +182,19 @@
       },
       "wafer_range_overrides": [
         {
-          "range": [0, 54],
+          "range": [
+            0,
+            54
+          ],
           "comment": "Default - all wafers use base gap_wafers from movement_params"
         }
       ],
       "wafer_specific_overrides": {},
       "safety_bounds": {
         "min_gap_wafers": 2.5,
-        "max_gap_wafers": 3.0,
-        "min_speed": 10.0,
-        "max_speed": 60.0,
+        "max_gap_wafers": 3,
+        "min_speed": 10,
+        "max_speed": 60,
         "workspace_x_min": -200,
         "workspace_x_max": 200,
         "workspace_y_min": -300,

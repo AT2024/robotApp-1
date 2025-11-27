@@ -53,6 +53,12 @@ def flatten_runtime_config(runtime_config: Dict[str, Any]) -> Dict[str, Any]:
     for robot_type, robot_config in runtime_config.items():
         for key, value in robot_config.items():
             if isinstance(value, dict):
+                # Special handling: sequence_config is stored as a whole JSON object
+                if key == "sequence_config":
+                    flat_key = f"{robot_type}_sequence_config"
+                    flattened[flat_key] = json.dumps(value)
+                    continue
+
                 for nested_key, nested_value in value.items():
                     # Special handling for positions.gen_drop
                     if key == "positions" and nested_key == "gen_drop":
@@ -148,6 +154,10 @@ class RoboticsSettings(BaseSettings):
     meca_t_photogate: str = Field(default="[53.8, -217.2, 94.9, 90.0, 0.0, -90.0]")
     meca_c_photogate: str = Field(default="[84.1, -217.2, 94.9, 90.0, 0.0, -90.0]")
     meca_gen_drop_positions: str = Field(default="[[130.2207, 159.230, 123.400, 179.7538, -0.4298, -89.9617], [85.5707, 159.4300, 123.400, 179.7538, -0.4298, -89.6617], [41.0207, 159.4300, 123.400, 179.7538, -0.4298, -89.6617], [-3.5793, 159.3300, 123.400, 179.7538, -0.4298, -89.6617], [-47.9793, 159.2300, 123.400, 179.7538, -0.4298, -89.6617]]")
+
+    # Meca Sequence Configuration (JSON format for 55-wafer sequence)
+    # This is loaded directly from runtime.json's meca.sequence_config
+    meca_sequence_config: Optional[str] = Field(default=None, description="JSON string containing sequence_config from runtime.json")
 
     # OT2 Robot Configuration
     ot2_enabled: bool = Field(default=True)
@@ -361,6 +371,21 @@ class RoboticsSettings(BaseSettings):
             # Return empty list as fallback
             return []
 
+    def _parse_sequence_config(self, config_str: Optional[str]) -> Optional[Dict[str, Any]]:
+        """Parse sequence configuration from JSON string format"""
+        if config_str is None:
+            return None
+        try:
+            parsed = json.loads(config_str)
+            if isinstance(parsed, dict):
+                return parsed
+            else:
+                raise ValueError(f"Sequence config must be a dict, got {type(parsed)}")
+        except (json.JSONDecodeError, ValueError) as e:
+            logger = logging.getLogger(__name__)
+            logger.warning(f"Failed to parse sequence_config JSON: {e}")
+            return None
+
     def get_robot_config(self, robot_type: str) -> Dict[str, Any]:
         """Get configuration for a specific robot type"""
         configs = {
@@ -393,6 +418,7 @@ class RoboticsSettings(BaseSettings):
                     "c_photogate": self._parse_position_json(self.meca_c_photogate),
                     "gen_drop": self._parse_position_json(self.meca_gen_drop_positions)
                 },
+                "sequence_config": self._parse_sequence_config(self.meca_sequence_config),
             },
             "ot2": {
                 "enabled": self.ot2_enabled,
