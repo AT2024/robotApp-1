@@ -117,6 +117,88 @@
           -89.6617
         ]
       ]
+    },
+    "sequence_config": {
+      "version": "1.0",
+      "total_wafers": 55,
+      "last_modified": "2025-01-27T00:00:00Z",
+      "operation_offsets": {
+        "pickup": {
+          "pickup_high_y": 0.2,
+          "pickup_high_z": 11.9286,
+          "intermediate_1_y": -0.2,
+          "intermediate_1_z": 2.8,
+          "intermediate_2_y": -0.8,
+          "intermediate_2_z": 2.7,
+          "intermediate_3_y": -11.5595,
+          "intermediate_3_z": 31.4,
+          "above_spreader_z": 40.4987,
+          "above_spreader_exit_z": 56.4987
+        },
+        "drop": {
+          "above_spreader_z": 36.6,
+          "above_spreader_pickup_z": 25.4987,
+          "baking_align1_x": -9.7,
+          "baking_align1_y": 0.3,
+          "baking_align1_z": 32.058,
+          "baking_align2_x": -7.7,
+          "baking_align2_y": 0.3,
+          "baking_align2_z": 22,
+          "baking_align3_x": -2.1,
+          "baking_align3_y": 0.3,
+          "baking_align3_z": 6,
+          "baking_align4_x": -0.7,
+          "baking_align4_y": 0.3,
+          "baking_align4_z": 2.8,
+          "baking_up_z": 29.458
+        },
+        "carousel": {
+          "above_baking_z": 27.558,
+          "move1_x": -0.7,
+          "move1_z": 2.8,
+          "move2_x": -2.1,
+          "move2_z": 6,
+          "move3_x": -7.7,
+          "move3_z": 22,
+          "move4_x": -9.7,
+          "move4_z": 32.058,
+          "y_away1_y": -216.95,
+          "y_away1_z": 119.9,
+          "y_away2_y": -245.95,
+          "y_away2_z": 115.9,
+          "above_carousel1_z": 115.9,
+          "above_carousel2_z": 109.9,
+          "above_carousel3_z": 103.9
+        },
+        "empty_carousel": {
+          "y_away1_y": -216.95,
+          "y_away1_z": 119.9,
+          "y_away2_y": -245.95,
+          "y_away2_z": 119.9,
+          "above_carousel_z": 115.9,
+          "move_rev_y": 0.3,
+          "above_baking_rev_z": 22.058
+        }
+      },
+      "wafer_range_overrides": [
+        {
+          "range": [0, 54],
+          "comment": "Default - all wafers use base gap_wafers from movement_params"
+        }
+      ],
+      "wafer_specific_overrides": {},
+      "safety_bounds": {
+        "min_gap_wafers": 2.5,
+        "max_gap_wafers": 3.0,
+        "min_speed": 10.0,
+        "max_speed": 60.0,
+        "workspace_x_min": -200,
+        "workspace_x_max": 200,
+        "workspace_y_min": -300,
+        "workspace_y_max": 200,
+        "workspace_z_min": 0,
+        "workspace_z_max": 250
+      }
     }
   },
   "ot2": {
