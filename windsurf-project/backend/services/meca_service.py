@@ -18,6 +18,7 @@ from core.circuit_breaker import circuit_breaker
 from core.settings import RoboticsSettings
 from core.exceptions import HardwareError, ValidationError, ResourceLockTimeout
 from .base import RobotService, ServiceResult, OperationContext
+from .wafer_config_manager import WaferConfigManager, ConfigurationError
 from utils.logger import get_logger
 
 
@@ -88,7 +89,18 @@ class MecaService(RobotService):
         
         # Movement parameters from config
         self.movement_params = self.robot_config.get("movement_params", {})
-        
+
+        # Initialize WaferConfigManager for sequence configuration
+        try:
+            self.wafer_config_manager = WaferConfigManager(
+                robot_config=self.robot_config,
+                movement_params=self.movement_params
+            )
+            self.logger.info(f"WaferConfigManager initialized - version {self.wafer_config_manager.config_version}")
+        except ConfigurationError as e:
+            self.logger.error(f"Failed to initialize WaferConfigManager: {e}")
+            raise
+
         # Position constants from settings (externalized from Meca_FullCode.py)
         positions = self.robot_config.get("positions", {})
         self.FIRST_WAFER = positions.get("first_wafer", [173.562, -175.178, 27.9714, 109.5547, 0.2877, -90.059])
@@ -1859,7 +1871,45 @@ class MecaService(RobotService):
             ]
         
         return await self.execute_operation(context, _get_carousel_status)
-    
+
+    async def reload_sequence_config(self) -> ServiceResult[Dict[str, Any]]:
+        """Reload sequence configuration from runtime.json for mid-run adjustments"""
+        try:
+            from core.settings import get_settings
+
+            # Get fresh settings
+            new_settings = get_settings()
+            new_robot_config = new_settings.get_robot_config("meca")
+            new_movement_params = new_robot_config.get("movement_params", {})
+
+            # Reload the config manager
+            self.wafer_config_manager.reload_config(new_robot_config, new_movement_params)
+
+            # Also update local references
+            self.robot_config = new_robot_config
+            self.movement_params = new_movement_params
+
+            # Validate new config for all wafers
+            errors = self.wafer_config_manager.validate_all_wafers()
+
+            self.logger.info(f"Sequence config reloaded - version {self.wafer_config_manager.config_version}")
+
+            return ServiceResult(
+                success=len(errors) == 0,
+                data={
+                    "version": self.wafer_config_manager.config_version,
+                    "validation_errors": errors,
+                    "message": "Configuration reloaded successfully" if not errors else f"Configuration reloaded with {len(errors)} validation warnings"
+                },
+                error="; ".join(errors) if errors else None
+            )
+        except ConfigurationError as e:
+            self.logger.error(f"Failed to reload sequence config: {e}")
+            return ServiceResult(success=False, error=str(e))
+        except Exception as e:
+            self.logger.error(f"Unexpected error reloading sequence config: {e}")
+            return ServiceResult(success=False, error=f"Unexpected error: {str(e)}")
+
     # Wafer sequence methods - exact implementations from Meca_FullCode.py
     
     async def execute_pickup_sequence(self, start: int, count: int) -> ServiceResult[Dict[str, Any]]:
