@@ -881,19 +881,27 @@ class RobotCommandService(BaseService):
     
     async def _transform_pickup_sequence_params(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Transform WebSocket pickup sequence parameters to MecaService method parameters"""
-        # Pass through start and count parameters directly to execute_pickup_sequence
-        return {
+        # Pass through start, count, and retry_wafers parameters to execute_pickup_sequence
+        result = {
             "start": params.get("start", 0),
             "count": params.get("count", 5)
         }
+        # Only include retry_wafers if it's provided (for error recovery)
+        if params.get("retry_wafers"):
+            result["retry_wafers"] = params["retry_wafers"]
+        return result
 
     async def _transform_drop_sequence_params(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Transform WebSocket drop sequence parameters to MecaService method parameters"""
-        # Pass through start and count parameters directly to execute_drop_sequence
-        return {
+        # Pass through start, count, and retry_wafers parameters to execute_drop_sequence
+        result = {
             "start": params.get("start", 0),
             "count": params.get("count", 5)
         }
+        # Only include retry_wafers if it's provided (for error recovery)
+        if params.get("retry_wafers"):
+            result["retry_wafers"] = params["retry_wafers"]
+        return result
     
     async def _transform_carousel_sequence_params(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Transform WebSocket carousel sequence parameters to MecaService method parameters"""
