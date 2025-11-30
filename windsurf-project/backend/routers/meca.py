@@ -690,6 +690,32 @@ async def test_tcp_connection():
 # -----------------------------------------------------------------------------
 
 
+@router.get("/sequence-config")
+async def get_sequence_config(meca_service: MecaService = MecaServiceDep()):
+    """
+    Get sequence configuration including total_wafers for batch workflow.
+    Used by frontend to initialize batch state and calculate total batches.
+    """
+    try:
+        from core.settings import get_settings
+        settings = get_settings()
+        meca_config = settings.get_robot_config("meca")
+        sequence_config = meca_config.get("sequence_config", {})
+
+        return {
+            "status": "success",
+            "data": {
+                "total_wafers": sequence_config.get("total_wafers", 55),
+                "wafers_per_batch": 5,
+                "total_batches": (sequence_config.get("total_wafers", 55) + 4) // 5,  # Ceiling division
+                "sequence_config": sequence_config
+            }
+        }
+    except Exception as e:
+        logger.error(f"Error getting sequence config: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.post("/validate-sequence-config")
 async def validate_sequence_config(meca_service: MecaService = MecaServiceDep()):
     """
