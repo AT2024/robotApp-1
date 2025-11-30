@@ -315,10 +315,59 @@ class MecaService(RobotService):
             )
             
             self.logger.debug(f"Broadcasted Meca state change: connected={is_connected}")
-            
+
         except Exception as e:
             self.logger.error(f"Failed to broadcast Meca state change: {e}")
-    
+
+    async def _broadcast_batch_completion(
+        self,
+        operation_type: str,
+        start: int,
+        count: int,
+        result: Dict[str, Any]
+    ):
+        """
+        Broadcast batch completion event to WebSocket clients.
+        Used to notify frontend when a pickup or drop sequence completes.
+
+        Args:
+            operation_type: Type of operation ("pickup" or "drop")
+            start: Starting wafer index
+            count: Number of wafers in batch
+            result: Result dict from the sequence execution
+        """
+        try:
+            from websocket.selective_broadcaster import get_broadcaster, MessageType
+
+            broadcaster = await get_broadcaster()
+
+            message = {
+                "event": "batch_completion",
+                "robot_id": self.robot_id,
+                "operation_type": operation_type,
+                "batch_start": start,
+                "batch_count": count,
+                "wafers_processed": result.get("wafers_processed", 0),
+                "wafers_failed": result.get("wafers_failed", []),
+                "success_rate": result.get("success_rate", "0%"),
+                "status": result.get("status", "completed"),
+                "timestamp": time.time()
+            }
+
+            await broadcaster.broadcast_message(
+                message_type=MessageType.OPERATION_UPDATE,
+                data=message,
+                robot_id=self.robot_id
+            )
+
+            self.logger.info(
+                f"📢 Broadcasted batch_completion: {operation_type} "
+                f"(wafers {start+1}-{start+count}, {result.get('wafers_processed', 0)} processed)"
+            )
+
+        except Exception as e:
+            self.logger.error(f"Failed to broadcast batch completion: {e}")
+
     async def _on_start(self):
         """Initialize Meca robot connection on service start"""
         # First register the robot with state manager
@@ -2127,14 +2176,22 @@ class MecaService(RobotService):
                 self.logger.info(f"Pickup sequence completed with partial success: {len(processed_wafers)}/{total_attempted} wafers processed successfully")
             else:
                 self.logger.info(f"Pickup sequence completed successfully for all {total_attempted} wafers")
-            
+
             # Complete step tracking
             await self.state_manager.complete_step(self.robot_id)
-            
+
+            # Broadcast batch completion to frontend
+            await self._broadcast_batch_completion(
+                operation_type="pickup",
+                start=start,
+                count=count,
+                result=result
+            )
+
             return result
-        
+
         return await self.execute_operation(context, _pickup_sequence)
-    
+
     def _validate_robot_parameters(self, command_type: str, parameters: List[Any]) -> bool:
         """
         Validate robot command parameters to prevent sending values that could cause errors.
@@ -2511,11 +2568,19 @@ class MecaService(RobotService):
             # Complete step tracking
             await self.state_manager.complete_step(self.robot_id)
 
+            # Broadcast batch completion to frontend
+            await self._broadcast_batch_completion(
+                operation_type="drop",
+                start=start,
+                count=count,
+                result=result
+            )
+
             self.logger.info(f"Drop sequence completed for wafers {start+1} to {start+count}")
             return result
-        
+
         return await self.execute_operation(context, _drop_sequence)
-    
+
     async def execute_carousel_sequence(self, start: int, count: int) -> ServiceResult[Dict[str, Any]]:
         """
         Execute carousel sequence from baking tray to carousel.
