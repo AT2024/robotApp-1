@@ -1922,14 +1922,17 @@ class MecaService(RobotService):
 
     # Wafer sequence methods - exact implementations from Meca_FullCode.py
     
-    async def execute_pickup_sequence(self, start: int, count: int) -> ServiceResult[Dict[str, Any]]:
+    async def execute_pickup_sequence(
+        self, start: int, count: int, retry_wafers: Optional[List[int]] = None
+    ) -> ServiceResult[Dict[str, Any]]:
         """
         Execute wafer pickup sequence from inert tray to spreader.
         Exact implementation of createPickUpPt() from Meca_FullCode.py
-        
+
         Args:
             start: Starting wafer index (0-based)
             count: Number of wafers to process
+            retry_wafers: Optional list of specific wafer indices to retry (for error recovery)
         """
         context = OperationContext(
             operation_id=f"{self.robot_id}_pickup_sequence_{start}_{count}",
@@ -1968,8 +1971,17 @@ class MecaService(RobotService):
             if step_state and step_state.progress_data.get("current_wafer_index") is not None:
                 resume_from_wafer = step_state.progress_data["current_wafer_index"]
                 self.logger.info(f"🔄 Resuming pickup sequence from wafer {resume_from_wafer + 1}")
-            
-            for i in range(max(start, resume_from_wafer), start + count):
+
+            # Determine which wafers to process
+            if retry_wafers:
+                # Retry mode: only process specific failed wafer indices
+                wafer_indices = retry_wafers
+                self.logger.info(f"🔄 Retry mode: processing wafers {retry_wafers}")
+            else:
+                # Normal mode: process range from start to start+count
+                wafer_indices = list(range(max(start, resume_from_wafer), start + count))
+
+            for i in wafer_indices:
                 wafer_num = i + 1
                 step_context = f"wafer {wafer_num} (index {i})"
                 
@@ -2095,21 +2107,26 @@ class MecaService(RobotService):
 
             if failed_wafers:
                 self.logger.warning(f"⚠️ Pickup sequence completed with {len(failed_wafers)} failures: {[fw['wafer_num'] for fw in failed_wafers]}")
-            
+
+            # Calculate success rate based on actual wafers processed
+            total_attempted = len(retry_wafers) if retry_wafers else count
+            success_rate = (len(processed_wafers) / total_attempted * 100) if total_attempted > 0 else 0
+
             result = {
                 "status": "completed" if not failed_wafers else "partial_success",
                 "wafers_processed": len(processed_wafers),
                 "wafers_succeeded": processed_wafers,
-                "wafers_failed": failed_wafers,
+                "wafers_failed": [fw["wafer_num"] for fw in failed_wafers],  # Return just indices for frontend
                 "start_wafer": start + 1,
                 "end_wafer": start + count,
-                "success_rate": f"{(len(processed_wafers) / count) * 100:.1f}%"
+                "success_rate": f"{success_rate:.1f}%",
+                "retry_mode": retry_wafers is not None
             }
-            
+
             if failed_wafers:
-                self.logger.info(f"Pickup sequence completed with partial success: {len(processed_wafers)}/{count} wafers processed successfully")
+                self.logger.info(f"Pickup sequence completed with partial success: {len(processed_wafers)}/{total_attempted} wafers processed successfully")
             else:
-                self.logger.info(f"Pickup sequence completed successfully for all {count} wafers ({start+1} to {start+count})")
+                self.logger.info(f"Pickup sequence completed successfully for all {total_attempted} wafers")
             
             # Complete step tracking
             await self.state_manager.complete_step(self.robot_id)
@@ -2329,14 +2346,17 @@ class MecaService(RobotService):
         if not result.success:
             raise HardwareError(f"Movement command {command_type} failed: {result.error}", robot_id=self.robot_id)
     
-    async def execute_drop_sequence(self, start: int, count: int) -> ServiceResult[Dict[str, Any]]:
+    async def execute_drop_sequence(
+        self, start: int, count: int, retry_wafers: Optional[List[int]] = None
+    ) -> ServiceResult[Dict[str, Any]]:
         """
         Execute wafer drop sequence from spreader to baking tray.
         Exact implementation of createDropPt() from Meca_FullCode.py
-        
+
         Args:
             start: Starting wafer index (0-based)
             count: Number of wafers to process
+            retry_wafers: Optional list of specific wafer indices to retry (for error recovery)
         """
         context = OperationContext(
             operation_id=f"{self.robot_id}_drop_sequence_{start}_{count}",
@@ -2369,11 +2389,20 @@ class MecaService(RobotService):
             if step_state and step_state.progress_data.get("current_wafer_index") is not None:
                 resume_from_wafer = step_state.progress_data["current_wafer_index"]
                 self.logger.info(f"🔄 Resuming drop sequence from wafer {resume_from_wafer + 1}")
-            
-            for i in range(max(start, resume_from_wafer), start + count):
+
+            # Determine which wafers to process
+            if retry_wafers:
+                # Retry mode: only process specific failed wafer indices
+                wafer_indices = retry_wafers
+                self.logger.info(f"🔄 Retry mode: processing wafers {retry_wafers}")
+            else:
+                # Normal mode: process range from start to start+count
+                wafer_indices = list(range(max(start, resume_from_wafer), start + count))
+
+            for i in wafer_indices:
                 wafer_num = i + 1
                 step_context = f"wafer {wafer_num} (index {i})"
-                
+
                 # Check for pause before processing each wafer
                 if await self.state_manager.is_step_paused(self.robot_id):
                     self.logger.info(f"⏸️ Drop operation paused at {step_context}")
@@ -2463,20 +2492,25 @@ class MecaService(RobotService):
             
             if failed_wafers:
                 self.logger.warning(f"⚠️ Drop sequence completed with {len(failed_wafers)} failures: {[fw['wafer_num'] for fw in failed_wafers]}")
-            
+
+            # Calculate success rate based on actual wafers processed
+            total_attempted = len(retry_wafers) if retry_wafers else count
+            success_rate = (len(processed_wafers) / total_attempted * 100) if total_attempted > 0 else 0
+
             result = {
                 "status": "completed" if not failed_wafers else "partial_success",
                 "wafers_processed": len(processed_wafers),
                 "wafers_succeeded": processed_wafers,
-                "wafers_failed": failed_wafers,
+                "wafers_failed": [fw["wafer_num"] for fw in failed_wafers],  # Return just indices for frontend
                 "start_wafer": start + 1,
                 "end_wafer": start + count,
-                "success_rate": f"{(len(processed_wafers) / count) * 100:.1f}%"
+                "success_rate": f"{success_rate:.1f}%",
+                "retry_mode": retry_wafers is not None
             }
-            
+
             # Complete step tracking
             await self.state_manager.complete_step(self.robot_id)
-            
+
             self.logger.info(f"Drop sequence completed for wafers {start+1} to {start+count}")
             return result
         
