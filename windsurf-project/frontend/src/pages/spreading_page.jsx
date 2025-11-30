@@ -7,11 +7,30 @@ import { SystemStatus } from '../components/status';
 import { ProgressSteps, StepContent } from '../components/steps';
 import { EmergencyButton, SecondaryButton, PauseButton, ResumeButton, ResetButton } from '../components/buttons';
 import { ConfirmationModal } from '../components/common';
+import { BatchProgress, BatchErrorDialog, AllCompleteDialog } from '../components/batch';
 
 const ROBOT_MAP = {
   MECA: 'meca',
   OT2: 'ot2',
   ARDUINO: 'arduino',
+};
+
+// localStorage key for batch state persistence
+const BATCH_STORAGE_KEY = 'spreading_batch_state';
+
+// Helper to load saved batch state from localStorage
+const loadSavedBatchState = () => {
+  try {
+    const saved = localStorage.getItem(BATCH_STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      logger.log('Loaded saved batch state:', parsed);
+      return parsed;
+    }
+  } catch (e) {
+    logger.error('Failed to load saved batch state:', e);
+  }
+  return { currentBatch: 0, batchResults: [] };
 };
 
 const SpreadingPage = () => {
@@ -53,6 +72,16 @@ const SpreadingPage = () => {
     variant: 'primary'
   });
 
+  // Batch workflow state - initialized from localStorage
+  const savedBatchState = loadSavedBatchState();
+  const [currentBatch, setCurrentBatch] = useState(savedBatchState.currentBatch);
+  const [batchResults, setBatchResults] = useState(savedBatchState.batchResults);
+  const [totalWafers, setTotalWafers] = useState(55);
+  const [totalBatches, setTotalBatches] = useState(11);
+  const [failedWafers, setFailedWafers] = useState([]);
+  const [showErrorDialog, setShowErrorDialog] = useState(false);
+  const [showAllComplete, setShowAllComplete] = useState(false);
+
   // Define workflow steps with their associated robot commands
   const steps = [
     {
@@ -62,13 +91,15 @@ const SpreadingPage = () => {
       hasPress: true,
       onClick: async () => {
         try {
-          logger.log('Initiating MECA pickup operation');
+          const batchStart = currentBatch * 5;
+          logger.log(`Initiating MECA pickup operation for batch ${currentBatch + 1} (wafers ${batchStart + 1}-${batchStart + 5})`);
           websocketService.send({
             type: 'command',
             command_type: 'meca_pickup',
             data: {
-              start: 0,
-              count: 5
+              start: batchStart,
+              count: 5,
+              is_last_batch: currentBatch === totalBatches - 1
             },
           });
         } catch (error) {
@@ -221,14 +252,15 @@ const SpreadingPage = () => {
       hasPress: true,
       onClick: async () => {
         try {
-          logger.log('Initiating move to baking tray');
+          const batchStart = currentBatch * 5;
+          logger.log(`Initiating move to baking tray for batch ${currentBatch + 1} (wafers ${batchStart + 1}-${batchStart + 5})`);
           websocketService.send({
             type: 'command',
             command_type: 'meca_drop',
             data: {
-              start: 0,
+              start: batchStart,
               count: 5,
-              is_last_batch: true,
+              is_last_batch: currentBatch === totalBatches - 1,
               current_step: activeStep,
               step_name: steps[activeStep].label
             },
@@ -274,6 +306,35 @@ const SpreadingPage = () => {
       navigate('/spreading/form');
     }
   }, [location.state, navigate]);
+
+  // Save batch state to localStorage whenever it changes
+  useEffect(() => {
+    const stateToSave = { currentBatch, batchResults };
+    localStorage.setItem(BATCH_STORAGE_KEY, JSON.stringify(stateToSave));
+    logger.log('Saved batch state to localStorage:', stateToSave);
+  }, [currentBatch, batchResults]);
+
+  // Fetch sequence config on mount
+  useEffect(() => {
+    const fetchSequenceConfig = async () => {
+      try {
+        const response = await fetch('/api/meca/sequence-config');
+        if (response.ok) {
+          const result = await response.json();
+          const config = result.data || result;
+          setTotalWafers(config.total_wafers || 55);
+          setTotalBatches(config.total_batches || Math.ceil((config.total_wafers || 55) / 5));
+          logger.log('Fetched sequence config:', config);
+        } else {
+          logger.warn('Failed to fetch sequence config, using defaults');
+        }
+      } catch (error) {
+        logger.error('Error fetching sequence config:', error);
+        // Keep default values
+      }
+    };
+    fetchSequenceConfig();
+  }, []);
 
   // Set up WebSocket connection and message handling
   useEffect(() => {
@@ -397,17 +458,48 @@ const SpreadingPage = () => {
         // Handle system-wide status updates for backward compatibility
         if (message.data) {
           const { system_paused, pause_reason, current_step } = message.data;
-          
+
           if (typeof system_paused === 'boolean') {
             setSystemPaused(system_paused);
             setPauseReason(pause_reason || '');
-            
+
             if (system_paused) {
               logger.log(`System paused: ${pause_reason}`);
             } else {
               logger.log('System resumed');
               setPausedOperations([]);
             }
+          }
+        }
+      } else if (message.type === 'operation_update' && message.data?.event === 'batch_completion') {
+        // Handle batch completion events from backend
+        const { operation_type, wafers_failed, wafers_processed, batch_start, batch_count } = message.data;
+        logger.log('Received batch completion event:', message.data);
+
+        // Store batch result
+        setBatchResults(prev => [...prev, message.data]);
+
+        // Only handle batch transition on drop completion (step 8)
+        if (operation_type === 'drop' && activeStep === 7) {
+          // Check for failures
+          if (wafers_failed && wafers_failed.length > 0) {
+            logger.log(`Batch had ${wafers_failed.length} failed wafers:`, wafers_failed);
+            setFailedWafers(wafers_failed);
+            setShowErrorDialog(true);
+            return;
+          }
+
+          // Success - auto-advance to next batch
+          if (currentBatch < totalBatches - 1) {
+            logger.log(`Batch ${currentBatch + 1} complete, advancing to batch ${currentBatch + 2}`);
+            setCurrentBatch(prev => prev + 1);
+            setActiveStep(0);
+            setStepConfirmations({});
+            // User will manually press pickup button to start next batch
+          } else {
+            // All batches complete
+            logger.log('All batches complete!');
+            setShowAllComplete(true);
           }
         }
       }
@@ -625,6 +717,61 @@ const SpreadingPage = () => {
     setActiveStep((prev) => (prev + 1 < steps.length ? prev + 1 : prev));
   };
 
+  // Handle retry failed wafers from error dialog
+  const handleRetryFailed = useCallback(() => {
+    logger.log('Retrying failed wafers:', failedWafers);
+    setShowErrorDialog(false);
+
+    // Re-run pickup with only failed wafer indices
+    const batchStart = currentBatch * 5;
+    websocketService.send({
+      type: 'command',
+      command_type: 'meca_pickup',
+      data: {
+        start: batchStart,
+        count: 5,
+        retry_wafers: failedWafers
+      }
+    });
+
+    // Reset to step 0 (pickup) for retry
+    setActiveStep(0);
+    setStepConfirmations({});
+    setFailedWafers([]);
+  }, [currentBatch, failedWafers]);
+
+  // Handle skip to next batch from error dialog
+  const handleSkipToNextBatch = useCallback(() => {
+    logger.log('Skipping to next batch after failures');
+    setShowErrorDialog(false);
+    setFailedWafers([]);
+
+    if (currentBatch < totalBatches - 1) {
+      setCurrentBatch(prev => prev + 1);
+      setActiveStep(0);
+      setStepConfirmations({});
+    } else {
+      // This was the last batch
+      setShowAllComplete(true);
+    }
+  }, [currentBatch, totalBatches]);
+
+  // Handle finish all batches
+  const handleFinishAllBatches = useCallback(() => {
+    logger.log('Finishing all batches, clearing state');
+    setShowAllComplete(false);
+
+    // Clear localStorage
+    localStorage.removeItem(BATCH_STORAGE_KEY);
+
+    // Reset batch state
+    setCurrentBatch(0);
+    setBatchResults([]);
+
+    // Navigate back to form
+    navigate('/spreading/form');
+  }, [navigate]);
+
   // Handle step execution
   const handlePress = async (stepIndex) => {
     try {
@@ -715,6 +862,13 @@ const SpreadingPage = () => {
         {/* System Status Component */}
         <SystemStatus onStatusChange={handleStatusChange} />
 
+        {/* Batch Progress */}
+        <BatchProgress
+          currentBatch={currentBatch}
+          totalBatches={totalBatches}
+          totalWafers={totalWafers}
+        />
+
         {/* Progress Steps */}
         <ProgressSteps steps={steps} activeStep={activeStep} />
 
@@ -783,6 +937,25 @@ const SpreadingPage = () => {
           variant={confirmationModal.variant}
           confirmText="OK"
           cancelText="Cancel"
+        />
+
+        {/* Batch Error Dialog */}
+        <BatchErrorDialog
+          isOpen={showErrorDialog}
+          currentBatch={currentBatch}
+          failedWafers={failedWafers}
+          onRetry={handleRetryFailed}
+          onSkip={handleSkipToNextBatch}
+          onClose={() => setShowErrorDialog(false)}
+        />
+
+        {/* All Complete Dialog */}
+        <AllCompleteDialog
+          isOpen={showAllComplete}
+          totalWafers={totalWafers}
+          batchResults={batchResults}
+          onFinish={handleFinishAllBatches}
+          onClose={() => setShowAllComplete(false)}
         />
       </div>
     </div>
