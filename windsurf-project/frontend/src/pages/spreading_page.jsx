@@ -87,6 +87,9 @@ const SpreadingPage = () => {
   const [currentWafer, setCurrentWafer] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // WebSocket connection status
+  const [wsConnected, setWsConnected] = useState(false);
+
   // Refs to hold current values for WebSocket callback (avoids stale closure)
   const currentBatchRef = useRef(currentBatch);
   const totalBatchesRef = useRef(totalBatches);
@@ -359,6 +362,32 @@ const SpreadingPage = () => {
     logger.log('Initializing WebSocket connection');
     websocketService.connect();
 
+    // Track initial connection status
+    setWsConnected(websocketService.isConnected());
+
+    // Subscribe to disconnect events
+    const disconnectUnsubscribe = websocketService.onDisconnect(() => {
+      logger.warn('WebSocket disconnected!');
+      setWsConnected(false);
+      toast.error('Connection lost! Attempting to reconnect...', {
+        autoClose: false,
+        toastId: 'ws-disconnect' // Prevent duplicate toasts
+      });
+    });
+
+    // Check connection status periodically
+    const connectionCheckInterval = setInterval(() => {
+      const connected = websocketService.isConnected();
+      setWsConnected(prevConnected => {
+        if (connected && !prevConnected) {
+          // Connection restored
+          toast.dismiss('ws-disconnect');
+          toast.success('Connection restored!', { autoClose: 2000 });
+        }
+        return connected;
+      });
+    }, 1000);
+
     const messageUnsubscribe = websocketService.onMessage((message) => {
       logger.log('Received WebSocket message:', message);
 
@@ -554,6 +583,8 @@ const SpreadingPage = () => {
     return () => {
       logger.log('Cleaning up WebSocket connections');
       messageUnsubscribe();
+      disconnectUnsubscribe();
+      clearInterval(connectionCheckInterval);
     };
   }, []);
 
@@ -578,6 +609,11 @@ const SpreadingPage = () => {
   // Check if a step can be executed
   const canExecuteStep = useCallback(
     (stepIndex) => {
+      // Disable all steps if WebSocket is not connected
+      if (!wsConnected) {
+        return false;
+      }
+
       // Disable all steps while processing a batch operation
       if (isProcessing) {
         return false;
@@ -590,7 +626,7 @@ const SpreadingPage = () => {
 
       return robotConnected && (!confirmationRequired || isConfirmed);
     },
-    [isRobotConnected, stepConfirmations, isProcessing]
+    [isRobotConnected, stepConfirmations, isProcessing, wsConnected]
   );
 
   // Debug current state
@@ -896,6 +932,16 @@ const SpreadingPage = () => {
                     </span>
                   )}
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* WebSocket Connection Status */}
+          {!wsConnected && (
+            <div className='mt-4 bg-yellow-50 text-yellow-700 px-4 py-2 rounded-md border border-yellow-200'>
+              <div className='flex items-center'>
+                <span className='mr-2 animate-pulse'>&#9888;</span>
+                <span>WebSocket disconnected - Step execution disabled until connection is restored</span>
               </div>
             </div>
           )}
