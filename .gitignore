@@ -331,3 +331,6 @@ gh.tar.gz
 test-results/
 coverage/
 .coverage
+
+# Claude Code
+.claude/
