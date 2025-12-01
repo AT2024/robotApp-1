@@ -1,5 +1,5 @@
 // spreading_page.jsx
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import websocketService from '../utils/services/websocketService';
 import logger from '../utils/logger';
@@ -30,15 +30,18 @@ const loadSavedBatchState = () => {
   } catch (e) {
     logger.error('Failed to load saved batch state:', e);
   }
-  return { currentBatch: 0, batchResults: [] };
+  return { currentBatch: 0, batchResults: [], activeStep: 0 };
 };
 
 const SpreadingPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Load saved batch state from localStorage first
+  const savedBatchState = loadSavedBatchState();
+
   // Core state management with meaningful initial values
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(savedBatchState.activeStep || 0);
   const [systemStatus, setSystemStatus] = useState({
     backend: 'disconnected',
     meca: 'disconnected',
@@ -52,17 +55,17 @@ const SpreadingPage = () => {
   const [ot2Status, setOt2Status] = useState('idle');
   const [connectionError, setConnectionError] = useState(false);
   const [lastError, setLastError] = useState(null);
-  
+
   // Pause/Resume functionality state
   const [systemPaused, setSystemPaused] = useState(false);
   const [pausedOperations, setPausedOperations] = useState([]);
   const [pauseReason, setPauseReason] = useState('');
-  
+
   // Step-specific pause functionality state
   const [stepPaused, setStepPaused] = useState(false);
   const [pausedStepName, setPausedStepName] = useState('');
   const [pausedStepIndex, setPausedStepIndex] = useState(-1);
-  
+
   // Confirmation modal state
   const [confirmationModal, setConfirmationModal] = useState({
     isOpen: false,
@@ -72,8 +75,7 @@ const SpreadingPage = () => {
     variant: 'primary'
   });
 
-  // Batch workflow state - initialized from localStorage
-  const savedBatchState = loadSavedBatchState();
+  // Batch workflow state - initialized from localStorage (savedBatchState loaded at top)
   const [currentBatch, setCurrentBatch] = useState(savedBatchState.currentBatch);
   const [batchResults, setBatchResults] = useState(savedBatchState.batchResults);
   const [totalWafers, setTotalWafers] = useState(55);
@@ -81,6 +83,12 @@ const SpreadingPage = () => {
   const [failedWafers, setFailedWafers] = useState([]);
   const [showErrorDialog, setShowErrorDialog] = useState(false);
   const [showAllComplete, setShowAllComplete] = useState(false);
+  const [currentWafer, setCurrentWafer] = useState(0);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  // Refs to hold current values for WebSocket callback (avoids stale closure)
+  const currentBatchRef = useRef(currentBatch);
+  const totalBatchesRef = useRef(totalBatches);
 
   // Define workflow steps with their associated robot commands
   const steps = [
@@ -309,10 +317,19 @@ const SpreadingPage = () => {
 
   // Save batch state to localStorage whenever it changes
   useEffect(() => {
-    const stateToSave = { currentBatch, batchResults };
+    const stateToSave = { currentBatch, batchResults, activeStep };
     localStorage.setItem(BATCH_STORAGE_KEY, JSON.stringify(stateToSave));
     logger.log('Saved batch state to localStorage:', stateToSave);
-  }, [currentBatch, batchResults]);
+  }, [currentBatch, batchResults, activeStep]);
+
+  // Keep refs in sync with state (prevents stale closure in WebSocket handler)
+  useEffect(() => {
+    currentBatchRef.current = currentBatch;
+  }, [currentBatch]);
+
+  useEffect(() => {
+    totalBatchesRef.current = totalBatches;
+  }, [totalBatches]);
 
   // Fetch sequence config on mount
   useEffect(() => {
@@ -376,7 +393,7 @@ const SpreadingPage = () => {
               logger.log('✅ Emergency stop completed successfully');
               setEmergencyStopStopping(false);
               setEmergencyStopActive(true);
-              
+
               // Show success details
               const data = message.data || {};
               if (data.total_stopped > 0) {
@@ -388,7 +405,7 @@ const SpreadingPage = () => {
               logger.warn('⚠️  Emergency stop partially successful');
               setEmergencyStopStopping(false);
               setEmergencyStopActive(true);
-              
+
               // Show partial success details
               const data = message.data || {};
               const errorMsg = `Partial emergency stop: ${data.total_stopped || 0} stopped, ${(data.failed_stops || []).length} failed, ${(data.unavailable_robots || []).length} unavailable`;
@@ -398,11 +415,11 @@ const SpreadingPage = () => {
               logger.error('❌ Emergency stop failed:', message.message);
               setEmergencyStopStopping(false);
               setEmergencyStopActive(false); // Reset to allow retry
-              
+
               // Show detailed error information
               const data = message.data || {};
               let errorMsg = message.message || 'Emergency stop failed';
-              
+
               if (data.error_type === 'no_operational_robots') {
                 errorMsg = 'EMERGENCY STOP FAILED: No robots are connected or operational!';
                 if (data.robot_statuses) {
@@ -415,7 +432,7 @@ const SpreadingPage = () => {
                 const failedRobots = data.failed_stops.map(f => `${f.robot_id}: ${f.error}`).join('; ');
                 errorMsg += ` | Failed robots: ${failedRobots}`;
               }
-              
+
               setLastError(errorMsg);
               setConnectionError(data.error_type === 'no_operational_robots');
             } else if (message.status === 'completed') {
@@ -436,12 +453,12 @@ const SpreadingPage = () => {
         // Handle step-specific status updates (like pause/resume broadcasts)
         if (message.data) {
           const { paused, pause_reason, step_index, step_name } = message.data;
-          
+
           if (typeof paused === 'boolean') {
             setSystemPaused(paused);
             setStepPaused(paused);
             setPauseReason(pause_reason || '');
-            
+
             if (paused) {
               setPausedStepName(step_name || '');
               setPausedStepIndex(step_index || -1);
@@ -476,11 +493,16 @@ const SpreadingPage = () => {
         const { operation_type, wafers_failed, wafers_processed, batch_start, batch_count } = message.data;
         logger.log('Received batch completion event:', message.data);
 
+        // Reset current wafer indicator and processing state since batch is done
+        setCurrentWafer(0);
+        setIsProcessing(false);
+
         // Store batch result
         setBatchResults(prev => [...prev, message.data]);
 
-        // Only handle batch transition on drop completion (step 8)
-        if (operation_type === 'drop' && activeStep === 7) {
+        // Only handle batch transition on drop completion
+        // We allow this even if activeStep is not 7, to support external triggers (e.g. verification script)
+        if (operation_type === 'drop') {
           // Check for failures
           if (wafers_failed && wafers_failed.length > 0) {
             logger.log(`Batch had ${wafers_failed.length} failed wafers:`, wafers_failed);
@@ -490,8 +512,9 @@ const SpreadingPage = () => {
           }
 
           // Success - auto-advance to next batch
-          if (currentBatch < totalBatches - 1) {
-            logger.log(`Batch ${currentBatch + 1} complete, advancing to batch ${currentBatch + 2}`);
+          // Use refs to get current values (avoids stale closure)
+          if (currentBatchRef.current < totalBatchesRef.current - 1) {
+            logger.log(`Batch ${currentBatchRef.current + 1} complete, advancing to batch ${currentBatchRef.current + 2}`);
             setCurrentBatch(prev => prev + 1);
             setActiveStep(0);
             setStepConfirmations({});
@@ -501,6 +524,15 @@ const SpreadingPage = () => {
             logger.log('All batches complete!');
             setShowAllComplete(true);
           }
+        }
+      } else if (message.type === 'operation_update' && message.data?.event === 'wafer_progress') {
+        // Handle wafer progress updates
+        const { wafer_num, wafer_index } = message.data;
+        logger.log(`Wafer progress: ${wafer_num} (index ${wafer_index})`);
+        setCurrentWafer(wafer_num);
+        // Set processing state when first wafer starts
+        if (wafer_index === 0 || wafer_num === 1) {
+          setIsProcessing(true);
         }
       }
     });
@@ -532,6 +564,11 @@ const SpreadingPage = () => {
   // Check if a step can be executed
   const canExecuteStep = useCallback(
     (stepIndex) => {
+      // Disable all steps while processing a batch operation
+      if (isProcessing) {
+        return false;
+      }
+
       const step = steps[stepIndex];
       const robotConnected = isRobotConnected(step.robot);
       const confirmationRequired = !!step.confirm;
@@ -539,7 +576,7 @@ const SpreadingPage = () => {
 
       return robotConnected && (!confirmationRequired || isConfirmed);
     },
-    [isRobotConnected, stepConfirmations]
+    [isRobotConnected, stepConfirmations, isProcessing]
   );
 
   // Debug current state
@@ -562,7 +599,7 @@ const SpreadingPage = () => {
       console.log('*** OT2 PROTOCOL DEBUG: handleOT2Protocol() called');
       console.log('*** OT2 PROTOCOL DEBUG: trayInfo:', trayInfo);
       console.log('*** OT2 PROTOCOL DEBUG: websocketService:', websocketService);
-      
+
       logger.log('Starting OT2 protocol with tray info:', trayInfo);
 
       const message = {
@@ -594,10 +631,10 @@ const SpreadingPage = () => {
   // Handle emergency stop - IMMEDIATE execution without confirmation
   const handleEmergencyStop = useCallback(() => {
     logger.log('🚨 Emergency stop activated - immediate execution');
-    
+
     // IMMEDIATE visual feedback - show stopping state
     setEmergencyStopStopping(true);
-    
+
     // Send emergency stop command immediately
     websocketService.send({
       type: 'command',
@@ -610,32 +647,32 @@ const SpreadingPage = () => {
         },
       },
     });
-    
+
     logger.log('✅ Emergency stop command sent - robots should halt immediately');
-    
+
     // Auto-clear stopping state after 3 seconds if no response received
     setTimeout(() => {
       setEmergencyStopStopping(false);
       setEmergencyStopActive(true);
       logger.log('⏱️ Emergency stop timeout - assuming completed');
     }, 3000);
-    
+
   }, [systemStatus]);
 
   // Handle emergency stop reset - IMMEDIATE execution without confirmation
   const handleEmergencyReset = useCallback(() => {
     logger.log('🔄 Emergency stop reset requested - immediate execution');
-    
+
     // Send reset command immediately
     websocketService.send({
       type: 'command',
       command_type: 'emergency_reset',
       data: {}
     });
-    
+
     // Update local state
     setEmergencyStopActive(false);
-    
+
     logger.log('✅ Emergency stop reset command sent');
   }, []);
 
@@ -670,7 +707,7 @@ const SpreadingPage = () => {
         logger.log('System pause activated');
         setSystemPaused(true);
         setPauseReason('User requested pause');
-        
+
         // Send pause command to backend with step information
         websocketService.send({
           type: 'command',
@@ -693,11 +730,11 @@ const SpreadingPage = () => {
     setSystemPaused(false);
     setPauseReason('');
     setPausedOperations([]);
-    
+
     // Send resume command to backend with step information
     websocketService.send({
       type: 'command',
-      command_type: 'resume_system', 
+      command_type: 'resume_system',
       commandId: Date.now().toString(),
       data: {
         current_step: activeStep,
@@ -779,7 +816,7 @@ const SpreadingPage = () => {
       console.log('*** HANDLE PRESS DEBUG: activeStep:', activeStep);
       console.log('*** HANDLE PRESS DEBUG: steps[stepIndex]:', steps[stepIndex]);
       console.log('*** HANDLE PRESS DEBUG: steps[stepIndex].label:', steps[stepIndex]?.label);
-      
+
       logger.log(`Executing step ${stepIndex}: ${steps[stepIndex].label}`);
 
       if (stepIndex === 2) {
@@ -848,7 +885,7 @@ const SpreadingPage = () => {
               </div>
             </div>
           )}
-          
+
           {/* Error Display */}
           {(connectionError || lastError) && (
             <div className='mt-4 bg-red-50 text-red-700 px-4 py-2 rounded-md'>
@@ -867,6 +904,7 @@ const SpreadingPage = () => {
           currentBatch={currentBatch}
           totalBatches={totalBatches}
           totalWafers={totalWafers}
+          currentWafer={currentWafer}
         />
 
         {/* Progress Steps */}
@@ -926,7 +964,7 @@ const SpreadingPage = () => {
             Back to Form
           </SecondaryButton>
         </div>
-        
+
         {/* Confirmation Modal */}
         <ConfirmationModal
           isOpen={confirmationModal.isOpen}
