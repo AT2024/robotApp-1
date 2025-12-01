@@ -325,7 +325,7 @@ class MecaService(RobotService):
         start: int,
         count: int,
         result: Dict[str, Any]
-    ):
+    ) -> bool:
         """
         Broadcast batch completion event to WebSocket clients.
         Used to notify frontend when a pickup or drop sequence completes.
@@ -335,6 +335,9 @@ class MecaService(RobotService):
             start: Starting wafer index
             count: Number of wafers in batch
             result: Result dict from the sequence execution
+
+        Returns:
+            True if broadcast succeeded, False otherwise
         """
         try:
             from websocket.selective_broadcaster import get_broadcaster, MessageType
@@ -354,6 +357,56 @@ class MecaService(RobotService):
                 "timestamp": time.time()
             }
 
+            success = await broadcaster.broadcast_message(
+                message_type=MessageType.OPERATION_UPDATE,
+                data=message,
+                robot_id=self.robot_id
+            )
+
+            if success:
+                self.logger.info(
+                    f"📢 Broadcasted batch_completion: {operation_type} "
+                    f"(wafers {start+1}-{start+count}, {result.get('wafers_processed', 0)} processed)"
+                )
+            else:
+                self.logger.warning(
+                    f"⚠️ Broadcast may have been dropped (queue full): {operation_type} "
+                    f"(wafers {start+1}-{start+count})"
+                )
+
+            return success if success is not None else True
+
+        except Exception as e:
+            self.logger.error(f"❌ Failed to broadcast batch completion: {e}")
+            return False
+
+    async def _broadcast_wafer_progress(
+        self,
+        operation_type: str,
+        wafer_num: int,
+        wafer_index: int,
+        batch_start: int,
+        batch_count: int
+    ):
+        """
+        Broadcast wafer progress event to WebSocket clients.
+        """
+        try:
+            from websocket.selective_broadcaster import get_broadcaster, MessageType
+
+            broadcaster = await get_broadcaster()
+
+            message = {
+                "event": "wafer_progress",
+                "robot_id": self.robot_id,
+                "operation_type": operation_type,
+                "wafer_num": wafer_num,
+                "wafer_index": wafer_index,
+                "batch_start": batch_start,
+                "batch_count": batch_count,
+                "timestamp": time.time()
+            }
+
             await broadcaster.broadcast_message(
                 message_type=MessageType.OPERATION_UPDATE,
                 data=message,
@@ -361,12 +414,12 @@ class MecaService(RobotService):
             )
 
             self.logger.info(
-                f"📢 Broadcasted batch_completion: {operation_type} "
-                f"(wafers {start+1}-{start+count}, {result.get('wafers_processed', 0)} processed)"
+                f"📡 Broadcasted wafer_progress: {operation_type} wafer {wafer_num} "
+                f"(index {wafer_index}, batch {batch_start}-{batch_start+batch_count})"
             )
 
         except Exception as e:
-            self.logger.error(f"Failed to broadcast batch completion: {e}")
+            self.logger.error(f"Failed to broadcast wafer progress: {e}")
 
     async def _on_start(self):
         """Initialize Meca robot connection on service start"""
@@ -2055,7 +2108,10 @@ class MecaService(RobotService):
                 
                 try:
                     self.logger.info(f"🔄 Starting pickup process for {step_context}")
-                    
+
+                    # Broadcast wafer progress to frontend
+                    await self._broadcast_wafer_progress("pickup", wafer_num, i, start, count)
+
                     # Update progress with current wafer
                     await self.state_manager.update_step_progress(
                         self.robot_id,
@@ -2475,7 +2531,10 @@ class MecaService(RobotService):
                 
                 try:
                     self.logger.info(f"🔄 Processing wafer {wafer_num} drop from spreader to baking tray")
-                    
+
+                    # Broadcast wafer progress to WebSocket clients
+                    await self._broadcast_wafer_progress("drop", wafer_num, i, start, count)
+
                     # Update progress with current wafer
                     await self.state_manager.update_step_progress(
                         self.robot_id,
@@ -2569,12 +2628,15 @@ class MecaService(RobotService):
             await self.state_manager.complete_step(self.robot_id)
 
             # Broadcast batch completion to frontend
-            await self._broadcast_batch_completion(
+            broadcast_success = await self._broadcast_batch_completion(
                 operation_type="drop",
                 start=start,
                 count=count,
                 result=result
             )
+
+            # Add broadcast status to result so HTTP response includes it
+            result["broadcast_sent"] = broadcast_success
 
             self.logger.info(f"Drop sequence completed for wafers {start+1} to {start+count}")
             return result
