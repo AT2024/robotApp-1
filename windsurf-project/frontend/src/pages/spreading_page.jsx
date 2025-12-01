@@ -1,6 +1,7 @@
 // spreading_page.jsx
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import websocketService from '../utils/services/websocketService';
 import logger from '../utils/logger';
 import { SystemStatus } from '../components/status';
@@ -514,7 +515,16 @@ const SpreadingPage = () => {
           // Success - auto-advance to next batch
           // Use refs to get current values (avoids stale closure)
           if (currentBatchRef.current < totalBatchesRef.current - 1) {
-            logger.log(`Batch ${currentBatchRef.current + 1} complete, advancing to batch ${currentBatchRef.current + 2}`);
+            const completedBatch = currentBatchRef.current + 1;
+            const nextBatch = currentBatchRef.current + 2;
+            logger.log(`Batch ${completedBatch} complete, advancing to batch ${nextBatch}`);
+
+            // Show batch completion toast
+            toast.success(
+              `Batch ${completedBatch} completed successfully! Starting batch ${nextBatch}...`,
+              { autoClose: 4000 }
+            );
+
             setCurrentBatch(prev => prev + 1);
             setActiveStep(0);
             setStepConfirmations({});
@@ -522,6 +532,10 @@ const SpreadingPage = () => {
           } else {
             // All batches complete
             logger.log('All batches complete!');
+            toast.success(
+              'All batches completed! Great job!',
+              { autoClose: 5000 }
+            );
             setShowAllComplete(true);
           }
         }

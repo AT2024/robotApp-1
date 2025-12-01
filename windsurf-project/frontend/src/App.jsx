@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import CarouselAssemblyStatusPage from "./pages/CarouselAssemblyStatusPage";
 import SpreadingPage from './pages/spreading_page';
 import WelcomePage from './WelcomePage';
@@ -78,6 +80,18 @@ const App = () => (
   <Router>
     <div className='min-h-screen bg-gray-50 text-gray-900 font-sans antialiased'>
       <AppRoutes />
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   </Router>
 );
