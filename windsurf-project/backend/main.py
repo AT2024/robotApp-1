@@ -80,11 +80,25 @@ async def websocket_endpoint(websocket: WebSocket):
     """
     client_id = f"client-{id(websocket)}"
     handler = app.state.websocket_handler
+    broadcaster = None  # Track broadcaster subscription for cleanup
 
     try:
         # Initial connection setup
         await handler.connect(websocket)
         logger.info(f"Client {client_id} connected successfully")
+
+        # Subscribe client to SelectiveWebSocketBroadcaster for operation updates
+        try:
+            from websocket.selective_broadcaster import get_broadcaster, SubscriptionLevel
+            broadcaster = await get_broadcaster()
+            await broadcaster.subscribe_client(
+                client_id=client_id,
+                websocket=websocket,
+                level=SubscriptionLevel.ALL
+            )
+            logger.info(f"Client {client_id} subscribed to selective broadcaster")
+        except Exception as e:
+            logger.warning(f"Failed to subscribe client {client_id} to selective broadcaster: {e}")
 
         # Send initial system status
         try:
@@ -139,6 +153,14 @@ async def websocket_endpoint(websocket: WebSocket):
     finally:
         # Ensure proper cleanup on any exit path
         try:
+            # Unsubscribe from selective broadcaster first
+            if broadcaster:
+                try:
+                    await broadcaster.unsubscribe_client(client_id)
+                    logger.info(f"Client {client_id} unsubscribed from selective broadcaster")
+                except Exception as e:
+                    logger.warning(f"Error unsubscribing client {client_id} from broadcaster: {e}")
+
             await handler.disconnect(websocket)
             logger.info(f"Client {client_id} connection cleaned up successfully")
         except Exception as cleanup_error:

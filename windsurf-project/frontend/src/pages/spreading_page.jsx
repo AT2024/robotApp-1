@@ -31,7 +31,7 @@ const loadSavedBatchState = () => {
   } catch (e) {
     logger.error('Failed to load saved batch state:', e);
   }
-  return { currentBatch: 0, batchResults: [], activeStep: 0 };
+  return { currentBatch: 0, batchResults: [] };
 };
 
 const SpreadingPage = () => {
@@ -42,7 +42,8 @@ const SpreadingPage = () => {
   const savedBatchState = loadSavedBatchState();
 
   // Core state management with meaningful initial values
-  const [activeStep, setActiveStep] = useState(savedBatchState.activeStep || 0);
+  // Always start at step 0 - don't restore from localStorage
+  const [activeStep, setActiveStep] = useState(0);
   const [systemStatus, setSystemStatus] = useState({
     backend: 'disconnected',
     meca: 'disconnected',
@@ -320,11 +321,12 @@ const SpreadingPage = () => {
   }, [location.state, navigate]);
 
   // Save batch state to localStorage whenever it changes
+  // Note: Don't save activeStep - always start at step 0 on page load
   useEffect(() => {
-    const stateToSave = { currentBatch, batchResults, activeStep };
+    const stateToSave = { currentBatch, batchResults };
     localStorage.setItem(BATCH_STORAGE_KEY, JSON.stringify(stateToSave));
     logger.log('Saved batch state to localStorage:', stateToSave);
-  }, [currentBatch, batchResults, activeStep]);
+  }, [currentBatch, batchResults]);
 
   // Keep refs in sync with state (prevents stale closure in WebSocket handler)
   useEffect(() => {
@@ -369,10 +371,7 @@ const SpreadingPage = () => {
     const disconnectUnsubscribe = websocketService.onDisconnect(() => {
       logger.warn('WebSocket disconnected!');
       setWsConnected(false);
-      toast.error('Connection lost! Attempting to reconnect...', {
-        autoClose: false,
-        toastId: 'ws-disconnect' // Prevent duplicate toasts
-      });
+      // Note: Removed toast notification - yellow banner provides visual feedback instead
     });
 
     // Check connection status periodically
@@ -380,9 +379,8 @@ const SpreadingPage = () => {
       const connected = websocketService.isConnected();
       setWsConnected(prevConnected => {
         if (connected && !prevConnected) {
-          // Connection restored
-          toast.dismiss('ws-disconnect');
-          toast.success('Connection restored!', { autoClose: 2000 });
+          // Connection restored - just update state, yellow banner will hide automatically
+          logger.log('WebSocket connection restored');
         }
         return connected;
       });
@@ -530,9 +528,13 @@ const SpreadingPage = () => {
         // Store batch result
         setBatchResults(prev => [...prev, message.data]);
 
-        // Only handle batch transition on drop completion
-        // We allow this even if activeStep is not 7, to support external triggers (e.g. verification script)
-        if (operation_type === 'drop') {
+        // Handle step auto-advance based on operation type
+        if (operation_type === 'pickup') {
+          // Pickup complete (step 1) - auto-advance to step 2
+          logger.log('Pickup operation complete, auto-advancing to next step');
+          toast.success('Pickup complete! Advancing to next step...', { autoClose: 2000 });
+          setActiveStep(prev => prev + 1);
+        } else if (operation_type === 'drop') {
           // Check for failures
           if (wafers_failed && wafers_failed.length > 0) {
             logger.log(`Batch had ${wafers_failed.length} failed wafers:`, wafers_failed);
@@ -541,32 +543,40 @@ const SpreadingPage = () => {
             return;
           }
 
-          // Success - auto-advance to next batch
-          // Use refs to get current values (avoids stale closure)
-          if (currentBatchRef.current < totalBatchesRef.current - 1) {
-            const completedBatch = currentBatchRef.current + 1;
-            const nextBatch = currentBatchRef.current + 2;
-            logger.log(`Batch ${completedBatch} complete, advancing to batch ${nextBatch}`);
+          // Step 8 (Move to Baking Tray) complete - show completion before advancing
+          toast.success(
+            'Step 8 complete! All wafers moved to baking tray.',
+            { autoClose: 2000 }
+          );
 
-            // Show batch completion toast
-            toast.success(
-              `Batch ${completedBatch} completed successfully! Starting batch ${nextBatch}...`,
-              { autoClose: 4000 }
-            );
+          // Delay batch advancement to let user see step 8 completion
+          setTimeout(() => {
+            // Use refs to get current values (avoids stale closure)
+            if (currentBatchRef.current < totalBatchesRef.current - 1) {
+              const completedBatch = currentBatchRef.current + 1;
+              const nextBatch = currentBatchRef.current + 2;
+              logger.log(`Batch ${completedBatch} complete, advancing to batch ${nextBatch}`);
 
-            setCurrentBatch(prev => prev + 1);
-            setActiveStep(0);
-            setStepConfirmations({});
-            // User will manually press pickup button to start next batch
-          } else {
-            // All batches complete
-            logger.log('All batches complete!');
-            toast.success(
-              'All batches completed! Great job!',
-              { autoClose: 5000 }
-            );
-            setShowAllComplete(true);
-          }
+              // Show batch completion toast
+              toast.success(
+                `Batch ${completedBatch} completed successfully! Starting batch ${nextBatch}...`,
+                { autoClose: 4000 }
+              );
+
+              setCurrentBatch(prev => prev + 1);
+              setActiveStep(0);
+              setStepConfirmations({});
+              // User will manually press pickup button to start next batch
+            } else {
+              // All batches complete
+              logger.log('All batches complete!');
+              toast.success(
+                'All batches completed! Great job!',
+                { autoClose: 5000 }
+              );
+              setShowAllComplete(true);
+            }
+          }, 2500);  // 2.5 second delay to show step 8 completion
         }
       } else if (message.type === 'operation_update' && message.data?.event === 'wafer_progress') {
         // Handle wafer progress updates

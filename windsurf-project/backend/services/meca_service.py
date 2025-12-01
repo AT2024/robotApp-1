@@ -2582,7 +2582,11 @@ class MecaService(RobotService):
                     
                     # Return to safe point
                     await self._execute_movement_command("MovePose", self.SAFE_POINT)
-                    
+
+                    # CRITICAL: Wait for robot to finish all queued movements before proceeding
+                    # Without this, code proceeds to next wafer while robot is still moving
+                    await self.async_wrapper.wait_idle(timeout=60.0)
+
                     processed_wafers.append(wafer_num)
                     self.logger.info(f"✅ Successfully completed drop for {step_context}")
                 
