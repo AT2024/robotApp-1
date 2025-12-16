@@ -470,8 +470,14 @@ class AsyncRobotWrapper:
             elif command.command_type == "Delay":
                 duration = command.parameters.get("duration", 0) if command.parameters else 0
                 if duration > 0:
-                    self.logger.info(f"Executing delay of {duration} seconds for {self.robot_id}")
-                    time.sleep(duration)  # Synchronous sleep in thread pool is OK
+                    # Prefer robot's Delay method to queue delay in motion buffer
+                    if hasattr(actual_robot, 'Delay'):
+                        actual_robot.Delay(duration)
+                        self.logger.info(f"Queued robot Delay of {duration} seconds for {self.robot_id}")
+                    else:
+                        # Fallback to Python sleep if robot doesn't support Delay
+                        self.logger.info(f"Executing Python sleep delay of {duration} seconds for {self.robot_id}")
+                        time.sleep(duration)
                 else:
                     self.logger.warning(f"Invalid delay duration: {duration} for {self.robot_id}")
             

@@ -2051,12 +2051,13 @@ class MecaService(RobotService):
             self.logger.info(f"Starting pickup sequence for wafers {start+1} to {start+count}")
 
             # Initial statements for first wafer
-            if start == 0:
-                await self._execute_movement_command("SetGripperForce", [self.FORCE])
-                await self._execute_movement_command("SetJointAcc", [self.ACC])
-                await self._execute_movement_command("SetTorqueLimits", [40, 40, 40, 40, 40, 40])
-                await self._execute_movement_command("SetTorqueLimitsCfg", [2, 1])
-                await self._execute_movement_command("SetBlending", [0])
+            # Initial statements - apply at start of every sequence to ensure consistent parameters
+            # if start == 0:  <-- REMOVED: Always apply parameters to prevent loss in subsequent batches
+            await self._execute_movement_command("SetGripperForce", [self.FORCE])
+            await self._execute_movement_command("SetJointAcc", [self.ACC])
+            await self._execute_movement_command("SetTorqueLimits", [40, 40, 40, 40, 40, 40])
+            await self._execute_movement_command("SetTorqueLimitsCfg", [2, 1])
+            await self._execute_movement_command("SetBlending", [0])
             
             # Set initial velocity and configuration
             await self._execute_movement_command("SetJointVel", [self.ALIGN_SPEED])
@@ -2669,10 +2670,9 @@ class MecaService(RobotService):
             
             self.logger.info(f"Starting carousel sequence for wafers {start+1} to {start+count}")
             
-            # Configuration specific to carousel movement
-            if start == 0:
-                await self._execute_movement_command("SetConf", [1, 1, -1])
-                await self._execute_movement_command("Delay", [3])
+            # Configuration specific to carousel movement - apply every batch
+            await self._execute_movement_command("SetConf", [1, 1, -1])
+            await self._execute_movement_command("Delay", [3])
             
             for i in range(start, start + count):
                 wafer_num = i + 1
