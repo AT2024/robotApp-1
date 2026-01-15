@@ -4,12 +4,18 @@ __pycache__/
 *$py.class
 *.so
 .Python
+*.egg-info/
+*.egg
+.installed.cfg
+MANIFEST
+
+# Python build
 build/
-develop-eggs/
 dist/
-downloads/
 eggs/
 .eggs/
+develop-eggs/
+downloads/
 lib/
 lib64/
 parts/
@@ -17,88 +23,8 @@ sdist/
 var/
 wheels/
 share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
 
-# PyInstaller
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-cover/
-
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-.pybuilder/
-target/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
-
-# pyenv
-.python-version
-
-# pipenv
-Pipfile.lock
-
-# poetry
-poetry.lock
-
-# pdm
-.pdm.toml
-
-# PEP 582
-__pypackages__/
-
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
+# Virtual environments
 .env
 .venv
 env/
@@ -107,155 +33,76 @@ ENV/
 env.bak/
 venv.bak/
 
-# Spyder project settings
-.spyderproject
-.spyproject
+# Testing
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+test-results/
 
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-# mypy
+# Type checking
 .mypy_cache/
 .dmypy.json
 dmypy.json
-
-# Pyre type checker
 .pyre/
-
-# pytype static type analyzer
 .pytype/
 
-# Cython debug symbols
-cython_debug/
+# Jupyter
+.ipynb_checkpoints
 
-# PyCharm
-.idea/
+# pyenv/pipenv/poetry/pdm
+.python-version
+Pipfile.lock
+poetry.lock
+.pdm.toml
+__pypackages__/
 
 # Node.js
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-lerna-debug.log*
 .pnpm-debug.log*
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Coverage directory used by tools like istanbul
-coverage/
-*.lcov
-
-# nyc test coverage
-.nyc_output
-
-# Grunt intermediate storage
-.grunt
-
-# Bower dependency directory
-bower_components
-
-# node-waf configuration
-.lock-wscript
-
-# Compiled binary addons
-build/Release
-
-# Dependency directories
-jspm_packages/
-
-# Snowpack dependency directory
-web_modules/
-
-# TypeScript cache
 *.tsbuildinfo
-
-# Optional npm cache directory
 .npm
-
-# Optional eslint cache
 .eslintcache
-
-# Optional stylelint cache
 .stylelintcache
-
-# Microbundle cache
-.rpt2_cache/
-.rts2_cache_cjs/
-.rts2_cache_es/
-.rts2_cache_umd/
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# dotenv environment variable files
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
-
-# parcel-bundler cache
-.cache
-.parcel-cache
-
-# Next.js build output
-.next
-out
-
-# Nuxt.js build / generate output
-.nuxt
-dist
-
-# Gatsby files
-.cache/
-public
-
-# vue-nuxt build / generate output
-.vuepress/dist
-
-# Vuepress build output
-.vuepress/dist
-
-# Serverless directories
-.serverless/
-
-# FuseBox cache
-.fusebox/
-
-# DynamoDB Local files
-.dynamodb/
-
-# TernJS port file
-.tern-port
-
-# Stores VSCode versions used for testing VSCode extensions
-.vscode-test
-
-# yarn v2
 .yarn/cache
 .yarn/unplugged
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
 
-# Docker
-.dockerignore
-Dockerfile*
-docker-compose*.yml
+# Build outputs
+out/
+.next/
+.nuxt/
+.vuepress/dist
+public/
 
-# System Files
+# Bundler caches
+.parcel-cache
+.rpt2_cache_*/
+.fusebox/
+
+# IDE/Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.vscode-test
+
+# System files
 .DS_Store
 .DS_Store?
 ._*
@@ -263,15 +110,16 @@ docker-compose*.yml
 .Trashes
 ehthumbs.db
 Thumbs.db
+.Trash-*
 
-# Windows
+# Windows executables (keep project scripts)
+*.cmd
+*.exe
+*.msi
 *.bat
 !windsurf-project/first-run-setup.bat
 !windsurf-project/run.bat
 !windsurf-project/run-prod.bat
-*.cmd
-*.exe
-*.msi
 
 # Archives
 *.zip
@@ -279,58 +127,43 @@ Thumbs.db
 *.rar
 *.7z
 
-# IDE and Editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# Project-specific ignores
-# Log files - NEVER commit these
+# Logs
 logs/
-*.log
 log/
+*.log
 
-# Database files
+# Database
 *.db
 *.sqlite
 *.sqlite3
+db.sqlite3-journal
 
-# Configuration files with secrets
+# Secrets and credentials
 .env*
 !.env.example
 secrets/
 credentials/
+*.gpg
 
-# Build artifacts
-build/
-dist/
-out/
-
-# Temporary files
+# Temporary
 tmp/
 temp/
 .tmp/
+pids/
+*.pid
+*.seed
+*.pid.lock
 
-# OS generated files
-.Trash-*
-
-# Application specific
+# Project-specific
 protocols/active/
 windsurf-project/backend/logs/
 windsurf-project/frontend/dist/
 windsurf-project/frontend/node_modules/
-
-# GitHub CLI installation
 gh_*/
 gh.tar.gz
-*.gpg
+nul
 
-# Test artifacts
-test-results/
-coverage/
-.coverage
-
-# Claude Code
-.claude/
+# Claude Code (keep shared configs)
+CLAUDE.local.md
+.claude/*.local.*
+.claude/settings.local.json

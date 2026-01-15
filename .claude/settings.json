@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker-compose:*)",
+      "Bash(npm run:*)",
+      "Bash(python -m pytest:*)",
+      "Bash(black:*)",
+      "Bash(flake8:*)",
+      "Bash(mypy:*)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/credentials*)",
+      "Read(**/secrets/**)",
+      "Read(**/*token*)",
+      "Read(**/*password*)"
+    ]
+  }
+}

@@ -13,7 +13,17 @@
       "Bash(curl:*)",
       "Bash(find:*)",
       "Bash(python test:*)",
-      "Bash(gemini:*)"
+      "Bash(gemini:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:support.mecademic.com)",
+      "WebFetch(domain:resources.mecademic.com)",
+      "WebFetch(domain:medium.com)",
+      "mcp__deepwiki__ask_question",
+      "WebFetch(domain:www.osha.gov)",
+      "WebFetch(domain:superfastpython.com)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }
