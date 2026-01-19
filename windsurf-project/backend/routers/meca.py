@@ -4,7 +4,6 @@ from dependencies import MecaServiceDep, OrchestratorDep, CommandServiceDep
 from services.meca_service import MecaService
 from services.orchestrator import RobotOrchestrator
 from services.command_service import RobotCommandService, CommandType, CommandPriority
-from pydantic import BaseModel
 from common.helpers import RouterHelper, CommandHelper, ResponseHelper
 
 
@@ -13,13 +12,13 @@ logger = get_logger("meca_router")
 
 
 # -----------------------------------------------------------------------------
-# New API endpoints for service layer integration
+# Connection Endpoints
 # -----------------------------------------------------------------------------
 
 
 @router.get("/status")
 async def get_meca_status(meca_service: MecaService = MecaServiceDep()):
-    """Get current status of the Meca robot"""
+    """Get current status of the Meca robot."""
     return await RouterHelper.execute_service_operation(
         meca_service.get_robot_status, "get_meca_status", logger
     )
@@ -27,7 +26,7 @@ async def get_meca_status(meca_service: MecaService = MecaServiceDep()):
 
 @router.post("/connect")
 async def connect_meca(meca_service: MecaService = MecaServiceDep()):
-    """Connect to Meca robot"""
+    """Connect to Meca robot."""
     result = await RouterHelper.execute_service_operation(
         meca_service.connect, "connect_meca", logger
     )
@@ -36,22 +35,65 @@ async def connect_meca(meca_service: MecaService = MecaServiceDep()):
     )
 
 
+@router.post("/connect-safe")
+async def connect_safe_meca(meca_service: MecaService = MecaServiceDep()):
+    """
+    Connect to Meca robot WITHOUT automatic homing.
+    Returns current joint positions for user safety confirmation.
+    Step 1 of two-step safe connection flow.
+    """
+    result = await RouterHelper.execute_service_operation(
+        meca_service.connect_safe, "connect_safe_meca", logger
+    )
+    return ResponseHelper.create_success_response(
+        data=result, message="Connected to Meca robot - awaiting confirmation"
+    )
+
+
+@router.post("/confirm-activation")
+async def confirm_activation_meca(meca_service: MecaService = MecaServiceDep()):
+    """
+    Confirm robot position is safe and proceed with activation/homing.
+    Step 2 of two-step safe connection flow.
+    """
+    result = await RouterHelper.execute_service_operation(
+        meca_service.confirm_activation, "confirm_activation_meca", logger
+    )
+    return ResponseHelper.create_success_response(
+        data=result, message="Robot activated and homed successfully"
+    )
+
+
+@router.post("/disconnect-safe")
+async def disconnect_safe_meca(meca_service: MecaService = MecaServiceDep()):
+    """Gracefully disconnect from Meca robot with deactivation."""
+    result = await RouterHelper.execute_service_operation(
+        meca_service.disconnect_safe, "disconnect_safe_meca", logger
+    )
+    return ResponseHelper.create_success_response(
+        data=result, message="Robot disconnected safely"
+    )
+
+
 @router.post("/disconnect")
 async def disconnect_meca(meca_service: MecaService = MecaServiceDep()):
-    """Disconnect from Meca robot"""
-    try:
-        result = await meca_service.disconnect()
-        if not result.success:
-            raise HTTPException(status_code=500, detail=result.error)
-        return {"status": "success", "message": "Disconnected from Meca robot"}
-    except Exception as e:
-        logger.error(f"Error disconnecting from Meca: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    """Disconnect from Meca robot."""
+    result = await RouterHelper.execute_service_operation(
+        meca_service.disconnect, "disconnect_meca", logger
+    )
+    return ResponseHelper.create_success_response(
+        data=result, message="Disconnected from Meca robot"
+    )
+
+
+# -----------------------------------------------------------------------------
+# Command Endpoints
+# -----------------------------------------------------------------------------
 
 
 @router.post("/home")
 async def home_meca(command_service: RobotCommandService = CommandServiceDep()):
-    """Send Meca robot to home position"""
+    """Send Meca robot to home position."""
     return await CommandHelper.submit_robot_command(
         command_service=command_service,
         robot_id="meca",
@@ -67,62 +109,59 @@ async def home_meca(command_service: RobotCommandService = CommandServiceDep()):
 async def emergency_stop_meca(
     command_service: RobotCommandService = CommandServiceDep(),
 ):
-    """Emergency stop the Meca robot"""
-    try:
-        result = await command_service.submit_command(
-            robot_id="meca",
-            command_type=CommandType.EMERGENCY_STOP,
-            parameters={},
-            priority=CommandPriority.EMERGENCY,
-            timeout=10.0,
-        )
-
-        if not result.success:
-            raise HTTPException(status_code=500, detail=result.error)
-
-        return {
-            "status": "success",
-            "command_id": result.data,
-            "message": "Emergency stop command submitted",
-        }
-    except Exception as e:
-        logger.error(f"Error emergency stopping Meca robot: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    """Emergency stop the Meca robot."""
+    return await CommandHelper.submit_robot_command(
+        command_service=command_service,
+        robot_id="meca",
+        command_type=CommandType.EMERGENCY_STOP,
+        parameters={},
+        priority=CommandPriority.EMERGENCY,
+        timeout=10.0,
+        success_message="Emergency stop command submitted",
+    )
 
 
 @router.get("/commands/{command_id}/status")
 async def get_command_status(
     command_id: str, command_service: RobotCommandService = CommandServiceDep()
 ):
-    """Get status of a specific command"""
-    try:
-        result = await command_service.get_command_status(command_id)
-        if not result.success:
-            raise HTTPException(status_code=404, detail=result.error)
-        return result.data
-    except Exception as e:
-        logger.error(f"Error getting command status: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    """Get status of a specific command."""
+    return await RouterHelper.execute_service_operation(
+        command_service.get_command_status, "get_command_status", logger, command_id
+    )
 
 
 @router.get("/commands")
 async def list_active_commands(
     command_service: RobotCommandService = CommandServiceDep(),
 ):
-    """List active commands for Meca robot"""
-    try:
-        result = await command_service.list_active_commands(robot_id="meca")
-        if not result.success:
-            raise HTTPException(status_code=500, detail=result.error)
-        return result.data
-    except Exception as e:
-        logger.error(f"Error listing commands: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    """List active commands for Meca robot."""
+    return await RouterHelper.execute_service_operation(
+        command_service.list_active_commands, "list_active_commands", logger, robot_id="meca"
+    )
 
 
 # -----------------------------------------------------------------------------
-# Robot Operation Endpoints - All operations use MecaService and Orchestrator
+# Sequence Operation Endpoints
 # -----------------------------------------------------------------------------
+
+
+async def _execute_sequence(
+    meca_service: MecaService,
+    sequence_method,
+    sequence_name: str,
+    start: int,
+    count: int,
+) -> dict:
+    """Execute a wafer sequence operation with standard error handling."""
+    result = await sequence_method(start, count)
+    if not result.success:
+        logger.error(f"{sequence_name} failed: {result.error}")
+        raise HTTPException(status_code=500, detail=result.error)
+    return ResponseHelper.create_success_response(
+        data=result.data,
+        message=f"{sequence_name} completed for wafers {start + 1} to {start + count}",
+    )
 
 
 @router.post("/pickup")
@@ -130,36 +169,14 @@ async def create_pickup(
     data: dict = Body(default={}),
     meca_service: MecaService = MecaServiceDep(),
 ):
-    try:
-        start = data.get("start", 0)
-        count = data.get("count", 5)
-
-        logger.info(f"Received meca pickup request: start={start}, count={count}")
-
-        # Check if meca service is available
-        if not meca_service:
-            logger.error("MecaService not available - service initialization failed")
-            raise HTTPException(status_code=503, detail="MecaService not available")
-
-        # Execute pickup sequence directly through MecaService
-        logger.info(f"Executing pickup sequence for wafers {start+1} to {start+count}")
-        result = await meca_service.execute_pickup_sequence(start, count)
-
-        if not result.success:
-            logger.error(f"Pickup sequence failed: {result.error}")
-            raise HTTPException(status_code=500, detail=result.error)
-
-        logger.info(f"Pickup sequence completed successfully")
-        return {
-            "status": "success",
-            "data": result.data,
-            "message": f"Pickup sequence completed for wafers {start+1} to {start+count}",
-        }
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Error creating pickup sequence: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
+    """Execute pickup sequence for wafers."""
+    start = data.get("start", 0)
+    count = data.get("count", 5)
+    if not meca_service:
+        raise HTTPException(status_code=503, detail="MecaService not available")
+    return await _execute_sequence(
+        meca_service, meca_service.execute_pickup_sequence, "Pickup sequence", start, count
+    )
 
 
 @router.post("/drop")
@@ -167,27 +184,12 @@ async def create_drop(
     data: dict = Body(default={}),
     meca_service: MecaService = MecaServiceDep(),
 ):
-    try:
-        start = data.get("start", 0)
-        count = data.get("count", 5)
-        
-        logger.info(f"Received meca drop request: start={start}, count={count}")
-
-        # Execute drop sequence directly through MecaService
-        result = await meca_service.execute_drop_sequence(start, count)
-        
-        if not result.success:
-            logger.error(f"Drop sequence failed: {result.error}")
-            raise HTTPException(status_code=500, detail=result.error)
-        
-        return {
-            "status": "success",
-            "data": result.data,
-            "message": f"Drop sequence completed for wafers {start+1} to {start+count}",
-        }
-    except Exception as e:
-        logger.error(f"Error executing drop sequence: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    """Execute drop sequence for wafers."""
+    start = data.get("start", 0)
+    count = data.get("count", 5)
+    return await _execute_sequence(
+        meca_service, meca_service.execute_drop_sequence, "Drop sequence", start, count
+    )
 
 
 @router.post("/carousel")
@@ -195,27 +197,12 @@ async def create_carousel_sequence(
     data: dict = Body(default={}),
     meca_service: MecaService = MecaServiceDep(),
 ):
-    try:
-        start = data.get("start", 0)
-        count = data.get("count", 11)
-
-        logger.info(f"Received meca carousel request: start={start}, count={count}")
-
-        # Execute carousel sequence directly through MecaService
-        result = await meca_service.execute_carousel_sequence(start, count)
-
-        if not result.success:
-            logger.error(f"Carousel sequence failed: {result.error}")
-            raise HTTPException(status_code=500, detail=result.error)
-
-        return {
-            "status": "success",
-            "data": result.data,
-            "message": f"Carousel sequence completed for wafers {start+1} to {start+count}",
-        }
-    except Exception as e:
-        logger.error(f"Error executing carousel sequence: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    """Execute carousel fill sequence for wafers."""
+    start = data.get("start", 0)
+    count = data.get("count", 11)
+    return await _execute_sequence(
+        meca_service, meca_service.execute_carousel_sequence, "Carousel sequence", start, count
+    )
 
 
 @router.post("/empty-carousel")
@@ -223,27 +210,12 @@ async def create_empty_carousel_sequence(
     data: dict = Body(default={}),
     meca_service: MecaService = MecaServiceDep(),
 ):
-    try:
-        start = data.get("start", 0)
-        count = data.get("count", 11)
-
-        logger.info(f"Received meca empty-carousel request: start={start}, count={count}")
-
-        # Execute empty carousel sequence directly through MecaService
-        result = await meca_service.execute_empty_carousel_sequence(start, count)
-
-        if not result.success:
-            logger.error(f"Empty carousel sequence failed: {result.error}")
-            raise HTTPException(status_code=500, detail=result.error)
-
-        return {
-            "status": "success",
-            "data": result.data,
-            "message": f"Empty carousel sequence completed for wafers {start+1} to {start+count}",
-        }
-    except Exception as e:
-        logger.error(f"Error executing empty-carousel sequence: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    """Execute carousel empty sequence for wafers."""
+    start = data.get("start", 0)
+    count = data.get("count", 11)
+    return await _execute_sequence(
+        meca_service, meca_service.execute_empty_carousel_sequence, "Empty carousel sequence", start, count
+    )
 
 
 @router.post("/test-wafer/{wafer_number}")
@@ -251,84 +223,74 @@ async def test_single_wafer(
     wafer_number: int,
     meca_service: MecaService = MecaServiceDep(),
 ):
-    """
-    Test processing a single wafer to verify sequence calculation.
-    This is useful for testing specific wafers like wafer 55.
-    """
-    try:
-        if wafer_number < 1 or wafer_number > 55:
-            raise HTTPException(status_code=400, detail="Wafer number must be between 1 and 55")
-        
-        # Convert to 0-based index
-        wafer_index = wafer_number - 1
-        
-        logger.info(f"Testing wafer {wafer_number} (index {wafer_index}) position calculation")
-        
-        # Use service layer methods for position calculation
-        try:
-            baking_position = meca_service.calculate_wafer_position(wafer_index, "baking")
-            carousel_position = meca_service.calculate_wafer_position(wafer_index, "carousel")
-            carousel_positions = meca_service.calculate_intermediate_positions(wafer_index, "carousel")
-            
-            result = {
-                "wafer_number": wafer_number,
-                "wafer_index": wafer_index,
-                "positions": {
-                    "baking_tray": {
-                        "coordinates": baking_position,
-                        "x": baking_position[0],
-                        "y": baking_position[1], 
-                        "z": baking_position[2]
-                    },
-                    "carousel": {
-                        "coordinates": carousel_position
-                    },
-                    "intermediate_positions": {
-                        "above_baking": carousel_positions.get("above_baking"),
-                        "move_sequence": [
-                            carousel_positions.get("move1"),
-                            carousel_positions.get("move2"),
-                            carousel_positions.get("move3"),
-                            carousel_positions.get("move4")
-                        ],
-                        "y_away_positions": [
-                            carousel_positions.get("y_away1"),
-                            carousel_positions.get("y_away2")
-                        ]
-                    }
-                },
-                "expected_x_for_wafer_55": "For wafer 55: X should be 4.1298 (calculated: -141.6702 + 2.7 * 54)",
-                "verification": {
-                    "calculated_x": baking_position[0],
-                    "expected_x_wafer_55": 4.1298,
-                    "matches_expected": abs(baking_position[0] - 4.1298) < 0.001 if wafer_number == 55 else "N/A"
-                }
-            }
-            
-            return {
-                "status": "success",
-                "data": result,
-                "message": f"Position calculation test completed for wafer {wafer_number}"
-            }
-            
-        except AttributeError as ae:
-            # Handle case where service methods might not exist
-            logger.warning(f"Service method not available: {ae}")
-            return {
-                "status": "success",
-                "data": {
-                    "wafer_number": wafer_number,
-                    "wafer_index": wafer_index,
-                    "message": "Position calculation methods are available in the MecaService"
-                },
-                "message": f"Wafer {wafer_number} test endpoint ready - service methods available"
-            }
-        
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Error testing wafer {wafer_number}: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    """Test position calculation for a single wafer (1-55)."""
+    if wafer_number < 1 or wafer_number > 55:
+        raise HTTPException(status_code=400, detail="Wafer number must be between 1 and 55")
+
+    wafer_index = wafer_number - 1
+    result = await RouterHelper.execute_service_operation(
+        meca_service.get_wafer_position_preview,
+        "test_single_wafer",
+        logger,
+        wafer_index,
+    )
+    return ResponseHelper.create_success_response(
+        data=result, message=f"Position calculation test completed for wafer {wafer_number}"
+    )
+
+
+# -----------------------------------------------------------------------------
+# Batch Processing Endpoint
+# -----------------------------------------------------------------------------
+
+
+def _build_batch_operations(
+    total_wafers: int, wafers_per_cycle: int, wafers_per_carousel: int
+) -> list:
+    """Build robot operations list for batch processing workflow."""
+    operations = []
+
+    # Phase 1: Pickup and drop operations
+    for start in range(0, total_wafers, wafers_per_cycle):
+        count = min(wafers_per_cycle, total_wafers - start)
+        operations.append({
+            "robot_id": "meca",
+            "operation_type": "pickup_wafer_sequence",
+            "parameters": {"start": start, "count": count},
+            "timeout": 600.0,
+        })
+        operations.append({
+            "robot_id": "meca",
+            "operation_type": "drop_wafer_sequence",
+            "parameters": {"start": start, "count": count},
+            "timeout": 600.0,
+        })
+
+    # Phase 2: Carousel operations
+    for start in range(0, total_wafers, wafers_per_carousel):
+        count = min(wafers_per_carousel, total_wafers - start)
+        operations.append({
+            "robot_id": "meca",
+            "operation_type": "carousel_wafer_sequence",
+            "parameters": {"start": start, "count": count},
+            "timeout": 900.0,
+        })
+        operations.append({
+            "robot_id": "meca",
+            "operation_type": "empty_carousel_sequence",
+            "parameters": {"start": start, "count": count},
+            "timeout": 900.0,
+        })
+
+    # Final home operation
+    operations.append({
+        "robot_id": "meca",
+        "operation_type": "home_robot",
+        "parameters": {},
+        "timeout": 120.0,
+    })
+
+    return operations
 
 
 @router.post("/process-batch")
@@ -336,353 +298,123 @@ async def process_wafer_batch(
     data: dict = Body(default={}),
     orchestrator: RobotOrchestrator = OrchestratorDep(),
 ):
-    try:
-        # Default wafer processing parameters
-        total_wafers_param = data.get("total_wafers", 25)
-        wafers_per_cycle_param = data.get("wafers_per_cycle", 5)
-        wafers_per_carousel_param = data.get("wafers_per_carousel", 11)
+    """Execute multi-robot workflow for batch wafer processing."""
+    total_wafers = data.get("total_wafers", 25)
+    wafers_per_cycle = data.get("wafers_per_cycle", 5)
+    wafers_per_carousel = data.get("wafers_per_carousel", 11)
 
-        # Create multi-robot workflow for batch processing
-        robot_operations = []
+    robot_operations = _build_batch_operations(total_wafers, wafers_per_cycle, wafers_per_carousel)
+    workflow_id = f"batch_process_{total_wafers}_wafers"
 
-        # Phase 1: Pickup and drop operations
-        for start in range(0, total_wafers_param, wafers_per_cycle_param):
-            count = min(wafers_per_cycle_param, total_wafers_param - start)
+    result = await orchestrator.execute_multi_robot_workflow(
+        workflow_id=workflow_id,
+        robot_operations=robot_operations,
+        coordination_strategy="sequential",
+    )
 
-            # Pickup operation
-            robot_operations.append(
-                {
-                    "robot_id": "meca",
-                    "operation_type": "pickup_wafer_sequence",
-                    "parameters": {"start": start, "count": count},
-                    "timeout": 600.0,
-                }
-            )
+    if not result.success:
+        raise HTTPException(status_code=500, detail=result.error)
 
-            # Drop operation (depends on pickup)
-            robot_operations.append(
-                {
-                    "robot_id": "meca",
-                    "operation_type": "drop_wafer_sequence",
-                    "parameters": {"start": start, "count": count},
-                    "timeout": 600.0,
-                }
-            )
+    return ResponseHelper.create_success_response(
+        message=f"Batch processing workflow started for {total_wafers} wafers",
+        workflow_id=workflow_id,
+        total_operations=len(robot_operations),
+    )
 
-        # Phase 2: Carousel operations
-        for start in range(0, total_wafers_param, wafers_per_carousel_param):
-            count = min(wafers_per_carousel_param, total_wafers_param - start)
 
-            # Carousel fill operation
-            robot_operations.append(
-                {
-                    "robot_id": "meca",
-                    "operation_type": "carousel_wafer_sequence",
-                    "parameters": {"start": start, "count": count},
-                    "timeout": 900.0,
-                }
-            )
-
-            # Carousel empty operation
-            robot_operations.append(
-                {
-                    "robot_id": "meca",
-                    "operation_type": "empty_carousel_sequence",
-                    "parameters": {"start": start, "count": count},
-                    "timeout": 900.0,
-                }
-            )
-
-        # Final home operation
-        robot_operations.append(
-            {
-                "robot_id": "meca",
-                "operation_type": "home_robot",
-                "parameters": {},
-                "timeout": 120.0,  # Default 2 minute timeout for home operation
-            }
-        )
-
-        # Execute the workflow
-        workflow_id = f"batch_process_{total_wafers_param}_wafers"
-        result = await orchestrator.execute_multi_robot_workflow(
-            workflow_id=workflow_id,
-            robot_operations=robot_operations,
-            coordination_strategy="sequential",
-        )
-
-        if not result.success:
-            raise HTTPException(status_code=500, detail=result.error)
-
-        return {
-            "status": "success",
-            "workflow_id": workflow_id,
-            "message": f"Batch processing workflow started for {total_wafers_param} wafers",
-            "total_operations": len(robot_operations),
-        }
-    except Exception as e:
-        logger.error(f"Error in batch processing: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+# -----------------------------------------------------------------------------
+# Debug/Diagnostic Endpoints
+# -----------------------------------------------------------------------------
 
 
 @router.get("/debug-connection-state")
 async def debug_connection_state(service: MecaService = MecaServiceDep()):
-    """
-    Debug endpoint to expose comprehensive connection diagnostics.
-    Returns detailed information about robot connection status, driver state,
-    socket status, activation status, homing status, and error status.
-    """
-    try:
-        from core.state_manager import RobotState
-        import time
-        
-        # Get basic service state
-        robot_info = await service.state_manager.get_robot_state(service.robot_id)
-        current_state = robot_info.current_state if robot_info else None
-        robot_id = service.robot_id
-        
-        debug_info = {
-            "timestamp": time.time(),
-            "robot_id": robot_id,
-            "service_state": current_state.name if hasattr(current_state, 'name') else str(current_state),
-            "service_ready": False,
-            "driver_available": False,
-            "robot_instance_available": False,
-            "socket_connected": False,
-            "activation_status": False,
-            "homing_status": False,
-            "error_status": False,
-            "paused_status": False,
-            "last_connection_time": None,
-            "connection_details": {},
-            "errors": []
-        }
-        
-        try:
-            # Check if service considers itself ready
-            debug_info["service_ready"] = await service.ensure_robot_ready(allow_busy=True)
-        except Exception as e:
-            debug_info["errors"].append(f"Service readiness check failed: {str(e)}")
-        
-        # Check driver availability
-        if hasattr(service.async_wrapper, 'robot_driver'):
-            debug_info["driver_available"] = True
-            driver = service.async_wrapper.robot_driver
-            
-            try:
-                # Check robot instance
-                robot_instance = driver.get_robot_instance() if hasattr(driver, 'get_robot_instance') else None
-                debug_info["robot_instance_available"] = robot_instance is not None
-                
-                if robot_instance:
-                    # Check socket connection status - try multiple approaches
-                    if hasattr(robot_instance, 'is_connected'):
-                        debug_info["socket_connected"] = robot_instance.is_connected()
-                    elif hasattr(robot_instance, '_socket') and robot_instance._socket:
-                        debug_info["socket_connected"] = True
-                    elif hasattr(robot_instance, 'connected') and robot_instance.connected:
-                        debug_info["socket_connected"] = True
-                    elif hasattr(driver, '_connected') and driver._connected:
-                        debug_info["socket_connected"] = True
-                    else:
-                        # If we can get status, assume connected
-                        try:
-                            test_status = await driver.get_status()
-                            debug_info["socket_connected"] = test_status.get('connected', False)
-                        except:
-                            debug_info["socket_connected"] = False
-                    
-                    # Get detailed robot status
-                    try:
-                        status = await driver.get_status()
-                        debug_info["activation_status"] = status.get('activation_status', False)
-                        debug_info["homing_status"] = status.get('homing_status', False)
-                        debug_info["error_status"] = status.get('error_status', False)
-                        debug_info["paused_status"] = status.get('paused', False)
-                        debug_info["connection_details"] = status
-                    except Exception as e:
-                        debug_info["errors"].append(f"Status retrieval failed: {str(e)}")
-                
-            except Exception as e:
-                debug_info["errors"].append(f"Driver instance check failed: {str(e)}")
-        
-        # Check for last successful connection time (if available)
-        try:
-            if hasattr(service, '_last_successful_connection'):
-                debug_info["last_connection_time"] = service._last_successful_connection
-        except:
-            pass
-        
-        return {
-            "status": "success",
-            "debug_info": debug_info,
-            "summary": {
-                "overall_health": (
-                    debug_info["service_ready"] and 
-                    debug_info["driver_available"] and 
-                    debug_info["robot_instance_available"] and 
-                    debug_info["socket_connected"] and 
-                    debug_info["activation_status"] and 
-                    debug_info["homing_status"] and 
-                    not debug_info["error_status"]
-                ),
-                "connection_ready": debug_info["socket_connected"] and debug_info["robot_instance_available"],
-                "robot_operational": debug_info["activation_status"] and debug_info["homing_status"] and not debug_info["error_status"]
-            }
-        }
-        
-    except Exception as e:
-        logger.error(f"Error in debug connection state: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=f"Debug endpoint error: {str(e)}")
+    """Get comprehensive connection diagnostics for the Meca robot."""
+    result = await RouterHelper.execute_service_operation(
+        service.get_debug_connection_state, "debug_connection_state", logger
+    )
+    return ResponseHelper.create_success_response(data=result)
 
 
 @router.get("/test-tcp-connection")
 async def test_tcp_connection():
-    """
-    Test direct TCP connection to Meca robot.
-    This bypasses all service layers to test raw network connectivity.
-    """
+    """Test direct TCP connection to Meca robot, bypassing service layer."""
     import socket
     import time
     from core.settings import get_settings
-    
+
     settings = get_settings()
     robot_config = settings.get_robot_config("meca")
     host = robot_config["ip"]
     port = robot_config["port"]
     timeout = robot_config.get("timeout", 30.0)
-    
-    test_results = {
+
+    result = _test_tcp_connectivity(host, port, timeout)
+    return ResponseHelper.create_success_response(
+        data=result, message=result.get("diagnosis", "TCP test completed")
+    )
+
+
+def _test_tcp_connectivity(host: str, port: int, timeout: float) -> dict:
+    """Test TCP connectivity to robot and return diagnostic results."""
+    import socket
+    import time
+
+    result = {
         "timestamp": time.time(),
         "target": f"{host}:{port}",
-        "network_ping": "unknown",
         "tcp_connection": "unknown",
         "socket_details": {},
-        "error_details": [],
-        "recommendations": []
+        "recommendations": [],
     }
-    
+
     try:
-        # Test 1: Network ping using raw socket (ICMP simulation)
-        try:
-            # Quick TCP connect test to verify network reachability
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as ping_sock:
-                ping_sock.settimeout(2.0)
-                ping_result = ping_sock.connect_ex((host, 80))  # Test common port
-                if ping_result == 0:
-                    test_results["network_ping"] = "reachable"
-                else:
-                    test_results["network_ping"] = "timeout"
-        except Exception as ping_error:
-            test_results["network_ping"] = f"error: {str(ping_error)}"
-        
-        # Test 2: Direct TCP connection to Meca port
-        try:
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tcp_sock:
-                tcp_sock.settimeout(timeout)
-                start_time = time.time()
-                
-                logger.info(f"🔍 Testing TCP connection to {host}:{port} with {timeout}s timeout")
-                connect_result = tcp_sock.connect_ex((host, port))
-                connect_time = time.time() - start_time
-                
-                test_results["socket_details"] = {
-                    "connect_result_code": connect_result,
-                    "connect_time_seconds": round(connect_time, 3),
-                    "socket_family": str(tcp_sock.family),
-                    "socket_type": str(tcp_sock.type)
-                }
-                
-                if connect_result == 0:
-                    test_results["tcp_connection"] = "success"
-                    logger.info(f"✅ TCP connection successful in {connect_time:.3f}s")
-                    
-                    # Try to get socket info
-                    try:
-                        local_addr = tcp_sock.getsockname()
-                        peer_addr = tcp_sock.getpeername()
-                        test_results["socket_details"].update({
-                            "local_address": f"{local_addr[0]}:{local_addr[1]}",
-                            "peer_address": f"{peer_addr[0]}:{peer_addr[1]}",
-                            "connection_established": True
-                        })
-                    except Exception as sock_info_error:
-                        test_results["error_details"].append(f"Socket info error: {str(sock_info_error)}")
-                    
-                elif connect_result == 10061:  # Windows WSAECONNREFUSED
-                    test_results["tcp_connection"] = "connection_refused"
-                    test_results["error_details"].append("Connection refused - robot software not listening on port")
-                    test_results["recommendations"].extend([
-                        "Check if Mecademic robot software is running",
-                        "Verify robot is not in error/fault state",
-                        "Check robot display for connection status",
-                        "Try power cycling the robot controller"
-                    ])
-                elif connect_result == 10060:  # Windows WSAETIMEDOUT
-                    test_results["tcp_connection"] = "timeout"
-                    test_results["error_details"].append("Connection timeout - network or firewall issue")
-                    test_results["recommendations"].extend([
-                        "Check network firewall settings",
-                        "Verify robot network configuration",
-                        "Test with different timeout values"
-                    ])
-                else:
-                    test_results["tcp_connection"] = f"failed_code_{connect_result}"
-                    test_results["error_details"].append(f"Connection failed with code: {connect_result}")
-                    
-        except socket.timeout:
-            test_results["tcp_connection"] = "timeout_exception"
-            test_results["error_details"].append(f"Socket timeout after {timeout}s")
-            test_results["recommendations"].extend([
-                "Increase connection timeout",
-                "Check robot network settings",
-                "Verify robot is powered on and operational"
-            ])
-        except Exception as tcp_error:
-            test_results["tcp_connection"] = f"error: {str(tcp_error)}"
-            test_results["error_details"].append(f"TCP connection error: {str(tcp_error)}")
-        
-        # Test 3: Port scan to check what's actually listening
-        try:
-            # Scan configured port and common alternatives
-            common_ports = [port, port + 1, 80, 22, 23, 443]
-            open_ports = []
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.settimeout(timeout)
+            start_time = time.time()
+            connect_result = sock.connect_ex((host, port))
+            connect_time = time.time() - start_time
 
-            for test_port in common_ports:
-                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as scan_sock:
-                    scan_sock.settimeout(2.0)
-                    if scan_sock.connect_ex((host, test_port)) == 0:
-                        open_ports.append(test_port)
+            result["socket_details"] = {
+                "connect_result_code": connect_result,
+                "connect_time_seconds": round(connect_time, 3),
+            }
 
-            test_results["socket_details"]["open_ports"] = open_ports
+            if connect_result == 0:
+                result["tcp_connection"] = "success"
+                result["diagnosis"] = "TCP connection successful - robot should be accessible"
+                try:
+                    result["socket_details"]["local_address"] = f"{sock.getsockname()[0]}:{sock.getsockname()[1]}"
+                    result["socket_details"]["peer_address"] = f"{sock.getpeername()[0]}:{sock.getpeername()[1]}"
+                except Exception:
+                    pass
+            elif connect_result == 10061:  # Windows WSAECONNREFUSED
+                result["tcp_connection"] = "connection_refused"
+                result["diagnosis"] = "Robot hardware reachable but software not listening"
+                result["recommendations"] = [
+                    "Check if Mecademic robot software is running",
+                    "Verify robot is not in error/fault state",
+                ]
+            elif connect_result == 10060:  # Windows WSAETIMEDOUT
+                result["tcp_connection"] = "timeout"
+                result["diagnosis"] = "Connection timeout - check network/firewall settings"
+                result["recommendations"] = [
+                    "Check network firewall settings",
+                    "Verify robot network configuration",
+                ]
+            else:
+                result["tcp_connection"] = f"failed_code_{connect_result}"
+                result["diagnosis"] = f"Connection failed with code: {connect_result}"
 
-            if port not in open_ports and open_ports:
-                test_results["recommendations"].append(f"Robot listening on ports {open_ports} but not {port} - check robot configuration")
-            elif not open_ports:
-                test_results["recommendations"].append("No common ports open - robot may be in standby/error state")
-                
-        except Exception as scan_error:
-            test_results["error_details"].append(f"Port scan error: {str(scan_error)}")
-        
-        # Generate final diagnosis
-        if test_results["tcp_connection"] == "success":
-            test_results["diagnosis"] = "✅ TCP connection successful - robot should be accessible"
-        elif test_results["tcp_connection"] == "connection_refused":
-            test_results["diagnosis"] = "❌ Robot hardware reachable but software not listening - check robot status"
-        elif "timeout" in test_results["tcp_connection"]:
-            test_results["diagnosis"] = "⏱️ Connection timeout - check network/firewall settings"
-        else:
-            test_results["diagnosis"] = "❓ Unknown connection issue - see error details"
-            
-        return {
-            "status": "success",
-            "test_results": test_results,
-            "summary": test_results["diagnosis"]
-        }
-        
+    except socket.timeout:
+        result["tcp_connection"] = "timeout_exception"
+        result["diagnosis"] = f"Socket timeout after {timeout}s"
+        result["recommendations"] = ["Increase connection timeout", "Verify robot is powered on"]
     except Exception as e:
-        logger.error(f"TCP connection test failed: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=f"Connection test error: {str(e)}")
+        result["tcp_connection"] = f"error"
+        result["diagnosis"] = f"Connection error: {str(e)}"
+
+    return result
 
 
 # -----------------------------------------------------------------------------
@@ -692,109 +424,66 @@ async def test_tcp_connection():
 
 @router.get("/sequence-config")
 async def get_sequence_config(meca_service: MecaService = MecaServiceDep()):
-    """
-    Get sequence configuration including total_wafers for batch workflow.
-    Used by frontend to initialize batch state and calculate total batches.
-    """
-    try:
-        from core.settings import get_settings
-        settings = get_settings()
-        meca_config = settings.get_robot_config("meca")
-        sequence_config = meca_config.get("sequence_config", {})
+    """Get sequence configuration for batch workflow initialization."""
+    from core.settings import get_settings
 
-        return {
-            "status": "success",
-            "data": {
-                "total_wafers": sequence_config.get("total_wafers", 55),
-                "wafers_per_batch": 5,
-                "total_batches": (sequence_config.get("total_wafers", 55) + 4) // 5,  # Ceiling division
-                "sequence_config": sequence_config
-            }
-        }
-    except Exception as e:
-        logger.error(f"Error getting sequence config: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    settings = get_settings()
+    meca_config = settings.get_robot_config("meca")
+    sequence_config = meca_config.get("sequence_config", {})
+    total_wafers = sequence_config.get("total_wafers", 55)
+
+    return ResponseHelper.create_success_response(data={
+        "total_wafers": total_wafers,
+        "wafers_per_batch": 5,
+        "total_batches": (total_wafers + 4) // 5,
+        "sequence_config": sequence_config,
+    })
 
 
 @router.post("/validate-sequence-config")
 async def validate_sequence_config(meca_service: MecaService = MecaServiceDep()):
-    """
-    Validate sequence configuration for all 55 wafers before running.
-    Returns validation status and any errors found in the configuration.
-    """
-    try:
-        errors = meca_service.wafer_config_manager.validate_all_wafers()
-        return {
-            "status": "valid" if not errors else "invalid",
-            "errors": errors,
-            "config_version": meca_service.wafer_config_manager.config_version,
-            "total_wafers_validated": 55
-        }
-    except Exception as e:
-        logger.error(f"Error validating sequence config: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    """Validate sequence configuration for all 55 wafers."""
+    errors = meca_service.wafer_config_manager.validate_all_wafers()
+    return {
+        "status": "valid" if not errors else "invalid",
+        "errors": errors,
+        "config_version": meca_service.wafer_config_manager.config_version,
+        "total_wafers_validated": 55,
+    }
 
 
 @router.post("/preview-wafer-positions")
 async def preview_wafer_positions(
     data: dict = Body(default={}),
-    meca_service: MecaService = MecaServiceDep()
+    meca_service: MecaService = MecaServiceDep(),
 ):
-    """
-    Preview calculated positions for specified wafers.
-    Useful for verifying position calculations before running sequences.
+    """Preview calculated positions for specified wafers."""
+    wafer_indices = data.get("wafer_indices", [0, 27, 54])
 
-    Body parameters:
-        wafer_indices: List of wafer indices (0-based) to preview. Default: [0, 27, 54]
-    """
-    try:
-        wafer_indices = data.get("wafer_indices", [0, 27, 54])
-
-        # Validate indices
-        invalid_indices = [i for i in wafer_indices if i < 0 or i > 54]
-        if invalid_indices:
-            raise HTTPException(
-                status_code=400,
-                detail=f"Invalid wafer indices (must be 0-54): {invalid_indices}"
-            )
-
-        preview = meca_service.wafer_config_manager.preview_wafer_positions(
-            wafer_indices=wafer_indices,
-            first_wafer=meca_service.FIRST_WAFER,
-            first_baking=meca_service.FIRST_BAKING_TRAY
+    invalid_indices = [i for i in wafer_indices if i < 0 or i > 54]
+    if invalid_indices:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid wafer indices (must be 0-54): {invalid_indices}",
         )
 
-        return {
-            "status": "success",
-            "preview": preview,
-            "config_version": meca_service.wafer_config_manager.config_version
-        }
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Error previewing wafer positions: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    preview = meca_service.wafer_config_manager.preview_wafer_positions(
+        wafer_indices=wafer_indices,
+        first_wafer=meca_service.FIRST_WAFER,
+        first_baking=meca_service.FIRST_BAKING_TRAY,
+    )
+
+    return ResponseHelper.create_success_response(
+        data={"preview": preview, "config_version": meca_service.wafer_config_manager.config_version}
+    )
 
 
 @router.post("/reload-sequence-config")
 async def reload_sequence_config(meca_service: MecaService = MecaServiceDep()):
-    """
-    Reload sequence configuration from runtime.json.
-    Useful for mid-run adjustments without restarting the service.
-    """
-    try:
-        result = await meca_service.reload_sequence_config()
-
-        if not result.success:
-            raise HTTPException(status_code=500, detail=result.error)
-
-        return {
-            "status": "reloaded",
-            "data": result.data,
-            "message": "Sequence configuration reloaded successfully"
-        }
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Error reloading sequence config: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    """Reload sequence configuration from runtime.json."""
+    result = await RouterHelper.execute_service_operation(
+        meca_service.reload_sequence_config, "reload_sequence_config", logger
+    )
+    return ResponseHelper.create_success_response(
+        data=result, message="Sequence configuration reloaded successfully"
+    )
