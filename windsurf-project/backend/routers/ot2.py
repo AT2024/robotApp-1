@@ -187,184 +187,6 @@ async def resume_protocol(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# -----------------------------------------------------------------------------
-# Legacy functions (to be removed after migration)
-# -----------------------------------------------------------------------------
-
-
-# Legacy function - will be removed after service migration
-async def wait_for_protocol_analysis(
-    robot_manager, protocol_id: str, headers: Dict
-) -> bool:
-    """Wait for protocol analysis to complete and return whether it was successful.
-
-    Args:
-        robot_manager: The robot manager instance
-        protocol_id: The ID of the protocol to check
-        headers: The HTTP headers to use for requests
-
-    Returns:
-        bool: True if analysis completed successfully, False otherwise
-    """
-    max_attempts = 15  # Try for up to 30 seconds (15 * 2)
-    for attempt in range(max_attempts):
-        analysis_url = f"http://{robot_manager.ot2_ip}:{robot_manager.ot2_port}/protocols/{protocol_id}"
-
-        try:
-            analysis_response = await asyncio.to_thread(
-                lambda: requests.get(analysis_url, headers=headers, timeout=10)
-            )
-
-            if analysis_response.status_code == 200:
-                data = analysis_response.json().get("data", {})
-                analysis_summaries = data.get("analysisSummaries", [])
-
-                if analysis_summaries:
-                    status = analysis_summaries[0].get("status", "")
-                    logger.info(f"Protocol analysis status: {status}")
-
-                    # Check for various status possibilities
-                    if status in ["succeeded", "success"]:
-                        logger.info("Protocol analysis succeeded")
-                        return True
-                    elif status in ["failed", "error"]:
-                        logger.error("Protocol analysis failed")
-                        return False
-                    elif status == "completed":
-                        # The OT2 API uses "completed" as the final state
-                        # Now check if there's a valid analysis result in the response
-                        if (
-                            "errors" in analysis_summaries[0]
-                            and analysis_summaries[0]["errors"]
-                        ):
-                            logger.error(
-                                f"Protocol analysis completed with errors: {analysis_summaries[0]['errors']}"
-                            )
-                            return False
-
-                        # Additional check: if the protocol is valid, it will have analyzedAt field
-                        if "analyzedAt" in data:
-                            logger.info("Protocol analysis completed successfully")
-                            return True
-
-                        # If we've seen "completed" status multiple times, assume it's done
-                        if attempt >= 2:  # Seen "completed" at least 3 times
-                            logger.info(
-                                "Protocol analysis appears complete after multiple checks"
-                            )
-                            return True
-            else:
-                logger.warning(
-                    f"Failed to check analysis status: {analysis_response.status_code}"
-                )
-                logger.warning(f"Response: {analysis_response.text}")
-
-        except Exception as e:
-            logger.error(f"Error checking analysis status: {e}")
-
-        await asyncio.sleep(
-            0.5
-        )  # Optimized: check every 0.5 seconds for faster response
-
-    # If we've been polling for a while and keep seeing "completed", assume it's ready
-    logger.info(
-        "Timed out waiting for analysis status change - proceeding with run creation"
-    )
-    return True  # Proceed anyway after max attempts
-
-
-async def monitor_run(robot_manager, run_id: str, headers: Dict) -> None:
-    """Monitor the run progress in a background task.
-
-    Args:
-        robot_manager: The robot manager instance
-        run_id: The ID of the run to monitor
-        headers: The HTTP headers to use for requests
-    """
-    try:
-        max_attempts = 60  # Check status for 5 minutes (5s interval)
-        for attempt in range(max_attempts):
-            await asyncio.sleep(5)  # Optimized: check every 5 seconds instead of 10
-            status_url = (
-                f"http://{robot_manager.ot2_ip}:{robot_manager.ot2_port}/runs/{run_id}"
-            )
-
-            try:
-                status_response = await asyncio.to_thread(
-                    lambda: requests.get(status_url, headers=headers, timeout=10)
-                )
-
-                if status_response.status_code == 200:
-                    status_data = status_response.json().get("data", {})
-                    current_status = status_data.get("status", "unknown")
-                    logger.info(
-                        f"Run status check ({attempt + 1}/{max_attempts}): {current_status}"
-                    )
-
-                    if current_status in ["succeeded", "stopped", "failed"]:
-                        logger.info(f"Run completed with status: {current_status}")
-                        # Notify the websocket server about the completion
-                        if (
-                            hasattr(robot_manager, "websocket_server")
-                            and robot_manager.websocket_server
-                        ):
-                            await robot_manager.websocket_server.broadcast(
-                                {
-                                    "type": "status_update",
-                                    "data": {
-                                        "type": "ot2",
-                                        "status": (
-                                            "complete"
-                                            if current_status == "succeeded"
-                                            else "error"
-                                        ),
-                                        "runId": run_id,
-                                        "runStatus": current_status,
-                                    },
-                                }
-                            )
-                        break
-                else:
-                    logger.warning(
-                        f"Failed to get run status: {status_response.status_code}"
-                    )
-
-            except Exception as e:
-                logger.error(f"Error checking run status: {e}")
-
-    except Exception as e:
-        logger.error(f"Error monitoring run: {e}")
-
-
-async def check_run_status(robot_manager, run_id: str) -> str:
-    """Check the status of a run.
-
-    Args:
-        robot_manager: The robot manager instance
-        run_id: The ID of the run to check
-
-    Returns:
-        str: The status of the run
-    """
-    headers = {"Accept": "application/json", "Opentrons-Version": "2"}
-    status_url = f"http://{robot_manager.ot2_ip}:{robot_manager.ot2_port}/runs/{run_id}"
-
-    try:
-        status_response = await asyncio.to_thread(
-            lambda: requests.get(status_url, headers=headers, timeout=10)
-        )
-
-        if status_response.status_code == 200:
-            status_data = status_response.json().get("data", {})
-            return status_data.get("status", "unknown")
-        else:
-            logger.warning(f"Failed to get run status: {status_response.status_code}")
-            return "unknown"
-    except Exception as e:
-        logger.error(f"Error checking run status: {e}")
-        return "error"
-
-
 @router.post("/run-protocol")
 async def run_ot2_protocol(
     request_data: ProtocolRequest = Body(default_factory=ProtocolRequest),
@@ -503,30 +325,6 @@ async def list_active_protocols(
         raise HTTPException(status_code=500, detail=error_msg)
 
 
-@router.get("/executions")
-async def list_protocol_executions(
-    protocol_service: ProtocolExecutionService = ProtocolServiceDep(),
-):
-    """List all protocol executions.
-
-    This endpoint retrieves a list of all protocol executions in the system.
-    """
-    try:
-        result = await protocol_service.list_active_protocols()
-
-        if not result.success:
-            raise HTTPException(status_code=500, detail=result.error)
-
-        return {"executions": result.data, "status": "success"}
-
-    except HTTPException:
-        raise
-    except Exception as e:
-        error_msg = f"Failed to list executions: {str(e)}"
-        logger.error(error_msg)
-        raise HTTPException(status_code=500, detail=error_msg)
-
-
 @router.get("/debug/connectivity")
 async def debug_ot2_connectivity(
     ot2_service: OT2Service = OT2ServiceDep(),
@@ -566,13 +364,13 @@ async def run_protocol_direct(
     ot2_service: OT2Service = OT2ServiceDep(),
 ):
     """Run OT2 protocol directly through OT2Service (bypasses ProtocolExecutionService).
-    
-    This endpoint provides a direct path to OT2Service.run_protocol() for simpler 
+
+    This endpoint provides a direct path to OT2Service.run_protocol() for simpler
     protocol execution without the complexity of the ProtocolExecutionService.
     """
     try:
         logger.info("Starting direct OT2 protocol execution")
-        
+
         # Prepare protocol parameters
         parameters = {}
         if request_data.trayInfo:
@@ -583,15 +381,15 @@ async def run_protocol_direct(
             parameters["trayNumber"] = request_data.trayNumber
         if request_data.parameters:
             parameters.update(request_data.parameters)
-        
+
         logger.info(f"Protocol parameters: {parameters}")
-        
+
         # Call OT2Service.run_protocol directly
         result = await ot2_service.run_protocol(**parameters)
-        
+
         if not result.success:
             raise HTTPException(status_code=500, detail=result.error)
-        
+
         logger.info("Direct OT2 protocol execution completed successfully")
         return {
             "message": "OT2 protocol executed successfully",
@@ -599,10 +397,95 @@ async def run_protocol_direct(
             "result": result.data,
             "parameters": parameters,
         }
-        
+
     except HTTPException:
         raise
     except Exception as e:
         error_msg = f"Failed to execute protocol directly: {str(e)}"
+        logger.error(error_msg, exc_info=True)
+        raise HTTPException(status_code=500, detail=error_msg)
+
+
+@router.post("/pause-run")
+async def pause_current_run(ot2_service: OT2Service = OT2ServiceDep()):
+    """Pause the currently running OT2 protocol.
+
+    This endpoint uses resilient run discovery to find and pause any active run,
+    even if internal state has become desynced. No execution_id required.
+
+    Returns:
+        Success response if paused, error otherwise
+    """
+    try:
+        logger.info("Pause run request received")
+        result = await ot2_service.pause_current_run()
+
+        if not result.success:
+            raise HTTPException(status_code=400, detail=result.error)
+
+        return {
+            "status": "success",
+            "message": "OT2 protocol paused successfully",
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        error_msg = f"Failed to pause protocol: {str(e)}"
+        logger.error(error_msg, exc_info=True)
+        raise HTTPException(status_code=500, detail=error_msg)
+
+
+@router.post("/resume-run")
+async def resume_current_run(ot2_service: OT2Service = OT2ServiceDep()):
+    """Resume a paused OT2 protocol.
+
+    This endpoint uses resilient run discovery to find and resume any paused run,
+    even if internal state has become desynced. No execution_id required.
+
+    Returns:
+        Success response if resumed, error otherwise
+    """
+    try:
+        logger.info("Resume run request received")
+        result = await ot2_service.resume_current_run()
+
+        if not result.success:
+            raise HTTPException(status_code=400, detail=result.error)
+
+        return {
+            "status": "success",
+            "message": "OT2 protocol resumed successfully",
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        error_msg = f"Failed to resume protocol: {str(e)}"
+        logger.error(error_msg, exc_info=True)
+        raise HTTPException(status_code=500, detail=error_msg)
+
+
+@router.get("/active-run")
+async def get_active_run(ot2_service: OT2Service = OT2ServiceDep()):
+    """Get information about the currently active (running or paused) OT2 run.
+
+    Uses resilient run discovery to find active runs even if internal state
+    has become desynced.
+
+    Returns:
+        Active run ID if found, null otherwise
+    """
+    try:
+        run_id = await ot2_service.get_active_run_id()
+
+        return {
+            "status": "success",
+            "active_run_id": run_id,
+            "has_active_run": run_id is not None,
+        }
+
+    except Exception as e:
+        error_msg = f"Failed to get active run: {str(e)}"
         logger.error(error_msg, exc_info=True)
         raise HTTPException(status_code=500, detail=error_msg)

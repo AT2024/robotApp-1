@@ -137,6 +137,10 @@ class OT2Service(RobotService):
         )
         self.monitoring_interval = protocol_config.get("monitoring_interval", 2.0)
 
+        # Protocol execution lock - prevents double-start race condition
+        # Per plan: Use async with lock to serialize protocol execution
+        self._protocol_lock = asyncio.Lock()
+
     async def _check_robot_connection(self) -> bool:
         """Check if OT2 robot is connected and accessible"""
         try:
@@ -151,40 +155,13 @@ class OT2Service(RobotService):
         """Handle OT2 robot connection state changes"""
         from core.state_manager import RobotState
 
-        self.logger.info(
-            f"OT2 robot {self.robot_id} connection state change: is_connected={is_connected}"
-        )
-
         if is_connected:
-            # Robot connected - set to IDLE state
-            self.logger.info(f"Setting OT2 robot {self.robot_id} state to IDLE")
-            await self.update_robot_state(
-                RobotState.IDLE, reason="OT2 robot connection restored"
-            )
-
-            # Verify state was set correctly
-            robot_info = await self.state_manager.get_robot_state(self.robot_id)
-            if robot_info:
-                self.logger.info(
-                    f"OT2 robot {self.robot_id} state after update: {robot_info.current_state}, operational: {robot_info.is_operational}"
-                )
-            else:
-                self.logger.error(
-                    f"Failed to get robot state for {self.robot_id} after update"
-                )
-
+            await self.update_robot_state(RobotState.IDLE, reason="OT2 robot connection restored")
             self.logger.info(f"OT2 robot {self.robot_id} connection restored")
         else:
-            # Robot disconnected - set to ERROR state
-            self.logger.warning(
-                f"Setting OT2 robot {self.robot_id} state to ERROR due to connection loss"
-            )
-            await self.update_robot_state(
-                RobotState.ERROR, reason="OT2 robot connection lost"
-            )
+            await self.update_robot_state(RobotState.ERROR, reason="OT2 robot connection lost")
             self.logger.warning(f"OT2 robot {self.robot_id} connection lost")
 
-        # Broadcast state change via WebSocket
         await self._broadcast_robot_state_change(is_connected)
 
     async def _broadcast_robot_state_change(self, is_connected: bool):
@@ -281,99 +258,102 @@ class OT2Service(RobotService):
         if self._session:
             await self._session.close()
 
+    def _extract_run_status(self, run: Dict[str, Any]) -> Optional[str]:
+        """Extract status from a run dict handling various API response formats."""
+        if not isinstance(run, dict):
+            return None
+        if "attributes" in run and isinstance(run["attributes"], dict):
+            return run["attributes"].get("status")
+        return run.get("status")
+
     async def _execute_emergency_stop(self) -> bool:
-        """Emergency stop implementation for OT2"""
-        self.logger.critical(f"🚨 Executing emergency stop for OT2 robot {self.robot_id}")
-        
-        emergency_success = False
+        """
+        Emergency stop implementation for OT2.
+
+        This method is resilient to state desync - it will stop ALL running or paused
+        runs discovered via API query, not just the tracked _current_run.
+
+        Steps:
+        1. Stop tracked run if exists and is active (running OR paused)
+        2. CRITICAL: Query /runs API and stop ALL running/paused runs (handles desync)
+        3. Cancel monitoring task
+        4. Home robot for safety
+        5. Clear internal state
+        """
+        self.logger.critical(f"Executing emergency stop for OT2 robot {self.robot_id}")
         stopped_operations = []
-        
+        failed_operations = []
+
         try:
-            # 1. Immediately stop any current run
-            if self._current_run and self._current_run.status == ProtocolStatus.RUNNING:
-                try:
-                    self.logger.critical(f"⏹️  Stopping current protocol run: {self._current_run.run_id}")
-                    stop_success = await self._stop_run(self._current_run.run_id)
-                    if stop_success:
-                        stopped_operations.append(f"protocol_run_{self._current_run.run_id}")
-                        self.logger.critical(f"✅ Protocol run stopped successfully")
-                    else:
-                        self.logger.error(f"❌ Failed to stop protocol run")
-                except Exception as run_error:
-                    self.logger.error(f"Error stopping current run: {run_error}")
-            
-            # 2. Try to stop all runs via OT2 API (broader emergency stop)
+            # Step 1: Stop tracked run if active (running OR paused)
+            if self._current_run and self._current_run.status in [ProtocolStatus.RUNNING, ProtocolStatus.PAUSED]:
+                tracked_run_id = self._current_run.run_id
+                self.logger.critical(f"Stopping tracked run: {tracked_run_id} (status: {self._current_run.status})")
+                if await self._stop_run(tracked_run_id):
+                    stopped_operations.append(f"tracked_run_{tracked_run_id}")
+                else:
+                    failed_operations.append(f"tracked_run_{tracked_run_id}")
+
+            # Step 2: CRITICAL - Query /runs API and stop ALL running/paused runs
+            # This handles state desync where _current_run may be None but runs are active
             try:
                 runs_data = await self._get_current_runs()
-                active_runs = []
-                
-                # Handle different possible response formats
                 data_list = runs_data.get("data", [])
                 if isinstance(data_list, list):
                     for run in data_list:
-                        try:
-                            # Check various possible status locations
-                            status = None
-                            if isinstance(run, dict):
-                                if "attributes" in run and isinstance(run["attributes"], dict):
-                                    status = run["attributes"].get("status")
-                                elif "status" in run:
-                                    status = run["status"]
-                                
-                                if status == "running":
-                                    active_runs.append(run.get("id", "unknown"))
-                        except Exception:
-                            continue
-                
-                # Stop all active runs
-                for run_id in active_runs:
-                    try:
-                        await self._stop_run(run_id)
-                        stopped_operations.append(f"active_run_{run_id}")
-                        self.logger.critical(f"✅ Stopped active run: {run_id}")
-                    except Exception as stop_error:
-                        self.logger.error(f"Failed to stop run {run_id}: {stop_error}")
-                        
-            except Exception as runs_error:
-                self.logger.warning(f"Could not check/stop active runs: {runs_error}")
-            
-            # 3. Cancel monitoring task if running
+                        status = self._extract_run_status(run)
+                        # Stop both running AND paused runs
+                        if status in ["running", "paused"]:
+                            run_id = run.get("id")
+                            if run_id:
+                                # Skip if we already stopped this run in step 1
+                                if self._current_run and run_id == self._current_run.run_id:
+                                    continue
+
+                                self.logger.critical(f"Found active run via API query: {run_id} (status: {status})")
+                                if await self._stop_run(run_id):
+                                    stopped_operations.append(f"api_discovered_run_{run_id}")
+                                else:
+                                    failed_operations.append(f"api_discovered_run_{run_id}")
+            except Exception as e:
+                self.logger.error(f"Could not query/stop active runs from API: {e}")
+                failed_operations.append(f"api_query_error: {e}")
+
+            # Step 3: Cancel monitoring task
             if self._monitoring_task and not self._monitoring_task.done():
+                self._monitoring_task.cancel()
                 try:
-                    self._monitoring_task.cancel()
-                    stopped_operations.append("monitoring_task")
-                    self.logger.info(f"📡 Monitoring task cancelled")
-                except Exception as monitor_error:
-                    self.logger.warning(f"Could not cancel monitoring task: {monitor_error}")
-            
-            # 4. Try to home the robot for safety (fallback position)
+                    await self._monitoring_task
+                except asyncio.CancelledError:
+                    pass
+                stopped_operations.append("monitoring_task")
+
+            # Step 4: Home robot for safety
             try:
-                home_success = await self._home_robot()
-                if home_success:
+                if await self._home_robot():
                     stopped_operations.append("robot_homing")
-                    self.logger.critical(f"🏠 Robot homed successfully for safety")
-                    emergency_success = True  # Consider success if we can at least home
                 else:
-                    self.logger.warning(f"⚠️  Robot homing failed during emergency stop")
-            except Exception as home_error:
-                self.logger.error(f"Robot homing failed during emergency stop: {home_error}")
-            
-            # 5. Clear current run state
+                    failed_operations.append("robot_homing")
+            except Exception as e:
+                self.logger.error(f"Failed to home robot during emergency stop: {e}")
+                failed_operations.append(f"robot_homing_error: {e}")
+
+            # Step 5: Clear internal state
             self._current_run = None
-            
-            # 6. Report results
-            if stopped_operations:
-                emergency_success = True
-                self.logger.critical(f"🚨 Emergency stop completed for OT2 robot {self.robot_id}")
-                self.logger.critical(f"✅ Stopped operations: {stopped_operations}")
+
+            # Log summary
+            if failed_operations:
+                self.logger.critical(
+                    f"Emergency stop completed with failures. "
+                    f"Stopped: {stopped_operations}, Failed: {failed_operations}"
+                )
             else:
-                self.logger.warning(f"⚠️  Emergency stop completed but no active operations were found to stop")
-                emergency_success = True  # Still consider success if nothing was running
-            
-            return emergency_success
-            
+                self.logger.critical(f"Emergency stop completed successfully. Stopped: {stopped_operations}")
+
+            return True
+
         except Exception as e:
-            self.logger.error(f"Emergency stop failed with unexpected error: {e}")
+            self.logger.error(f"Emergency stop failed with exception: {e}", exc_info=True)
             return False
 
     @circuit_breaker("ot2_connection", failure_threshold=3, recovery_timeout=30)
@@ -396,83 +376,86 @@ class OT2Service(RobotService):
         )
 
         async def _execute_protocol():
-            # Ensure robot is ready (CommandService already set to BUSY)
-            await self.ensure_robot_ready()
+            # Acquire protocol lock to prevent double-start race condition
+            # Per plan: Lock FIRST, then check state INSIDE the lock
+            async with self._protocol_lock:
+                # Ensure robot is ready (CommandService already set to BUSY)
+                await self.ensure_robot_ready()
 
-            # Check if another protocol is running
-            if self._current_run and self._current_run.status == ProtocolStatus.RUNNING:
-                raise ValidationError(
-                    f"Protocol already running: {self._current_run.protocol_id}"
-                )
-
-            try:
-                # Step 1: Upload protocol if needed
-                protocol_id = await self._upload_protocol(protocol_config)
-
-                # Step 2: CRITICAL FIX - Wait for protocol analysis to complete
-                self.logger.info("Waiting for protocol analysis to complete...")
-                analysis_success = await self._wait_for_analysis_completion(protocol_id)
-
-                if not analysis_success:
-                    raise ProtocolExecutionError(
-                        "Protocol analysis failed - cannot create run with empty protocol"
+                # Check if another protocol is running (now thread-safe inside lock)
+                if self._current_run and self._current_run.status == ProtocolStatus.RUNNING:
+                    raise ValidationError(
+                        f"Protocol already running: {self._current_run.protocol_id}"
                     )
 
-                # Step 2.5: Validate hardware requirements
-                self.logger.info("Validating hardware requirements...")
-                hardware_validation = await self._validate_hardware_requirements(
-                    protocol_id
-                )
+                try:
+                    # Step 1: Upload protocol if needed
+                    protocol_id = await self._upload_protocol(protocol_config)
 
-                if not hardware_validation["valid"]:
-                    detailed_error = self._generate_hardware_error_message(
-                        hardware_validation
-                    )
-                    raise HardwareError(detailed_error, robot_id=self.robot_id)
+                    # Step 2: CRITICAL FIX - Wait for protocol analysis to complete
+                    self.logger.info("Waiting for protocol analysis to complete...")
+                    analysis_success = await self._wait_for_analysis_completion(protocol_id)
 
-                # Log warnings but continue execution
-                if hardware_validation["warnings"]:
-                    for warning in hardware_validation["warnings"]:
-                        self.logger.warning(f"Hardware warning: {warning}")
+                    if not analysis_success:
+                        raise ProtocolExecutionError(
+                            "Protocol analysis failed - cannot create run with empty protocol"
+                        )
 
-                self.logger.info(
-                    "Hardware validation passed - proceeding with protocol execution"
-                )
-
-                # Step 2.75: Pre-run homing to ensure hardware is fully initialized
-                # Research shows protocols can hang if hardware isn't properly homed before execution
-                self.logger.info("Performing pre-run homing to initialize hardware...")
-                home_success = await self._home_robot()
-                if home_success:
-                    self.logger.info("Pre-run homing successful, waiting for stabilization...")
-                    # Wait 20 seconds for homing to complete (successful runs show ~18s homing time)
-                    await asyncio.sleep(20)
-                    self.logger.info("Hardware stabilized, ready for protocol execution")
-                else:
-                    self.logger.warning("Pre-run homing failed, but continuing with protocol execution")
-
-                # Step 3: Create and start run (only after analysis completes)
-                run_id = await self._create_run(protocol_id, protocol_config.parameters)
-
-                # Step 4: Start execution
-                run_status = await self._start_run(run_id)
-                self._current_run = run_status
-
-                # Step 5: Monitor execution if requested
-                if monitor_progress:
-                    self._monitoring_task = asyncio.create_task(
-                        self._monitor_run_progress(run_id)
+                    # Step 2.5: Validate hardware requirements
+                    self.logger.info("Validating hardware requirements...")
+                    hardware_validation = await self._validate_hardware_requirements(
+                        protocol_id
                     )
 
-                    # Wait for completion
-                    final_status = await self._monitoring_task
-                    return final_status
-                else:
-                    return run_status
+                    if not hardware_validation["valid"]:
+                        detailed_error = self._generate_hardware_error_message(
+                            hardware_validation
+                        )
+                        raise HardwareError(detailed_error, robot_id=self.robot_id)
 
-            except Exception as e:
-                self.logger.error(f"Protocol execution failed: {e}")
-                raise
+                    # Log warnings but continue execution
+                    if hardware_validation["warnings"]:
+                        for warning in hardware_validation["warnings"]:
+                            self.logger.warning(f"Hardware warning: {warning}")
+
+                    self.logger.info(
+                        "Hardware validation passed - proceeding with protocol execution"
+                    )
+
+                    # Step 2.75: Pre-run homing to ensure hardware is fully initialized
+                    # Research shows protocols can hang if hardware isn't properly homed before execution
+                    self.logger.info("Performing pre-run homing to initialize hardware...")
+                    home_success = await self._home_robot()
+                    if home_success:
+                        self.logger.info("Pre-run homing successful, waiting for stabilization...")
+                        # Wait 20 seconds for homing to complete (successful runs show ~18s homing time)
+                        await asyncio.sleep(20)
+                        self.logger.info("Hardware stabilized, ready for protocol execution")
+                    else:
+                        self.logger.warning("Pre-run homing failed, but continuing with protocol execution")
+
+                    # Step 3: Create and start run (only after analysis completes)
+                    run_id = await self._create_run(protocol_id, protocol_config.parameters)
+
+                    # Step 4: Start execution
+                    run_status = await self._start_run(run_id)
+                    self._current_run = run_status
+
+                    # Step 5: Monitor execution if requested
+                    if monitor_progress:
+                        self._monitoring_task = asyncio.create_task(
+                            self._monitor_run_progress(run_id)
+                        )
+
+                        # Wait for completion
+                        final_status = await self._monitoring_task
+                        return final_status
+                    else:
+                        return run_status
+
+                except Exception as e:
+                    self.logger.error(f"Protocol execution failed: {e}")
+                    raise
 
         return await self.execute_operation(context, _execute_protocol)
 
@@ -552,34 +535,24 @@ class OT2Service(RobotService):
         async def _calibrate():
             await self.ensure_robot_ready()
 
-            try:
-                # Get current calibration status
-                calibration_data = await self._get_calibration_data()
+            calibration_data = await self._get_calibration_data()
 
-                # Check if calibration is needed
-                needs_calibration = any(
-                    not cal.get("status", {}).get("markedAt")
-                    for cal in calibration_data.get("data", {}).values()
-                )
+            needs_calibration = any(
+                not cal.get("status", {}).get("markedAt")
+                for cal in calibration_data.get("data", {}).values()
+            )
 
-                result = {
-                    "calibration_required": needs_calibration,
-                    "calibration_data": calibration_data,
-                    "status": "completed",
-                }
+            result = {
+                "calibration_required": needs_calibration,
+                "calibration_data": calibration_data,
+                "status": "completed",
+            }
 
-                if needs_calibration:
-                    self.logger.warning(
-                        "Pipette calibration required - manual intervention needed"
-                    )
-                    result["message"] = (
-                        "Manual calibration required through OT-2 interface"
-                    )
+            if needs_calibration:
+                self.logger.warning("Pipette calibration required - manual intervention needed")
+                result["message"] = "Manual calibration required through OT-2 interface"
 
-                return result
-
-            finally:
-                pass  # CommandService handles state management
+            return result
 
         return await self.execute_operation(context, _calibrate)
 
@@ -694,32 +667,29 @@ class OT2Service(RobotService):
         This is a wrapper method for ProtocolExecutionService compatibility.
         """
         try:
+            # CRITICAL: Set robot state to BUSY at start of protocol execution
+            # This enables pause_system to find OT2 as an active robot
+            await self.update_robot_state(RobotState.BUSY, reason="Protocol executing")
+            self.logger.info("OT2 state set to BUSY - protocol starting")
+
             # Filter out unsupported parameters and extract valid protocol parameters
             protocol_parameters = kwargs.copy()
 
-            # Remove any unsupported parameters that might cause issues
-            unsupported_params = ["test", "debug", "verbose"]
-            for param in unsupported_params:
+            # Remove unsupported parameters
+            for param in ["test", "debug", "verbose"]:
                 protocol_parameters.pop(param, None)
 
-            # Validate protocol file exists before creating config
+            # Validate protocol file exists
             protocol_file_path = self.protocol_directory / self.default_protocol_file
             if not protocol_file_path.exists():
                 raise ValidationError(f"Protocol file not found: {protocol_file_path}")
 
-            # Get correct protocol parameters from settings (defaults from runtime.json)
+            # Merge runtime.json defaults with API overrides
             ot2_config_params = self.ot2_config.get("protocol_parameters", {}).copy()
-
-            # Merge: runtime.json defaults + API parameters override
-            # Log parameter sources for debugging
             api_overrides = {k: v for k, v in protocol_parameters.items() if k in ot2_config_params}
-            if api_overrides:
-                self.logger.info(f"API parameters overriding defaults: {api_overrides}")
-                ot2_config_params.update(api_overrides)
-            else:
-                self.logger.info("Using all parameters from runtime.json (no API overrides)")
+            ot2_config_params.update(api_overrides)
 
-            self.logger.info(f"Final protocol parameters: {ot2_config_params}")
+            self.logger.debug(f"Protocol parameters: {ot2_config_params}")
 
             # Create a default protocol config for the standard OT2 protocol
             protocol_config = ProtocolConfig(
@@ -735,6 +705,9 @@ class OT2Service(RobotService):
             result = await self.execute_protocol(protocol_config, monitor_progress=True)
 
             if result.success:
+                # Set robot state back to IDLE after successful protocol completion
+                await self.update_robot_state(RobotState.IDLE, reason="Protocol completed successfully")
+                self.logger.info("OT2 state set to IDLE - protocol completed successfully")
                 return ServiceResult.success_result(
                     {
                         "status": "completed",
@@ -747,12 +720,21 @@ class OT2Service(RobotService):
                     }
                 )
             else:
+                # Set robot state back to IDLE on protocol failure
+                await self.update_robot_state(RobotState.IDLE, reason=f"Protocol failed: {result.error}")
+                self.logger.info("OT2 state set to IDLE - protocol failed")
                 return ServiceResult.error_result(
                     f"Protocol execution failed: {result.error}"
                 )
 
         except Exception as e:
             self.logger.error(f"Failed to run protocol: {e}", exc_info=True)
+            # Ensure robot state is reset to IDLE even on exception
+            try:
+                await self.update_robot_state(RobotState.IDLE, reason=f"Protocol exception: {str(e)}")
+                self.logger.info("OT2 state set to IDLE - protocol exception")
+            except Exception as state_error:
+                self.logger.error(f"Failed to reset OT2 state after exception: {state_error}")
             return ServiceResult.error_result(f"Protocol execution failed: {str(e)}")
 
     async def get_robot_status(self) -> ServiceResult[Dict[str, Any]]:
@@ -764,57 +746,10 @@ class OT2Service(RobotService):
         )
 
         async def _get_status():
-            # Get hardware status
             health_data = await self._get_health_status()
-
-            # Get current runs
             runs_data = await self._get_current_runs()
-
-            # Get robot info from state manager
             robot_info = await self.state_manager.get_robot_state(self.robot_id)
-
-            # Get hardware validation information
-            hardware_info = {}
-            try:
-                pipettes_data = await self._get_attached_pipettes()
-                calibration_data = await self._get_calibration_data()
-
-                hardware_info = {
-                    "pipettes": pipettes_data.get("data", {}),
-                    "calibration": calibration_data.get("data", {}),
-                    "hardware_ready": bool(
-                        pipettes_data.get("data", {}).get("left")
-                        or pipettes_data.get("data", {}).get("right")
-                    ),
-                }
-
-                # Add hardware readiness assessment
-                left_pipette = pipettes_data.get("data", {}).get("left")
-                right_pipette = pipettes_data.get("data", {}).get("right")
-
-                hardware_info["hardware_issues"] = []
-                if not left_pipette and not right_pipette:
-                    hardware_info["hardware_issues"].append("No pipettes attached")
-                else:
-                    if left_pipette and not left_pipette.get("ok", False):
-                        hardware_info["hardware_issues"].append(
-                            f"Left pipette needs calibration: {left_pipette.get('model', 'unknown')}"
-                        )
-                    if right_pipette and not right_pipette.get("ok", False):
-                        hardware_info["hardware_issues"].append(
-                            f"Right pipette needs calibration: {right_pipette.get('model', 'unknown')}"
-                        )
-
-                # Check deck calibration
-                deck_cal = calibration_data.get("data", {}).get("deckCalibration", {})
-                if not deck_cal.get("status", {}).get("markedAt"):
-                    hardware_info["hardware_issues"].append(
-                        "Deck calibration may be required"
-                    )
-
-            except Exception as e:
-                self.logger.warning(f"Could not get hardware status: {e}")
-                hardware_info = {"error": f"Hardware status unavailable: {str(e)}"}
+            hardware_info = await self._build_hardware_info()
 
             return {
                 "robot_id": self.robot_id,
@@ -823,16 +758,12 @@ class OT2Service(RobotService):
                 "hardware_info": hardware_info,
                 "current_runs": runs_data,
                 "state_info": {
-                    "current_state": (
-                        robot_info.current_state.value if robot_info else "unknown"
-                    ),
+                    "current_state": robot_info.current_state.value if robot_info else "unknown",
                     "operational": robot_info.is_operational if robot_info else False,
                     "uptime_seconds": robot_info.uptime_seconds if robot_info else 0,
                     "error_count": robot_info.error_count if robot_info else 0,
                 },
-                "current_run": (
-                    self._current_run.__dict__ if self._current_run else None
-                ),
+                "current_run": self._current_run.__dict__ if self._current_run else None,
                 "base_url": self.base_url,
             }
 
@@ -859,6 +790,13 @@ class OT2Service(RobotService):
         return await self.execute_operation(context, _stop_run)
 
     # HTTP API helper methods
+
+    def _parse_run_response(self, run_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Parse run response handling both nested and flat structures."""
+        run_data_attrs = run_data.get("data", {})
+        if "attributes" in run_data_attrs:
+            return run_data_attrs["attributes"]
+        return run_data_attrs
 
     async def _api_request(
         self,
@@ -942,66 +880,68 @@ class OT2Service(RobotService):
             self.logger.warning(f"Failed to clear protocol cache: {e}")
             # Don't fail if cache clearing fails - it's a best-effort optimization
 
-    def _inject_runtime_values(self, protocol_content: str) -> str:
-        """Inject runtime.json values into protocol constants.
+    def _get_runtime_value(self, key: str, default: Any, parse_json: bool = False) -> Any:
+        """Get a runtime config value, optionally parsing JSON."""
+        value = self.ot2_config.get(key, default)
+        if parse_json and isinstance(value, str):
+            try:
+                return json.loads(value)
+            except json.JSONDecodeError:
+                self.logger.warning(f"Failed to parse JSON for {key}, using default")
+                return default if not isinstance(default, str) else json.loads(default)
+        return value
 
-        This allows users to configure protocol parameters via runtime.json
-        while keeping the protocol file simple (like the working version).
-        """
+    def _inject_runtime_values(self, protocol_content: str) -> str:
+        """Inject runtime.json values into protocol constants."""
         import re
 
-        # Get values from OT2 config (which comes from runtime.json)
-        num_generators = self.ot2_config.get("num_generators", 5)
-        radioactive_vol = self.ot2_config.get("radioactive_vol", 6.6)
-        sds_vol = self.ot2_config.get("sds_vol", 1.0)
-        cur = self.ot2_config.get("cur", 2)
-        tip_location = self.ot2_config.get("tip_location", "1")
+        # Scalar replacements: (pattern, config_key, default, format_string)
+        scalar_replacements = [
+            (r'NUM_OF_GENERATORS = \d+', 'num_generators', 5, 'NUM_OF_GENERATORS = {}'),
+            (r'THORIUM_VOL = [\d.]+', 'radioactive_vol', 6.6, 'THORIUM_VOL = {}'),
+            (r'SDS_VOL = [\d.]+', 'sds_vol', 1.0, 'SDS_VOL = {}'),
+            (r'CUR = \d+', 'cur', 2, 'CUR = {}'),
+            (r'tip_location = "[^"]*"', 'tip_location', "1", 'tip_location = "{}"'),
+        ]
 
-        # Parse JSON string arrays from config
-        try:
-            sds_location = json.loads(self.ot2_config.get("sds_location", "[287, 226, 40]"))
-            radioactive_location = json.loads(self.ot2_config.get("radioactive_location", "[354, 225, 40]"))
-            generators_locations = json.loads(self.ot2_config.get("generators_locations", "[[4, 93, 133], [4, 138, 133], [4, 183, 133], [4, 228, 133], [4, 273, 133]]"))
-            home_location = json.loads(self.ot2_config.get("home_location", "[350, 350, 147]"))
-            temp_location = json.loads(self.ot2_config.get("temp_location", "[8, 350, 147]"))
-            height_home_location = json.loads(self.ot2_config.get("height_home_location", "[302, 302, 147]"))
-            height_temp_location = json.loads(self.ot2_config.get("height_temp_location", "[8, 228, 147]"))
-        except json.JSONDecodeError as e:
-            self.logger.warning(f"Failed to parse location JSON from config: {e}, using defaults")
-            sds_location = [287, 226, 40]
-            radioactive_location = [354, 225, 40]
-            generators_locations = [[4, 93, 133], [4, 138, 133], [4, 183, 133], [4, 228, 133], [4, 273, 133]]
-            home_location = [350, 350, 147]
-            temp_location = [8, 350, 147]
-            height_home_location = [302, 302, 147]
-            height_temp_location = [8, 228, 147]
+        # Array replacements: (pattern, config_key, default_json)
+        array_replacements = [
+            (r'sds_lct = \[[^\]]+\]', 'sds_location', '[287, 226, 40]'),
+            (r'thorium_lct = \[[^\]]+\]', 'radioactive_location', '[354, 225, 40]'),
+            (r'home_lct = \[[^\]]+\]', 'home_location', '[350, 350, 147]'),
+            (r'temp_lct = \[[^\]]+\]', 'temp_location', '[8, 350, 147]'),
+            (r'hight_home_lct = \[[^\]]+\]', 'height_home_location', '[302, 302, 147]'),
+            (r'hight_temp_lct = \[[^\]]+\]', 'height_temp_location', '[8, 228, 147]'),
+        ]
 
-        # Replace constant values in protocol
-        protocol_content = re.sub(r'NUM_OF_GENERATORS = \d+', f'NUM_OF_GENERATORS = {num_generators}', protocol_content)
-        protocol_content = re.sub(r'THORIUM_VOL = [\d.]+', f'THORIUM_VOL = {radioactive_vol}', protocol_content)
-        protocol_content = re.sub(r'SDS_VOL = [\d.]+', f'SDS_VOL = {sds_vol}', protocol_content)
-        protocol_content = re.sub(r'CUR = \d+', f'CUR = {cur}', protocol_content)
-        protocol_content = re.sub(r'tip_location = "[^"]*"', f'tip_location = "{tip_location}"', protocol_content)
+        # Apply scalar replacements
+        for pattern, key, default, fmt in scalar_replacements:
+            value = self._get_runtime_value(key, default)
+            protocol_content = re.sub(pattern, fmt.format(value), protocol_content)
 
-        # Replace location arrays
-        protocol_content = re.sub(r'sds_lct = \[[^\]]+\]', f'sds_lct = {sds_location}', protocol_content)
-        protocol_content = re.sub(r'thorium_lct = \[[^\]]+\]', f'thorium_lct = {radioactive_location}', protocol_content)
-        protocol_content = re.sub(r'home_lct = \[[^\]]+\]', f'home_lct = {home_location}', protocol_content)
-        protocol_content = re.sub(r'temp_lct = \[[^\]]+\]', f'temp_lct = {temp_location}', protocol_content)
-        protocol_content = re.sub(r'hight_home_lct = \[[^\]]+\]', f'hight_home_lct = {height_home_location}', protocol_content)
-        protocol_content = re.sub(r'hight_temp_lct = \[[^\]]+\]', f'hight_temp_lct = {height_temp_location}', protocol_content)
+        # Apply array replacements
+        for pattern, key, default_json in array_replacements:
+            value = self._get_runtime_value(key, default_json, parse_json=True)
+            var_name = pattern.split(' = ')[0]
+            protocol_content = re.sub(pattern, f'{var_name} = {value}', protocol_content)
 
-        # Replace generators_locations - match the entire line since it's a nested array
-        # The pattern matches: generators_locations = [...anything until end of line...]
-        generators_str = str(generators_locations)
+        # Handle nested array (generators_locations) separately
+        generators = self._get_runtime_value(
+            'generators_locations',
+            '[[4, 93, 133], [4, 138, 133], [4, 183, 133], [4, 228, 133], [4, 273, 133]]',
+            parse_json=True
+        )
         protocol_content = re.sub(
             r'generators_locations = \[.*\]$',
-            f'generators_locations = {generators_str}',
+            f'generators_locations = {generators}',
             protocol_content,
             flags=re.MULTILINE
         )
 
-        self.logger.info(f"Injected runtime values: num_generators={num_generators}, radioactive_vol={radioactive_vol}, sds_vol={sds_vol}")
+        self.logger.info(
+            f"Injected runtime values: num_generators={self._get_runtime_value('num_generators', 5)}, "
+            f"radioactive_vol={self._get_runtime_value('radioactive_vol', 6.6)}"
+        )
 
         return protocol_content
 
@@ -1227,15 +1167,7 @@ class OT2Service(RobotService):
 
         # Get initial run status
         run_data = await self._api_request("GET", f"/runs/{run_id}")
-
-        # Defensive parsing for response structure
-        run_data_attrs = run_data.get("data", {})
-        if "attributes" in run_data_attrs:
-            # Nested structure: {"data": {"attributes": {...}}}
-            attrs = run_data_attrs["attributes"]
-        else:
-            # Flat structure: {"data": {...}}
-            attrs = run_data_attrs
+        attrs = self._parse_run_response(run_data)
 
         status = RunStatus(
             run_id=run_id,
@@ -1261,125 +1193,234 @@ class OT2Service(RobotService):
             self.logger.error(f"Failed to stop run {run_id}: {e}")
             return False
 
+    async def _pause_run(self, run_id: str) -> bool:
+        """Pause protocol execution via OT2 API"""
+        try:
+            data = {"data": {"actionType": "pause"}}
+
+            await self._api_request("POST", f"/runs/{run_id}/actions", data)
+
+            self.logger.info(f"Run paused: {run_id}")
+            return True
+
+        except Exception as e:
+            self.logger.error(f"Failed to pause run {run_id}: {e}")
+            return False
+
+    async def _resume_run(self, run_id: str) -> bool:
+        """Resume paused protocol execution via OT2 API"""
+        try:
+            data = {"data": {"actionType": "play"}}
+
+            await self._api_request("POST", f"/runs/{run_id}/actions", data)
+
+            self.logger.info(f"Run resumed: {run_id}")
+            return True
+
+        except Exception as e:
+            self.logger.error(f"Failed to resume run {run_id}: {e}")
+            return False
+
+    async def get_active_run_id(self) -> Optional[str]:
+        """
+        Get the ID of any active (running or paused) run.
+
+        Uses resilient discovery:
+        1. First check self._current_run if it's valid and active
+        2. Fallback: Query /runs API for any running/paused runs
+
+        This handles state desync situations where _current_run may be None
+        but a run is still active on the OT2.
+
+        Returns:
+            run_id if an active run is found, None otherwise
+        """
+        # Step 1: Check tracked run first
+        if self._current_run:
+            if self._current_run.status in [ProtocolStatus.RUNNING, ProtocolStatus.PAUSED]:
+                self.logger.debug(f"Found active run from tracking: {self._current_run.run_id}")
+                return self._current_run.run_id
+
+        # Step 2: Fallback - query OT2 API for any running/paused runs
+        try:
+            runs_data = await self._get_current_runs()
+            data_list = runs_data.get("data", [])
+
+            if isinstance(data_list, list):
+                for run in data_list:
+                    status = self._extract_run_status(run)
+                    if status in ["running", "paused"]:
+                        run_id = run.get("id")
+                        if run_id:
+                            self.logger.info(f"Found active run via API query: {run_id} (status: {status})")
+                            return run_id
+        except Exception as e:
+            self.logger.warning(f"Could not query runs API: {e}")
+
+        self.logger.debug("No active run found")
+        return None
+
+    async def pause_current_run(self) -> ServiceResult[bool]:
+        """
+        Pause the currently running protocol.
+
+        Uses resilient run discovery to find active runs even if
+        internal state has become desynced.
+
+        Returns:
+            ServiceResult with success=True if paused, error otherwise
+        """
+        try:
+            # Use resilient run discovery
+            run_id = await self.get_active_run_id()
+
+            if not run_id:
+                return ServiceResult.error_result(
+                    "No active run to pause", error_code="NO_ACTIVE_RUN"
+                )
+
+            # Check if already paused
+            if self._current_run and self._current_run.status == ProtocolStatus.PAUSED:
+                return ServiceResult.error_result(
+                    "Run is already paused", error_code="ALREADY_PAUSED"
+                )
+
+            # Call OT2 API to pause
+            success = await self._pause_run(run_id)
+
+            if success:
+                # Update internal state
+                if self._current_run:
+                    self._current_run.status = ProtocolStatus.PAUSED
+
+                self.logger.info(f"Successfully paused run: {run_id}")
+                return ServiceResult.success_result(True)
+            else:
+                return ServiceResult.error_result(
+                    f"Failed to pause run {run_id}", error_code="PAUSE_FAILED"
+                )
+
+        except Exception as e:
+            self.logger.error(f"Error pausing run: {e}")
+            return ServiceResult.error_result(f"Pause failed: {e}")
+
+    async def resume_current_run(self) -> ServiceResult[bool]:
+        """
+        Resume a paused protocol.
+
+        Uses resilient run discovery to find paused runs even if
+        internal state has become desynced.
+
+        Returns:
+            ServiceResult with success=True if resumed, error otherwise
+        """
+        try:
+            # Use resilient run discovery
+            run_id = await self.get_active_run_id()
+
+            if not run_id:
+                return ServiceResult.error_result(
+                    "No paused run to resume", error_code="NO_PAUSED_RUN"
+                )
+
+            # Call OT2 API to resume
+            success = await self._resume_run(run_id)
+
+            if success:
+                # Update internal state
+                if self._current_run:
+                    self._current_run.status = ProtocolStatus.RUNNING
+
+                self.logger.info(f"Successfully resumed run: {run_id}")
+                return ServiceResult.success_result(True)
+            else:
+                return ServiceResult.error_result(
+                    f"Failed to resume run {run_id}", error_code="RESUME_FAILED"
+                )
+
+        except Exception as e:
+            self.logger.error(f"Error resuming run: {e}")
+            return ServiceResult.error_result(f"Resume failed: {e}")
+
+    async def _handle_idle_timeout(
+        self, run_id: str, idle_duration: float
+    ) -> Optional[RunStatus]:
+        """Handle protocol stuck in idle state, returning failed status if timeout exceeded."""
+        if not self._current_run:
+            return None
+
+        try:
+            pipettes_data = await self._get_attached_pipettes()
+            hardware_info = pipettes_data.get("data", {})
+        except Exception:
+            hardware_info = {}
+
+        self._current_run.status = ProtocolStatus.FAILED
+        self._current_run.error_message = self._generate_idle_timeout_message(
+            run_id, idle_duration, hardware_info
+        )
+        self._current_run.end_time = time.time()
+
+        final_status = self._current_run
+        self._current_run = None
+        return final_status
+
+    def _has_play_action(self, actions: List[Dict[str, Any]]) -> bool:
+        """Check if play action exists in actions list."""
+        return any(action.get("actionType") == "play" for action in actions)
+
     async def _monitor_run_progress(self, run_id: str) -> RunStatus:
         """Monitor protocol execution progress"""
         idle_start_time = time.time()
-        idle_warning_threshold = 30.0  # Warn if stuck in idle for 30 seconds
-        idle_timeout_threshold = 120.0  # Fail if stuck in idle for 2 minutes
+        idle_warning_logged = False
+        IDLE_WARNING_THRESHOLD = 30.0
+        IDLE_TIMEOUT_THRESHOLD = 120.0
 
         while True:
             try:
-                await asyncio.sleep(
-                    0.5
-                )  # Check every 0.5 seconds for better responsiveness
+                await asyncio.sleep(0.5)
 
                 run_data = await self._api_request("GET", f"/runs/{run_id}")
-
-                # Defensive parsing for response structure (same as _start_run)
-                run_data_attrs = run_data.get("data", {})
-                if "attributes" in run_data_attrs:
-                    # Nested structure: {"data": {"attributes": {...}}}
-                    attrs = run_data_attrs["attributes"]
-                else:
-                    # Flat structure: {"data": {...}}
-                    attrs = run_data_attrs
-
+                attrs = self._parse_run_response(run_data)
                 status = ProtocolStatus(attrs.get("status", "unknown"))
                 actions = attrs.get("actions", [])
 
                 # Check for stuck in idle state after play command
-                play_actions = [
-                    action for action in actions if action.get("actionType") == "play"
-                ]
-                if play_actions and status == ProtocolStatus.IDLE:
+                if self._has_play_action(actions) and status == ProtocolStatus.IDLE:
                     idle_duration = time.time() - idle_start_time
 
-                    if idle_duration > idle_warning_threshold:
+                    if idle_duration > IDLE_WARNING_THRESHOLD and not idle_warning_logged:
                         self.logger.warning(
-                            f"Protocol {run_id} has been idle for {idle_duration:.1f}s after play command. "
-                            f"This may indicate missing hardware or calibration issues."
+                            f"Protocol {run_id} idle for {idle_duration:.1f}s - possible hardware issue"
                         )
+                        idle_warning_logged = True
 
-                        # Get hardware status for debugging
-                        try:
-                            pipettes_data = await self._get_attached_pipettes()
-                            attached_pipettes = pipettes_data.get("data", {})
-
-                            if not attached_pipettes.get(
-                                "left"
-                            ) and not attached_pipettes.get("right"):
-                                self.logger.error(
-                                    f"Protocol stuck in idle: No pipettes detected. "
-                                    f"Please attach and calibrate pipettes before running protocols."
-                                )
-                            else:
-                                self.logger.warning(
-                                    f"Protocol stuck in idle despite pipettes being attached: "
-                                    f"left={attached_pipettes.get('left', {}).get('model', 'None')}, "
-                                    f"right={attached_pipettes.get('right', {}).get('model', 'None')}"
-                                )
-                        except Exception:
-                            pass  # Don't fail monitoring due to hardware check errors
-
-                    if idle_duration > idle_timeout_threshold:
-                        # Create a failed status to indicate the timeout
-                        if self._current_run:
-                            # Get current hardware info for detailed error message
-                            try:
-                                pipettes_data = await self._get_attached_pipettes()
-                                hardware_info = pipettes_data.get("data", {})
-                            except Exception:
-                                hardware_info = {}
-
-                            self._current_run.status = ProtocolStatus.FAILED
-                            self._current_run.error_message = (
-                                self._generate_idle_timeout_message(
-                                    run_id, idle_duration, hardware_info
-                                )
-                            )
-                            self._current_run.end_time = time.time()
-
-                            final_status = self._current_run
-                            self._current_run = None
-                            return final_status
+                    if idle_duration > IDLE_TIMEOUT_THRESHOLD:
+                        return await self._handle_idle_timeout(run_id, idle_duration)
                 elif status != ProtocolStatus.IDLE:
-                    # Reset idle timer if status changes from idle
                     idle_start_time = time.time()
+                    idle_warning_logged = False
 
                 # Update current run status
                 if self._current_run:
                     self._current_run.status = status
                     self._current_run.current_command = attrs.get("currentCommand")
 
-                    # Calculate progress if available
-                    if "completedAt" in attrs and attrs["completedAt"]:
+                    if attrs.get("completedAt"):
                         self._current_run.progress_percent = 100.0
                         self._current_run.end_time = time.time()
 
-                    if status in {
-                        ProtocolStatus.SUCCEEDED,
-                        ProtocolStatus.FAILED,
-                        ProtocolStatus.STOPPED,
-                    }:
+                    # Check for terminal states
+                    terminal_states = {ProtocolStatus.SUCCEEDED, ProtocolStatus.FAILED, ProtocolStatus.STOPPED}
+                    if status in terminal_states:
                         self._current_run.end_time = time.time()
 
                         if status == ProtocolStatus.FAILED:
-                            # Get error details
                             errors = attrs.get("errors", [])
-                            if errors and isinstance(errors, list) and len(errors) > 0:
-                                self._current_run.error_message = errors[0].get(
-                                    "detail", "Unknown error"
-                                )
-                            else:
-                                self._current_run.error_message = (
-                                    "Protocol failed - no error details available"
-                                )
-
-                            # CommandService handles error state management
-                            pass
-                        else:
-                            # CommandService handles state management
-                            pass
+                            self._current_run.error_message = (
+                                errors[0].get("detail", "Unknown error")
+                                if errors else "Protocol failed - no error details available"
+                            )
 
                         final_status = self._current_run
                         self._current_run = None
@@ -1389,9 +1430,7 @@ class OT2Service(RobotService):
                 break
             except Exception as e:
                 self.logger.error(f"Error monitoring run {run_id}: {e}")
-                await asyncio.sleep(
-                    1.0
-                )  # Shorter error recovery delay for faster startup
+                await asyncio.sleep(1.0)
 
     async def _get_health_status(self) -> Dict[str, Any]:
         """Get OT2 health status"""
@@ -1413,17 +1452,50 @@ class OT2Service(RobotService):
         """Get current deck configuration"""
         return await self._api_request("GET", "/deck_configuration")
 
+    async def _build_hardware_info(self) -> Dict[str, Any]:
+        """Build hardware info dict with pipettes, calibration, and issues."""
+        try:
+            pipettes_data = await self._get_attached_pipettes()
+            calibration_data = await self._get_calibration_data()
+
+            pipettes = pipettes_data.get("data", {})
+            left_pipette = pipettes.get("left")
+            right_pipette = pipettes.get("right")
+
+            issues = []
+            if not left_pipette and not right_pipette:
+                issues.append("No pipettes attached")
+            else:
+                if left_pipette and not left_pipette.get("ok", False):
+                    issues.append(f"Left pipette needs calibration: {left_pipette.get('model', 'unknown')}")
+                if right_pipette and not right_pipette.get("ok", False):
+                    issues.append(f"Right pipette needs calibration: {right_pipette.get('model', 'unknown')}")
+
+            deck_cal = calibration_data.get("data", {}).get("deckCalibration", {})
+            if not deck_cal.get("status", {}).get("markedAt"):
+                issues.append("Deck calibration may be required")
+
+            return {
+                "pipettes": pipettes,
+                "calibration": calibration_data.get("data", {}),
+                "hardware_ready": bool(left_pipette or right_pipette),
+                "hardware_issues": issues,
+            }
+        except Exception as e:
+            self.logger.warning(f"Could not get hardware status: {e}")
+            return {"error": f"Hardware status unavailable: {str(e)}"}
+
+    def _check_pipette_calibration(
+        self, pipette: Optional[Dict], mount: str, warnings: List[str]
+    ) -> None:
+        """Check if a pipette needs calibration and add warning if so."""
+        if pipette and not pipette.get("ok", False):
+            model = pipette.get("model", "unknown")
+            warnings.append(f"{mount} pipette may need calibration: {model}")
+
     async def _validate_hardware_requirements(self, protocol_id: str) -> Dict[str, Any]:
-        """
-        Validate that required hardware is available for protocol execution.
-
-        Args:
-            protocol_id: The protocol ID to validate hardware for
-
-        Returns:
-            Dict with validation results and missing hardware details
-        """
-        validation_result = {
+        """Validate that required hardware is available for protocol execution."""
+        result = {
             "valid": True,
             "missing_hardware": [],
             "warnings": [],
@@ -1433,102 +1505,54 @@ class OT2Service(RobotService):
         }
 
         try:
-            # Get protocol analysis to understand requirements
+            # Check protocol analysis status
             protocol_data = await self._api_request("GET", f"/protocols/{protocol_id}")
+            analysis_summaries = protocol_data.get("data", {}).get("analysisSummaries", [])
 
-            # Check if protocol has been analyzed
-            analysis_summaries = protocol_data.get("data", {}).get(
-                "analysisSummaries", []
-            )
-            if (
-                not analysis_summaries
-                or analysis_summaries[0].get("status") != "completed"
-            ):
-                validation_result["valid"] = False
-                validation_result["missing_hardware"].append(
-                    "Protocol analysis not completed"
-                )
-                return validation_result
+            if not analysis_summaries or analysis_summaries[0].get("status") != "completed":
+                result["valid"] = False
+                result["missing_hardware"].append("Protocol analysis not completed")
+                return result
 
-            # Get current robot hardware state
+            # Get hardware state
             pipettes_data = await self._get_attached_pipettes()
             calibration_data = await self._get_calibration_data()
 
-            # DEBUG: Log the actual API response structure
-            self.logger.info(f"Raw pipettes API response: {pipettes_data}")
-            self.logger.info(f"Raw calibration API response: {calibration_data}")
+            result["pipettes"] = pipettes_data
+            result["calibration_status"] = calibration_data
 
-            # Check attached pipettes
-            # attached_pipettes = pipettes_data.get("data", {})
-            attached_pipettes = pipettes_data
-            self.logger.info(f"Parsed attached_pipettes: {attached_pipettes}")
-            validation_result["pipettes"] = attached_pipettes
+            left_pipette = pipettes_data.get("left")
+            right_pipette = pipettes_data.get("right")
 
-            # Validate pipettes are attached and calibrated
-            left_pipette = attached_pipettes.get("left")
-            right_pipette = attached_pipettes.get("right")
-
-            self.logger.info(f"Left pipette data: {left_pipette}")
-            self.logger.info(f"Right pipette data: {right_pipette}")
-
+            # Validate pipettes
             if not left_pipette and not right_pipette:
-                self.logger.error(
-                    "Hardware validation failed: No pipettes detected in API response"
-                )
-                self.logger.error(f"Full pipettes_data structure: {pipettes_data}")
-                validation_result["valid"] = False
-                validation_result["missing_hardware"].append(
-                    "No pipettes attached to robot"
-                )
+                self.logger.error("Hardware validation failed: No pipettes detected")
+                result["valid"] = False
+                result["missing_hardware"].append("No pipettes attached to robot")
             else:
-                self.logger.info("Pipettes detected, checking calibration...")
-                # Check pipette calibration
-                if left_pipette:
-                    left_ok = left_pipette.get("ok", False)
-                    left_model = left_pipette.get("model", "unknown")
-                    self.logger.info(f"Left pipette: model={left_model}, ok={left_ok}")
-                    if not left_ok:
-                        validation_result["warnings"].append(
-                            f"Left pipette may need calibration: {left_model}"
-                        )
-
-                if right_pipette:
-                    right_ok = right_pipette.get("ok", False)
-                    right_model = right_pipette.get("model", "unknown")
-                    self.logger.info(
-                        f"Right pipette: model={right_model}, ok={right_ok}"
-                    )
-                    if not right_ok:
-                        validation_result["warnings"].append(
-                            f"Right pipette may need calibration: {right_model}"
-                        )
-
-            # Store calibration status
-            validation_result["calibration_status"] = calibration_data
+                self._check_pipette_calibration(left_pipette, "Left", result["warnings"])
+                self._check_pipette_calibration(right_pipette, "Right", result["warnings"])
 
             # Check deck calibration
             deck_cal = calibration_data.get("data", {}).get("deckCalibration", {})
             if not deck_cal.get("status", {}).get("markedAt"):
-                validation_result["warnings"].append("Deck calibration may be required")
+                result["warnings"].append("Deck calibration may be required")
 
-            self.logger.info(
-                f"Hardware validation for protocol {protocol_id}: {'PASSED' if validation_result['valid'] else 'FAILED'}"
-            )
-            if validation_result["missing_hardware"]:
-                self.logger.warning(
-                    f"Missing hardware: {validation_result['missing_hardware']}"
-                )
-            if validation_result["warnings"]:
-                self.logger.warning(
-                    f"Hardware warnings: {validation_result['warnings']}"
-                )
+            # Log summary
+            status = "PASSED" if result["valid"] else "FAILED"
+            self.logger.info(f"Hardware validation for protocol {protocol_id}: {status}")
+
+            if result["missing_hardware"]:
+                self.logger.warning(f"Missing hardware: {result['missing_hardware']}")
+            if result["warnings"]:
+                self.logger.warning(f"Hardware warnings: {result['warnings']}")
 
         except Exception as e:
             self.logger.error(f"Hardware validation failed: {e}")
-            validation_result["valid"] = False
-            validation_result["missing_hardware"].append(f"Validation error: {str(e)}")
+            result["valid"] = False
+            result["missing_hardware"].append(f"Validation error: {str(e)}")
 
-        return validation_result
+        return result
 
     def _generate_hardware_error_message(
         self, validation_result: Dict[str, Any]
@@ -1687,64 +1711,35 @@ class OT2Service(RobotService):
             self.logger.error(f"Failed to home robot: {e}")
             return False
 
+    def _extract_protocol_id(self, run: Dict[str, Any]) -> str:
+        """Extract protocol ID from run dict handling various API formats."""
+        if "attributes" in run and isinstance(run["attributes"], dict):
+            return run["attributes"].get("protocolId", "unknown")
+        return run.get("protocolId") or run.get("protocol_id") or "unknown"
+
     async def _check_for_active_runs(self):
         """Check for any active runs on startup"""
         try:
             runs_data = await self._get_current_runs()
-
-            # Handle different possible response formats
             data_list = runs_data.get("data", [])
+
             if not isinstance(data_list, list):
-                data_list = []
+                return
 
-            active_runs = []
+            # Find first running run
             for run in data_list:
-                try:
-                    # Try different possible response formats
-                    if isinstance(run, dict):
-                        # Format 1: run.attributes.status
-                        if "attributes" in run and isinstance(run["attributes"], dict):
-                            status = run["attributes"].get("status", "unknown")
-                        # Format 2: run.status
-                        elif "status" in run:
-                            status = run["status"]
-                        # Format 3: run.data.status
-                        elif "data" in run and isinstance(run["data"], dict):
-                            status = run["data"].get("status", "unknown")
-                        else:
-                            status = "unknown"
-
-                        if status == "running":
-                            active_runs.append(run)
-                except Exception as inner_e:
-                    self.logger.debug(f"Error parsing run data: {inner_e}")
-                    continue
-
-            if active_runs:
-                run = active_runs[0]  # Take the first active run
-
-                # Extract protocol ID with fallback
-                protocol_id = None
-                if "attributes" in run and isinstance(run["attributes"], dict):
-                    protocol_id = run["attributes"].get("protocolId")
-                elif "protocolId" in run:
-                    protocol_id = run["protocolId"]
-                elif "protocol_id" in run:
-                    protocol_id = run["protocol_id"]
-
-                self._current_run = RunStatus(
-                    run_id=run.get("id", "unknown"),
-                    protocol_id=protocol_id or "unknown",
-                    status=ProtocolStatus.RUNNING,
-                    start_time=time.time(),  # Approximate start time
-                )
-
-                # Start monitoring this run
-                self._monitoring_task = asyncio.create_task(
-                    self._monitor_run_progress(self._current_run.run_id)
-                )
-
-                self.logger.info(f"Found active run: {self._current_run.run_id}")
+                if self._extract_run_status(run) == "running":
+                    self._current_run = RunStatus(
+                        run_id=run.get("id", "unknown"),
+                        protocol_id=self._extract_protocol_id(run),
+                        status=ProtocolStatus.RUNNING,
+                        start_time=time.time(),
+                    )
+                    self._monitoring_task = asyncio.create_task(
+                        self._monitor_run_progress(self._current_run.run_id)
+                    )
+                    self.logger.info(f"Found active run: {self._current_run.run_id}")
+                    break
 
         except Exception as e:
             self.logger.error(f"Failed to check for active runs: {e}")
