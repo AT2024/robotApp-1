@@ -52,33 +52,41 @@ const StepButton = ({ connected, ...props }) => (
   </button>
 );
 
-const PauseButton = ({ paused, className = "", ...props }) => (
-  <button
-    className={`${baseButtonClasses} ${
-      paused 
-        ? "bg-gray-500 text-white cursor-not-allowed"
-        : "bg-orange-500 text-white hover:bg-orange-600"
-    } focus:ring-orange-500 ${className}`}
-    disabled={paused}
-    {...props}
-  >
-    ⏸️ Pause
-  </button>
-);
+const PauseButton = ({ paused, disabled, className = "", ...props }) => {
+  // Combine internal logic (disabled when paused) with external disabled prop
+  const isDisabled = paused || disabled;
+  return (
+    <button
+      className={`${baseButtonClasses} ${
+        isDisabled
+          ? "bg-gray-500 text-white cursor-not-allowed"
+          : "bg-orange-500 text-white hover:bg-orange-600"
+      } focus:ring-orange-500 ${className}`}
+      disabled={isDisabled}
+      {...props}
+    >
+      {paused ? "Already Paused" : "Pause"}
+    </button>
+  );
+};
 
-const ResumeButton = ({ paused, className = "", ...props }) => (
-  <button
-    className={`${baseButtonClasses} ${
-      !paused 
-        ? "bg-gray-500 text-white cursor-not-allowed"
-        : "bg-green-500 text-white hover:bg-green-600"
-    } focus:ring-green-500 ${className}`}
-    disabled={!paused}
-    {...props}
-  >
-    ▶️ Resume
-  </button>
-);
+const ResumeButton = ({ paused, disabled, className = "", ...props }) => {
+  // Combine internal logic (disabled when NOT paused) with external disabled prop
+  const isDisabled = !paused || disabled;
+  return (
+    <button
+      className={`${baseButtonClasses} ${
+        isDisabled
+          ? "bg-gray-500 text-white cursor-not-allowed"
+          : "bg-green-500 text-white hover:bg-green-600"
+      } focus:ring-green-500 ${className}`}
+      disabled={isDisabled}
+      {...props}
+    >
+      {!paused ? "Not Paused" : "Resume"}
+    </button>
+  );
+};
 
 const ResetButton = ({ disabled, className = "", ...props }) => (
   <button

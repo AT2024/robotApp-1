@@ -390,9 +390,10 @@ const SpreadingPage = () => {
       logger.log('Received WebSocket message:', message);
 
       if (message.type === 'command_response') {
-        if (message.status === 'success') {
+        if (message.status === 'success' || message.status === 'started') {
           if (message.command_type === 'ot2_protocol') {
-            logger.log('OT2 protocol started successfully');
+            // Handle both 'success' (legacy) and 'started' (non-blocking) statuses
+            logger.log(`OT2 protocol ${message.status}: ${message.message || 'started'}`);
             setOt2Status('running');
           } else if (message.command_type === 'pause_system') {
             logger.log('System paused successfully');
@@ -516,6 +517,33 @@ const SpreadingPage = () => {
             }
           }
         }
+      } else if (message.type === 'ot2_protocol_complete') {
+        // Handle OT2 protocol completion (from non-blocking background execution)
+        const { success, result, error, step_index } = message.data || {};
+        logger.log(`OT2 protocol complete: success=${success}, step=${step_index}`);
+
+        if (success) {
+          setOt2Status('completed');
+          toast.success('OT2 protocol completed successfully!', { autoClose: 3000 });
+
+          // Auto-advance to next step if this was the OT2 step (step 2)
+          if (step_index === 2 || activeStep === 2) {
+            logger.log('OT2 process completed, advancing to next step');
+            setActiveStep((prev) => prev + 1);
+          }
+        } else {
+          setOt2Status('error');
+          setLastError(error || 'OT2 protocol failed');
+          toast.error(`OT2 protocol failed: ${error || 'Unknown error'}`, { autoClose: 5000 });
+        }
+      } else if (message.type === 'ot2_protocol_error') {
+        // Handle OT2 protocol execution errors (exceptions during execution)
+        const { error, step_index } = message.data || {};
+        logger.error(`OT2 protocol error at step ${step_index}: ${error}`);
+
+        setOt2Status('error');
+        setLastError(error || 'OT2 protocol execution error');
+        toast.error(`OT2 protocol error: ${error || 'Unknown error'}`, { autoClose: 5000 });
       } else if (message.type === 'operation_update' && message.data?.event === 'batch_completion') {
         // Handle batch completion events from backend
         const { operation_type, wafers_failed, wafers_processed, batch_start, batch_count } = message.data;
@@ -639,49 +667,21 @@ const SpreadingPage = () => {
     [isRobotConnected, stepConfirmations, isProcessing, wsConnected]
   );
 
-  // Debug current state
-  React.useEffect(() => {
-    console.log('*** STATE DEBUG: Component state updated');
-    console.log('*** STATE DEBUG: activeStep:', activeStep);
-    console.log('*** STATE DEBUG: steps.length:', steps.length);
-    console.log('*** STATE DEBUG: current step:', steps[activeStep]);
-    console.log('*** STATE DEBUG: systemStatus:', systemStatus);
-    console.log('*** STATE DEBUG: emergencyStopActive:', emergencyStopActive);
-    if (activeStep < steps.length) {
-      console.log('*** STATE DEBUG: robotConnected for current step:', isRobotConnected(steps[activeStep].robot));
-      console.log('*** STATE DEBUG: canExecute for current step:', canExecuteStep(activeStep));
-    }
-  }, [activeStep, systemStatus, emergencyStopActive]);
-
   // Handle OT2 protocol execution
   const handleOT2Protocol = async () => {
     try {
-      console.log('*** OT2 PROTOCOL DEBUG: handleOT2Protocol() called');
-      console.log('*** OT2 PROTOCOL DEBUG: trayInfo:', trayInfo);
-      console.log('*** OT2 PROTOCOL DEBUG: websocketService:', websocketService);
-
       logger.log('Starting OT2 protocol with tray info:', trayInfo);
 
       const message = {
         type: 'command',
         command_type: 'ot2_protocol',
-        commandId: Date.now().toString(), // Add a unique ID for tracking
-        data: trayInfo || {}, // Send tray info directly without additional nesting
+        commandId: Date.now().toString(),
+        data: trayInfo || {},
       };
 
-      console.log('*** OT2 PROTOCOL DEBUG: Prepared message:', message);
-      console.log('*** OT2 PROTOCOL DEBUG: About to call websocketService.send()');
-
-      // Make sure we're sending just the trayInfo without nesting it inside parameters
       websocketService.send(message);
-
-      console.log('*** OT2 PROTOCOL DEBUG: websocketService.send() completed');
-
-      // Update UI state to indicate the protocol is running
       setOt2Status('running');
-      console.log('*** OT2 PROTOCOL DEBUG: OT2 status set to running');
     } catch (error) {
-      console.error('*** OT2 PROTOCOL DEBUG: Error in handleOT2Protocol:', error);
       logger.error('Failed to start OT2 protocol:', error);
       setOt2Status('error');
       setLastError('Failed to start OT2 protocol: ' + (error.message || 'Unknown error'));
@@ -690,51 +690,55 @@ const SpreadingPage = () => {
 
   // Handle emergency stop - IMMEDIATE execution without confirmation
   const handleEmergencyStop = useCallback(() => {
-    logger.log('🚨 Emergency stop activated - immediate execution');
-
-    // IMMEDIATE visual feedback - show stopping state
+    logger.log('Emergency stop activated - immediate execution');
     setEmergencyStopStopping(true);
 
-    // Send emergency stop command immediately
-    websocketService.send({
-      type: 'command',
-      command_type: 'emergency_stop',
-      data: {
-        robots: {
-          meca: systemStatus.meca === 'connected',
-          ot2: systemStatus.ot2 === 'connected',
-          arduino: systemStatus.arduino === 'connected',
+    try {
+      websocketService.send({
+        type: 'command',
+        command_type: 'emergency_stop',
+        data: {
+          robots: {
+            meca: systemStatus.meca === 'connected',
+            ot2: systemStatus.ot2 === 'connected',
+            arduino: systemStatus.arduino === 'connected',
+          },
         },
-      },
-    });
+      });
 
-    logger.log('✅ Emergency stop command sent - robots should halt immediately');
+      logger.log('Emergency stop command sent - robots should halt immediately');
 
-    // Auto-clear stopping state after 3 seconds if no response received
-    setTimeout(() => {
+      setTimeout(() => {
+        setEmergencyStopStopping(false);
+        setEmergencyStopActive(true);
+        logger.log('Emergency stop timeout - assuming completed');
+      }, 3000);
+    } catch (error) {
       setEmergencyStopStopping(false);
-      setEmergencyStopActive(true);
-      logger.log('⏱️ Emergency stop timeout - assuming completed');
-    }, 3000);
+      setLastError(`Emergency stop failed: ${error.message}`);
+      toast.error(`Emergency stop failed: ${error.message}`);
+    }
 
-  }, [systemStatus]);
+  }, [systemStatus, wsConnected]);
 
   // Handle emergency stop reset - IMMEDIATE execution without confirmation
   const handleEmergencyReset = useCallback(() => {
-    logger.log('🔄 Emergency stop reset requested - immediate execution');
+    logger.log('Emergency stop reset requested - immediate execution');
 
-    // Send reset command immediately
-    websocketService.send({
-      type: 'command',
-      command_type: 'emergency_reset',
-      data: {}
-    });
+    try {
+      websocketService.send({
+        type: 'command',
+        command_type: 'emergency_reset',
+        data: {}
+      });
 
-    // Update local state
-    setEmergencyStopActive(false);
-
-    logger.log('✅ Emergency stop reset command sent');
-  }, []);
+      setEmergencyStopActive(false);
+      logger.log('Emergency stop reset command sent');
+    } catch (error) {
+      setLastError(`Reset failed: ${error.message}`);
+      toast.error(`Reset failed: ${error.message}`);
+    }
+  }, [wsConnected]);
 
   // Confirmation modal handlers
   const showConfirmation = (title, message, action, variant = 'primary') => {
@@ -760,48 +764,70 @@ const SpreadingPage = () => {
 
   // Handle system pause with confirmation
   const handlePause = useCallback(() => {
+    if (!wsConnected) {
+      setLastError('Cannot pause: WebSocket disconnected');
+      toast.error('Cannot pause: WebSocket not connected');
+      return;
+    }
+
     showConfirmation(
       'Pause System',
       'This will pause all active operations. Are you sure you want to continue?',
       () => {
-        logger.log('System pause activated');
-        setSystemPaused(true);
-        setPauseReason('User requested pause');
+        try {
+          logger.log('System pause activated');
+          setSystemPaused(true);
+          setPauseReason('User requested pause');
 
-        // Send pause command to backend with step information
-        websocketService.send({
-          type: 'command',
-          command_type: 'pause_system',
-          commandId: Date.now().toString(),
-          data: {
-            reason: 'User requested pause',
-            current_step: activeStep,
-            step_name: steps[activeStep].label
-          },
-        });
+          websocketService.send({
+            type: 'command',
+            command_type: 'pause_system',
+            commandId: Date.now().toString(),
+            data: {
+              reason: 'User requested pause',
+              current_step: activeStep,
+              step_name: steps[activeStep].label
+            },
+          });
+        } catch (error) {
+          setLastError(`Pause failed: ${error.message}`);
+          setSystemPaused(false);
+          toast.error(`Pause failed: ${error.message}`);
+        }
       },
       'warning'
     );
-  }, [activeStep, steps]);
+  }, [activeStep, steps, wsConnected]);
 
   // Handle system resume
   const handleResume = useCallback(() => {
-    logger.log('System resume activated');
-    setSystemPaused(false);
-    setPauseReason('');
-    setPausedOperations([]);
+    if (!wsConnected) {
+      setLastError('Cannot resume: WebSocket disconnected');
+      toast.error('Cannot resume: WebSocket not connected');
+      return;
+    }
 
-    // Send resume command to backend with step information
-    websocketService.send({
-      type: 'command',
-      command_type: 'resume_system',
-      commandId: Date.now().toString(),
-      data: {
-        current_step: activeStep,
-        step_name: steps[activeStep].label
-      },
-    });
-  }, [activeStep, steps]);
+    try {
+      logger.log('System resume activated');
+      setSystemPaused(false);
+      setPauseReason('');
+      setPausedOperations([]);
+
+      websocketService.send({
+        type: 'command',
+        command_type: 'resume_system',
+        commandId: Date.now().toString(),
+        data: {
+          current_step: activeStep,
+          step_name: steps[activeStep].label
+        },
+      });
+    } catch (error) {
+      setLastError(`Resume failed: ${error.message}`);
+      setSystemPaused(true);
+      toast.error(`Resume failed: ${error.message}`);
+    }
+  }, [activeStep, steps, wsConnected, systemPaused]);
 
   // Handle step skipping
   const handleSkip = () => {
@@ -872,26 +898,14 @@ const SpreadingPage = () => {
   // Handle step execution
   const handlePress = async (stepIndex) => {
     try {
-      console.log('*** HANDLE PRESS DEBUG: handlePress called with stepIndex:', stepIndex);
-      console.log('*** HANDLE PRESS DEBUG: activeStep:', activeStep);
-      console.log('*** HANDLE PRESS DEBUG: steps[stepIndex]:', steps[stepIndex]);
-      console.log('*** HANDLE PRESS DEBUG: steps[stepIndex].label:', steps[stepIndex]?.label);
-
       logger.log(`Executing step ${stepIndex}: ${steps[stepIndex].label}`);
 
       if (stepIndex === 2) {
-        console.log('*** HANDLE PRESS DEBUG: stepIndex === 2, calling handleOT2Protocol()');
         await handleOT2Protocol();
-        console.log('*** HANDLE PRESS DEBUG: handleOT2Protocol() completed');
       } else if (steps[stepIndex].onClick) {
-        console.log('*** HANDLE PRESS DEBUG: calling steps[stepIndex].onClick()');
         await steps[stepIndex].onClick();
-        console.log('*** HANDLE PRESS DEBUG: steps[stepIndex].onClick() completed');
-      } else {
-        console.log('*** HANDLE PRESS DEBUG: No action for this step');
       }
     } catch (error) {
-      console.error('*** HANDLE PRESS DEBUG: Error in handlePress:', error);
       logger.error(`Error executing step ${stepIndex}:`, error);
       setLastError(`Failed to execute step ${stepIndex + 1}`);
     }
@@ -987,15 +1001,7 @@ const SpreadingPage = () => {
             stepIndex={activeStep}
             robotConnected={isRobotConnected(steps[activeStep].robot)}
             canExecute={canExecuteStep(activeStep)}
-            onPress={() => {
-              console.log('*** BUTTON CLICK DEBUG: Button clicked!');
-              console.log('*** BUTTON CLICK DEBUG: activeStep:', activeStep);
-              console.log('*** BUTTON CLICK DEBUG: robotConnected:', isRobotConnected(steps[activeStep].robot));
-              console.log('*** BUTTON CLICK DEBUG: canExecute:', canExecuteStep(activeStep));
-              console.log('*** BUTTON CLICK DEBUG: emergencyStopActive:', emergencyStopActive);
-              console.log('*** BUTTON CLICK DEBUG: About to call handlePress');
-              handlePress(activeStep);
-            }}
+            onPress={() => handlePress(activeStep)}
             onSkip={handleSkip}
             onConfirmationChange={(checked) => handleConfirmationChange(activeStep, checked)}
             confirmationChecked={stepConfirmations[activeStep] || false}
