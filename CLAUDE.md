@@ -14,7 +14,7 @@ cd windsurf-project && docker-compose up -d
 ## Critical Quirks
 
 - **Mecademic TCP**: Keep socket open entire session (robot loses state if closed)
-- **OT2 Header**: Always include `opentrons-version: 4` in requests
+- **OT2 Header**: Always include `Opentrons-Version: 2` in requests
 - **Pydantic**: Must use `pydantic<2.0.0` for OT2 SDK compatibility
 - **State Sync**: Use ResourceLockManager to prevent MecaService desync
 - **robot_id**: Required for OT2Service constructor (check OT2 dashboard)

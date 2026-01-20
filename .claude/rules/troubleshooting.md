@@ -4,7 +4,7 @@
 
 | Issue | Check |
 |-------|-------|
-| OT2 connection fails | `robot_id` matches dashboard, `opentrons-version: 4` header present, pydantic<2.0.0 installed |
+| OT2 connection fails | `robot_id` matches dashboard, `Opentrons-Version: 2` header present, pydantic<2.0.0 installed |
 | Mecademic connection fails | IP 192.168.0.100:10000 reachable, socket kept open, safety system enabled |
 | Docker build fails | Use `--no-cache` flag, check Alpine vs Debian packages, verify memory allocation |
 | State desync | ResourceLockManager in use, AtomicStateManager for state changes |
