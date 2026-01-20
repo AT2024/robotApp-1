@@ -43,17 +43,31 @@ class WebsocketHandler:
         # Background tasks
         self._status_monitor_task: Optional[asyncio.Task] = None
 
-    async def connect(self, websocket: WebSocket):
-        """Handle new WebSocket connection"""
-        await websocket.accept()
-        self.active_connections.append(websocket)
-        logger.info(f"WebSocket connected. Total connections: {len(self.active_connections)}")
+    def _map_robot_statuses(self, system_status) -> Dict[str, str]:
+        """Map robot details from system status to connection statuses.
 
-    async def disconnect(self, websocket: WebSocket):
-        """Handle WebSocket disconnection"""
-        if websocket in self.active_connections:
-            self.active_connections.remove(websocket)
-        logger.info(f"WebSocket disconnected. Total connections: {len(self.active_connections)}")
+        Args:
+            system_status: SystemStatus object from orchestrator
+
+        Returns:
+            Dict mapping robot type to 'connected' or 'disconnected'
+        """
+        robot_statuses = {
+            "meca": "disconnected",
+            "arduino": "disconnected",
+            "ot2": "disconnected"
+        }
+
+        for robot_id, robot_info in system_status.robot_details.items():
+            robot_state = robot_info.get("state", "disconnected")
+            if "meca" in robot_id.lower():
+                robot_statuses["meca"] = "connected" if robot_state in ["idle", "busy"] else "disconnected"
+            elif "ot2" in robot_id.lower():
+                robot_statuses["ot2"] = "connected" if robot_state in ["idle", "busy"] else "disconnected"
+            elif "arduino" in robot_id.lower():
+                robot_statuses["arduino"] = "connected" if robot_state in ["idle", "busy"] else "disconnected"
+
+        return robot_statuses
 
     async def send_status_update(self, websocket: WebSocket, device: str, status: str):
         """Send status update only if there's a change"""
@@ -491,40 +505,100 @@ class WebsocketHandler:
                 elif command_type == "ot2_protocol":
                     # Execute OT2 protocol directly through OT2Service (bypassing complex ProtocolExecutionService)
                     try:
+                        # Extract step tracking info from command data
+                        current_step = command_data.get("current_step", 2)  # OT2 is usually step 2
+                        step_name = command_data.get("step_name", "OT2 Process")
+
                         logger.info(f"Starting DIRECT OT2 protocol execution with data: {command_data}")
-                        
+                        logger.info(f"OT2 step tracking: step {current_step}, name '{step_name}'")
+
+                        # CRITICAL: Register OT2 with state manager BEFORE execution
+                        # This enables pause_system to find OT2 in step_states instead of slow API fallback
+                        await self.state_manager.start_step(
+                            robot_id="ot2",
+                            step_index=current_step,
+                            step_name=step_name,
+                            operation_type="ot2_protocol",
+                            progress_data=command_data
+                        )
+                        logger.info(f"OT2 registered with state manager for step {current_step}")
+
                         # Get the OT2 service directly from orchestrator
                         ot2_service = await self.orchestrator.get_robot_service("ot2")
                         logger.info(f"Retrieved OT2 service: {ot2_service is not None}")
-                        
+
                         if not ot2_service:
                             logger.error("OT2 service not available")
+                            # Complete step even on failure
+                            await self.state_manager.complete_step("ot2")
                             response.update({
                                 "status": "error",
                                 "message": "OT2 service not available - service initialization may have failed"
                             })
                             await websocket.send_json(response)
                             return
-                        
-                        # Execute protocol directly through OT2Service.run_protocol()
-                        protocol_result = await ot2_service.run_protocol(**command_data)
-                        
-                        if protocol_result.success:
-                            response.update({
-                                "status": "success",
-                                "message": "OT2 protocol executed successfully via direct service",
-                                "result": protocol_result.data
-                            })
-                            logger.info(f"OT2 protocol completed successfully: {protocol_result.data}")
-                        else:
-                            response.update({
-                                "status": "error",
-                                "message": f"OT2 protocol failed: {protocol_result.error}"
-                            })
-                            logger.error(f"OT2 protocol execution failed: {protocol_result.error}")
-                            
+
+                        # NON-BLOCKING: Execute OT2 protocol in background task
+                        # This allows pause/stop commands to be processed while protocol runs
+                        async def execute_ot2_protocol():
+                            try:
+                                logger.info(f"Background OT2 protocol execution started for step {current_step}")
+                                protocol_result = await ot2_service.run_protocol(**command_data)
+
+                                # Broadcast result when complete
+                                if protocol_result.success:
+                                    logger.info(f"OT2 protocol completed successfully: {protocol_result.data}")
+                                    await self.broadcast({
+                                        "type": "ot2_protocol_complete",
+                                        "data": {
+                                            "success": True,
+                                            "result": protocol_result.data,
+                                            "error": None,
+                                            "step_index": current_step
+                                        }
+                                    })
+                                else:
+                                    logger.error(f"OT2 protocol execution failed: {protocol_result.error}")
+                                    await self.broadcast({
+                                        "type": "ot2_protocol_complete",
+                                        "data": {
+                                            "success": False,
+                                            "result": None,
+                                            "error": protocol_result.error,
+                                            "step_index": current_step
+                                        }
+                                    })
+                            except Exception as e:
+                                logger.error(f"OT2 protocol execution error: {e}", exc_info=True)
+                                await self.broadcast({
+                                    "type": "ot2_protocol_error",
+                                    "data": {
+                                        "error": str(e),
+                                        "step_index": current_step
+                                    }
+                                })
+                            finally:
+                                # CRITICAL: Always complete step when protocol finishes (success or failure)
+                                await self.state_manager.complete_step("ot2")
+                                logger.info(f"OT2 step {current_step} completed in state manager")
+
+                        # Start protocol in background - allows pause/stop commands to be processed
+                        asyncio.create_task(execute_ot2_protocol())
+
+                        # Return immediate acknowledgment (non-blocking)
+                        response.update({
+                            "status": "started",
+                            "message": "OT2 protocol started - monitoring progress"
+                        })
+                        logger.info(f"OT2 protocol started in background for step {current_step}")
+
                     except Exception as e:
                         logger.error(f"Direct OT2 protocol execution error: {e}", exc_info=True)
+                        # Ensure step is completed even on exception
+                        try:
+                            await self.state_manager.complete_step("ot2")
+                        except Exception:
+                            pass  # Ignore errors during cleanup
                         response.update({
                             "status": "error",
                             "message": f"Failed to execute OT2 protocol directly: {str(e)}"
@@ -710,28 +784,44 @@ class WebsocketHandler:
                             "message": f"Arduino operation failed: {str(e)}"
                         })
                 elif command_type == "pause_system":
-                    # Step-aware pause functionality
+                    # Step-aware pause functionality with OT2 API integration
                     try:
                         pause_reason = command_data.get("reason", "User requested pause")
                         current_step = command_data.get("current_step", 0)
                         step_name = command_data.get("step_name", f"Step {current_step}")
-                        
+
                         logger.info(f"Step-aware pause requested for step {current_step} ({step_name}): {pause_reason}")
-                        
+
                         # Get step states to find which robot is currently active
                         step_states = await self.state_manager.get_all_step_states()
                         active_robot = None
-                        
+
                         # Find robot currently running the specified step
                         for robot_id, step_state in step_states.items():
                             if step_state and step_state.step_index == current_step and not step_state.paused:
                                 active_robot = robot_id
                                 break
-                        
+
                         if active_robot:
-                            # Pause the specific robot's current step
+                            # CRITICAL: If active robot is OT2, pause via OT2 API
+                            if active_robot == "ot2":
+                                try:
+                                    ot2_service = await self.orchestrator.get_robot_service("ot2")
+                                    if ot2_service:
+                                        logger.info("Pausing OT2 protocol via API...")
+                                        ot2_result = await ot2_service.pause_current_run()
+                                        if ot2_result.success:
+                                            logger.info("OT2 protocol paused successfully via API")
+                                        else:
+                                            logger.warning(f"OT2 pause API call returned error: {ot2_result.error}")
+                                    else:
+                                        logger.warning("OT2 service not available for pause")
+                                except Exception as ot2_e:
+                                    logger.error(f"Error calling OT2 pause API: {ot2_e}")
+
+                            # Pause the specific robot's current step (internal state)
                             paused_step = await self.state_manager.pause_step(active_robot, pause_reason)
-                            
+
                             if paused_step:
                                 response.update({
                                     "status": "success",
@@ -743,7 +833,7 @@ class WebsocketHandler:
                                         "progress": paused_step.progress_data
                                     }
                                 })
-                                
+
                                 # Broadcast step-specific pause status to all clients
                                 await self.broadcast({
                                     "type": "step_status_update",
@@ -762,11 +852,47 @@ class WebsocketHandler:
                                     "message": f"Failed to pause step {current_step} for robot {active_robot}"
                                 })
                         else:
-                            response.update({
-                                "status": "error",
-                                "message": f"No active robot found for step {current_step}"
-                            })
-                            
+                            # Fallback: Try OT2 directly if step tracking doesn't find active robot
+                            # This handles cases where OT2 protocol runs without step registration
+                            ot2_service = await self.orchestrator.get_robot_service("ot2")
+                            if ot2_service:
+                                run_id = await ot2_service.get_active_run_id()
+                                if run_id:
+                                    logger.info(f"Fallback: Found OT2 active run {run_id}, attempting pause")
+                                    ot2_result = await ot2_service.pause_current_run()
+                                    if ot2_result.success:
+                                        response.update({
+                                            "status": "success",
+                                            "message": f"OT2 paused via fallback (run: {run_id})"
+                                        })
+                                        # Broadcast pause status to all clients
+                                        await self.broadcast({
+                                            "type": "step_status_update",
+                                            "data": {
+                                                "step_index": current_step,
+                                                "step_name": step_name,
+                                                "robot_id": "ot2",
+                                                "paused": True,
+                                                "pause_reason": pause_reason,
+                                                "progress": {}
+                                            }
+                                        })
+                                    else:
+                                        response.update({
+                                            "status": "error",
+                                            "message": f"OT2 pause failed: {ot2_result.error}"
+                                        })
+                                else:
+                                    response.update({
+                                        "status": "error",
+                                        "message": f"No active robot found for step {current_step}"
+                                    })
+                            else:
+                                response.update({
+                                    "status": "error",
+                                    "message": f"No active robot found for step {current_step}"
+                                })
+
                     except Exception as e:
                         logger.error(f"Step pause error: {e}")
                         response.update({
@@ -774,27 +900,43 @@ class WebsocketHandler:
                             "message": f"Step pause failed: {str(e)}"
                         })
                 elif command_type == "resume_system":
-                    # Step-aware resume functionality
+                    # Step-aware resume functionality with OT2 API integration
                     try:
                         current_step = command_data.get("current_step", 0)
                         step_name = command_data.get("step_name", f"Step {current_step}")
-                        
+
                         logger.info(f"Step-aware resume requested for step {current_step} ({step_name})")
-                        
+
                         # Get step states to find which robot is paused for this step
                         step_states = await self.state_manager.get_all_step_states()
                         paused_robot = None
-                        
+
                         # Find robot with paused step matching the current step
                         for robot_id, step_state in step_states.items():
                             if step_state and step_state.step_index == current_step and step_state.paused:
                                 paused_robot = robot_id
                                 break
-                        
+
                         if paused_robot:
-                            # Resume the specific robot's step
+                            # CRITICAL: If paused robot is OT2, resume via OT2 API
+                            if paused_robot == "ot2":
+                                try:
+                                    ot2_service = await self.orchestrator.get_robot_service("ot2")
+                                    if ot2_service:
+                                        logger.info("Resuming OT2 protocol via API...")
+                                        ot2_result = await ot2_service.resume_current_run()
+                                        if ot2_result.success:
+                                            logger.info("OT2 protocol resumed successfully via API")
+                                        else:
+                                            logger.warning(f"OT2 resume API call returned error: {ot2_result.error}")
+                                    else:
+                                        logger.warning("OT2 service not available for resume")
+                                except Exception as ot2_e:
+                                    logger.error(f"Error calling OT2 resume API: {ot2_e}")
+
+                            # Resume the specific robot's step (internal state)
                             resumed_step = await self.state_manager.resume_step(paused_robot)
-                            
+
                             if resumed_step:
                                 response.update({
                                     "status": "success",
@@ -806,7 +948,7 @@ class WebsocketHandler:
                                         "progress": resumed_step.progress_data
                                     }
                                 })
-                                
+
                                 # Broadcast step-specific resume status to all clients
                                 await self.broadcast({
                                     "type": "step_status_update",
@@ -825,11 +967,43 @@ class WebsocketHandler:
                                     "message": f"Failed to resume step {current_step} for robot {paused_robot}"
                                 })
                         else:
-                            response.update({
-                                "status": "error",
-                                "message": f"No paused robot found for step {current_step}"
-                            })
-                            
+                            # Fallback: Try OT2 directly if step tracking doesn't find paused robot
+                            # This handles cases where OT2 was paused via fallback (without step registration)
+                            ot2_service = await self.orchestrator.get_robot_service("ot2")
+                            if ot2_service:
+                                # Try to resume - resume_current_run() uses resilient run discovery
+                                # and will return an appropriate error if nothing to resume
+                                logger.info("Fallback: Attempting OT2 resume via direct service call")
+                                ot2_result = await ot2_service.resume_current_run()
+                                if ot2_result.success:
+                                    response.update({
+                                        "status": "success",
+                                        "message": "OT2 resumed via fallback"
+                                    })
+                                    # Broadcast resume status to all clients
+                                    await self.broadcast({
+                                        "type": "step_status_update",
+                                        "data": {
+                                            "step_index": current_step,
+                                            "step_name": step_name,
+                                            "robot_id": "ot2",
+                                            "paused": False,
+                                            "pause_reason": "",
+                                            "progress": {}
+                                        }
+                                    })
+                                else:
+                                    # If OT2 resume also failed, return original error
+                                    response.update({
+                                        "status": "error",
+                                        "message": f"No paused robot found for step {current_step}"
+                                    })
+                            else:
+                                response.update({
+                                    "status": "error",
+                                    "message": f"No paused robot found for step {current_step}"
+                                })
+
                     except Exception as e:
                         logger.error(f"Step resume error: {e}")
                         response.update({

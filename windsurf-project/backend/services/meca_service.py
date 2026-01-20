@@ -166,356 +166,176 @@ class MecaService(RobotService):
     
     @circuit_breaker("meca_check_connection", failure_threshold=3, recovery_timeout=10)
     async def _check_robot_connection(self) -> bool:
-        """Check if Meca robot is connected and accessible, attempt reconnection if needed"""
+        """Check robot connection, attempting reconnection if needed."""
         try:
-            # First check basic TCP connectivity
             await self._test_robot_connection()
-            
-            # Check if we have a full robot connection (not just TCP)
-            if hasattr(self.async_wrapper, 'robot_driver'):
-                driver = self.async_wrapper.robot_driver
-                robot_instance = driver.get_robot_instance() if hasattr(driver, 'get_robot_instance') else None
-                
-                if not robot_instance:
-                    # TCP is working but no robot instance - check if we should attempt reconnection
-                    current_time = time.time()
-                    if current_time >= self._next_reconnect_time:
-                        self.logger.info(f"TCP connection OK but no robot instance for {self.robot_id} - attempting reconnection (attempt {self._reconnect_attempt_count + 1})")
-                        reconnected = await self._attempt_robot_reconnection()
-                        if reconnected:
-                            self.logger.info(f"🎉 Successfully reconnected to robot {self.robot_id}")
-                            return True
-                        else:
-                            self.logger.debug(f"Robot reconnection attempt failed for {self.robot_id}")
-                            return True  # TCP is working, just no full connection yet
-                    else:
-                        # Still in backoff period
-                        remaining = self._next_reconnect_time - current_time
-                        self.logger.debug(f"Robot {self.robot_id} reconnection in backoff - {remaining:.1f}s remaining")
-                        return True  # TCP is working, just waiting for next retry
-                        
+
+            if not hasattr(self.async_wrapper, 'robot_driver'):
+                return True
+
+            driver = self.async_wrapper.robot_driver
+            robot_instance = driver.get_robot_instance() if hasattr(driver, 'get_robot_instance') else None
+
+            if not robot_instance and time.time() >= self._next_reconnect_time:
+                await self._attempt_robot_reconnection()
+
             return True
         except Exception as e:
-            self.logger.debug(f"Meca connection check failed: {e}")
+            self.logger.debug(f"Connection check failed: {e}")
             return False
-    
+
     @circuit_breaker("meca_reconnection", failure_threshold=2, recovery_timeout=5)
     async def _attempt_robot_reconnection(self) -> bool:
-        """Attempt to reconnect to the robot hardware (full mecademicpy connection) with exponential backoff"""
-        try:
-            if hasattr(self.async_wrapper, 'robot_driver'):
-                driver = self.async_wrapper.robot_driver
-                self.logger.info(f"🔄 Attempting full robot reconnection for {self.robot_id} (attempt {self._reconnect_attempt_count + 1}/{self._max_reconnect_attempts})")
-                
-                # Attempt the full robot connection
-                connected = await driver.connect()
-                
-                if connected:
-                    self.logger.info(f"✅ Robot reconnection successful for {self.robot_id}")
-                    # Reset backoff state on successful connection
-                    self._reset_reconnect_backoff()
-                    
-                    # Update robot state to reflect successful connection
-                    await self.update_robot_state(
-                        RobotState.IDLE,
-                        reason="Robot hardware reconnected successfully"
-                    )
-                    return True
-                else:
-                    self.logger.debug(f"⚠️ Robot reconnection failed for {self.robot_id}")
-                    self._schedule_next_reconnect_attempt("Connection returned False")
-                    return False
-            else:
-                self.logger.warning(f"No robot_driver available for reconnection for {self.robot_id}")
-                self._schedule_next_reconnect_attempt("No robot driver available")
-                return False
-                
-        except Exception as e:
-            # Check if it's the "Another user connected" error
-            if "Another user is already connected" in str(e):
-                self.logger.debug(f"⏳ Robot {self.robot_id} still has another user connected - will retry later")
-                self._schedule_next_reconnect_attempt("Another user connected")
-            else:
-                self.logger.warning(f"⚠️ Robot reconnection error for {self.robot_id}: {e}")
-                self._schedule_next_reconnect_attempt(f"Exception: {str(e)}")
+        """Attempt reconnection with exponential backoff."""
+        if not hasattr(self.async_wrapper, 'robot_driver'):
+            self._schedule_next_reconnect_attempt("No driver")
             return False
-    
-    def _reset_reconnect_backoff(self):
-        """Reset exponential backoff state after successful connection"""
+
+        driver = self.async_wrapper.robot_driver
+        self.logger.info(f"Reconnection attempt {self._reconnect_attempt_count + 1} for {self.robot_id}")
+
+        try:
+            if await driver.connect():
+                self._reset_reconnect_backoff()
+                await self.update_robot_state(RobotState.IDLE, reason="Reconnected")
+                self.logger.info(f"Reconnected to {self.robot_id}")
+                return True
+
+            self._schedule_next_reconnect_attempt("Connection failed")
+            return False
+
+        except Exception as e:
+            self._schedule_next_reconnect_attempt(str(e)[:50])
+            return False
+
+    def _reset_reconnect_backoff(self) -> None:
+        """Reset exponential backoff state."""
         self._reconnect_attempt_count = 0
         self._next_reconnect_time = 0.0
-        self.logger.debug(f"Reset reconnection backoff for {self.robot_id}")
-    
-    def _schedule_next_reconnect_attempt(self, reason: str):
-        """Schedule the next reconnection attempt with exponential backoff"""
-        self._reconnect_attempt_count += 1
-        
-        if self._reconnect_attempt_count >= self._max_reconnect_attempts:
-            self.logger.warning(f"Maximum reconnection attempts ({self._max_reconnect_attempts}) reached for {self.robot_id}")
-            # Reset to allow future attempts, but with maximum delay
-            self._reconnect_attempt_count = self._max_reconnect_attempts - 1
-        
-        # Calculate exponential backoff delay: base_delay * 2^(attempt-1), capped at max_delay
-        delay = min(
-            self._base_reconnect_delay * (2 ** (self._reconnect_attempt_count - 1)),
-            self._max_reconnect_delay
-        )
-        
+
+    def _schedule_next_reconnect_attempt(self, reason: str) -> None:
+        """Schedule next reconnection attempt with exponential backoff."""
+        self._reconnect_attempt_count = min(self._reconnect_attempt_count + 1, self._max_reconnect_attempts - 1)
+        delay = min(self._base_reconnect_delay * (2 ** (self._reconnect_attempt_count - 1)), self._max_reconnect_delay)
         self._next_reconnect_time = time.time() + delay
-        
-        self.logger.info(
-            f"Scheduled next reconnection attempt for {self.robot_id} in {delay:.1f}s "
-            f"(attempt {self._reconnect_attempt_count}/{self._max_reconnect_attempts}, reason: {reason})"
-        )
-    
-    async def _handle_connection_state_change(self, is_connected: bool):
-        """Handle Meca robot connection state changes"""
-        from core.state_manager import RobotState
-        
-        if is_connected:
-            # Robot connected - set to IDLE state
-            await self.update_robot_state(
-                RobotState.IDLE,
-                reason="Meca robot connection restored"
-            )
-            self.logger.info(f"Meca robot {self.robot_id} connection restored")
-        else:
-            # Robot disconnected - set to ERROR state
-            await self.update_robot_state(
-                RobotState.ERROR,
-                reason="Meca robot connection lost"
-            )
-            self.logger.warning(f"Meca robot {self.robot_id} connection lost")
-        
-        # Broadcast state change via WebSocket
+        self.logger.debug(f"Next reconnect in {delay:.1f}s: {reason}")
+
+    async def _handle_connection_state_change(self, is_connected: bool) -> None:
+        """Handle robot connection state changes."""
+        state = RobotState.IDLE if is_connected else RobotState.ERROR
+        reason = "Connection restored" if is_connected else "Connection lost"
+        await self.update_robot_state(state, reason=reason)
+        self.logger.info(f"Robot {self.robot_id}: {reason}")
         await self._broadcast_robot_state_change(is_connected)
     
-    async def _broadcast_robot_state_change(self, is_connected: bool):
-        """Broadcast robot state change to WebSocket clients"""
-        try:
-            # Import here to avoid circular imports
-            from websocket.selective_broadcaster import get_broadcaster, MessageType
-            
-            broadcaster = await get_broadcaster()
-            
-            message = {
-                "type": "robot_status",
-                "robot_id": self.robot_id,
-                "robot_type": self.robot_type,
-                "connected": is_connected,
-                "robot_state": "idle" if is_connected else "error",
-                "operational": is_connected,
-                "timestamp": time.time()
-            }
-            
-            await broadcaster.broadcast_message(
-                message_type=MessageType.ROBOT_STATUS,
-                data=message,
-                robot_id=self.robot_id
-            )
-            
-            self.logger.debug(f"Broadcasted Meca state change: connected={is_connected}")
-
-        except Exception as e:
-            self.logger.error(f"Failed to broadcast Meca state change: {e}")
-
-    async def _broadcast_batch_completion(
-        self,
-        operation_type: str,
-        start: int,
-        count: int,
-        result: Dict[str, Any]
-    ) -> bool:
-        """
-        Broadcast batch completion event to WebSocket clients.
-        Used to notify frontend when a pickup or drop sequence completes.
-
-        Args:
-            operation_type: Type of operation ("pickup" or "drop")
-            start: Starting wafer index
-            count: Number of wafers in batch
-            result: Result dict from the sequence execution
-
-        Returns:
-            True if broadcast succeeded, False otherwise
-        """
+    async def _broadcast_message(self, message_type_str: str, data: Dict[str, Any]) -> bool:
+        """Broadcast message to WebSocket clients. Returns True on success."""
         try:
             from websocket.selective_broadcaster import get_broadcaster, MessageType
-
             broadcaster = await get_broadcaster()
-
-            message = {
-                "event": "batch_completion",
-                "robot_id": self.robot_id,
-                "operation_type": operation_type,
-                "batch_start": start,
-                "batch_count": count,
-                "wafers_processed": result.get("wafers_processed", 0),
-                "wafers_failed": result.get("wafers_failed", []),
-                "success_rate": result.get("success_rate", "0%"),
-                "status": result.get("status", "completed"),
-                "timestamp": time.time()
-            }
-
-            success = await broadcaster.broadcast_message(
-                message_type=MessageType.OPERATION_UPDATE,
-                data=message,
-                robot_id=self.robot_id
-            )
-
-            if success:
-                self.logger.info(
-                    f"📢 Broadcasted batch_completion: {operation_type} "
-                    f"(wafers {start+1}-{start+count}, {result.get('wafers_processed', 0)} processed)"
-                )
-            else:
-                self.logger.warning(
-                    f"⚠️ Broadcast may have been dropped (queue full): {operation_type} "
-                    f"(wafers {start+1}-{start+count})"
-                )
-
-            return success if success is not None else True
-
+            msg_type = MessageType.ROBOT_STATUS if message_type_str == "robot_status" else MessageType.OPERATION_UPDATE
+            data["robot_id"] = self.robot_id
+            data["timestamp"] = time.time()
+            return await broadcaster.broadcast_message(message_type=msg_type, data=data, robot_id=self.robot_id) or True
         except Exception as e:
-            self.logger.error(f"❌ Failed to broadcast batch completion: {e}")
+            self.logger.warning(f"Broadcast failed: {e}")
             return False
 
-    async def _broadcast_wafer_progress(
-        self,
-        operation_type: str,
-        wafer_num: int,
-        wafer_index: int,
-        batch_start: int,
-        batch_count: int
-    ):
-        """
-        Broadcast wafer progress event to WebSocket clients.
-        """
-        try:
-            from websocket.selective_broadcaster import get_broadcaster, MessageType
+    async def _broadcast_robot_state_change(self, is_connected: bool) -> None:
+        """Broadcast robot state change to WebSocket clients."""
+        await self._broadcast_message("robot_status", {
+            "type": "robot_status",
+            "robot_type": self.robot_type,
+            "connected": is_connected,
+            "robot_state": "idle" if is_connected else "error",
+            "operational": is_connected
+        })
 
-            broadcaster = await get_broadcaster()
+    async def _broadcast_batch_completion(self, operation_type: str, start: int, count: int, result: Dict[str, Any]) -> bool:
+        """Broadcast batch completion event to WebSocket clients."""
+        success = await self._broadcast_message("operation", {
+            "event": "batch_completion",
+            "operation_type": operation_type,
+            "batch_start": start,
+            "batch_count": count,
+            "wafers_processed": result.get("wafers_processed", 0),
+            "wafers_failed": result.get("wafers_failed", []),
+            "success_rate": result.get("success_rate", "0%"),
+            "status": result.get("status", "completed")
+        })
+        self.logger.debug(f"Batch completion broadcast: {operation_type} wafers {start+1}-{start+count}")
+        return success
 
-            message = {
-                "event": "wafer_progress",
-                "robot_id": self.robot_id,
-                "operation_type": operation_type,
-                "wafer_num": wafer_num,
-                "wafer_index": wafer_index,
-                "batch_start": batch_start,
-                "batch_count": batch_count,
-                "timestamp": time.time()
-            }
+    async def _broadcast_wafer_progress(self, operation_type: str, wafer_num: int, wafer_index: int, batch_start: int, batch_count: int) -> None:
+        """Broadcast wafer progress event to WebSocket clients."""
+        await self._broadcast_message("operation", {
+            "event": "wafer_progress",
+            "operation_type": operation_type,
+            "wafer_num": wafer_num,
+            "wafer_index": wafer_index,
+            "batch_start": batch_start,
+            "batch_count": batch_count
+        })
 
-            await broadcaster.broadcast_message(
-                message_type=MessageType.OPERATION_UPDATE,
-                data=message,
-                robot_id=self.robot_id
-            )
-
-            self.logger.info(
-                f"📡 Broadcasted wafer_progress: {operation_type} wafer {wafer_num} "
-                f"(index {wafer_index}, batch {batch_start}-{batch_start+batch_count})"
-            )
-
-        except Exception as e:
-            self.logger.error(f"Failed to broadcast wafer progress: {e}")
-
-    async def _on_start(self):
-        """Initialize Meca robot connection on service start"""
-        # First register the robot with state manager
+    async def _on_start(self) -> None:
+        """Initialize Meca robot connection on service start."""
         await super()._on_start()
-        
+
+        await self.update_robot_state(RobotState.CONNECTING, reason="Attempting to connect to Meca robot")
+
+        # Test TCP connection first
+        tcp_ok = await self._test_tcp_connection_safe()
+        if not tcp_ok:
+            await self._handle_startup_failure("TCP connection failed")
+            return
+
+        self.logger.info(f"TCP connection test successful for {self.robot_id}")
+
+        # Attempt full robot connection
+        connected = await self._attempt_startup_connection()
+        if not connected:
+            await self._handle_startup_failure("Robot connection failed during startup")
+            return
+
+        self._reset_reconnect_backoff()
+        self.logger.info(f"Robot {self.robot_id} successfully connected")
+
+        await self.capture_current_position()
+        await self.update_robot_state(RobotState.IDLE, reason="Meca robot service started and connected")
+        self.logger.info(f"Meca robot service started successfully for {self.robot_id}")
+
+    async def _test_tcp_connection_safe(self) -> bool:
+        """Test TCP connection, returning False on failure instead of raising."""
         try:
-            # Update to connecting state first
-            await self.update_robot_state(
-                RobotState.CONNECTING,
-                reason="Attempting to connect to Meca robot"
-            )
-            
-            # Test robot connection using status check
-            try:
-                await self._test_robot_connection()
-                self.logger.info("TCP connection test successful, attempting full robot connection...")
-                
-                # Attempt full robot connection (mecademicpy Robot.Connect)
-                robot_connection_established = False
-                try:
-                    if hasattr(self.async_wrapper, 'robot_driver'):
-                        driver = self.async_wrapper.robot_driver
-                        self.logger.info(f"🔄 Attempting mecademicpy Robot.Connect() during startup for {self.robot_id}")
-                        
-                        # Attempt connection
-                        connected = await driver.connect()
-                        
-                        if connected:
-                            self.logger.info(f"🎉 Full robot connection established during startup for {self.robot_id}")
-                            # Reset backoff state on successful connection
-                            self._reset_reconnect_backoff()
-                            robot_connection_established = True
-                        else:
-                            self.logger.error(f"❌ Robot connection failed during startup for {self.robot_id}")
-                            self.logger.error(f"💡 Check network connectivity and robot status at {driver.ip_address}:{driver.port}")
-                    else:
-                        self.logger.error(f"❌ No robot_driver available for connection for {self.robot_id}")
-                        self.logger.error(f"💡 Check robot driver initialization in async_wrapper")
-                        
-                except Exception as robot_conn_error:
-                    self.logger.error(f"❌ mecademicpy Robot.Connect() failed during startup for {self.robot_id}: {robot_conn_error}")
-                    self.logger.error(f"💡 See detailed connection logs above for troubleshooting information")
-                
-                # CRITICAL: Only proceed if robot connection is established
-                if not robot_connection_established:
-                    self.logger.error(f"🚫 Robot {self.robot_id} connection failed - service cannot start without hardware connection")
-                    # Set to error state instead of continuing
-                    await self.update_robot_state(
-                        RobotState.ERROR,
-                        reason=f"Robot connection failed during startup"
-                    )
-                    # Don't raise exception here, just log the failure and let health monitoring handle reconnection
-                    self.logger.error(f"💡 Health monitoring will attempt reconnection for {self.robot_id}")
-                else:
-                    self.logger.info(f"✅ Robot {self.robot_id} successfully connected and ready for operations")
-                
-                # Capture current position
-                await self.capture_current_position()
-                
-                # Update robot state to idle if connection successful
-                await self.update_robot_state(
-                    RobotState.IDLE,
-                    reason="Meca robot service started and connected"
-                )
-                
-                self.logger.info("Meca robot service started successfully")
-                
-            except Exception as conn_error:
-                self.logger.error(f"❌ Meca robot connection failed: {type(conn_error).__name__}: {conn_error}")
-                self.logger.error(f"💡 Connection troubleshooting for {self.robot_id}:")
-                robot_config = self.robot_config
-                self.logger.error(f"   - Robot IP: {robot_config.get('ip', 'N/A')}")
-                self.logger.error(f"   - Robot Port: {robot_config.get('port', 'N/A')}")
-                self.logger.error(f"   - Timeout: {robot_config.get('timeout', 'N/A')}s")
-                self.logger.error(f"   - Check robot power and network accessibility")
-                # Set to error state from connecting state
-                await self.update_robot_state(
-                    RobotState.ERROR,
-                    reason=f"Connection failed: {str(conn_error)}"
-                )
-            
+            await self._test_robot_connection()
+            return True
         except Exception as e:
-            self.logger.error(f"💥 Failed to start Meca robot service: {type(e).__name__}: {e}")
-            self.logger.error(f"💡 Service startup troubleshooting:")
-            self.logger.error(f"   1. Check system dependencies and imports")
-            self.logger.error(f"   2. Verify configuration settings")
-            self.logger.error(f"   3. Check state manager and lock manager initialization")
-            # If we can't even get to connecting state, there's a critical issue
-            try:
-                await self.update_robot_state(
-                    RobotState.ERROR,
-                    reason=f"Critical startup failure: {str(e)}"
-                )
-            except Exception as state_error:
-                self.logger.error(f"Could not update robot state: {state_error}")
+            self.logger.error(f"TCP connection test failed for {self.robot_id}: {e}")
+            return False
+
+    async def _attempt_startup_connection(self) -> bool:
+        """Attempt to establish full robot connection during startup."""
+        if not hasattr(self.async_wrapper, 'robot_driver'):
+            self.logger.error(f"No robot_driver available for {self.robot_id}")
+            return False
+
+        driver = self.async_wrapper.robot_driver
+        try:
+            connected = await driver.connect()
+            if not connected:
+                self.logger.error(f"Robot connection returned False for {self.robot_id}")
+            return connected
+        except Exception as e:
+            self.logger.error(f"Robot connection failed for {self.robot_id}: {e}")
+            return False
+
+    async def _handle_startup_failure(self, reason: str) -> None:
+        """Handle startup failure by setting error state."""
+        self.logger.error(f"Startup failure for {self.robot_id}: {reason}")
+        try:
+            await self.update_robot_state(RobotState.ERROR, reason=reason)
+        except Exception as e:
+            self.logger.error(f"Could not update robot state: {e}")
     
     async def _on_stop(self):
         """Clean up Meca robot connection on service stop"""
@@ -608,445 +428,226 @@ class MecaService(RobotService):
     @circuit_breaker("meca_robot_ready", failure_threshold=4, recovery_timeout=20)
     async def ensure_robot_ready(self, allow_busy: bool = True) -> bool:
         """
-        Override base method to add hardware state verification for Mecademic robot.
-        
-        Ensures both software state (IDLE/BUSY) and hardware state (activated/homed)
-        are ready before allowing operations to proceed.
-        
+        Ensure robot is ready for operations by verifying hardware state.
+
+        Checks software state and hardware state (activated/homed), performing
+        necessary recovery steps (error reset, activation, homing) as needed.
+
         Args:
-            allow_busy: Whether to allow BUSY state (for operations already in progress)
-            
+            allow_busy: Whether to allow BUSY state
+
         Returns:
-            True if robot is ready for operations
-            
+            True if robot is ready
+
         Raises:
             ValidationError: If robot is not in valid state
             HardwareError: If hardware activation/homing fails
         """
-        # Debug logging for comprehensive connection flow tracking
-        start_time = time.time()
-        self.debug_log(self.robot_id, "ensure_robot_ready", "entry", 
-                      f"Starting readiness check", {"allow_busy": allow_busy})
-        
-        # First check software state using base class method
-        self.debug_log(self.robot_id, "ensure_robot_ready", "base_check", 
-                      "Calling base class ensure_robot_ready()")
         await super().ensure_robot_ready(allow_busy)
-        self.debug_log(self.robot_id, "ensure_robot_ready", "base_complete", 
-                      "Base class check completed successfully")
-        
-        # Now check hardware state for Mecademic-specific requirements
-        try:
-            self.logger.debug(f"Checking Mecademic hardware state for {self.robot_id}")
-            
-            # Get robot status from driver
-            self.debug_log(self.robot_id, "ensure_robot_ready", "driver_check", 
-                          "Checking for robot driver availability")
-            if not hasattr(self.async_wrapper, 'robot_driver'):
-                self.debug_log(self.robot_id, "ensure_robot_ready", "no_driver", 
-                              "No robot driver available - skipping hardware check")
-                self.logger.warning(f"No robot driver available for {self.robot_id} - skipping hardware state check")
-                return True
-                
-            driver = self.async_wrapper.robot_driver
-            self.debug_log(self.robot_id, "ensure_robot_ready", "driver_found", 
-                          "Robot driver available", {"driver_type": type(driver).__name__})
-            
-            robot_instance = driver.get_robot_instance() if hasattr(driver, 'get_robot_instance') else None
-            self.debug_log(self.robot_id, "ensure_robot_ready", "instance_check", 
-                          f"Robot instance status", {"instance_available": robot_instance is not None})
-            
-            if not robot_instance:
-                # No robot instance available - attempt to connect before proceeding
-                self.debug_log(self.robot_id, "ensure_robot_ready", "connection_attempt", 
-                              "No robot instance - attempting connection")
-                self.logger.info(f"No robot instance available for {self.robot_id} - attempting connection")
-                try:
-                    connect_ok = await driver.connect()
-                    self.debug_log(self.robot_id, "ensure_robot_ready", "connection_result", 
-                                  f"Connection attempt result", {"success": connect_ok})
-                    if not connect_ok:
-                        error_msg = f"Failed to connect robot {self.robot_id}"
-                        self.logger.error(error_msg)
-                        raise HardwareError(error_msg, robot_id=self.robot_id)
-                    
-                    # Refresh robot instance after successful connection
-                    robot_instance = driver.get_robot_instance() if hasattr(driver, 'get_robot_instance') else None
-                    if not robot_instance:
-                        error_msg = f"Robot instance still not available after connection for {self.robot_id}"
-                        self.logger.error(error_msg)
-                        raise HardwareError(error_msg, robot_id=self.robot_id)
-                        
-                    self.logger.info(f"✅ Successfully connected robot {self.robot_id}")
-                    
-                    # Clear driver's status cache to ensure fresh status on next call
-                    if hasattr(driver, 'clear_status_cache'):
-                        self.debug_log(self.robot_id, "ensure_robot_ready", "cache_clear", 
-                                      "Clearing driver status cache after connection")
-                        driver.clear_status_cache()
-                    
-                except Exception as exc:
-                    error_msg = f"Error connecting robot {self.robot_id}: {exc}"
-                    self.logger.error(error_msg)
-                    raise HardwareError(error_msg, robot_id=self.robot_id)
-            
-            # Get current robot status  
-            self.debug_log(self.robot_id, "ensure_robot_ready", "status_refresh", 
-                          "Getting fresh robot status after connection check")
-            status = await driver.get_status()
-            self.debug_log(self.robot_id, "ensure_robot_ready", "status_retrieved", 
-                          f"Robot status retrieved", {"status": status})
-            activation_status = status.get('activation_status', False)
-            homing_status = status.get('homing_status', False)
-            error_status = status.get('error_status', False)
-            pause_status = status.get('paused', False)
-            
-            self.logger.debug(f"Robot {self.robot_id} hardware state - Activated: {activation_status}, Homed: {homing_status}, Error: {error_status}, Paused: {pause_status}")
-            
-            # Step 1: Reset any error condition first
-            if error_status:
-                self.logger.info(f"🔧 Robot {self.robot_id} has error - resetting...")
-                try:
-                    reset_success = await driver.reset_error()
-                    if reset_success:
-                        self.logger.info(f"✅ Error reset successful for {self.robot_id}")
-                        # Re-check status after reset
-                        await asyncio.sleep(2.0)
-                        status = await driver.get_status()
-                        activation_status = status.get('activation_status', False)
-                        homing_status = status.get('homing_status', False)
-                        error_status = status.get('error_status', False)
-                        pause_status = status.get('paused', False)
-                    else:
-                        raise HardwareError(f"Failed to reset error for robot {self.robot_id}", robot_id=self.robot_id)
-                except Exception as e:
-                    error_msg = f"Error reset failed for robot {self.robot_id}: {str(e)}"
-                    self.logger.error(error_msg)
-                    raise HardwareError(error_msg, robot_id=self.robot_id)
-            
-            # Check if robot needs activation
-            if not activation_status:
-                self.logger.info(f"🔧 Robot {self.robot_id} not activated - activating now...")
-                
-                # Retry robot activation with exponential backoff
-                max_retries = 3
-                base_delay = 1.0
-                
-                for attempt in range(max_retries):
-                    try:
-                        if attempt > 0:
-                            delay = base_delay * (2 ** (attempt - 1))
-                            self.logger.info(f"🔄 Robot {self.robot_id} activation retry {attempt}/{max_retries - 1} after {delay}s delay...")
-                            await asyncio.sleep(delay)
-                        
-                        await driver.activate_robot()
-                        self.logger.info(f"✅ Robot {self.robot_id} activation command sent (attempt {attempt + 1})")
-                        
-                        # Wait and verify activation completed
-                        await asyncio.sleep(2.0)  # Give time for activation to complete
-                        verification_status = await driver.get_status()
-                        if not verification_status.get('activation_status', False):
-                            if attempt < max_retries - 1:
-                                self.logger.warning(f"⚠️ Robot {self.robot_id} activation verification failed on attempt {attempt + 1}, retrying...")
-                                continue
-                            else:
-                                raise HardwareError(f"Robot {self.robot_id} activation failed to complete after {max_retries} attempts", robot_id=self.robot_id)
-                        
-                        self.logger.info(f"✅ Robot {self.robot_id} activation verified on attempt {attempt + 1}")
-                        activation_status = True  # Update local status
-                        break  # Success, exit retry loop
-                        
-                    except Exception as e:
-                        error_str = str(e)
-                        if attempt < max_retries - 1 and ("Socket was closed" in error_str or "Connection" in error_str or "timeout" in error_str.lower()):
-                            self.logger.warning(f"⚠️ Robot {self.robot_id} activation failed on attempt {attempt + 1} with transient error: {error_str}")
-                            continue  # Retry on transient network errors
-                        else:
-                            error_msg = f"Failed to activate robot {self.robot_id} after {attempt + 1} attempts: {error_str}"
-                            self.logger.error(error_msg)
-                            raise HardwareError(error_msg, robot_id=self.robot_id)
-            
-            # Step 3: Resume motion if paused and not homed (prevents homing deadlock)
-            if pause_status and not homing_status:
-                self.logger.info(f"🔧 Robot {self.robot_id} is paused and not homed - resuming before homing...")
-                try:
-                    resume_success = await driver.resume_motion()
-                    if resume_success:
-                        self.logger.info(f"✅ Motion resumed for robot {self.robot_id} before homing")
-                        # Update pause status
-                        await asyncio.sleep(1.0)
-                        status = await driver.get_status()
-                        pause_status = status.get('paused', False)
-                    else:
-                        self.logger.warning(f"⚠️ Failed to resume motion before homing for {self.robot_id}")
-                except Exception as e:
-                    self.logger.error(f"Failed to resume motion before homing for {self.robot_id}: {str(e)}")
-            
-            # Step 4: Home robot if needed, then wait for completion
-            if not homing_status:
-                self.logger.info(f"🏠 Robot {self.robot_id} not homed - homing now...")
-                
-                # Retry robot homing with exponential backoff
-                max_retries = 3
-                base_delay = 2.0
-                
-                for attempt in range(max_retries):
-                    try:
-                        if attempt > 0:
-                            delay = base_delay * (2 ** (attempt - 1))
-                            self.logger.info(f"🔄 Robot {self.robot_id} homing retry {attempt}/{max_retries - 1} after {delay}s delay...")
-                            await asyncio.sleep(delay)
-                        
-                        await driver.home_robot()
-                        self.logger.info(f"✅ Robot {self.robot_id} homing command sent (attempt {attempt + 1})")
-                        
-                        # Wait for homing to complete using wait_idle
-                        self.logger.info(f"⏳ Waiting for robot {self.robot_id} to complete homing...")
-                        wait_success = await driver.wait_idle(timeout=30.0)
-                        if not wait_success:
-                            self.logger.warning(f"⚠️ Wait idle timeout for robot {self.robot_id} - checking status")
-                        
-                        # Verify homing completed
-                        verification_status = await driver.get_status()
-                        if not verification_status.get('homing_status', False):
-                            if attempt < max_retries - 1:
-                                self.logger.warning(f"⚠️ Robot {self.robot_id} homing verification failed on attempt {attempt + 1}, retrying...")
-                                continue
-                            else:
-                                raise HardwareError(f"Robot {self.robot_id} homing failed to complete after {max_retries} attempts", robot_id=self.robot_id)
-                        
-                        self.logger.info(f"✅ Robot {self.robot_id} homing verified on attempt {attempt + 1}")
-                        homing_status = True  # Update local status
-                        break  # Success, exit retry loop
-                        
-                    except Exception as e:
-                        error_str = str(e)
-                        if attempt < max_retries - 1 and ("Socket was closed" in error_str or "Connection" in error_str or "timeout" in error_str.lower()):
-                            self.logger.warning(f"⚠️ Robot {self.robot_id} homing failed on attempt {attempt + 1} with transient error: {error_str}")
-                            continue  # Retry on transient network errors
-                        else:
-                            error_msg = f"Failed to home robot {self.robot_id} after {attempt + 1} attempts: {error_str}"
-                            self.logger.error(error_msg)
-                            raise HardwareError(error_msg, robot_id=self.robot_id)
-            
-            # Refresh status after homing completion to get current pause state
-            if homing_status and activation_status:
-                self.debug_log(self.robot_id, "ensure_robot_ready", "post_homing_status", 
-                              "Refreshing status after homing to check pause state")
-                # Clear driver cache and get fresh status to check pause state
-                if hasattr(driver, 'clear_status_cache'):
-                    driver.clear_status_cache()
-                post_homing_status = await driver.get_status()
-                final_pause_status = post_homing_status.get('paused', False)
-                self.debug_log(self.robot_id, "ensure_robot_ready", "post_homing_pause", 
-                              f"Post-homing pause status", {"paused": final_pause_status})
-            
-            # Clear motion queue and resume motion after successful homing/activation
-            if homing_status and activation_status:
-                self.debug_log(self.robot_id, "ensure_robot_ready", "motion_sequence", 
-                              "Starting clear_motion + resume_motion sequence", 
-                              {"homing": homing_status, "activation": activation_status})
-                try:
-                    self.logger.info(f"🔧 Clearing and resuming motion for {self.robot_id}")
-                    
-                    # Clear any leftover motion queue (this also pauses the robot)
-                    self.debug_log(self.robot_id, "ensure_robot_ready", "clear_motion", 
-                                  "Calling clear_motion() to clear queue and pause robot")
-                    clear_success = await driver.clear_motion()
-                    self.debug_log(self.robot_id, "ensure_robot_ready", "clear_result", 
-                                  f"Clear motion result", {"success": clear_success})
-                    if not clear_success:
-                        self.logger.warning(f"⚠️ Failed to clear motion for {self.robot_id} - continuing with resume")
-                    
-                    # Resume motion so robot is ready for new commands (critical for Mecademic post-homing)
-                    self.debug_log(self.robot_id, "ensure_robot_ready", "resume_motion", 
-                                  "Calling resume_motion() to enable new commands (critical for post-homing)")
-                    resume_success = await driver.resume_motion()
-                    self.debug_log(self.robot_id, "ensure_robot_ready", "resume_result", 
-                                  f"Resume motion result", {"success": resume_success})
-                    if not resume_success:
-                        self.logger.warning(f"⚠️ Failed to resume motion for {self.robot_id} - robot may not accept motion commands")
-                    
-                    if clear_success and resume_success:
-                        self.debug_log(self.robot_id, "ensure_robot_ready", "motion_complete", 
-                                      "Motion clear+resume sequence completed successfully")
-                        self.logger.info(f"✅ Motion cleared and resumed for {self.robot_id}")
-                    elif resume_success:
-                        self.debug_log(self.robot_id, "ensure_robot_ready", "resume_only", 
-                                      "Resume motion succeeded (clear failed but robot should be ready)")
-                        self.logger.info(f"✅ Motion resumed for {self.robot_id} (clear failed)")
-                    else:
-                        self.debug_log(self.robot_id, "ensure_robot_ready", "motion_partial_failure", 
-                                      "Motion sequence had issues - robot may not be fully ready", 
-                                      {"clear_success": clear_success, "resume_success": resume_success})
-                    
-                except Exception as e:
-                    self.debug_log(self.robot_id, "ensure_robot_ready", "motion_error", 
-                                  f"Motion clear/resume failed", {"error": str(e)})
-                    # Log error but don't fail - robot is still technically ready
-                    self.logger.error(f"⚠️ Failed to clear/resume motion for {self.robot_id}: {str(e)}", exc_info=True)
-            
-            # Final verification of robot readiness - ensure robot is truly responsive
-            self.debug_log(self.robot_id, "ensure_robot_ready", "final_verification", 
-                          "Starting final robot responsiveness verification")
-            
-            # Test robot responsiveness with a quick status query
-            try:
-                response_start = time.time()
-                final_status = await driver.get_status()
-                response_time = time.time() - response_start
-                
-                self.debug_log(self.robot_id, "ensure_robot_ready", "response_test", 
-                              f"Robot response test completed", {"response_time": f"{response_time:.3f}s"})
-                
-                if response_time > 5.0:  # If response takes more than 5 seconds, consider it problematic
-                    self.logger.warning(f"⚠️ Robot {self.robot_id} response time slow: {response_time:.3f}s")
-                    
-            except Exception as e:
-                error_msg = f"Robot {self.robot_id} failed responsiveness test: {str(e)}"
-                self.logger.error(error_msg)
-                raise HardwareError(error_msg, robot_id=self.robot_id)
-            
-            final_activation = final_status.get('activation_status', False)
-            final_homing = final_status.get('homing_status', False)
-            error_status = final_status.get('error_status', False)
-            
-            if error_status:
-                self.logger.warning(f"🔧 Robot {self.robot_id} is in error state - attempting error recovery...")
-                try:
-                    # Attempt to reset the error state
-                    reset_success = await driver.reset_error()
-                    if reset_success:
-                        self.logger.info(f"✅ Error state cleared for robot {self.robot_id}")
-                        # Re-check status after error reset
-                        await asyncio.sleep(1.0)
-                        reset_status = await driver.get_status()
-                        error_after_reset = reset_status.get('error_status', True)
-                        if not error_after_reset:
-                            self.logger.info(f"✅ Robot {self.robot_id} error recovery successful")
-                            # Update local status variables
-                            activation_status = reset_status.get('activation_status', False)
-                            homing_status = reset_status.get('homing_status', False)
-                            error_status = False
-                        else:
-                            error_msg = f"Robot {self.robot_id} still in error state after reset attempt"
-                            self.logger.error(error_msg)
-                            raise HardwareError(error_msg, robot_id=self.robot_id)
-                    else:
-                        error_msg = f"Failed to reset error state for robot {self.robot_id}"
-                        self.logger.error(error_msg)
-                        raise HardwareError(error_msg, robot_id=self.robot_id)
-                except Exception as e:
-                    error_msg = f"Error during error recovery for robot {self.robot_id}: {str(e)}"
-                    self.logger.error(error_msg)
-                    raise HardwareError(error_msg, robot_id=self.robot_id)
 
-            # Check if robot is paused and resume if necessary (critical per mecademicpy docs)
-            # Robot must not be paused or commands will fail with "Socket was closed"
-            paused_status = final_status.get('paused', False)
-            if paused_status:
-                self.logger.warning(f"🔧 Robot {self.robot_id} is paused (pause_motion_status: True) - calling ResumeMotion()...")
-                try:
-                    robot_instance = driver.get_robot_instance() if hasattr(driver, 'get_robot_instance') else None
-                    if robot_instance and hasattr(robot_instance, 'ResumeMotion'):
-                        loop = asyncio.get_event_loop()
-                        await loop.run_in_executor(
-                            None,  # Use default executor
-                            robot_instance.ResumeMotion
-                        )
-                        self.logger.info(f"✅ ResumeMotion() completed for {self.robot_id}")
-
-                        # Verify motion resumed
-                        await asyncio.sleep(1.0)
-                        verify_status = await driver.get_status()
-                        verify_paused = verify_status.get('paused', True)
-
-                        if verify_paused:
-                            self.logger.warning(f"⚠️ Motion still paused after ResumeMotion() for {self.robot_id}")
-                        else:
-                            self.logger.info(f"✅ Motion resume verified (pause_motion_status: False) for {self.robot_id}")
-                            paused_status = False  # Update local status
-                    else:
-                        self.logger.warning(f"⚠️ ResumeMotion not available for {self.robot_id}")
-                except Exception as e:
-                    # Check if socket was closed (collision aftermath) - need to reconnect
-                    error_str = str(e)
-                    error_type = type(e).__name__
-
-                    if "Socket was closed" in error_str or "DisconnectError" in error_type:
-                        self.logger.error(f"🔴 Socket closed for {self.robot_id} (collision aftermath) - forcing reconnect...")
-
-                        try:
-                            # Disconnect and reconnect to restore communication
-                            self.logger.info(f"🔄 Attempting to disconnect {self.robot_id}...")
-                            await driver.disconnect()
-
-                            self.logger.info(f"⏳ Waiting 3s for clean disconnect...")
-                            await asyncio.sleep(3.0)
-
-                            self.logger.info(f"🔄 Attempting to reconnect {self.robot_id}...")
-                            connect_result = await driver.connect()
-
-                            if connect_result:
-                                self.logger.info(f"✅ Successfully reconnected {self.robot_id} after socket closure")
-
-                                # Wait for connection to stabilize
-                                await asyncio.sleep(2.0)
-
-                                # Verify robot is ready after reconnection
-                                reconnect_status = await driver.get_status()
-                                if reconnect_status.get('paused', False):
-                                    # Try ResumeMotion again after reconnection
-                                    robot_instance = driver.get_robot_instance()
-                                    if robot_instance and hasattr(robot_instance, 'ResumeMotion'):
-                                        loop = asyncio.get_event_loop()
-                                        await loop.run_in_executor(None, robot_instance.ResumeMotion)
-                                        self.logger.info(f"✅ ResumeMotion successful after reconnection")
-
-                                paused_status = False  # Reset after successful reconnect
-                            else:
-                                error_msg = f"Failed to reconnect {self.robot_id} after socket closure"
-                                self.logger.error(error_msg)
-                                raise HardwareError(error_msg, robot_id=self.robot_id)
-
-                        except Exception as reconnect_e:
-                            error_msg = f"Failed to reconnect {self.robot_id} after socket closure: {str(reconnect_e)}"
-                            self.logger.error(error_msg)
-                            raise HardwareError(error_msg, robot_id=self.robot_id)
-                    else:
-                        # Other error, not socket closure
-                        error_msg = f"Failed to resume motion for {self.robot_id}: {str(e)}"
-                        self.logger.error(error_msg)
-                        raise HardwareError(error_msg, robot_id=self.robot_id)
-
-                # If still paused after resume attempt, fail
-                if paused_status:
-                    error_msg = f"Robot {self.robot_id} remains in paused state - cannot execute commands"
-                    self.logger.error(error_msg)
-                    raise HardwareError(error_msg, robot_id=self.robot_id)
-
-            if not final_activation or not final_homing:
-                error_msg = f"Robot {self.robot_id} final state check failed - Activated: {final_activation}, Homed: {final_homing}"
-                self.logger.error(error_msg)
-                raise HardwareError(error_msg, robot_id=self.robot_id)
-            
-            self.logger.info(f"✅ Robot {self.robot_id} hardware state verified - Activated: {final_activation}, Homed: {final_homing}, Ready for operations")
-            
-            elapsed_time = time.time() - start_time
-            self.debug_log(self.robot_id, "ensure_robot_ready", "success", 
-                          f"Robot ready sequence completed successfully", 
-                          {"elapsed_time": f"{elapsed_time:.3f}s", "final_activation": final_activation, 
-                           "final_homing": final_homing})
-            
+        if not hasattr(self.async_wrapper, 'robot_driver'):
+            self.logger.warning(f"No robot driver for {self.robot_id} - skipping hardware check")
             return True
-            
-        except HardwareError:
-            # Re-raise hardware errors as-is
-            raise
+
+        driver = self.async_wrapper.robot_driver
+
+        # Ensure robot instance is available
+        await self._ensure_robot_instance(driver)
+
+        # Get and process robot status
+        status = await driver.get_status()
+        self.logger.debug(f"Robot {self.robot_id} state: {status}")
+
+        # Step 1: Reset errors if present
+        if status.get('error_status', False):
+            status = await self._reset_robot_error(driver)
+
+        # Step 2: Activate if needed
+        if not status.get('activation_status', False):
+            await self._activate_robot_with_retry(driver)
+
+        # Step 3: Resume if paused before homing
+        if status.get('paused', False) and not status.get('homing_status', False):
+            await self._resume_motion_safe(driver)
+            status = await driver.get_status()
+
+        # Step 4: Home if needed
+        if not status.get('homing_status', False):
+            await self._home_robot_with_retry(driver)
+
+        # Step 5: Clear motion queue and resume after homing
+        await self._prepare_motion_after_homing(driver)
+
+        # Final verification
+        final_status = await driver.get_status()
+
+        # Handle any lingering error state
+        if final_status.get('error_status', False):
+            await self._reset_robot_error(driver)
+            final_status = await driver.get_status()
+
+        # Ensure not paused
+        if final_status.get('paused', False):
+            await self._resume_paused_robot(driver)
+            final_status = await driver.get_status()
+
+        # Verify final state
+        if not final_status.get('activation_status') or not final_status.get('homing_status'):
+            raise HardwareError(
+                f"Robot {self.robot_id} not ready: activated={final_status.get('activation_status')}, "
+                f"homed={final_status.get('homing_status')}",
+                robot_id=self.robot_id
+            )
+
+        self.logger.info(f"Robot {self.robot_id} ready for operations")
+        return True
+
+    async def _ensure_robot_instance(self, driver) -> None:
+        """Ensure robot instance is available, connecting if needed."""
+        robot_instance = driver.get_robot_instance() if hasattr(driver, 'get_robot_instance') else None
+        if robot_instance:
+            return
+
+        self.logger.info(f"No robot instance for {self.robot_id} - connecting")
+        if not await driver.connect():
+            raise HardwareError(f"Failed to connect robot {self.robot_id}", robot_id=self.robot_id)
+
+        robot_instance = driver.get_robot_instance() if hasattr(driver, 'get_robot_instance') else None
+        if not robot_instance:
+            raise HardwareError(f"Robot instance unavailable after connect for {self.robot_id}", robot_id=self.robot_id)
+
+        if hasattr(driver, 'clear_status_cache'):
+            driver.clear_status_cache()
+
+    async def _reset_robot_error(self, driver) -> Dict[str, Any]:
+        """Reset robot error state and return fresh status."""
+        self.logger.info(f"Resetting error for {self.robot_id}")
+        if not await driver.reset_error():
+            raise HardwareError(f"Failed to reset error for {self.robot_id}", robot_id=self.robot_id)
+        await asyncio.sleep(2.0)
+        return await driver.get_status()
+
+    async def _activate_robot_with_retry(self, driver, max_retries: int = 3) -> None:
+        """Activate robot with exponential backoff retry."""
+        self.logger.info(f"Activating {self.robot_id}")
+
+        for attempt in range(max_retries):
+            if attempt > 0:
+                delay = 1.0 * (2 ** (attempt - 1))
+                self.logger.info(f"Activation retry {attempt} for {self.robot_id} after {delay}s")
+                await asyncio.sleep(delay)
+
+            try:
+                await driver.activate_robot()
+                await asyncio.sleep(2.0)
+
+                status = await driver.get_status()
+                if status.get('activation_status', False):
+                    self.logger.info(f"Activation verified for {self.robot_id}")
+                    return
+
+                if attempt == max_retries - 1:
+                    raise HardwareError(f"Activation failed for {self.robot_id} after {max_retries} attempts", robot_id=self.robot_id)
+
+            except HardwareError:
+                raise
+            except Exception as e:
+                if attempt == max_retries - 1 or not self._is_transient_error(e):
+                    raise HardwareError(f"Activation failed for {self.robot_id}: {e}", robot_id=self.robot_id)
+
+    async def _home_robot_with_retry(self, driver, max_retries: int = 3) -> None:
+        """Home robot with exponential backoff retry."""
+        self.logger.info(f"Homing {self.robot_id}")
+
+        for attempt in range(max_retries):
+            if attempt > 0:
+                delay = 2.0 * (2 ** (attempt - 1))
+                self.logger.info(f"Homing retry {attempt} for {self.robot_id} after {delay}s")
+                await asyncio.sleep(delay)
+
+            try:
+                await driver.home_robot()
+                await driver.wait_idle(timeout=30.0)
+
+                status = await driver.get_status()
+                if status.get('homing_status', False):
+                    self.logger.info(f"Homing verified for {self.robot_id}")
+                    return
+
+                if attempt == max_retries - 1:
+                    raise HardwareError(f"Homing failed for {self.robot_id} after {max_retries} attempts", robot_id=self.robot_id)
+
+            except HardwareError:
+                raise
+            except Exception as e:
+                if attempt == max_retries - 1 or not self._is_transient_error(e):
+                    raise HardwareError(f"Homing failed for {self.robot_id}: {e}", robot_id=self.robot_id)
+
+    async def _prepare_motion_after_homing(self, driver) -> None:
+        """Clear motion queue and resume motion after homing."""
+        if hasattr(driver, 'clear_status_cache'):
+            driver.clear_status_cache()
+
+        try:
+            await driver.clear_motion()
+            await driver.resume_motion()
+            self.logger.debug(f"Motion prepared for {self.robot_id}")
         except Exception as e:
-            error_msg = f"Unexpected error checking hardware state for {self.robot_id}: {str(e)}"
-            self.logger.error(error_msg)
-            raise HardwareError(error_msg, robot_id=self.robot_id)
+            self.logger.warning(f"Motion preparation warning for {self.robot_id}: {e}")
+
+    async def _resume_motion_safe(self, driver) -> None:
+        """Safely resume motion, handling failures gracefully."""
+        try:
+            await driver.resume_motion()
+            await asyncio.sleep(1.0)
+        except Exception as e:
+            self.logger.warning(f"Resume motion warning for {self.robot_id}: {e}")
+
+    async def _resume_paused_robot(self, driver) -> None:
+        """Resume paused robot, handling socket closure with reconnection."""
+        self.logger.info(f"Resuming paused {self.robot_id}")
+
+        try:
+            robot_instance = driver.get_robot_instance() if hasattr(driver, 'get_robot_instance') else None
+            if robot_instance and hasattr(robot_instance, 'ResumeMotion'):
+                loop = asyncio.get_event_loop()
+                await loop.run_in_executor(None, robot_instance.ResumeMotion)
+                await asyncio.sleep(1.0)
+
+                status = await driver.get_status()
+                if status.get('paused', False):
+                    raise HardwareError(f"Robot {self.robot_id} still paused after resume", robot_id=self.robot_id)
+                return
+
+        except Exception as e:
+            if "Socket was closed" in str(e) or "DisconnectError" in type(e).__name__:
+                await self._reconnect_after_socket_closure(driver)
+            else:
+                raise HardwareError(f"Failed to resume {self.robot_id}: {e}", robot_id=self.robot_id)
+
+    async def _reconnect_after_socket_closure(self, driver) -> None:
+        """Reconnect robot after socket closure (e.g., collision aftermath)."""
+        self.logger.info(f"Reconnecting {self.robot_id} after socket closure")
+
+        await driver.disconnect()
+        await asyncio.sleep(3.0)
+
+        if not await driver.connect():
+            raise HardwareError(f"Reconnection failed for {self.robot_id}", robot_id=self.robot_id)
+
+        await asyncio.sleep(2.0)
+
+        status = await driver.get_status()
+        if status.get('paused', False):
+            robot_instance = driver.get_robot_instance()
+            if robot_instance and hasattr(robot_instance, 'ResumeMotion'):
+                loop = asyncio.get_event_loop()
+                await loop.run_in_executor(None, robot_instance.ResumeMotion)
+
+    def _is_transient_error(self, error: Exception) -> bool:
+        """Check if error is transient and retryable."""
+        error_str = str(error).lower()
+        return any(x in error_str for x in ["socket was closed", "connection", "timeout"])
     
     def calculate_wafer_position(self, wafer_index: int, tray_type: str) -> List[float]:
         """
@@ -1454,79 +1055,39 @@ class MecaService(RobotService):
         return self._auto_reset_enabled
     
     async def connect(self) -> ServiceResult[bool]:
-        """
-        Connect to the Mecademic robot.
-        
-        Returns:
-            ServiceResult with connection status
-        """
+        """Connect to the Mecademic robot."""
         context = OperationContext(
             operation_id=f"{self.robot_id}_connect_{int(time.time() * 1000)}",
             robot_id=self.robot_id,
             operation_type="connect",
             timeout=self.settings.meca_timeout
         )
-        
+
         async def _connect():
-            self.logger.info(f"🔄 CONNECTING: Starting connection process for robot {self.robot_id}")
-            await self.update_robot_state(
-                RobotState.CONNECTING,
-                reason="Attempting to connect to robot"
-            )
-            
+            await self.update_robot_state(RobotState.CONNECTING, reason="Connecting to robot")
+
+            if not hasattr(self.async_wrapper, 'robot_driver'):
+                await self.update_robot_state(RobotState.ERROR, reason="Robot driver not available")
+                return False
+
+            driver = self.async_wrapper.robot_driver
             try:
-                # Get the underlying Mecademic driver
-                if hasattr(self.async_wrapper, 'robot_driver'):
-                    driver = self.async_wrapper.robot_driver
-                    self.logger.info(f"🔌 CONNECTING: Driver found for robot {self.robot_id}, attempting TCP connection")
-                    
-                    # Attempt connection
-                    connected = await driver.connect()
-                    self.logger.info(f"🔗 CONNECTION RESULT: Robot {self.robot_id} connection attempt returned: {connected}")
-                    
-                    if connected:
-                        self.logger.info(f"✅ CONNECTION SUCCESS: Robot {self.robot_id} connected successfully")
-                        
-                        # Reset backoff state on successful connection
-                        self._reset_reconnect_backoff()
-                        
-                        # Capture initial position
-                        self.logger.info(f"📍 POSITION CAPTURE: Capturing current position for robot {self.robot_id}")
-                        position_result = await self.capture_current_position()
-                        if position_result.success:
-                            self.logger.info(f"📍 POSITION CAPTURED: Successfully captured position for robot {self.robot_id}")
-                        else:
-                            self.logger.warning(f"⚠️ POSITION CAPTURE FAILED: Could not capture position for robot {self.robot_id}: {position_result.error}")
-                        
-                        # Update state to idle
-                        await self.update_robot_state(
-                            RobotState.IDLE,
-                            reason="Successfully connected to robot"
-                        )
-                        
-                        self.logger.info(f"🎯 READY: Robot {self.robot_id} is now IDLE and ready for operations")
-                        return True
-                    else:
-                        self.logger.error(f"❌ CONNECTION FAILED: Robot {self.robot_id} driver.connect() returned False")
-                        await self.update_robot_state(
-                            RobotState.ERROR,
-                            reason="Failed to connect to robot"
-                        )
-                        return False
-                else:
-                    await self.update_robot_state(
-                        RobotState.ERROR,
-                        reason="Robot driver not available"
-                    )
+                connected = await driver.connect()
+                if not connected:
+                    self.logger.error(f"Connection failed for {self.robot_id}")
+                    await self.update_robot_state(RobotState.ERROR, reason="Failed to connect")
                     return False
-                    
+
+                self._reset_reconnect_backoff()
+                await self.capture_current_position()
+                await self.update_robot_state(RobotState.IDLE, reason="Connected successfully")
+                self.logger.info(f"Robot {self.robot_id} connected and ready")
+                return True
+
             except Exception as e:
-                await self.update_robot_state(
-                    RobotState.ERROR,
-                    reason=f"Connection error: {str(e)}"
-                )
+                await self.update_robot_state(RobotState.ERROR, reason=f"Connection error: {e}")
                 raise
-        
+
         return await self.execute_operation(context, _connect)
     
     async def disconnect(self) -> ServiceResult[bool]:
@@ -1576,7 +1137,252 @@ class MecaService(RobotService):
                 return False
         
         return await self.execute_operation(context, _disconnect)
-    
+
+    async def connect_safe(self) -> dict:
+        """
+        Connect to robot WITHOUT automatic homing.
+        Returns joint positions for UI confirmation before proceeding.
+
+        This is Phase 2 of the safety plan - prevents auto-homing
+        when robot might be in an unsafe position (e.g., after E-Stop).
+
+        Returns:
+            dict with keys:
+                - connected: bool
+                - awaiting_confirmation: bool (if successful)
+                - joints: list[float] (current joint angles in degrees)
+                - error: bool (if robot has error status)
+                - error_code: int (if error exists)
+        """
+        self.logger.info(f"Safe connect initiated for robot {self.robot_id}")
+
+        try:
+            # Get the underlying Mecademic driver
+            driver = self.async_wrapper.robot_driver
+
+            # Step 1: Connect to robot (TCP connection only)
+            await driver.connect()
+            self.logger.info(f"TCP connection established for robot {self.robot_id}")
+
+            # Step 2: Get current state BEFORE activation
+            status = await driver.get_status()
+            joints = await driver.get_joints()
+
+            # Step 3: Check for error status
+            if status.get('error_status'):
+                error_code = status.get('error_code', 'unknown')
+                self.logger.warning(
+                    f"Robot {self.robot_id} connected but in error state: {error_code}"
+                )
+                return {
+                    "connected": True,
+                    "error": True,
+                    "error_code": error_code,
+                    "message": "Robot in error state - clear error before homing"
+                }
+
+            # Step 4: Broadcast connection pending state via WebSocket
+            await self._broadcast_robot_state_change_pending(joints)
+
+            self.logger.info(
+                f"Robot {self.robot_id} connected safely. "
+                f"Current joints: {joints}. Awaiting user confirmation."
+            )
+
+            return {
+                "connected": True,
+                "awaiting_confirmation": True,
+                "joints": list(joints)
+            }
+
+        except Exception as e:
+            self.logger.error(f"Robot {self.robot_id} safe connect failed: {e}")
+            raise HardwareError(
+                f"Safe connect failed: {e}",
+                robot_id=self.robot_id
+            )
+
+    async def confirm_activation(self) -> dict:
+        """
+        User-confirmed activation and homing.
+        Called by UI after user confirms robot position is safe.
+
+        Proceeds with the activation → home → wait homed sequence.
+
+        Returns:
+            dict with keys:
+                - connected: bool
+                - homed: bool
+        """
+        self.logger.info(f"Activation confirmed by user for robot {self.robot_id}")
+
+        try:
+            driver = self.async_wrapper.robot_driver
+
+            # Step 1: Check and reset any errors first
+            status = await driver.get_status()
+            if status.get('error_status'):
+                error_code = status.get('error_code', 'unknown')
+                self.logger.info(
+                    f"Resetting error {error_code} before activation for robot {self.robot_id}"
+                )
+                await driver.reset_error()
+
+            # Step 2: Activate robot
+            self.logger.info(f"Activating robot {self.robot_id}")
+            await driver.activate_robot()
+
+            # Step 3: Home robot
+            self.logger.info(f"Homing robot {self.robot_id}")
+            await driver.home_robot()
+
+            # Step 4: Wait for homing to complete (30s timeout)
+            await driver.wait_homed(timeout=30.0)
+            self.logger.info(f"Robot {self.robot_id} homing complete")
+
+            # Step 5: Check if robot is paused after homing and resume if needed
+            status = await driver.get_status()
+            if status.get('pause_motion_status'):
+                self.logger.info(f"Robot {self.robot_id} paused after homing - resuming motion")
+                await driver.resume_motion()
+
+            # Step 6: Broadcast connection complete state
+            await self._broadcast_robot_state_change_complete()
+
+            # Step 7: Update internal state to IDLE
+            await self.update_robot_state(
+                RobotState.IDLE,
+                reason="Robot activated and homed successfully"
+            )
+
+            self.logger.info(f"Robot {self.robot_id} activation and homing complete")
+
+            return {
+                "connected": True,
+                "homed": True
+            }
+
+        except Exception as e:
+            self.logger.error(f"Robot {self.robot_id} activation failed: {e}")
+            # Execute emergency stop on failure
+            await self._execute_emergency_stop()
+            raise HardwareError(
+                f"Activation failed: {e}",
+                robot_id=self.robot_id
+            )
+
+    async def _broadcast_robot_state_change_pending(self, joints: list):
+        """Broadcast connection pending state to UI via WebSocket."""
+        try:
+            from websocket.selective_broadcaster import get_broadcaster, MessageType
+
+            broadcaster = await get_broadcaster()
+            await broadcaster.broadcast_message(
+                {
+                    "type": "connection_pending",
+                    "robot_id": self.robot_id,
+                    "joints": list(joints),
+                    "requires_confirmation": True,
+                    "message": "Review robot position before homing"
+                },
+                message_type=MessageType.ROBOT_STATUS
+            )
+        except Exception as e:
+            self.logger.warning(f"Failed to broadcast pending state: {e}")
+
+    async def _broadcast_robot_state_change_complete(self):
+        """Broadcast connection complete state to UI via WebSocket."""
+        try:
+            from websocket.selective_broadcaster import get_broadcaster, MessageType
+
+            broadcaster = await get_broadcaster()
+            await broadcaster.broadcast_message(
+                {
+                    "type": "connection_complete",
+                    "robot_id": self.robot_id,
+                    "homed": True
+                },
+                message_type=MessageType.ROBOT_STATUS
+            )
+        except Exception as e:
+            self.logger.warning(f"Failed to broadcast complete state: {e}")
+
+    async def disconnect_safe(self) -> dict:
+        """
+        Gracefully disconnect from Mecademic robot.
+
+        Per plan: Deactivates robot before disconnecting to ensure clean shutdown.
+        This follows mecademicpy best practices for proper disconnection sequence.
+
+        Returns:
+            dict: Result containing disconnected status and whether robot was connected
+        """
+        try:
+            driver = self.async_wrapper.robot_driver
+
+            # Check if connected first
+            is_connected = await driver.is_connected()
+            if not is_connected:
+                self.logger.info(f"Robot {self.robot_id} already disconnected")
+                return {
+                    "disconnected": True,
+                    "was_connected": False
+                }
+
+            self.logger.info(f"Disconnecting robot {self.robot_id} safely...")
+
+            # Deactivate robot before disconnect (per mecademicpy best practices)
+            await driver.deactivate_robot()
+            self.logger.info(f"Robot {self.robot_id} deactivated")
+
+            # Disconnect from robot
+            await driver.disconnect()
+            self.logger.info(f"Robot {self.robot_id} disconnected")
+
+            # Update state to DISCONNECTED
+            await self.state_manager.update_state(
+                self.robot_id,
+                {"status": "DISCONNECTED"}
+            )
+
+            # Broadcast disconnected state via WebSocket
+            await self._broadcast_robot_disconnected()
+
+            return {
+                "disconnected": True,
+                "was_connected": True
+            }
+
+        except Exception as e:
+            self.logger.error(f"Robot {self.robot_id} disconnect failed: {e}")
+            # Force disconnect on error to avoid stuck connection
+            try:
+                driver = self.async_wrapper.robot_driver
+                await driver.disconnect()
+            except Exception:
+                pass  # Ignore secondary errors during forced disconnect
+            raise HardwareError(
+                f"Disconnect failed: {e}",
+                robot_id=self.robot_id
+            )
+
+    async def _broadcast_robot_disconnected(self):
+        """Broadcast disconnected state to UI via WebSocket."""
+        try:
+            from websocket.selective_broadcaster import get_broadcaster, MessageType
+
+            broadcaster = await get_broadcaster()
+            await broadcaster.broadcast_message(
+                {
+                    "type": "disconnected",
+                    "robot_id": self.robot_id,
+                    "disconnected": True
+                },
+                message_type=MessageType.ROBOT_STATUS
+            )
+        except Exception as e:
+            self.logger.warning(f"Failed to broadcast disconnected state: {e}")
+
     async def _execute_emergency_stop(self) -> bool:
         """Emergency stop implementation for Mecademic robot"""
         self.logger.critical(f"🚨 Executing emergency stop for Meca robot {self.robot_id}")
@@ -1590,133 +1396,62 @@ class MecaService(RobotService):
                     MovementCommand(command_type="emergency_stop")
                 )
                 emergency_success = True
-                self.logger.critical(f"✅ Emergency stop executed via AsyncRobotWrapper for {self.robot_id}")
+                self.logger.critical(f"Emergency stop executed for {self.robot_id}")
             except Exception as wrapper_error:
                 self.logger.error(f"AsyncRobotWrapper emergency stop failed: {wrapper_error}")
-                
-                # Fallback method: Direct driver emergency stop
+
+                # Fallback: Direct driver emergency stop
                 try:
                     if hasattr(self.async_wrapper.robot_driver, '_emergency_stop_impl'):
                         await self.async_wrapper.robot_driver._emergency_stop_impl()
                         emergency_success = True
-                        self.logger.critical(f"✅ Emergency stop executed via direct driver for {self.robot_id}")
-                    else:
-                        self.logger.error(f"❌ No emergency stop implementation available for {self.robot_id}")
                 except Exception as driver_error:
                     self.logger.error(f"Direct driver emergency stop failed: {driver_error}")
-            
-            # Note: Gripper state preserved (no automatic opening during emergency stop)
-            # Robot halts in place without any additional movements to prevent damage
-            
-            # CRITICAL: Validate connection after emergency stop
+
+            # Validate connection after emergency stop
             connection_preserved = await self._validate_connection_after_emergency_stop()
-            
+
             if emergency_success:
-                self.logger.critical(f"🚨 Emergency stop completed for Meca robot {self.robot_id}")
-                if connection_preserved:
-                    self.logger.critical(f"✅ Connection preserved after emergency stop for {self.robot_id}")
-                else:
-                    self.logger.warning(f"⚠️ Connection may be compromised after emergency stop for {self.robot_id}")
+                self.logger.critical(f"Emergency stop completed for {self.robot_id}, connection preserved: {connection_preserved}")
             else:
-                self.logger.error(f"❌ Emergency stop FAILED for Meca robot {self.robot_id}")
-            
+                self.logger.error(f"Emergency stop FAILED for {self.robot_id}")
+
             return emergency_success
-            
+
         except Exception as e:
-            self.logger.error(f"Emergency stop failed with unexpected error: {e}")
+            self.logger.error(f"Emergency stop failed: {e}")
             return False
-    
+
     async def _validate_connection_after_emergency_stop(self) -> bool:
-        """
-        Validate and preserve connection after emergency stop.
-        
-        Returns:
-            bool: True if connection is preserved, False if compromised
-        """
+        """Validate connection after emergency stop."""
         try:
-            self.logger.info(f"🔍 Validating connection after emergency stop for {self.robot_id}")
-            
-            # Test connection with robot status check
             status = await self.async_wrapper.get_status()
-            
             if status.get("connected", False):
-                self.logger.info(f"✅ Connection validated - robot {self.robot_id} still connected")
-                
-                # Additional validation: ensure robot is accessible
-                if hasattr(self.async_wrapper.robot_driver, '_robot'):
-                    robot_instance = self.async_wrapper.robot_driver._robot
-                    if robot_instance and hasattr(robot_instance, 'IsConnected'):
-                        try:
-                            loop = asyncio.get_event_loop()
-                            is_connected = await loop.run_in_executor(
-                                None, robot_instance.IsConnected
-                            )
-                            if is_connected:
-                                self.logger.info(f"✅ Deep connection validation passed for {self.robot_id}")
-                                return True
-                            else:
-                                self.logger.warning(f"⚠️ Robot reports disconnected after emergency stop")
-                        except Exception as check_error:
-                            self.logger.warning(f"⚠️ Connection check failed: {check_error}")
-                
                 return True
-                
-            else:
-                self.logger.warning(f"⚠️ Connection lost after emergency stop for {self.robot_id}")
-                
-                # Attempt reconnection if connection is lost
-                reconnection_success = await self._attempt_emergency_reconnection()
-                if reconnection_success:
-                    self.logger.info(f"✅ Connection restored after emergency stop for {self.robot_id}")
-                    return True
-                else:
-                    self.logger.error(f"❌ Failed to restore connection after emergency stop for {self.robot_id}")
-                    return False
-                    
+
+            # Attempt reconnection
+            return await self._attempt_emergency_reconnection()
+
         except Exception as e:
-            self.logger.error(f"❌ Connection validation failed after emergency stop: {e}")
+            self.logger.error(f"Connection validation failed: {e}")
             return False
-    
+
     async def _attempt_emergency_reconnection(self) -> bool:
-        """
-        Attempt to reconnect robot after emergency stop if connection is lost.
-        
-        Returns:
-            bool: True if reconnection successful, False otherwise
-        """
+        """Attempt to reconnect robot after emergency stop."""
+        if not hasattr(self.async_wrapper.robot_driver, 'connect'):
+            return False
+
         try:
-            self.logger.info(f"🔄 Attempting emergency reconnection for {self.robot_id}")
-            
-            # Try to reconnect the driver
-            if hasattr(self.async_wrapper.robot_driver, 'connect'):
-                reconnect_success = await self.async_wrapper.robot_driver.connect()
-                
-                if reconnect_success:
-                    self.logger.info(f"✅ Emergency reconnection successful for {self.robot_id}")
-                    
-                    # Update robot state to reflect reconnection
-                    await self.update_robot_state(
-                        RobotState.IDLE,
-                        reason="Reconnected after emergency stop"
-                    )
-                    
-                    return True
-                else:
-                    self.logger.error(f"❌ Emergency reconnection failed for {self.robot_id}")
-                    
-                    # Update robot state to reflect disconnection
-                    await self.update_robot_state(
-                        RobotState.ERROR,
-                        reason="Connection lost after emergency stop"
-                    )
-                    
-                    return False
-            else:
-                self.logger.error(f"❌ No reconnect method available for {self.robot_id}")
-                return False
-                
+            if await self.async_wrapper.robot_driver.connect():
+                await self.update_robot_state(RobotState.IDLE, reason="Reconnected after emergency stop")
+                self.logger.info(f"Emergency reconnection successful for {self.robot_id}")
+                return True
+
+            await self.update_robot_state(RobotState.ERROR, reason="Connection lost after emergency stop")
+            return False
+
         except Exception as e:
-            self.logger.error(f"❌ Emergency reconnection attempt failed: {e}")
+            self.logger.error(f"Emergency reconnection failed: {e}")
             return False
     
     
@@ -2051,12 +1786,13 @@ class MecaService(RobotService):
             self.logger.info(f"Starting pickup sequence for wafers {start+1} to {start+count}")
 
             # Initial statements for first wafer
-            if start == 0:
-                await self._execute_movement_command("SetGripperForce", [self.FORCE])
-                await self._execute_movement_command("SetJointAcc", [self.ACC])
-                await self._execute_movement_command("SetTorqueLimits", [40, 40, 40, 40, 40, 40])
-                await self._execute_movement_command("SetTorqueLimitsCfg", [2, 1])
-                await self._execute_movement_command("SetBlending", [0])
+            # Initial statements - apply at start of every sequence to ensure consistent parameters
+            # if start == 0:  <-- REMOVED: Always apply parameters to prevent loss in subsequent batches
+            await self._execute_movement_command("SetGripperForce", [self.FORCE])
+            await self._execute_movement_command("SetJointAcc", [self.ACC])
+            await self._execute_movement_command("SetTorqueLimits", [40, 40, 40, 40, 40, 40])
+            await self._execute_movement_command("SetTorqueLimitsCfg", [2, 1])
+            await self._execute_movement_command("SetBlending", [0])
             
             # Set initial velocity and configuration
             await self._execute_movement_command("SetJointVel", [self.ALIGN_SPEED])
@@ -2066,152 +1802,84 @@ class MecaService(RobotService):
             
             processed_wafers = []
             failed_wafers = []
-            
-            # Check if resuming from a previous pause
-            resume_from_wafer = 0
-            step_state = await self.state_manager.get_step_state(self.robot_id)
-            if step_state and step_state.progress_data.get("current_wafer_index") is not None:
-                resume_from_wafer = step_state.progress_data["current_wafer_index"]
-                self.logger.info(f"🔄 Resuming pickup sequence from wafer {resume_from_wafer + 1}")
 
-            # Determine which wafers to process
-            if retry_wafers:
-                # Retry mode: only process specific failed wafer indices
-                wafer_indices = retry_wafers
-                self.logger.info(f"🔄 Retry mode: processing wafers {retry_wafers}")
-            else:
-                # Normal mode: process range from start to start+count
-                wafer_indices = list(range(max(start, resume_from_wafer), start + count))
+            # Determine starting point (handle resume from pause)
+            step_state = await self.state_manager.get_step_state(self.robot_id)
+            resume_from = step_state.progress_data.get("current_wafer_index", 0) if step_state else 0
+
+            # Determine wafers to process
+            wafer_indices = retry_wafers if retry_wafers else list(range(max(start, resume_from), start + count))
 
             for i in wafer_indices:
                 wafer_num = i + 1
-                step_context = f"wafer {wafer_num} (index {i})"
-                
-                # Check for pause before processing each wafer
+
+                # Handle pause
                 if await self.state_manager.is_step_paused(self.robot_id):
-                    self.logger.info(f"⏸️ Operation paused at {step_context}")
-                    # Update progress to current wafer index
-                    await self.state_manager.update_step_progress(
-                        self.robot_id, 
-                        {"current_wafer_index": i, "total_wafers": count}
-                    )
-                    # Wait while paused
+                    await self.state_manager.update_step_progress(self.robot_id, {"current_wafer_index": i, "total_wafers": count})
                     while await self.state_manager.is_step_paused(self.robot_id):
-                        await asyncio.sleep(1.0)  # Check every second
-                    self.logger.info(f"▶️ Operation resumed at {step_context}")
-                
-                # Check for emergency stop before processing each wafer
+                        await asyncio.sleep(1.0)
+
+                # Check emergency stop
                 robot_info = await self.state_manager.get_robot_state(self.robot_id)
                 if robot_info and robot_info.current_state == RobotState.EMERGENCY_STOP:
-                    self.logger.critical(f"🚨 Emergency stop detected - aborting pickup sequence at {step_context}")
-                    break  # Exit the wafer processing loop immediately
-                
+                    self.logger.critical(f"Emergency stop - aborting at wafer {wafer_num}")
+                    break
+
                 try:
-                    self.logger.info(f"🔄 Starting pickup process for {step_context}")
-
-                    # Broadcast wafer progress to frontend
                     await self._broadcast_wafer_progress("pickup", wafer_num, i, start, count)
-
-                    # Update progress with current wafer
                     await self.state_manager.update_step_progress(
                         self.robot_id,
                         {"current_wafer_index": i, "current_wafer_num": wafer_num, "total_wafers": count}
                     )
-                    
-                    # Get positions for this wafer
+
                     positions = self.calculate_intermediate_positions(i, "pickup")
                     pickup_position = self.calculate_wafer_position(i, "inert")
-                    
-                    # Step 1: Move to high position above wafer
-                    self.logger.debug(f"📍 Moving to high position above {step_context}")
+
+                    # Move to pickup position and grab wafer
                     await self._execute_movement_command("MovePose", positions["pickup_high"])
-                    
-                    # Step 2: Move to pickup position
-                    self.logger.debug(f"📍 Moving to pickup position for {step_context}")
                     await self._execute_movement_command("MovePose", pickup_position)
                     await self._execute_movement_command("Delay", [1])
-                    
-                    # Step 3: Close gripper to pick wafer
-                    self.logger.debug(f"🤏 Closing gripper to pick {step_context}")
                     await self._execute_movement_command("GripperClose", [])
                     await self._execute_movement_command("Delay", [1])
-                    
-                    # Step 4: Move up with wafer through intermediate positions
-                    self.logger.debug(f"⬆️ Moving {step_context} through intermediate positions")
+
+                    # Move through intermediate positions to safe point
                     await self._execute_movement_command("SetJointVel", [self.WAFER_SPEED])
                     await self._execute_movement_command("MovePose", positions["intermediate_1"])
                     await self._execute_movement_command("SetBlending", [100])
                     await self._execute_movement_command("MovePose", positions["intermediate_2"])
                     await self._execute_movement_command("MoveLin", positions["intermediate_3"])
                     await self._execute_movement_command("SetBlending", [0])
-                    
-                    # Step 5: Move to safe point
-                    self.logger.debug(f"🛡️ Moving {step_context} to safe point")
                     await self._execute_movement_command("MovePose", self.SAFE_POINT)
-                    
-                    # Step 6: Move to spreader
-                    self.logger.debug(f"📍 Moving {step_context} to spreader")
+
+                    # Move to spreader and release wafer
                     await self._execute_movement_command("SetJointVel", [self.ALIGN_SPEED])
                     await self._execute_movement_command("MovePose", positions["above_spreader"])
                     await self._execute_movement_command("MovePose", positions["spreader"])
                     await self._execute_movement_command("Delay", [1])
-                    
-                    # Step 7: Release wafer
-                    self.logger.debug(f"🖐️ Releasing {step_context} at spreader")
                     await self._execute_movement_command("GripperOpen", [])
                     await self._execute_movement_command("Delay", [1])
-                    
-                    # Step 8: Move up and return to safe point
-                    self.logger.debug(f"🔙 Returning to safe point after placing {step_context}")
+
+                    # Return to safe point
                     await self._execute_movement_command("MovePose", positions["above_spreader_exit"])
                     await self._execute_movement_command("SetJointVel", [self.EMPTY_SPEED])
                     await self._execute_movement_command("MovePose", self.SAFE_POINT)
 
-                    # Check robot status before waiting (detect collisions/errors immediately)
-                    driver = self.async_wrapper.robot_driver
-                    if hasattr(driver, 'get_robot_instance'):
-                        robot_instance = driver.get_robot_instance()
-                        if robot_instance and hasattr(robot_instance, 'GetStatusRobot'):
-                            try:
-                                status = robot_instance.GetStatusRobot()
-                                error_status = getattr(status, 'error_status', False)
-                                paused = getattr(status, 'pause_motion_status', False)
+                    # Check for collision/error
+                    await self._check_robot_status_after_motion(wafer_num)
 
-                                if error_status:
-                                    self.logger.error(f"🔴 Robot error detected after wafer {wafer_num} movements")
-                                    raise HardwareError(
-                                        f"Robot error after wafer {wafer_num} - possible collision or torque limit exceeded",
-                                        robot_id=self.robot_id
-                                    )
-
-                                if paused:
-                                    self.logger.error(f"⏸️ Robot paused after wafer {wafer_num} movements")
-                                    raise HardwareError(
-                                        f"Robot paused after wafer {wafer_num} - possible collision detected",
-                                        robot_id=self.robot_id
-                                    )
-                            except HardwareError:
-                                raise
-                            except Exception as status_e:
-                                self.logger.warning(f"Could not check robot status: {status_e}")
-
-                    # Wait for all motions to complete before proceeding to next wafer
-                    # Use 60s timeout per wafer (complex movement sequence)
                     await self.async_wrapper.wait_idle(timeout=60.0)
-                    self.logger.info(f"✅ Wafer {wafer_num} motion sequence completed")
+                    self.logger.debug(f"Wafer {wafer_num} completed")
 
-                    # Add spreading wait time when needed
                     if (4 - (i % 5)) == 0:
                         await self._execute_movement_command("Delay", [self.SPREAD_WAIT])
 
                 except Exception as e:
-                    error_msg = f"❌ Failed to process {step_context}: {str(e)}"
-                    self.logger.error(error_msg, exc_info=True)
+                    self.logger.error(f"Failed wafer {wafer_num}: {e}")
                     failed_wafers.append({"wafer_num": wafer_num, "error": str(e)})
                     raise
 
             if failed_wafers:
-                self.logger.warning(f"⚠️ Pickup sequence completed with {len(failed_wafers)} failures: {[fw['wafer_num'] for fw in failed_wafers]}")
+                self.logger.warning(f"Pickup completed with {len(failed_wafers)} failures")
 
             # Calculate success rate based on actual wafers processed
             total_attempted = len(retry_wafers) if retry_wafers else count
@@ -2352,113 +2020,79 @@ class MecaService(RobotService):
         return True
     
     async def _execute_movement_command(self, command_type: str, parameters: List[Any] = None) -> None:
-        """
-        Helper method to execute movement commands through the async wrapper.
-        
-        Args:
-            command_type: Type of movement command (e.g., "MovePose", "SetJointVel")
-            parameters: List of parameters for the command
-        """
+        """Execute movement command through the async wrapper."""
         if parameters is None:
             parameters = []
-            
-        # Check for emergency stop before executing any movement
+
+        # Safety check: abort if emergency stop is active
         robot_info = await self.state_manager.get_robot_state(self.robot_id)
         if robot_info and robot_info.current_state == RobotState.EMERGENCY_STOP:
-            self.logger.critical(f"🚨 Emergency stop active - aborting movement: {command_type}")
             raise RuntimeError(f"Emergency stop activated during {command_type}")
-        
-        # Validate parameters before sending to robot
-        try:
-            self._validate_robot_parameters(command_type, parameters)
-            self.logger.debug(f"Parameters validated for command {command_type}: {parameters}")
-        except ValidationError as e:
-            self.logger.error(f"Parameter validation failed for {command_type}: {e}")
-            raise
-        
-        # Convert list parameters to proper format for MovementCommand
-        if command_type == "MovePose" and len(parameters) == 6:
-            # MovePose with 6 coordinates
-            command = MovementCommand(
-                command_type="MovePose",
-                target_position={
-                    "x": parameters[0],
-                    "y": parameters[1], 
-                    "z": parameters[2],
-                    "alpha": parameters[3],
-                    "beta": parameters[4],
-                    "gamma": parameters[5]
-                }
-            )
-        elif command_type == "MoveLin" and len(parameters) == 6:
-            # Linear movement with 6 coordinates
-            command = MovementCommand(
-                command_type="MoveLin",
-                target_position={
-                    "x": parameters[0],
-                    "y": parameters[1],
-                    "z": parameters[2], 
-                    "alpha": parameters[3],
-                    "beta": parameters[4],
-                    "gamma": parameters[5]
-                }
-            )
-        elif command_type == "GripperOpen":
-            command = MovementCommand(
-                command_type="GripperOpen",
-                tool_action="grip_open"
-            )
-        elif command_type == "GripperClose":
-            command = MovementCommand(
-                command_type="GripperClose", 
-                tool_action="grip_close"
-            )
-        elif command_type == "MoveGripper" and len(parameters) == 1:
-            command = MovementCommand(
-                command_type="MoveGripper",
-                tool_action="grip_move",
-                parameters={"width": parameters[0]}
-            )
-        elif command_type == "Delay" and len(parameters) == 1:
-            command = MovementCommand(
-                command_type="Delay",
-                parameters={"duration": parameters[0]}
-            )
-        elif command_type.startswith("Set"):
-            # Configuration commands
-            command = MovementCommand(
-                command_type="config",
-                parameters={"config_type": command_type, "values": parameters}
-            )
-        else:
-            # Generic command
-            command = MovementCommand(
-                command_type=command_type.lower(),
-                parameters={"values": parameters} if parameters else {}
-            )
-        
-        # Enhanced logging for pickup sequence debugging
-        command_start = time.time()
-        self.logger.info(f"🤖 EXECUTING COMMAND: {command_type} with parameters {parameters}")
-        
-        # Check socket/driver status before command
-        if hasattr(self.async_wrapper, 'robot_driver'):
-            driver = self.async_wrapper.robot_driver
-            try:
-                # Quick pre-command status check
-                robot_instance = driver.get_robot_instance() if hasattr(driver, 'get_robot_instance') else None
-                if robot_instance:
-                    self.logger.debug(f"🔗 SOCKET STATUS: Robot instance available for command {command_type}")
-                else:
-                    self.logger.warning(f"⚠️ SOCKET STATUS: No robot instance for command {command_type}")
-            except Exception as e:
-                self.logger.warning(f"⚠️ SOCKET CHECK: Could not verify socket status before {command_type}: {e}")
-        
-        # Execute the command
+
+        # Validate parameters
+        self._validate_robot_parameters(command_type, parameters)
+
+        # Build command
+        command = self._build_movement_command(command_type, parameters)
+
+        # Execute
+        self.logger.debug(f"Executing {command_type}")
         result = await self.async_wrapper.execute_movement(command)
         if not result.success:
-            raise HardwareError(f"Movement command {command_type} failed: {result.error}", robot_id=self.robot_id)
-    
+            raise HardwareError(f"Command {command_type} failed: {result.error}", robot_id=self.robot_id)
+
+    def _build_movement_command(self, command_type: str, parameters: List[Any]) -> MovementCommand:
+        """Build MovementCommand from command type and parameters."""
+        # Position commands with 6 coordinates
+        if command_type in ("MovePose", "MoveLin") and len(parameters) == 6:
+            return MovementCommand(
+                command_type=command_type,
+                target_position={
+                    "x": parameters[0], "y": parameters[1], "z": parameters[2],
+                    "alpha": parameters[3], "beta": parameters[4], "gamma": parameters[5]
+                }
+            )
+
+        # Gripper commands
+        if command_type == "GripperOpen":
+            return MovementCommand(command_type="GripperOpen", tool_action="grip_open")
+        if command_type == "GripperClose":
+            return MovementCommand(command_type="GripperClose", tool_action="grip_close")
+        if command_type == "MoveGripper" and len(parameters) == 1:
+            return MovementCommand(command_type="MoveGripper", tool_action="grip_move", parameters={"width": parameters[0]})
+
+        # Delay command
+        if command_type == "Delay" and len(parameters) == 1:
+            return MovementCommand(command_type="Delay", parameters={"duration": parameters[0]})
+
+        # Configuration commands (Set*)
+        if command_type.startswith("Set"):
+            return MovementCommand(command_type="config", parameters={"config_type": command_type, "values": parameters})
+
+        # Generic fallback
+        return MovementCommand(command_type=command_type.lower(), parameters={"values": parameters} if parameters else {})
+
+    async def _check_robot_status_after_motion(self, wafer_num: int) -> None:
+        """Check robot status after motion sequence to detect collisions/errors."""
+        driver = self.async_wrapper.robot_driver
+        if not hasattr(driver, 'get_robot_instance'):
+            return
+
+        robot_instance = driver.get_robot_instance()
+        if not robot_instance or not hasattr(robot_instance, 'GetStatusRobot'):
+            return
+
+        try:
+            status = robot_instance.GetStatusRobot()
+            if getattr(status, 'error_status', False):
+                raise HardwareError(f"Robot error after wafer {wafer_num}", robot_id=self.robot_id)
+            if getattr(status, 'pause_motion_status', False):
+                raise HardwareError(f"Robot paused after wafer {wafer_num}", robot_id=self.robot_id)
+        except HardwareError:
+            raise
+        except Exception as e:
+            self.logger.debug(f"Status check warning: {e}")
+
     async def execute_drop_sequence(
         self, start: int, count: int, retry_wafers: Optional[List[int]] = None
     ) -> ServiceResult[Dict[str, Any]]:
@@ -2495,47 +2129,25 @@ class MecaService(RobotService):
             
             processed_wafers = []
             failed_wafers = []
-            
-            # Check if resuming from a previous pause
-            resume_from_wafer = 0
-            step_state = await self.state_manager.get_step_state(self.robot_id)
-            if step_state and step_state.progress_data.get("current_wafer_index") is not None:
-                resume_from_wafer = step_state.progress_data["current_wafer_index"]
-                self.logger.info(f"🔄 Resuming drop sequence from wafer {resume_from_wafer + 1}")
 
-            # Determine which wafers to process
-            if retry_wafers:
-                # Retry mode: only process specific failed wafer indices
-                wafer_indices = retry_wafers
-                self.logger.info(f"🔄 Retry mode: processing wafers {retry_wafers}")
-            else:
-                # Normal mode: process range from start to start+count
-                wafer_indices = list(range(max(start, resume_from_wafer), start + count))
+            # Determine starting point (handle resume from pause)
+            step_state = await self.state_manager.get_step_state(self.robot_id)
+            resume_from = step_state.progress_data.get("current_wafer_index", 0) if step_state else 0
+
+            # Determine wafers to process
+            wafer_indices = retry_wafers if retry_wafers else list(range(max(start, resume_from), start + count))
 
             for i in wafer_indices:
                 wafer_num = i + 1
-                step_context = f"wafer {wafer_num} (index {i})"
 
-                # Check for pause before processing each wafer
+                # Handle pause
                 if await self.state_manager.is_step_paused(self.robot_id):
-                    self.logger.info(f"⏸️ Drop operation paused at {step_context}")
-                    # Update progress to current wafer index
-                    await self.state_manager.update_step_progress(
-                        self.robot_id, 
-                        {"current_wafer_index": i, "total_wafers": count}
-                    )
-                    # Wait while paused
+                    await self.state_manager.update_step_progress(self.robot_id, {"current_wafer_index": i, "total_wafers": count})
                     while await self.state_manager.is_step_paused(self.robot_id):
-                        await asyncio.sleep(1.0)  # Check every second
-                    self.logger.info(f"▶️ Drop operation resumed at {step_context}")
-                
+                        await asyncio.sleep(1.0)
+
                 try:
-                    self.logger.info(f"🔄 Processing wafer {wafer_num} drop from spreader to baking tray")
-
-                    # Broadcast wafer progress to WebSocket clients
                     await self._broadcast_wafer_progress("drop", wafer_num, i, start, count)
-
-                    # Update progress with current wafer
                     await self.state_manager.update_step_progress(
                         self.robot_id,
                         {"current_wafer_index": i, "current_wafer_num": wafer_num, "total_wafers": count}
@@ -2588,30 +2200,24 @@ class MecaService(RobotService):
                     await self.async_wrapper.wait_idle(timeout=60.0)
 
                     processed_wafers.append(wafer_num)
-                    self.logger.info(f"✅ Successfully completed drop for {step_context}")
-                
+                    self.logger.debug(f"Completed drop for wafer {wafer_num}")
+
                 except Exception as e:
-                    error_msg = f"❌ Failed to process {step_context}: {str(e)}"
-                    self.logger.error(error_msg, exc_info=True)
+                    self.logger.error(f"Failed wafer {wafer_num}: {e}")
                     failed_wafers.append({"wafer_num": wafer_num, "error": str(e)})
-                    
+
                     # Attempt recovery - move to safe position
                     try:
-                        self.logger.warning(f"🔧 Attempting recovery for {step_context} - moving to safe position")
                         await self._execute_movement_command("SetJointVel", [self.SPEED])
                         await self._execute_movement_command("MovePose", self.SAFE_POINT)
-                        await self._execute_movement_command("GripperOpen", [])  # Ensure gripper is open
-                        self.logger.info(f"🛡️ Recovery completed for {step_context}")
+                        await self._execute_movement_command("GripperOpen", [])
                     except Exception as recovery_error:
-                        self.logger.error(f"💥 Recovery failed for {step_context}: {str(recovery_error)}")
-                        # If recovery fails, re-raise the original error to stop the sequence
-                        raise HardwareError(f"Drop sequence failed at {step_context} and recovery failed: {str(e)}", robot_id=self.robot_id)
-                    
-                    # Continue with next wafer even if this one failed (partial success)
+                        raise HardwareError(f"Drop failed and recovery failed: {e}", robot_id=self.robot_id)
+
                     continue
-            
+
             if failed_wafers:
-                self.logger.warning(f"⚠️ Drop sequence completed with {len(failed_wafers)} failures: {[fw['wafer_num'] for fw in failed_wafers]}")
+                self.logger.warning(f"Drop sequence completed with {len(failed_wafers)} failures")
 
             # Calculate success rate based on actual wafers processed
             total_attempted = len(retry_wafers) if retry_wafers else count
@@ -2669,10 +2275,9 @@ class MecaService(RobotService):
             
             self.logger.info(f"Starting carousel sequence for wafers {start+1} to {start+count}")
             
-            # Configuration specific to carousel movement
-            if start == 0:
-                await self._execute_movement_command("SetConf", [1, 1, -1])
-                await self._execute_movement_command("Delay", [3])
+            # Configuration specific to carousel movement - apply every batch
+            await self._execute_movement_command("SetConf", [1, 1, -1])
+            await self._execute_movement_command("Delay", [3])
             
             for i in range(start, start + count):
                 wafer_num = i + 1
@@ -2891,3 +2496,135 @@ class MecaService(RobotService):
             return result
         
         return await self.execute_operation(context, _empty_carousel_sequence)
+
+    async def get_wafer_position_preview(self, wafer_index: int) -> Dict[str, Any]:
+        """
+        Get position preview data for a single wafer.
+        Used by test endpoint to verify position calculations.
+
+        Args:
+            wafer_index: Wafer index (0-based, 0-54)
+
+        Returns:
+            Dictionary with calculated positions for the wafer
+        """
+        wafer_number = wafer_index + 1
+        baking_position = self.calculate_wafer_position(wafer_index, "baking")
+        carousel_position = self.calculate_wafer_position(wafer_index, "carousel")
+        carousel_positions = self.calculate_intermediate_positions(wafer_index, "carousel")
+
+        return {
+            "wafer_number": wafer_number,
+            "wafer_index": wafer_index,
+            "positions": {
+                "baking_tray": {
+                    "coordinates": baking_position,
+                    "x": baking_position[0],
+                    "y": baking_position[1],
+                    "z": baking_position[2],
+                },
+                "carousel": {"coordinates": carousel_position},
+                "intermediate_positions": {
+                    "above_baking": carousel_positions.get("above_baking"),
+                    "move_sequence": [
+                        carousel_positions.get("move1"),
+                        carousel_positions.get("move2"),
+                        carousel_positions.get("move3"),
+                        carousel_positions.get("move4"),
+                    ],
+                },
+            },
+            "verification": {
+                "calculated_x": baking_position[0],
+                "expected_x_wafer_55": 4.1298,
+                "matches_expected": abs(baking_position[0] - 4.1298) < 0.001 if wafer_number == 55 else "N/A",
+            },
+        }
+
+    async def get_debug_connection_state(self) -> Dict[str, Any]:
+        """
+        Get comprehensive connection diagnostics for debugging.
+
+        Returns:
+            Dictionary with detailed connection state information
+        """
+        robot_info = await self.state_manager.get_robot_state(self.robot_id)
+        current_state = robot_info.current_state if robot_info else None
+
+        debug_info = {
+            "timestamp": time.time(),
+            "robot_id": self.robot_id,
+            "service_state": current_state.name if hasattr(current_state, 'name') else str(current_state),
+            "service_ready": False,
+            "driver_available": False,
+            "robot_instance_available": False,
+            "socket_connected": False,
+            "activation_status": False,
+            "homing_status": False,
+            "error_status": False,
+            "paused_status": False,
+            "connection_details": {},
+            "errors": [],
+        }
+
+        # Check service readiness
+        try:
+            debug_info["service_ready"] = await self.ensure_robot_ready(allow_busy=True)
+        except Exception as e:
+            debug_info["errors"].append(f"Service readiness check failed: {str(e)}")
+
+        # Check driver and robot instance
+        if hasattr(self.async_wrapper, 'robot_driver'):
+            debug_info["driver_available"] = True
+            driver = self.async_wrapper.robot_driver
+
+            try:
+                robot_instance = driver.get_robot_instance() if hasattr(driver, 'get_robot_instance') else None
+                debug_info["robot_instance_available"] = robot_instance is not None
+
+                if robot_instance:
+                    # Check socket connection status
+                    if hasattr(robot_instance, 'is_connected'):
+                        debug_info["socket_connected"] = robot_instance.is_connected()
+                    elif hasattr(driver, '_connected') and driver._connected:
+                        debug_info["socket_connected"] = True
+                    else:
+                        try:
+                            test_status = await driver.get_status()
+                            debug_info["socket_connected"] = test_status.get('connected', False)
+                        except Exception:
+                            debug_info["socket_connected"] = False
+
+                    # Get detailed robot status
+                    try:
+                        status = await driver.get_status()
+                        debug_info["activation_status"] = status.get('activation_status', False)
+                        debug_info["homing_status"] = status.get('homing_status', False)
+                        debug_info["error_status"] = status.get('error_status', False)
+                        debug_info["paused_status"] = status.get('paused', False)
+                        debug_info["connection_details"] = status
+                    except Exception as e:
+                        debug_info["errors"].append(f"Status retrieval failed: {str(e)}")
+
+            except Exception as e:
+                debug_info["errors"].append(f"Driver instance check failed: {str(e)}")
+
+        # Build summary
+        overall_health = (
+            debug_info["service_ready"]
+            and debug_info["driver_available"]
+            and debug_info["robot_instance_available"]
+            and debug_info["socket_connected"]
+            and debug_info["activation_status"]
+            and debug_info["homing_status"]
+            and not debug_info["error_status"]
+        )
+
+        return {
+            "debug_info": debug_info,
+            "summary": {
+                "overall_health": overall_health,
+                "connection_ready": debug_info["socket_connected"] and debug_info["robot_instance_available"],
+                "robot_operational": debug_info["activation_status"] and debug_info["homing_status"] and not debug_info["error_status"],
+            },
+        }
