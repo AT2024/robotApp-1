@@ -176,8 +176,15 @@ class MecaService(RobotService):
             driver = self.async_wrapper.robot_driver
             robot_instance = driver.get_robot_instance() if hasattr(driver, 'get_robot_instance') else None
 
-            if not robot_instance and time.time() >= self._next_reconnect_time:
-                await self._attempt_robot_reconnection()
+            if not robot_instance:
+                # No robot instance - attempt reconnection if not in backoff
+                if time.time() >= self._next_reconnect_time:
+                    reconnected = await self._attempt_robot_reconnection()
+                    if reconnected:
+                        self.logger.info(f"Successfully reconnected to robot {self.robot_id}")
+                        return True
+                # Return False - TCP works but no mecademicpy connection
+                return False
 
             return True
         except Exception as e:
