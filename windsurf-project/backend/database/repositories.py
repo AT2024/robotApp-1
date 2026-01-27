@@ -1,12 +1,11 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from .models import Robot, Config, ProcessLog, ThoriumVial, Wafer, BakingTray, Carousel
-import logging
 from datetime import datetime
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from utils.logger import get_logger
+
+logger = get_logger("repositories")
 
 class RobotRepository:
     @staticmethod

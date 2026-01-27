@@ -1,9 +1,10 @@
 from .db_config import engine, Base, SessionLocal
 from .models import Robot, Config, ProcessLog, ThoriumVial, Wafer, BakingTray, Carousel
 from core.settings import get_settings
-import logging
 
-logger = logging.getLogger(__name__)
+from utils.logger import get_logger
+
+logger = get_logger("init_db")
 
 
 def init_db():

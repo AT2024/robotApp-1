@@ -10,7 +10,8 @@ from typing import Dict, Set, List, Any, Optional, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from fastapi import WebSocket
-import logging
+
+from utils.logger import get_logger
 
 
 class MessageType(Enum):
@@ -139,7 +140,7 @@ class SelectiveWebSocketBroadcaster:
             "errors": 0
         }
         
-        self.logger = logging.getLogger("selective_broadcaster")
+        self.logger = get_logger("selective_broadcaster")
 
     async def start(self):
         """Start the broadcaster"""

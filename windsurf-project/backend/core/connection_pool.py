@@ -8,12 +8,12 @@ import time
 from typing import Dict, Any, Optional, List, Union
 from dataclasses import dataclass, field
 from enum import Enum
-import logging
 
 import aiohttp
 from aiohttp import ClientTimeout, TCPConnector, ClientSession
 from core.circuit_breaker import CircuitBreaker
 from core.exceptions import ConnectionError, HardwareError
+from utils.logger import get_logger
 
 
 class ConnectionPoolType(Enum):
@@ -87,7 +87,7 @@ class ManagedConnectionPool:
         self.session: Optional[ClientSession] = None
         self.circuit_breaker: Optional[CircuitBreaker] = None
         self.metrics = RequestMetrics()
-        self.logger = logging.getLogger(f"connection_pool.{config.name}")
+        self.logger = get_logger(f"connection_pool_{config.name}")
         self._lock = asyncio.Lock()
 
     async def initialize(self):
@@ -318,7 +318,7 @@ class ConnectionPoolManager:
 
     def __init__(self):
         self._pools: Dict[str, ManagedConnectionPool] = {}
-        self.logger = logging.getLogger("connection_pool_manager")
+        self.logger = get_logger("connection_pool_manager")
 
     async def create_pool(self, config: PoolConfig) -> ManagedConnectionPool:
         """

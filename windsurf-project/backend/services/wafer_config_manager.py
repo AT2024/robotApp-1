@@ -8,9 +8,10 @@ If a required value is missing, the system raises a clear error.
 import copy
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
-import logging
 
-logger = logging.getLogger(__name__)
+from utils.logger import get_logger
+
+logger = get_logger("wafer_config_manager")
 
 
 class ConfigurationError(Exception):

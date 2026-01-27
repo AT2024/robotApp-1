@@ -5,7 +5,6 @@ Provides centralized, thread-safe state management with validation and change tr
 
 import asyncio
 import time
-import logging
 from datetime import datetime
 from enum import Enum
 from typing import Dict, Optional, List, Callable, Any, Set
@@ -13,6 +12,7 @@ from dataclasses import dataclass, field
 from collections import defaultdict
 
 from .exceptions import StateTransitionError, ValidationError
+from utils.logger import get_logger
 
 
 class RobotState(Enum):
@@ -126,7 +126,7 @@ class StateChangeCallback:
             self.call_count += 1
             self.last_called = time.time()
         except Exception as e:
-            logging.getLogger("state_manager").error(
+            get_logger("state_manager").error(
                 f"Error in state change callback: {e}"
             )
 
@@ -206,7 +206,7 @@ class AtomicStateManager:
         # System metadata
         self._system_metadata: Dict[str, Any] = {}
         
-        self.logger = logging.getLogger("state_manager")
+        self.logger = get_logger("state_manager")
         self.logger.info("AtomicStateManager initialized")
     
     async def register_robot(

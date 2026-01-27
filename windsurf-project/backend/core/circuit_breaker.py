@@ -207,7 +207,7 @@ class CircuitBreaker:
         self._stats.state_changes += 1
         
         self.logger.error(
-            f"Circuit breaker '{self.name}' transition: {old_state.value} → OPEN. "
+            f"Circuit breaker '{self.name}' transition: {old_state.value} -> OPEN. "
             f"Failure threshold breached: {self._stats.consecutive_failures}/{self.failure_threshold} consecutive failures. "
             f"Blocking requests for {self.recovery_timeout}s."
         )
@@ -221,7 +221,7 @@ class CircuitBreaker:
         
         recovery_time_elapsed = time.time() - (self._stats.last_failure_time or 0)
         self.logger.info(
-            f"Circuit breaker '{self.name}' transition: {old_state.value} → HALF_OPEN. "
+            f"Circuit breaker '{self.name}' transition: {old_state.value} -> HALF_OPEN. "
             f"Recovery timeout reached after {recovery_time_elapsed:.1f}s. "
             f"Testing service recovery with max {self.half_open_max_calls} attempts."
         )
@@ -234,7 +234,7 @@ class CircuitBreaker:
         self._stats.state_changes += 1
         
         self.logger.info(
-            f"Circuit breaker '{self.name}' transition: {old_state.value} → CLOSED. "
+            f"Circuit breaker '{self.name}' transition: {old_state.value} -> CLOSED. "
             f"Service recovered successfully. Success rate: {self._stats.success_rate:.1f}%"
         )
     

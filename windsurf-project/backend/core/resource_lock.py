@@ -5,13 +5,13 @@ Provides distributed locking for shared resources like carousel, sample position
 
 import asyncio
 import time
-import logging
 from contextlib import asynccontextmanager
 from typing import Dict, Optional, Set, Any
 from dataclasses import dataclass, field
 from enum import Enum
 
 from .exceptions import ResourceLockTimeout, ValidationError
+from utils.logger import get_logger
 
 
 class LockType(Enum):
@@ -69,7 +69,7 @@ class ResourceLockManager:
         self._cleanup_task: Optional[asyncio.Task] = None
         self._running = False
         
-        self.logger = logging.getLogger("resource_lock_manager")
+        self.logger = get_logger("resource_lock_manager")
     
     async def start(self):
         """Start the lock manager and cleanup task"""

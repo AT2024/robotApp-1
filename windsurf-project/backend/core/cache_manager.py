@@ -9,8 +9,9 @@ import time
 from typing import Dict, Any, Optional, List, Callable
 from dataclasses import dataclass, field
 from enum import Enum
-import logging
 from datetime import datetime, timedelta
+
+from utils.logger import get_logger
 
 
 class CacheKey(Enum):
@@ -93,7 +94,7 @@ class InMemoryCacheManager:
             "memory_usage": 0
         }
         
-        self.logger = logging.getLogger("cache_manager")
+        self.logger = get_logger("cache_manager")
         
         # Invalidation callbacks
         self._invalidation_callbacks: Dict[str, List[Callable]] = {}
@@ -431,7 +432,7 @@ class RobotStatusCache:
 
     def __init__(self, cache_manager: InMemoryCacheManager):
         self.cache_manager = cache_manager
-        self.logger = logging.getLogger("robot_status_cache")
+        self.logger = get_logger("robot_status_cache")
 
     async def get_robot_status(self, robot_id: str) -> Optional[Dict[str, Any]]:
         """Get cached robot status"""

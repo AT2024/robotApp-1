@@ -1,9 +1,10 @@
 from sqlalchemy.orm import Session
 from database.models import Robot as DbRobot, Config as DbConfig
 from database.repositories import RobotRepository, ConfigRepository
-import logging
 
-logger = logging.getLogger(__name__)
+from utils.logger import get_logger
+
+logger = get_logger("robot_domain")
 
 class Robot:
     def __init__(self, id=None, name=None, db_session=None):
