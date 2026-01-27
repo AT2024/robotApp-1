@@ -25,5 +25,5 @@ Backend API is at `http://localhost:8080`.
 ## Port Mapping
 
 - Frontend runs on port 5173 internally
-- Mapped to port 3000 externally
-- Ignore port 3002 references in docker-compose
+- Mapped to port 3002 externally (via docker-compose)
+- Backend API at port 8080 (external), 8000 (internal)

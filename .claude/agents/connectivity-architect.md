@@ -1,6 +1,43 @@
 ---
 name: connectivity-architect
-description: Use this agent when tasks involve WebSocket connections, API endpoints, threading, network communication, or any connectivity-related implementation. This includes:\n\n<example>\nContext: User needs to implement a new WebSocket endpoint for real-time robot status updates.\nuser: "I need to add a WebSocket endpoint that streams robot position data every 100ms"\nassistant: "I'm going to use the Task tool to launch the connectivity-architect agent to design and implement the WebSocket streaming solution with proper error handling and performance optimization."\n<commentary>\nSince this involves WebSocket implementation, the connectivity-architect agent should handle the design, implementation strategy, and best practices for real-time data streaming.\n</commentary>\n</example>\n\n<example>\nContext: User is debugging API connection issues between frontend and backend.\nuser: "The frontend can't connect to the /api/robot/status endpoint"\nassistant: "Let me use the connectivity-architect agent to analyze the API connectivity issue and provide a solution."\n<commentary>\nAPI connectivity troubleshooting falls under the connectivity-architect's domain. The agent will analyze the issue, identify root causes, and provide implementation fixes.\n</commentary>\n</example>\n\n<example>\nContext: User needs to implement thread-safe communication between services.\nuser: "I need to coordinate between the Mecademic service and OT2 service without blocking"\nassistant: "I'll launch the connectivity-architect agent to design the inter-service communication pattern with proper threading and async handling."\n<commentary>\nThread management and inter-service communication requires the connectivity-architect's expertise in concurrency patterns and best practices.\n</commentary>\n</example>\n\n<example>\nContext: Proactive detection - User is implementing a new robot service that will need API endpoints.\nuser: "Here's my new LaserCutterService class implementation"\nassistant: "Great work on the service implementation. Now I'm going to use the connectivity-architect agent to design the API layer and WebSocket integration for this new service."\n<commentary>\nProactively launch the connectivity-architect when new services are created that will need connectivity layers, ensuring proper architecture from the start.\n</commentary>\n</example>
+description: |
+  Use this agent when tasks involve WebSocket connections, API endpoints, threading, network communication, or any connectivity-related implementation. This includes:
+
+  <example>
+  Context: User needs to implement a new WebSocket endpoint for real-time robot status updates.
+  user: "I need to add a WebSocket endpoint that streams robot position data every 100ms"
+  assistant: "I'm going to use the Task tool to launch the connectivity-architect agent to design and implement the WebSocket streaming solution with proper error handling and performance optimization."
+  <commentary>
+  Since this involves WebSocket implementation, the connectivity-architect agent should handle the design, implementation strategy, and best practices for real-time data streaming.
+  </commentary>
+  </example>
+
+  <example>
+  Context: User is debugging API connection issues between frontend and backend.
+  user: "The frontend can't connect to the /api/robot/status endpoint"
+  assistant: "Let me use the connectivity-architect agent to analyze the API connectivity issue and provide a solution."
+  <commentary>
+  API connectivity troubleshooting falls under the connectivity-architect's domain. The agent will analyze the issue, identify root causes, and provide implementation fixes.
+  </commentary>
+  </example>
+
+  <example>
+  Context: User needs to implement thread-safe communication between services.
+  user: "I need to coordinate between the Mecademic service and OT2 service without blocking"
+  assistant: "I'll launch the connectivity-architect agent to design the inter-service communication pattern with proper threading and async handling."
+  <commentary>
+  Thread management and inter-service communication requires the connectivity-architect's expertise in concurrency patterns and best practices.
+  </commentary>
+  </example>
+
+  <example>
+  Context: Proactive detection - User is implementing a new robot service that will need API endpoints.
+  user: "Here's my new LaserCutterService class implementation"
+  assistant: "Great work on the service implementation. Now I'm going to use the connectivity-architect agent to design the API layer and WebSocket integration for this new service."
+  <commentary>
+  Proactively launch the connectivity-architect when new services are created that will need connectivity layers, ensuring proper architecture from the start.
+  </commentary>
+  </example>
 tools: Bash, Glob, Grep, Read, Edit, Write, NotebookEdit, WebFetch, TodoWrite, WebSearch, BashOutput, mcp__ide__getDiagnostics, mcp__ide__executeCode
 model: sonnet
 color: red

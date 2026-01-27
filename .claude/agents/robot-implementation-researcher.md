@@ -1,6 +1,47 @@
 ---
 name: robot-implementation-researcher
-description: Use this agent when you need to research best practices and implementation strategies for OT2 or Mecademic robotic systems. Trigger this agent proactively whenever:\n\n<example>\nContext: User is about to modify robot control logic for the Mecademic arm.\nuser: "I need to add a new pickup sequence for the Mecademic robot that handles fragile samples"\nassistant: "Before implementing this feature, let me use the Task tool to launch the robot-implementation-researcher agent to gather best practices for safe handling sequences and error recovery patterns for the Mecademic system."\n<commentary>\nSince the user is requesting changes to robot logic, proactively use the robot-implementation-researcher agent to research implementation best practices before proceeding with the code changes.\n</commentary>\nassistant: "Based on the research findings, here's the recommended implementation approach..."\n</example>\n\n<example>\nContext: User wants to optimize OT2 liquid handling operations.\nuser: "The OT2 pipetting is taking too long. Can we speed it up?"\nassistant: "Let me use the Task tool to launch the robot-implementation-researcher agent to research OT2 performance optimization techniques and best practices for liquid handling efficiency."\n<commentary>\nThis involves changing OT2 working logic, so the robot-implementation-researcher agent should be used to find optimal implementation patterns.\n</commentary>\nassistant: "After researching OT2 optimization strategies, here are the recommended approaches..."\n</example>\n\n<example>\nContext: User is implementing new safety features for robot coordination.\nuser: "We need to add collision detection between the Mecademic arm and OT2 deck"\nassistant: "This is a critical safety feature. Let me use the Task tool to launch the robot-implementation-researcher agent to research industry best practices for multi-robot collision avoidance and safety protocols."\n<commentary>\nChanging robot safety logic requires thorough research of best practices, so proactively launch the research agent.\n</commentary>\nassistant: "Based on robotics safety standards and best practices, here's the recommended implementation..."\n</example>\n\n<example>\nContext: User is debugging existing robot behavior.\nuser: "The Mecademic robot sometimes loses position accuracy after long operations"\nassistant: "Let me use the Task tool to launch the robot-implementation-researcher agent to research common causes of position drift in Mecademic systems and recommended calibration strategies."\n<commentary>\nThis involves understanding and potentially modifying robot working logic, so research is needed before proposing solutions.\n</commentary>\nassistant: "Research indicates several potential causes and solutions..."\n</example>
+description: |
+  Use this agent when you need to research best practices and implementation strategies for OT2 or Mecademic robotic systems. Trigger this agent proactively whenever:
+
+  <example>
+  Context: User is about to modify robot control logic for the Mecademic arm.
+  user: "I need to add a new pickup sequence for the Mecademic robot that handles fragile samples"
+  assistant: "Before implementing this feature, let me use the Task tool to launch the robot-implementation-researcher agent to gather best practices for safe handling sequences and error recovery patterns for the Mecademic system."
+  <commentary>
+  Since the user is requesting changes to robot logic, proactively use the robot-implementation-researcher agent to research implementation best practices before proceeding with the code changes.
+  </commentary>
+  assistant: "Based on the research findings, here's the recommended implementation approach..."
+  </example>
+
+  <example>
+  Context: User wants to optimize OT2 liquid handling operations.
+  user: "The OT2 pipetting is taking too long. Can we speed it up?"
+  assistant: "Let me use the Task tool to launch the robot-implementation-researcher agent to research OT2 performance optimization techniques and best practices for liquid handling efficiency."
+  <commentary>
+  This involves changing OT2 working logic, so the robot-implementation-researcher agent should be used to find optimal implementation patterns.
+  </commentary>
+  assistant: "After researching OT2 optimization strategies, here are the recommended approaches..."
+  </example>
+
+  <example>
+  Context: User is implementing new safety features for robot coordination.
+  user: "We need to add collision detection between the Mecademic arm and OT2 deck"
+  assistant: "This is a critical safety feature. Let me use the Task tool to launch the robot-implementation-researcher agent to research industry best practices for multi-robot collision avoidance and safety protocols."
+  <commentary>
+  Changing robot safety logic requires thorough research of best practices, so proactively launch the research agent.
+  </commentary>
+  assistant: "Based on robotics safety standards and best practices, here's the recommended implementation..."
+  </example>
+
+  <example>
+  Context: User is debugging existing robot behavior.
+  user: "The Mecademic robot sometimes loses position accuracy after long operations"
+  assistant: "Let me use the Task tool to launch the robot-implementation-researcher agent to research common causes of position drift in Mecademic systems and recommended calibration strategies."
+  <commentary>
+  This involves understanding and potentially modifying robot working logic, so research is needed before proposing solutions.
+  </commentary>
+  assistant: "Research indicates several potential causes and solutions..."
+  </example>
 tools: Glob, Grep, Read, WebFetch, TodoWrite, WebSearch, BashOutput, KillShell
 model: opus
 color: blue
