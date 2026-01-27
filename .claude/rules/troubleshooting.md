@@ -8,6 +8,7 @@
 | Mecademic connection fails | IP 192.168.0.100:10000 reachable, socket kept open, safety system enabled |
 | Docker build fails | Use `--no-cache` flag, check Alpine vs Debian packages, verify memory allocation |
 | State desync | ResourceLockManager in use, AtomicStateManager for state changes |
+| "invalid high surrogate" error | Plan contains Unicode; use `/text-cleaner` to fix, follow `unicode-safety.md` rules |
 
 ## Tool Selection
 

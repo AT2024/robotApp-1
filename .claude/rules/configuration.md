@@ -26,5 +26,5 @@ ROBOTICS_OT2_IP=169.254.49.202
 |-----------|-------|
 | Mecademic IP | 192.168.0.100:10000 |
 | OT2 | Requires `robot_id` from OT2 dashboard |
-| Frontend | Port 3000 (external), 5173 (internal) |
-| Backend | Port 8080 |
+| Frontend | Port 3002 (external), 5173 (internal) |
+| Backend | Port 8080 (external), 8000 (internal) |

@@ -22,8 +22,8 @@ The project is set up with the following Docker configuration:
    - Build the Docker images
    - Start the containers in development mode
    - Set up volume mounts for hot-reloading
-3. Access the frontend at `http://localhost:3000`.
-4. Access the backend at `http://localhost:8000`.
+3. Access the frontend at `http://localhost:3002`.
+4. Access the backend at `http://localhost:8080`.
 5. Any changes you make to the frontend or backend code will automatically reload.
 6. To stop the containers, run `docker-compose down` in the `windsurf-project` directory.
 

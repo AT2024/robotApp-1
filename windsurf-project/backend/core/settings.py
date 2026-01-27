@@ -115,6 +115,8 @@ class RoboticsSettings(BaseSettings):
     log_file: Optional[str] = Field(default=None)
     log_rotation: str = Field(default="1 day")
     log_retention: str = Field(default="30 days")
+    log_timezone: str = Field(default="Asia/Jerusalem", description="Timezone for log timestamps")
+    log_max_age_days: int = Field(default=7, ge=1, description="Maximum age in days for old log files")
     
     # Debug logging for robot operations
     enable_debug_logging: bool = Field(default=False, description="Enable detailed debug logging for robot operations")
@@ -251,9 +253,11 @@ class RoboticsSettings(BaseSettings):
     # CORS Configuration
     cors_origins: List[str] = Field(
         default=[
-            "http://localhost:3000",
-            "http://localhost:5173",
+            "http://localhost:3002",      # Primary frontend port
+            "http://127.0.0.1:3002",
+            "http://localhost:5173",      # Vite internal
             "http://127.0.0.1:5173",
+            "http://localhost:3000",      # Legacy/proxy (keep for compatibility)
             "http://127.0.0.1:3000",
         ]
     )

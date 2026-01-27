@@ -1,0 +1,7 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Browser testing cache (auto-generated)
+.claude/skills/browser-testing/element-cache.json

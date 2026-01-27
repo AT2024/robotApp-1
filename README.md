@@ -199,4 +199,4 @@ The Windsurf Robotics Application is a system designed to automate laboratory pr
 
 1.  Start the backend server.
 2.  Start the frontend development server.
-3.  Access the application in your browser at the URL provided by the frontend development server (e.g., `http://localhost:3000`).
+3.  Access the application in your browser at `http://localhost:3002`.

@@ -8,7 +8,7 @@ Laboratory automation controlling Mecademic arm, Opentrons OT-2, Arduino, and Ca
 
 ```bash
 cd windsurf-project && docker-compose up -d
-# Frontend: http://localhost:3000 | Backend: http://localhost:8080
+# Frontend: http://localhost:3002 | Backend: http://localhost:8080
 ```
 
 ## Critical Quirks
