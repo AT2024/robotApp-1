@@ -61,13 +61,35 @@ class RobotOrchestrator(BaseService):
         # System coordination
         self._system_lock = asyncio.Lock()
         self._emergency_stop_active = False
-        
+        self._emergency_stopped_robots: Set[str] = set()  # Track which robots are e-stopped
+
         # Monitoring tasks
         self._status_monitor_task: Optional[asyncio.Task] = None
         self._health_check_task: Optional[asyncio.Task] = None
     
     async def _on_start(self):
         """Start orchestrator and monitoring tasks"""
+        # SAFETY: Clear any stale emergency stop state from previous session
+        # This is critical after Docker restart - the in-memory tracking
+        # gets reset but we want to ensure a clean slate
+        self._emergency_stop_active = False
+        self._emergency_stopped_robots.clear()
+        self.logger.info("Cleared stale emergency stop state on startup")
+
+        # SAFETY: Clear all paused step states on startup
+        # This prevents sequences from resuming after backend restart following e-stop.
+        # When user presses e-stop, the step gets paused. If backend restarts and
+        # user clicks "Continue", the paused step would resume - which is DANGEROUS.
+        # By clearing step states, the frontend must start a new sequence.
+        try:
+            cleared_steps = await self.state_manager.clear_all_paused_steps()
+            if cleared_steps:
+                self.logger.warning(
+                    f"[SAFETY] Cleared paused steps on startup to prevent accidental resume: {cleared_steps}"
+                )
+        except Exception as e:
+            self.logger.error(f"Failed to clear paused steps on startup: {e}")
+
         # Start hardware manager
         await self.hardware_manager.start()
         
@@ -125,10 +147,7 @@ class RobotOrchestrator(BaseService):
     
     def register_protocol_service(self, service: 'ProtocolExecutionService'):
         """Register the protocol execution service"""
-        self.logger.info(f"*** ORCHESTRATOR DEBUG: Registering protocol service: {service}")
-        self.logger.info(f"*** ORCHESTRATOR DEBUG: Service type: {type(service)}")
         self._protocol_service = service
-        self.logger.info(f"*** ORCHESTRATOR DEBUG: Protocol service registered. self._protocol_service: {self._protocol_service}")
         self.logger.info("Registered protocol execution service")
     
     def register_monitoring_service(self, service: 'MonitoringService'):
@@ -193,7 +212,7 @@ class RobotOrchestrator(BaseService):
         
         async def _emergency_stop_all():
             # EMERGENCY BYPASS: Skip system lock for maximum speed
-            self.logger.critical(f"🚨 Emergency stop bypassing system lock for immediate execution")
+            self.logger.critical(f"[EMERGENCY] Emergency stop bypassing system lock for immediate execution")
             self._emergency_stop_active = True
             
             # Update system state (non-blocking)
@@ -220,7 +239,7 @@ class RobotOrchestrator(BaseService):
             hardware_results = {}
             
             if emergency_tasks:
-                self.logger.critical(f"🚨 Executing {len(emergency_tasks)} emergency stops in parallel")
+                self.logger.critical(f"[EMERGENCY] Executing {len(emergency_tasks)} emergency stops in parallel")
                 
                 # Execute with 2-second timeout per task to prevent hanging
                 results = await asyncio.gather(
@@ -233,10 +252,10 @@ class RobotOrchestrator(BaseService):
                     result = results[i]
                     
                     if isinstance(result, asyncio.TimeoutError):
-                        self.logger.error(f"⏱️ Emergency stop timeout for {name}")
+                        self.logger.error(f"[TIMEOUT] Emergency stop timeout for {name}")
                         service_results[name] = False
                     elif isinstance(result, Exception):
-                        self.logger.error(f"❌ Emergency stop error for {name}: {result}")
+                        self.logger.error(f"[ERROR] Emergency stop error for {name}: {result}")
                         service_results[name] = False
                     elif name == "hardware_manager":
                         hardware_results = result if isinstance(result, dict) else {"hardware": bool(result)}
@@ -247,7 +266,7 @@ class RobotOrchestrator(BaseService):
             all_results = {**hardware_results, **service_results}
             
             self.logger.critical(
-                f"🛑 Emergency stop completed in parallel. Results: {all_results}. Reason: {reason}"
+                f"[STOPPED] Emergency stop completed in parallel. Results: {all_results}. Reason: {reason}"
             )
             
             return all_results
@@ -259,12 +278,71 @@ class RobotOrchestrator(BaseService):
         try:
             result = await service.emergency_stop()
             success = result.success if hasattr(result, 'success') else bool(result)
-            self.logger.critical(f"✅ Emergency stop completed for {robot_id}: {success}")
+            if success:
+                self._emergency_stopped_robots.add(robot_id)
+            self.logger.critical(f"[OK] Emergency stop completed for {robot_id}: {success}")
             return success
         except Exception as e:
-            self.logger.error(f"❌ Emergency stop failed for {robot_id}: {e}")
+            self.logger.error(f"[ERROR] Emergency stop failed for {robot_id}: {e}")
             return False
-    
+
+    async def emergency_stop_robot(
+        self, robot_id: str, reason: str = "User triggered"
+    ) -> ServiceResult[Dict[str, Any]]:
+        """
+        Emergency stop only the specified robot (not all robots).
+
+        Args:
+            robot_id: ID of the robot to stop (e.g., 'meca', 'ot2')
+            reason: Reason for the emergency stop
+
+        Returns:
+            ServiceResult with stop status
+        """
+        context = OperationContext(
+            operation_id=f"robot_emergency_stop_{robot_id}_{int(time.time() * 1000)}",
+            robot_id=robot_id,
+            operation_type="emergency_stop_robot",
+            priority=100,
+            metadata={"reason": reason}
+        )
+
+        async def _emergency_stop_robot():
+            self.logger.critical(f"[EMERGENCY] Per-robot emergency stop for {robot_id}: {reason}")
+
+            service = self._robot_services.get(robot_id)
+            if not service:
+                raise ValidationError(f"Unknown robot: {robot_id}")
+
+            # Pause the robot's current step if active
+            try:
+                step_state = await self.state_manager.get_step_state(robot_id)
+                if step_state and not step_state.paused:
+                    await self.state_manager.pause_step(robot_id, reason=f"Emergency stop: {reason}")
+                    self.logger.info(f"Paused step {step_state.step_index} for {robot_id}")
+            except Exception as e:
+                self.logger.warning(f"Could not pause step for {robot_id}: {e}")
+
+            # Execute emergency stop on the single robot
+            success = await self._execute_service_emergency_stop(robot_id, service)
+
+            return {
+                "robot_id": robot_id,
+                "success": success,
+                "reason": reason,
+                "timestamp": time.time()
+            }
+
+        return await self.execute_operation(context, _emergency_stop_robot)
+
+    def get_emergency_stopped_robots(self) -> Set[str]:
+        """Get set of robot IDs that are currently emergency stopped."""
+        return self._emergency_stopped_robots.copy()
+
+    def is_robot_emergency_stopped(self, robot_id: str) -> bool:
+        """Check if a specific robot is emergency stopped."""
+        return robot_id in self._emergency_stopped_robots
+
     async def reset_emergency_stop(self) -> ServiceResult[bool]:
         """Reset emergency stop state"""
         context = OperationContext(
@@ -295,16 +373,70 @@ class RobotOrchestrator(BaseService):
                     )
                 
                 self._emergency_stop_active = False
-                
+                self._emergency_stopped_robots.clear()
+
+                all_step_states = await self.state_manager.get_all_step_states()
+                paused_steps = [
+                    robot_id for robot_id, step_state in all_step_states.items()
+                    if step_state and step_state.paused
+                ]
+                if paused_steps:
+                    self.logger.info(f"Emergency stop state reset. Paused steps preserved: {paused_steps}")
+
                 await self.state_manager.update_system_state(
                     SystemState.READY,
                     reason="Emergency stop reset"
                 )
-                
+
                 self.logger.info("Emergency stop state reset")
                 return True
-        
+
         return await self.execute_operation(context, _reset_emergency_stop)
+
+    async def reset_robot_emergency_stop(self, robot_id: str) -> ServiceResult[bool]:
+        """
+        Reset emergency stop for a specific robot only.
+
+        Args:
+            robot_id: ID of the robot to reset
+
+        Returns:
+            ServiceResult with reset status
+        """
+        context = OperationContext(
+            operation_id=f"robot_emergency_reset_{robot_id}_{int(time.time() * 1000)}",
+            robot_id=robot_id,
+            operation_type="emergency_reset_robot"
+        )
+
+        async def _reset_robot_emergency():
+            if robot_id not in self._emergency_stopped_robots:
+                self.logger.info(f"Robot {robot_id} was not emergency stopped")
+                return True
+
+            # Check if robot is in safe state
+            robot_info = await self.state_manager.get_robot_state(robot_id)
+            if robot_info and robot_info.current_state not in {
+                RobotState.DISCONNECTED, RobotState.IDLE, RobotState.MAINTENANCE
+            }:
+                raise ValidationError(
+                    f"Cannot reset {robot_id}: still in unsafe state {robot_info.current_state.value}"
+                )
+
+            self._emergency_stopped_robots.discard(robot_id)
+            self.logger.info(f"Reset emergency stop for robot {robot_id}")
+
+            # If no more robots are e-stopped, reset system state
+            if not self._emergency_stopped_robots:
+                self._emergency_stop_active = False
+                await self.state_manager.update_system_state(
+                    SystemState.READY,
+                    reason=f"All robots recovered from emergency stop"
+                )
+
+            return True
+
+        return await self.execute_operation(context, _reset_robot_emergency)
     
     async def execute_multi_robot_workflow(
         self,

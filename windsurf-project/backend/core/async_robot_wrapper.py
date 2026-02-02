@@ -5,7 +5,6 @@ Provides thread pool execution, connection pooling, and batched operations.
 
 import asyncio
 import time
-import logging
 from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, Any, List, Optional, Callable, Union
 from dataclasses import dataclass, field
@@ -13,6 +12,7 @@ from enum import Enum
 from abc import ABC, abstractmethod
 
 from .exceptions import HardwareError, ValidationError
+from utils.logger import get_logger
 
 
 class CommandType(Enum):
@@ -112,7 +112,7 @@ class AsyncRobotWrapper:
         self._status_cache = {}
         self._status_cache_ttl = 1.0  # Cache status for 1 second
         
-        self.logger = logging.getLogger(f"async_robot.{robot_id}")
+        self.logger = get_logger(f"async_robot_{robot_id}")
         
         # Start batch processing
         self._start_batch_processing()
@@ -147,24 +147,22 @@ class AsyncRobotWrapper:
     async def get_status(self, use_cache: bool = True) -> Dict[str, Any]:
         """
         Get robot status with caching for performance.
-        
+
         Args:
             use_cache: Whether to use cached status if available
-            
+
         Returns:
             Robot status dictionary
         """
         current_time = time.time()
-        
+
         # Use cache if available and fresh
-        if (use_cache and 
-            self._status_cache and 
+        if (use_cache and
+            self._status_cache and
             current_time - self._last_status_check < self._status_cache_ttl):
-            self.logger.debug(f"Using cached status for robot {self.robot_id} (age: {current_time - self._last_status_check:.3f}s)")
             return self._status_cache
-        
+
         status_start_time = time.time()
-        self.logger.debug(f"Requesting fresh status from robot {self.robot_id}")
         
         try:
             # Execute in thread pool to avoid blocking
@@ -177,14 +175,10 @@ class AsyncRobotWrapper:
                 timeout=self.command_timeout
             )
             
-            status_duration = time.time() - status_start_time
-            
             # Update cache
             self._status_cache = status
             self._last_status_check = current_time
-            
-            self.logger.debug(f"Robot {self.robot_id} status retrieved in {status_duration:.3f}s: {status}")
-            
+
             return status
             
         except asyncio.TimeoutError:
@@ -198,6 +192,16 @@ class AsyncRobotWrapper:
             self.logger.error(error_msg)
             raise HardwareError(error_msg, robot_id=self.robot_id)
     
+    def _call_robot_method(self, robot, method_name: str, *args, log_info: str = None) -> bool:
+        """Call a robot method if available, with optional info logging. Returns True if called."""
+        if not hasattr(robot, method_name):
+            self.logger.warning(f"{method_name} not available on robot {self.robot_id}")
+            return False
+        getattr(robot, method_name)(*args)
+        if log_info:
+            self.logger.info(f"{log_info} for {self.robot_id}")
+        return True
+
     def _get_status_sync(self) -> Dict[str, Any]:
         """Synchronous status check (runs in thread pool)"""
         if hasattr(self.robot_driver, 'GetStatusRobot'):
@@ -224,25 +228,21 @@ class AsyncRobotWrapper:
     async def execute_movement(self, command: MovementCommand) -> CommandResult:
         """
         Execute a movement command asynchronously.
-        
+
         Args:
             command: Movement command to execute
-            
+
         Returns:
             Command execution result
         """
         command.validate()
-        
+
         command_id = f"{self.robot_id}_{int(time.time() * 1000)}"
         start_time = time.time()
-        
-        # Log command transmission
-        self.logger.info(f"Transmitting movement command {command_id} to robot {self.robot_id}")
-        self.logger.debug(f"Command details: type={command.command_type}, position={command.target_position}, speed={command.speed}")
-        
+
+        self.logger.info(f"Executing {command.command_type} command {command_id}")
+
         try:
-            # Execute in thread pool
-            self.logger.debug(f"Executing movement command {command_id} in thread pool")
             loop = asyncio.get_event_loop()
             result = await asyncio.wait_for(
                 loop.run_in_executor(
@@ -255,10 +255,9 @@ class AsyncRobotWrapper:
             
             execution_time = time.time() - start_time
             
-            # Update statistics
             await self._update_command_stats(CommandType.MOVEMENT, True, execution_time)
-            
-            self.logger.info(f"Movement command {command_id} completed successfully in {execution_time:.3f}s")
+
+            self.logger.info(f"Command {command_id} completed in {execution_time:.3f}s")
             
             return CommandResult(
                 command_id=command_id,
@@ -270,10 +269,8 @@ class AsyncRobotWrapper:
         except asyncio.TimeoutError:
             execution_time = time.time() - start_time
             await self._update_command_stats(CommandType.MOVEMENT, False, execution_time)
-            
             error_msg = f"Movement timeout after {self.command_timeout}s"
-            self.logger.error(f"Movement command {command_id} timed out after {execution_time:.3f}s (timeout: {self.command_timeout}s)")
-            
+            self.logger.error(f"Command {command_id} timed out: {error_msg}")
             return CommandResult(
                 command_id=command_id,
                 success=False,
@@ -283,9 +280,7 @@ class AsyncRobotWrapper:
         except Exception as e:
             execution_time = time.time() - start_time
             await self._update_command_stats(CommandType.MOVEMENT, False, execution_time)
-            
-            self.logger.error(f"Movement command {command_id} failed after {execution_time:.3f}s: {str(e)}")
-            
+            self.logger.error(f"Command {command_id} failed: {e}")
             return CommandResult(
                 command_id=command_id,
                 success=False,
@@ -360,24 +355,16 @@ class AsyncRobotWrapper:
                 actual_robot = self.robot_driver.get_robot_instance()
             
             if not actual_robot:
-                # CRITICAL: Do not fall back to simulation - this indicates a connection problem
-                error_msg = f"❌ No robot instance available for {self.robot_id} - command '{command.command_type}' cannot be executed"
-                self.logger.error(error_msg)
-                self.logger.error(f"💡 Robot connection may have failed. Check driver connection status.")
-                raise HardwareError(f"Robot {self.robot_id} not connected: {error_msg}", robot_id=self.robot_id)
-            
-            self.logger.debug(f"✅ Using actual robot instance for {self.robot_id} hardware commands")
+                error_msg = f"No robot instance available for {self.robot_id} - command '{command.command_type}' cannot be executed"
+                self.logger.error(f"{error_msg}. Check driver connection status.")
+                raise HardwareError(f"Robot {self.robot_id} not connected", robot_id=self.robot_id)
             
             # Set movement parameters if provided
-            if command.speed is not None:
-                if hasattr(actual_robot, 'SetJointVel'):
-                    actual_robot.SetJointVel(command.speed)
-                    self.logger.debug(f"Set joint velocity to {command.speed} for {self.robot_id}")
-            
-            if command.acceleration is not None:
-                if hasattr(actual_robot, 'SetJointAcc'):
-                    actual_robot.SetJointAcc(command.acceleration)
-                    self.logger.debug(f"Set joint acceleration to {command.acceleration} for {self.robot_id}")
+            if command.speed is not None and hasattr(actual_robot, 'SetJointVel'):
+                actual_robot.SetJointVel(command.speed)
+
+            if command.acceleration is not None and hasattr(actual_robot, 'SetJointAcc'):
+                actual_robot.SetJointAcc(command.acceleration)
             
             # Execute movement based on command type
             if command.command_type == "move_joints":
@@ -422,49 +409,18 @@ class AsyncRobotWrapper:
                 else:
                     self.logger.warning(f"MoveLin not available on robot {self.robot_id}")
             
-            # Tool actions
-            if command.tool_action == "grip_open":
-                if hasattr(actual_robot, 'GripperOpen'):
-                    actual_robot.GripperOpen()
-                    self.logger.info(f"Executed GripperOpen command for {self.robot_id}")
-                else:
-                    self.logger.warning(f"GripperOpen not available on robot {self.robot_id}")
-            elif command.tool_action == "grip_close":
-                if hasattr(actual_robot, 'GripperClose'):
-                    actual_robot.GripperClose()
-                    self.logger.info(f"Executed GripperClose command for {self.robot_id}")
-                else:
-                    self.logger.warning(f"GripperClose not available on robot {self.robot_id}")
-            elif command.tool_action == "grip_move":
+            # Tool actions (via tool_action field or command_type)
+            gripper_action = command.tool_action or (
+                command.command_type if command.command_type in ("GripperOpen", "GripperClose", "MoveGripper") else None
+            )
+
+            if gripper_action in ("grip_open", "GripperOpen"):
+                self._call_robot_method(actual_robot, 'GripperOpen', log_info="Executed GripperOpen")
+            elif gripper_action in ("grip_close", "GripperClose"):
+                self._call_robot_method(actual_robot, 'GripperClose', log_info="Executed GripperClose")
+            elif gripper_action in ("grip_move", "MoveGripper"):
                 width = command.parameters.get("width", 0) if command.parameters else 0
-                if hasattr(actual_robot, 'MoveGripper'):
-                    actual_robot.MoveGripper(width)
-                    self.logger.info(f"Executed MoveGripper to width {width} for {self.robot_id}")
-                else:
-                    self.logger.warning(f"MoveGripper not available on robot {self.robot_id}")
-            
-            # Direct gripper command types (alternative to tool_action)
-            elif command.command_type == "GripperOpen":
-                if hasattr(actual_robot, 'GripperOpen'):
-                    actual_robot.GripperOpen()
-                    self.logger.info(f"Executed GripperOpen command for {self.robot_id}")
-                else:
-                    self.logger.warning(f"GripperOpen not available on robot {self.robot_id}")
-            
-            elif command.command_type == "GripperClose":
-                if hasattr(actual_robot, 'GripperClose'):
-                    actual_robot.GripperClose()
-                    self.logger.info(f"Executed GripperClose command for {self.robot_id}")
-                else:
-                    self.logger.warning(f"GripperClose not available on robot {self.robot_id}")
-            
-            elif command.command_type == "MoveGripper":
-                width = command.parameters.get("width", 0) if command.parameters else 0
-                if hasattr(actual_robot, 'MoveGripper'):
-                    actual_robot.MoveGripper(width)
-                    self.logger.info(f"Executed MoveGripper to width {width} for {self.robot_id}")
-                else:
-                    self.logger.warning(f"MoveGripper not available on robot {self.robot_id}")
+                self._call_robot_method(actual_robot, 'MoveGripper', width, log_info=f"MoveGripper to width {width}")
             
             # Delay command
             elif command.command_type == "Delay":
@@ -485,120 +441,66 @@ class AsyncRobotWrapper:
             elif command.command_type == "config":
                 config_type = command.parameters.get("config_type")
                 values = command.parameters.get("values", [])
-                
-                self.logger.debug(f"Executing configuration command '{config_type}' with values {values} for {self.robot_id}")
-                
-                if config_type == "SetJointVel" and len(values) >= 1:
-                    if hasattr(actual_robot, 'SetJointVel'):
-                        actual_robot.SetJointVel(values[0])
-                        self.logger.info(f"Set joint velocity to {values[0]} for {self.robot_id}")
-                    else:
-                        self.logger.warning(f"SetJointVel not available on robot {self.robot_id}")
-                        
-                elif config_type == "SetJointAcc" and len(values) >= 1:
-                    if hasattr(actual_robot, 'SetJointAcc'):
-                        actual_robot.SetJointAcc(values[0])
-                        self.logger.info(f"Set joint acceleration to {values[0]} for {self.robot_id}")
-                    else:
-                        self.logger.warning(f"SetJointAcc not available on robot {self.robot_id}")
-                        
-                elif config_type == "SetGripperForce" and len(values) >= 1:
-                    if hasattr(actual_robot, 'SetGripperForce'):
-                        actual_robot.SetGripperForce(values[0])
-                        self.logger.info(f"Set gripper force to {values[0]} for {self.robot_id}")
-                    else:
-                        self.logger.warning(f"SetGripperForce not available on robot {self.robot_id}")
-                        
-                elif config_type == "SetTorqueLimits" and len(values) >= 6:
-                    if hasattr(actual_robot, 'SetTorqueLimits'):
-                        actual_robot.SetTorqueLimits(values[0], values[1], values[2], values[3], values[4], values[5])
-                        self.logger.info(f"Set torque limits to {values} for {self.robot_id}")
-                    else:
-                        self.logger.warning(f"SetTorqueLimits not available on robot {self.robot_id}")
-                        
-                elif config_type == "SetTorqueLimitsCfg" and len(values) >= 2:
-                    if hasattr(actual_robot, 'SetTorqueLimitsCfg'):
-                        actual_robot.SetTorqueLimitsCfg(values[0], values[1])
-                        self.logger.info(f"Set torque limits config to {values} for {self.robot_id}")
-                    else:
-                        self.logger.warning(f"SetTorqueLimitsCfg not available on robot {self.robot_id}")
-                        
-                elif config_type == "SetBlending" and len(values) >= 1:
-                    if hasattr(actual_robot, 'SetBlending'):
-                        actual_robot.SetBlending(values[0])
-                        self.logger.info(f"Set blending to {values[0]} for {self.robot_id}")
-                    else:
-                        self.logger.warning(f"SetBlending not available on robot {self.robot_id}")
-                        
-                elif config_type == "SetConf" and len(values) >= 3:
-                    if hasattr(actual_robot, 'SetConf'):
-                        actual_robot.SetConf(values[0], values[1], values[2])
-                        self.logger.info(f"Set configuration to {values} for {self.robot_id}")
-                    else:
-                        self.logger.warning(f"SetConf not available on robot {self.robot_id}")
-                        
-                elif config_type == "SetCartVel" and len(values) >= 1:
-                    if hasattr(actual_robot, 'SetCartVel'):
-                        actual_robot.SetCartVel(values[0])
-                        self.logger.info(f"Set cartesian velocity to {values[0]} for {self.robot_id}")
-                    else:
-                        self.logger.warning(f"SetCartVel not available on robot {self.robot_id}")
-                        
-                elif config_type == "SetCartAcc" and len(values) >= 1:
-                    if hasattr(actual_robot, 'SetCartAcc'):
-                        actual_robot.SetCartAcc(values[0])
-                        self.logger.info(f"Set cartesian acceleration to {values[0]} for {self.robot_id}")
-                    else:
-                        self.logger.warning(f"SetCartAcc not available on robot {self.robot_id}")
-                        
+
+                # Map config types to (method_name, required_args, log_description)
+                config_map = {
+                    "SetJointVel": (1, "joint velocity"),
+                    "SetJointAcc": (1, "joint acceleration"),
+                    "SetGripperForce": (1, "gripper force"),
+                    "SetTorqueLimits": (6, "torque limits"),
+                    "SetTorqueLimitsCfg": (2, "torque limits config"),
+                    "SetBlending": (1, "blending"),
+                    "SetConf": (3, "configuration"),
+                    "SetCartVel": (1, "cartesian velocity"),
+                    "SetCartAcc": (1, "cartesian acceleration"),
+                }
+
+                if config_type in config_map:
+                    required_args, description = config_map[config_type]
+                    if len(values) >= required_args:
+                        args = values[:required_args]
+                        self._call_robot_method(
+                            actual_robot, config_type, *args,
+                            log_info=f"Set {description} to {args[0] if required_args == 1 else values}"
+                        )
                 else:
-                    self.logger.warning(f"Unknown configuration command: {config_type} with values {values} for {self.robot_id}")
+                    self.logger.warning(f"Unknown config command: {config_type} with values {values}")
             
             elif command.command_type == "emergency_stop":
-                # EMERGENCY STOP: Immediate halt using proper Mecademic API methods
-                self.logger.critical(f"🚨 EMERGENCY STOP triggered for {self.robot_id}")
-                
+                self.logger.critical(f"EMERGENCY STOP triggered for {self.robot_id}")
                 emergency_executed = False
-                
-                # STEP 1: Immediate stop current movement
+
+                # Step 1: Immediate stop current movement
                 if hasattr(actual_robot, 'PauseMotion'):
                     actual_robot.PauseMotion()
-                    self.logger.critical(f"✅ PauseMotion() immediate stop executed for {self.robot_id}")
+                    self.logger.critical(f"PauseMotion() executed for {self.robot_id}")
                     emergency_executed = True
+                    if hasattr(self.robot_driver, '_software_estop_active'):
+                        self.robot_driver._software_estop_active = True
 
-                # STEP 2: Clear remaining movement queue  
+                # Step 2: Clear remaining movement queue
                 if hasattr(actual_robot, 'ClearMotion'):
                     actual_robot.ClearMotion()
-                    self.logger.critical(f"✅ ClearMotion() queue cleared for {self.robot_id}")
+                    self.logger.critical(f"ClearMotion() executed for {self.robot_id}")
                     emergency_executed = True
-                    
-                    # Also engage brakes if available for additional safety
+
                     if hasattr(actual_robot, 'BrakesOn'):
                         try:
                             actual_robot.BrakesOn()
-                            self.logger.critical(f"✅ Emergency brakes engaged for {self.robot_id}")
+                            self.logger.critical(f"Brakes engaged for {self.robot_id}")
                         except Exception as brake_error:
-                            self.logger.warning(f"⚠️ Could not engage brakes during emergency stop: {brake_error}")
+                            self.logger.warning(f"Could not engage brakes: {brake_error}")
                 
                 # STEP 3: Fallback if neither PauseMotion nor ClearMotion available
                 if not emergency_executed and hasattr(actual_robot, 'StopMotion'):
                     actual_robot.StopMotion()
-                    self.logger.critical(f"✅ StopMotion() fallback executed for {self.robot_id}")
+                    self.logger.critical(f"StopMotion() fallback executed for {self.robot_id}")
                     emergency_executed = True
-                
-                else:
-                    self.logger.error(f"❌ No emergency stop methods available for {self.robot_id}")
-                    # Try alternative stop methods if available
-                    if hasattr(actual_robot, 'StopMotion'):
-                        actual_robot.StopMotion()
-                        self.logger.warning(f"⚠️ StopMotion() used as fallback for {self.robot_id}")
-                        emergency_executed = True
-                
+
                 if emergency_executed:
-                    self.logger.critical(f"🛑 Emergency stop completed for {self.robot_id} - robot halted in place")
-                    # Note: No gripper state change, no movement to safe position (as requested)
+                    self.logger.critical(f"Emergency stop completed for {self.robot_id} - robot halted")
                 else:
-                    self.logger.error(f"❌ Emergency stop FAILED for {self.robot_id} - no suitable methods available")
+                    self.logger.error(f"Emergency stop FAILED for {self.robot_id} - no suitable methods")
             
             else:
                 self.logger.warning(f"Unknown command type: {command.command_type} for robot {self.robot_id}")
@@ -764,15 +666,12 @@ class AsyncRobotWrapper:
         
         type_stats = self._command_stats["command_types"][type_key]
         type_stats["count"] += 1
-        
-        # Log performance metrics
-        success_rate = (self._command_stats["successful_commands"] / total) * 100
-        self.logger.info(f"Robot {self.robot_id} performance: {total} commands, {success_rate:.1f}% success rate, {execution_time:.3f}s execution time")
-        
+
+        # Log performance on failures only (success logged at command level)
         if not success:
             failure_rate = (self._command_stats["failed_commands"] / total) * 100
-            self.logger.warning(f"Robot {self.robot_id} command failure: failure rate now {failure_rate:.1f}%")
-        
+            self.logger.warning(f"Robot {self.robot_id} failure rate: {failure_rate:.1f}%")
+
         # Update success rate for this command type
         if success:
             type_stats["success_rate"] = (

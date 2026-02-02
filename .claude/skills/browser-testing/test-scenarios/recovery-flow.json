@@ -1,0 +1,115 @@
+{
+  "name": "recovery-flow",
+  "description": "Test Meca emergency stop and recovery workflow",
+  "url": "http://localhost:3002",
+  "prerequisites": ["App running", "Meca connected or mock enabled"],
+  "token_budget": {
+    "max_screenshots": 2,
+    "max_read_page": 3,
+    "prefer_api_verify": true
+  },
+  "playwright_selectors": {
+    "system-status": "region \"System Status\"",
+    "meca-status": "[data-testid=\"meca-status\"]",
+    "quick-recovery-btn": "button \"Quick Recovery\"",
+    "recovery-panel": "region \"Recovery\"",
+    "estop-indicator": "text \"Emergency Stop Active\""
+  },
+  "fallback_selectors": {
+    "system-status": {
+      "css": ".system-status, [class*='status']",
+      "text": "System Status"
+    },
+    "quick-recovery-btn": {
+      "css": "button.quick-recovery, button[class*='recovery']",
+      "text": "Quick Recovery"
+    },
+    "recovery-panel": {
+      "css": ".recovery-panel, [class*='recovery']",
+      "text": "Recovery"
+    }
+  },
+  "steps": [
+    {
+      "id": "navigate-to-app",
+      "action": "navigate",
+      "url": "http://localhost:3002",
+      "wait_for": "page load",
+      "playwright": {
+        "tool": "browser_navigate",
+        "url": "http://localhost:3002"
+      }
+    },
+    {
+      "id": "verify-initial-state",
+      "action": "verify",
+      "target": "system-status",
+      "cache_key": "system-status",
+      "method": "find",
+      "expected": "Meca status visible",
+      "playwright": {
+        "tool": "browser_snapshot",
+        "verify": "System Status or Meca in accessibility tree"
+      }
+    },
+    {
+      "id": "trigger-estop-api",
+      "action": "api_call",
+      "method": "POST",
+      "url": "http://localhost:8080/api/meca/emergency-stop",
+      "description": "Trigger emergency stop via API"
+    },
+    {
+      "id": "wait-for-estop-ui",
+      "action": "wait",
+      "duration": 2000,
+      "description": "Wait for UI to update",
+      "playwright": {
+        "tool": "browser_wait",
+        "time": 2
+      }
+    },
+    {
+      "id": "verify-recovery-panel",
+      "action": "verify",
+      "target": "Recovery Panel",
+      "method": "find",
+      "expected": "Emergency Stop Active",
+      "playwright": {
+        "tool": "browser_snapshot",
+        "verify": "Recovery or Emergency Stop in accessibility tree"
+      }
+    },
+    {
+      "id": "click-quick-recovery",
+      "action": "click",
+      "target": "quick-recovery-btn",
+      "cache_key": "quick-recovery-btn",
+      "verify": {"api_check": "GET /api/meca/status"},
+      "playwright": {
+        "tool": "browser_click",
+        "element": "button \"Quick Recovery\"",
+        "ref": "Use ref from snapshot if exact text differs"
+      }
+    },
+    {
+      "id": "verify-recovered",
+      "action": "verify",
+      "target": "system-status",
+      "cache_key": "system-status",
+      "method": "api",
+      "api_endpoint": "GET /api/meca/status",
+      "expected": "Meca ready or idle"
+    }
+  ],
+  "on_failure": {
+    "screenshot": true,
+    "try_alternatives": true,
+    "max_retries": 2
+  },
+  "debug_endpoints": [
+    "GET /api/meca/status",
+    "GET /api/health",
+    "GET /api/meca/recovery-state"
+  ]
+}

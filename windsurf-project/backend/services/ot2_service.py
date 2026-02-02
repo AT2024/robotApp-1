@@ -141,6 +141,13 @@ class OT2Service(RobotService):
         # Per plan: Use async with lock to serialize protocol execution
         self._protocol_lock = asyncio.Lock()
 
+        # Track emergency stop state - robot needs homing after emergency stop
+        self._was_emergency_stopped = False
+
+        # Position tracking for reverse path homing (Phase 4)
+        self._position_history: List[Dict[str, Any]] = []
+        self._max_position_history = 50
+
     async def _check_robot_connection(self) -> bool:
         """Check if OT2 robot is connected and accessible"""
         try:
@@ -277,8 +284,10 @@ class OT2Service(RobotService):
         1. Stop tracked run if exists and is active (running OR paused)
         2. CRITICAL: Query /runs API and stop ALL running/paused runs (handles desync)
         3. Cancel monitoring task
-        4. Home robot for safety
-        5. Clear internal state
+        4. Clear internal state
+
+        Note: Does NOT home robot - emergency stop should only STOP motion, not initiate
+        new motion. User should manually home after emergency condition is cleared.
         """
         self.logger.critical(f"Executing emergency stop for OT2 robot {self.robot_id}")
         stopped_operations = []
@@ -328,18 +337,20 @@ class OT2Service(RobotService):
                     pass
                 stopped_operations.append("monitoring_task")
 
-            # Step 4: Home robot for safety
-            try:
-                if await self._home_robot():
-                    stopped_operations.append("robot_homing")
-                else:
-                    failed_operations.append("robot_homing")
-            except Exception as e:
-                self.logger.error(f"Failed to home robot during emergency stop: {e}")
-                failed_operations.append(f"robot_homing_error: {e}")
-
-            # Step 5: Clear internal state
+            # Step 4: Clear internal state
+            # NOTE: Homing removed from emergency stop - homing initiates motion which
+            # contradicts the purpose of emergency stop (STOP all motion, not start new motion).
+            # User should manually home after emergency condition is cleared.
             self._current_run = None
+            self._was_emergency_stopped = True  # Track that we need homing before next run
+
+            # Step 5: Set robot state to EMERGENCY_STOP so RecoveryPanel is shown
+            # This is critical - without this state change, the frontend won't display
+            # the recovery options (Safe Home, reverse path homing, etc.)
+            await self.update_robot_state(
+                RobotState.EMERGENCY_STOP,
+                reason="Emergency stop activated - manual recovery required"
+            )
 
             # Log summary
             if failed_operations:
@@ -422,17 +433,25 @@ class OT2Service(RobotService):
                         "Hardware validation passed - proceeding with protocol execution"
                     )
 
-                    # Step 2.75: Pre-run homing to ensure hardware is fully initialized
-                    # Research shows protocols can hang if hardware isn't properly homed before execution
-                    self.logger.info("Performing pre-run homing to initialize hardware...")
-                    home_success = await self._home_robot()
-                    if home_success:
-                        self.logger.info("Pre-run homing successful, waiting for stabilization...")
-                        # Wait 20 seconds for homing to complete (successful runs show ~18s homing time)
-                        await asyncio.sleep(20)
-                        self.logger.info("Hardware stabilized, ready for protocol execution")
+                    # Step 2.75: Pre-run homing (skip if already homed AND not after emergency stop)
+                    # Opentrons default is HOME_AND_STAY_ENGAGED after runs, so motors
+                    # stay engaged when robot is at known position. Skip homing if engaged
+                    # UNLESS we had an emergency stop (robot may be in unknown position).
+                    motors_engaged = await self._are_motors_engaged()
+                    if motors_engaged and not self._was_emergency_stopped:
+                        self.logger.info("Motors engaged - skipping pre-run homing (robot already at known position)")
                     else:
-                        self.logger.warning("Pre-run homing failed, but continuing with protocol execution")
+                        reason = "after emergency stop" if self._was_emergency_stopped else "motors not engaged"
+                        self.logger.info(f"Performing pre-run homing ({reason})...")
+                        home_success = await self._home_robot()
+                        if home_success:
+                            self._was_emergency_stopped = False  # Clear flag after successful home
+                            self.logger.info("Pre-run homing successful, waiting for stabilization...")
+                            # Wait 20 seconds for homing to complete (successful runs show ~18s homing time)
+                            await asyncio.sleep(20)
+                            self.logger.info("Hardware stabilized, ready for protocol execution")
+                        else:
+                            self.logger.warning("Pre-run homing failed, but continuing with protocol execution")
 
                     # Step 3: Create and start run (only after analysis completes)
                     run_id = await self._create_run(protocol_id, protocol_config.parameters)
@@ -623,6 +642,169 @@ class OT2Service(RobotService):
         except Exception as e:
             return ServiceResult.error_result(f"Reset failed: {e}")
 
+    async def clear_and_reconnect(self) -> ServiceResult[Dict[str, Any]]:
+        """
+        Recovery operation: Clear all runs, home the robot, and reset state.
+
+        This is used after an emergency stop or error state to recover the OT2.
+        The OT2 uses HTTP-based stateless connections, so recovery is simpler
+        than for the Mecademic - we just need to:
+        1. Stop any running protocols
+        2. Clear/delete any stuck runs
+        3. Home the robot
+        4. Reset internal state
+
+        Returns:
+            ServiceResult containing recovery status and steps performed
+        """
+        context = OperationContext(
+            operation_id=f"{self.robot_id}_clear_and_reconnect",
+            robot_id=self.robot_id,
+            operation_type="recovery",
+            timeout=120.0
+        )
+
+        async def _clear_and_reconnect():
+            self.logger.info(f"[CONNECTING] Starting OT2 recovery sequence for {self.robot_id}")
+            recovery_steps = []
+
+            # Step 1: Check current connection/health
+            self.logger.info(f"Step 1: Checking OT2 health for {self.robot_id}")
+            try:
+                health_data = await self._get_health_status()
+                recovery_steps.append({
+                    "step": "health_check",
+                    "success": health_data is not None,
+                    "robot_name": health_data.get("name") if health_data else None
+                })
+            except Exception as e:
+                self.logger.warning(f"Health check failed: {e}")
+                recovery_steps.append({
+                    "step": "health_check",
+                    "success": False,
+                    "error": str(e)
+                })
+                # If health check fails, robot is not accessible
+                return {
+                    "robot_id": self.robot_id,
+                    "recovery_success": False,
+                    "steps": recovery_steps,
+                    "message": "OT2 not accessible. Check network connection and power."
+                }
+
+            # Step 2: Stop any active runs
+            self.logger.info(f"Step 2: Stopping any active runs for {self.robot_id}")
+            try:
+                active_run_id = await self.get_active_run_id()
+                if active_run_id:
+                    stop_success = await self._stop_run(active_run_id)
+                    recovery_steps.append({
+                        "step": "stop_active_run",
+                        "run_id": active_run_id,
+                        "success": stop_success
+                    })
+                    await asyncio.sleep(2.0)  # Allow time for stop to complete
+                else:
+                    recovery_steps.append({
+                        "step": "stop_active_run",
+                        "success": True,
+                        "message": "No active run to stop"
+                    })
+            except Exception as e:
+                self.logger.warning(f"Stop active run failed: {e}")
+                recovery_steps.append({
+                    "step": "stop_active_run",
+                    "success": False,
+                    "error": str(e)
+                })
+
+            # Step 3: Clear runs (delete completed/failed runs)
+            self.logger.info(f"Step 3: Clearing runs for {self.robot_id}")
+            try:
+                runs_data = await self._get_current_runs()
+                runs_list = runs_data.get("data", [])
+                cleared_count = 0
+
+                for run in runs_list:
+                    run_id = run.get("id")
+                    status = self._extract_run_status(run)
+                    # Only delete non-running runs
+                    if status not in ["running", "paused"] and run_id:
+                        try:
+                            await self._api_request("DELETE", f"/runs/{run_id}")
+                            cleared_count += 1
+                        except Exception as e:
+                            self.logger.debug(f"Could not delete run {run_id}: {e}")
+
+                recovery_steps.append({
+                    "step": "clear_runs",
+                    "success": True,
+                    "runs_cleared": cleared_count
+                })
+            except Exception as e:
+                self.logger.warning(f"Clear runs failed: {e}")
+                recovery_steps.append({
+                    "step": "clear_runs",
+                    "success": False,
+                    "error": str(e)
+                })
+
+            # Step 4: Home the robot
+            self.logger.info(f"Step 4: Homing robot {self.robot_id}")
+            try:
+                home_success = await self._home_robot()
+                recovery_steps.append({
+                    "step": "home_robot",
+                    "success": home_success
+                })
+            except Exception as e:
+                self.logger.warning(f"Homing failed: {e}")
+                recovery_steps.append({
+                    "step": "home_robot",
+                    "success": False,
+                    "error": str(e)
+                })
+
+            # Step 5: Reset internal state
+            self.logger.info(f"Step 5: Resetting internal state for {self.robot_id}")
+            try:
+                self._current_run = None
+                if self._monitoring_task:
+                    self._monitoring_task.cancel()
+                    self._monitoring_task = None
+
+                # Update robot state to IDLE
+                await self.update_robot_state(
+                    RobotState.IDLE,
+                    reason="Recovery complete - robot ready"
+                )
+
+                recovery_steps.append({
+                    "step": "reset_state",
+                    "success": True
+                })
+                recovery_success = True
+
+            except Exception as e:
+                self.logger.warning(f"State reset failed: {e}")
+                recovery_steps.append({
+                    "step": "reset_state",
+                    "success": False,
+                    "error": str(e)
+                })
+                recovery_success = False
+
+            self.logger.info(f"OT2 recovery sequence completed: success={recovery_success}")
+
+            return {
+                "robot_id": self.robot_id,
+                "recovery_success": recovery_success,
+                "steps": recovery_steps,
+                "message": "OT2 recovery complete. Robot is ready." if recovery_success else "OT2 recovery incomplete. Check robot status."
+            }
+
+        return await self.execute_operation(context, _clear_and_reconnect)
+
     async def move_to_position(self, **kwargs) -> ServiceResult[bool]:
         """Move robot to position (not applicable for OT2)"""
         return ServiceResult.error_result("Move to position not supported for OT2")
@@ -705,12 +887,21 @@ class OT2Service(RobotService):
             result = await self.execute_protocol(protocol_config, monitor_progress=True)
 
             if result.success:
-                # Set robot state back to IDLE after successful protocol completion
-                await self.update_robot_state(RobotState.IDLE, reason="Protocol completed successfully")
-                self.logger.info("OT2 state set to IDLE - protocol completed successfully")
+                # Check if emergency stop occurred during execution
+                # If so, do NOT override the EMERGENCY_STOP state with IDLE
+                # The RecoveryPanel needs to be shown for manual recovery
+                if self._was_emergency_stopped:
+                    self.logger.info(
+                        "OT2 protocol completed but emergency stop was triggered - "
+                        "maintaining EMERGENCY_STOP state for RecoveryPanel"
+                    )
+                else:
+                    # Set robot state back to IDLE after successful protocol completion
+                    await self.update_robot_state(RobotState.IDLE, reason="Protocol completed successfully")
+                    self.logger.info("OT2 state set to IDLE - protocol completed successfully")
                 return ServiceResult.success_result(
                     {
-                        "status": "completed",
+                        "status": "completed" if not self._was_emergency_stopped else "emergency_stopped",
                         "run_status": (
                             result.data.__dict__
                             if hasattr(result.data, "__dict__")
@@ -720,19 +911,33 @@ class OT2Service(RobotService):
                     }
                 )
             else:
-                # Set robot state back to IDLE on protocol failure
-                await self.update_robot_state(RobotState.IDLE, reason=f"Protocol failed: {result.error}")
-                self.logger.info("OT2 state set to IDLE - protocol failed")
+                # Check if this failure was due to emergency stop
+                if self._was_emergency_stopped:
+                    self.logger.info(
+                        "OT2 protocol failed due to emergency stop - "
+                        "maintaining EMERGENCY_STOP state for RecoveryPanel"
+                    )
+                else:
+                    # Set robot state back to IDLE on protocol failure (non-emergency)
+                    await self.update_robot_state(RobotState.IDLE, reason=f"Protocol failed: {result.error}")
+                    self.logger.info("OT2 state set to IDLE - protocol failed")
                 return ServiceResult.error_result(
                     f"Protocol execution failed: {result.error}"
                 )
 
         except Exception as e:
             self.logger.error(f"Failed to run protocol: {e}", exc_info=True)
-            # Ensure robot state is reset to IDLE even on exception
+            # Ensure robot state is reset appropriately
+            # Do NOT override EMERGENCY_STOP state - RecoveryPanel needs to be shown
             try:
-                await self.update_robot_state(RobotState.IDLE, reason=f"Protocol exception: {str(e)}")
-                self.logger.info("OT2 state set to IDLE - protocol exception")
+                if self._was_emergency_stopped:
+                    self.logger.info(
+                        "OT2 protocol exception after emergency stop - "
+                        "maintaining EMERGENCY_STOP state for RecoveryPanel"
+                    )
+                else:
+                    await self.update_robot_state(RobotState.IDLE, reason=f"Protocol exception: {str(e)}")
+                    self.logger.info("OT2 state set to IDLE - protocol exception")
             except Exception as state_error:
                 self.logger.error(f"Failed to reset OT2 state after exception: {state_error}")
             return ServiceResult.error_result(f"Protocol execution failed: {str(e)}")
@@ -1342,6 +1547,266 @@ class OT2Service(RobotService):
             self.logger.error(f"Error resuming run: {e}")
             return ServiceResult.error_result(f"Resume failed: {e}")
 
+    # -------------------------------------------------------------------------
+    # Phase 2 & 4: Quick Recovery and Position Tracking Methods
+    # -------------------------------------------------------------------------
+
+    async def quick_recovery(self) -> ServiceResult[Dict[str, Any]]:
+        """
+        Resume from paused state using existing pause/resume API.
+
+        This is a convenience wrapper around resume_current_run() that provides
+        consistent interface with MecaService's quick_recovery.
+
+        Returns:
+            ServiceResult with recovery status
+        """
+        self.logger.info(f"Quick recovery requested for {self.robot_id}")
+
+        # Check current step state
+        step_state = await self.state_manager.get_step_state(self.robot_id)
+
+        # Resume using existing method
+        result = await self.resume_current_run()
+
+        if result.success:
+            # Resume step tracking if paused
+            if step_state and step_state.paused:
+                await self.state_manager.resume_step(self.robot_id)
+
+            return ServiceResult.success_result({
+                "robot_id": self.robot_id,
+                "recovery_type": "quick",
+                "resumed_step": {
+                    "index": step_state.step_index if step_state else None,
+                    "name": step_state.step_name if step_state else None,
+                    "operation_type": step_state.operation_type if step_state else None
+                } if step_state else None,
+                "message": "OT2 protocol resumed successfully"
+            })
+        else:
+            return ServiceResult.error_result(
+                f"Quick recovery failed: {result.error}",
+                error_code="QUICK_RECOVERY_FAILED"
+            )
+
+    async def _record_position(self, context: str = "") -> None:
+        """
+        Record current pipette position to history for reverse path homing.
+
+        Args:
+            context: Optional context string describing the movement
+        """
+        try:
+            pos = await self._get_pipette_position()
+            if pos:
+                self._position_history.append({
+                    "x": pos.get("x", 0),
+                    "y": pos.get("y", 0),
+                    "z": pos.get("z", 0),
+                    "timestamp": time.time(),
+                    "context": context
+                })
+
+                # Limit history size
+                if len(self._position_history) > self._max_position_history:
+                    self._position_history.pop(0)
+
+                self.logger.debug(
+                    f"Recorded position: ({pos.get('x')}, {pos.get('y')}, {pos.get('z')}) - {context}"
+                )
+        except Exception as e:
+            self.logger.warning(f"Could not record position: {e}")
+
+    async def _get_pipette_position(self) -> Optional[Dict[str, float]]:
+        """
+        Get current pipette position from OT2 API.
+
+        Returns:
+            Dict with x, y, z coordinates or None if unavailable
+        """
+        try:
+            async with self._get_session() as session:
+                url = f"{self.base_url}/robot/positions"
+                headers = {"Opentrons-Version": "2"}
+
+                async with session.get(url, headers=headers, timeout=10) as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        # Extract position from response
+                        positions = data.get("positions", {})
+                        # Return first pipette position found
+                        for mount in ["left", "right"]:
+                            if mount in positions:
+                                return positions[mount]
+                        return None
+        except Exception as e:
+            self.logger.debug(f"Could not get pipette position: {e}")
+            return None
+
+    async def _move_pipette(
+        self, x: float, y: float, z: float, speed: float = 50.0
+    ) -> bool:
+        """
+        Move pipette to specified coordinates.
+
+        Args:
+            x, y, z: Target coordinates
+            speed: Movement speed (percentage)
+
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            async with self._get_session() as session:
+                url = f"{self.base_url}/robot/move"
+                headers = {"Opentrons-Version": "2", "Content-Type": "application/json"}
+                payload = {
+                    "target": "pipette",
+                    "point": [x, y, z],
+                    "speed": speed
+                }
+
+                async with session.post(
+                    url, headers=headers, json=payload, timeout=30
+                ) as response:
+                    return response.status == 200
+
+        except Exception as e:
+            self.logger.error(f"Error moving pipette: {e}")
+            return False
+
+    async def safe_home_reverse_path(self) -> ServiceResult[Dict[str, Any]]:
+        """
+        Home by retracing path in reverse (shield-safe).
+
+        This method reverses through the recorded position history, ensuring
+        the pipette doesn't collide with any obstacles (like the shield).
+        Z-up movements are prioritized for safety.
+
+        Returns:
+            ServiceResult with homing status
+        """
+        self.logger.info(f"Starting reverse path homing for {self.robot_id}")
+
+        if not self._position_history:
+            self.logger.info("No position history - using normal homing")
+            result = await self._home_robot()
+            if result:
+                # Clear emergency stop flag and update state to IDLE
+                self._was_emergency_stopped = False
+                await self.update_robot_state(
+                    RobotState.IDLE,
+                    reason="Recovery completed - normal homing successful"
+                )
+                self.logger.info("Emergency stop cleared - OT2 state set to IDLE after normal homing")
+            return ServiceResult.success_result({
+                "robot_id": self.robot_id,
+                "method": "normal_home",
+                "positions_retraced": 0,
+                "homed": result,
+                "message": "No position history - homed normally"
+            })
+
+        positions_retraced = 0
+        try:
+            # Reverse through positions
+            for pos in reversed(self._position_history):
+                # Get current position
+                current = await self._get_pipette_position()
+
+                if current:
+                    # Z-up first for safety (if needed)
+                    if current.get("z", 0) < pos["z"]:
+                        self.logger.debug(f"Z-up to {pos['z']}")
+                        await self._move_pipette(
+                            current.get("x", 0),
+                            current.get("y", 0),
+                            pos["z"],
+                            speed=30.0  # Slow for safety
+                        )
+                        await asyncio.sleep(0.5)
+
+                # Move to recorded position
+                self.logger.debug(f"Moving to ({pos['x']}, {pos['y']}, {pos['z']})")
+                success = await self._move_pipette(
+                    pos["x"], pos["y"], pos["z"], speed=30.0
+                )
+
+                if success:
+                    positions_retraced += 1
+                else:
+                    self.logger.warning(
+                        f"Failed to move to position: ({pos['x']}, {pos['y']}, {pos['z']})"
+                    )
+                    break
+
+                await asyncio.sleep(0.3)  # Brief pause between moves
+
+            # Clear history after successful retrace
+            self._position_history.clear()
+
+            # Home robot
+            home_result = await self._home_robot()
+
+            if home_result:
+                # Clear emergency stop flag and update state to IDLE
+                # This allows the RecoveryPanel to auto-close
+                self._was_emergency_stopped = False
+                await self.update_robot_state(
+                    RobotState.IDLE,
+                    reason="Recovery completed - reverse path homing successful"
+                )
+                self.logger.info("Emergency stop cleared - OT2 state set to IDLE after reverse path homing")
+
+            return ServiceResult.success_result({
+                "robot_id": self.robot_id,
+                "method": "reverse_path",
+                "positions_retraced": positions_retraced,
+                "homed": home_result,
+                "message": f"Retraced {positions_retraced} positions and homed"
+            })
+
+        except Exception as e:
+            self.logger.error(f"Error during reverse path homing: {e}")
+            return ServiceResult.error_result(
+                f"Reverse path homing failed: {e}",
+                error_code="REVERSE_HOME_FAILED"
+            )
+
+    async def _home_robot(self) -> bool:
+        """
+        Home the OT2 robot using API.
+
+        Returns:
+            True if homing successful
+        """
+        try:
+            async with self._get_session() as session:
+                url = f"{self.base_url}/robot/home"
+                headers = {"Opentrons-Version": "2", "Content-Type": "application/json"}
+
+                async with session.post(url, headers=headers, timeout=60) as response:
+                    if response.status == 200:
+                        self.logger.info("OT2 homing completed")
+                        return True
+                    else:
+                        self.logger.error(f"Homing failed with status {response.status}")
+                        return False
+
+        except Exception as e:
+            self.logger.error(f"Error homing robot: {e}")
+            return False
+
+    def get_position_history_count(self) -> int:
+        """Get the number of positions recorded in history."""
+        return len(self._position_history)
+
+    def clear_position_history(self) -> None:
+        """Clear the position history."""
+        self._position_history.clear()
+        self.logger.info("Position history cleared")
+
     async def _handle_idle_timeout(
         self, run_id: str, idle_duration: float
     ) -> Optional[RunStatus]:
@@ -1570,7 +2035,7 @@ class OT2Service(RobotService):
         warnings = validation_result.get("warnings", [])
 
         error_parts = [
-            "❌ Hardware Validation Failed",
+            "[ERROR] Hardware Validation Failed",
             "",
             "The OT2 robot cannot execute this protocol due to missing or unconfigured hardware:",
             "",
@@ -1581,7 +2046,7 @@ class OT2Service(RobotService):
             error_parts.append(f"  • {item}")
 
         if warnings:
-            error_parts.extend(["", "⚠️  Additional Warnings:"])
+            error_parts.extend(["", "[WARNING]  Additional Warnings:"])
             for warning in warnings:
                 error_parts.append(f"  • {warning}")
 
@@ -1589,7 +2054,7 @@ class OT2Service(RobotService):
         error_parts.extend(
             [
                 "",
-                "🔧 Troubleshooting Steps:",
+                "[EXEC] Troubleshooting Steps:",
                 "",
                 "1. Check Physical Hardware:",
                 "   • Ensure pipettes are physically attached to the robot",
@@ -1610,7 +2075,7 @@ class OT2Service(RobotService):
                 "   • Try running the protocol directly from the OT2 interface",
                 "   • This will show specific error messages about missing hardware",
                 "",
-                f"🌐 Robot Interface: http://{self.ot2_config['ip']}:{self.ot2_config['port']}",
+                f"[NETWORK] Robot Interface: http://{self.ot2_config['ip']}:{self.ot2_config['port']}",
                 "",
                 "After resolving hardware issues, try running the protocol again.",
             ]
@@ -1633,12 +2098,12 @@ class OT2Service(RobotService):
             Detailed error message with diagnostic information
         """
         error_parts = [
-            f"⏱️  Protocol Execution Timeout (Run ID: {run_id})",
+            f"[TIMEOUT]  Protocol Execution Timeout (Run ID: {run_id})",
             "",
             f"The protocol remained in 'idle' state for {duration:.1f} seconds after receiving the 'play' command.",
             "This typically indicates a hardware setup issue preventing execution.",
             "",
-            "🔍 Diagnostic Information:",
+            "[DEBUG] Diagnostic Information:",
             "",
         ]
 
@@ -1649,24 +2114,24 @@ class OT2Service(RobotService):
         if not left_pip and not right_pip:
             error_parts.extend(
                 [
-                    "❌ No pipettes detected",
+                    "[ERROR] No pipettes detected",
                     "   → The robot has no pipettes attached or they are not recognized",
                     "   → Attach pipettes and run calibration through the OT2 interface",
                     "",
                 ]
             )
         else:
-            error_parts.append("✅ Pipettes detected:")
+            error_parts.append("[OK] Pipettes detected:")
             if left_pip:
                 status = (
-                    "✅ OK" if left_pip.get("ok", False) else "⚠️  Needs calibration"
+                    "[OK] OK" if left_pip.get("ok", False) else "[WARNING]  Needs calibration"
                 )
                 error_parts.append(
                     f"   • Left: {left_pip.get('model', 'Unknown')} - {status}"
                 )
             if right_pip:
                 status = (
-                    "✅ OK" if right_pip.get("ok", False) else "⚠️  Needs calibration"
+                    "[OK] OK" if right_pip.get("ok", False) else "[WARNING]  Needs calibration"
                 )
                 error_parts.append(
                     f"   • Right: {right_pip.get('model', 'Unknown')} - {status}"
@@ -1676,7 +2141,7 @@ class OT2Service(RobotService):
         # Add common solutions
         error_parts.extend(
             [
-                "🔧 Common Solutions:",
+                "[EXEC] Common Solutions:",
                 "",
                 "1. Hardware Issues:",
                 "   • Check that pipettes are properly seated and recognized",
@@ -1693,13 +2158,36 @@ class OT2Service(RobotService):
                 "   • Try running a simple test protocol to verify hardware",
                 "   • Check the OT2 logs for specific error messages",
                 "",
-                f"🌐 Robot Interface: http://{self.ot2_config['ip']}:{self.ot2_config['port']}",
+                f"[NETWORK] Robot Interface: http://{self.ot2_config['ip']}:{self.ot2_config['port']}",
                 "",
                 "Check the robot's interface for specific error messages and hardware status.",
             ]
         )
 
         return "\n".join(error_parts)
+
+    async def _are_motors_engaged(self) -> bool:
+        """Check if robot motors are engaged (indicating robot is homed).
+
+        Opentrons default post_run_hardware_state is HOME_AND_STAY_ENGAGED,
+        meaning after a successful run, the robot homes AND keeps motors engaged.
+        If motors are engaged, robot is at a known position (likely home).
+        If motors are disengaged, robot MUST be homed.
+        """
+        try:
+            response = await self._api_request("GET", "/motors/engaged")
+            # Check if all gantry axes are engaged
+            # OT2 API returns: x, y, z_l (left Z), z_r (right Z), p_l/p_r (pipettes)
+            required_axes = ['x', 'y', 'z_l', 'z_r']  # Gantry axes only
+            for axis in required_axes:
+                if not response.get(axis, {}).get('enabled', False):
+                    self.logger.debug(f"Motor axis '{axis}' is not engaged")
+                    return False
+            self.logger.debug("All gantry motor axes are engaged")
+            return True
+        except Exception as e:
+            self.logger.warning(f"Failed to check motor status: {e}")
+            return False  # Assume not homed if check fails
 
     async def _home_robot(self) -> bool:
         """Home the robot"""

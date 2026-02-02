@@ -1,6 +1,6 @@
-# websocket_handlers.py
-# Updated to use the new service layer architecture
+"""WebSocket handlers for robot control communication."""
 from fastapi import WebSocket
+from starlette.websockets import WebSocketState
 from typing import Dict, Optional
 from utils.logger import get_logger
 from datetime import datetime
@@ -12,6 +12,22 @@ from services.protocol_service import ProtocolExecutionService
 from core.state_manager import AtomicStateManager, RobotState
 
 logger = get_logger("websocket_handler")
+
+# Module-level singleton for WebsocketHandler
+# This allows services to access the actual handler with connected clients
+_websocket_handler_singleton: Optional["WebsocketHandler"] = None
+
+
+def set_websocket_handler_singleton(handler: "WebsocketHandler") -> None:
+    """Set the global websocket handler singleton. Called during app initialization."""
+    global _websocket_handler_singleton
+    _websocket_handler_singleton = handler
+    logger.info("WebSocket handler singleton registered")
+
+
+def get_websocket_handler_singleton() -> Optional["WebsocketHandler"]:
+    """Get the global websocket handler singleton with actual connected clients."""
+    return _websocket_handler_singleton
 
 class WebsocketHandler:
     def __init__(
@@ -43,29 +59,26 @@ class WebsocketHandler:
         # Background tasks
         self._status_monitor_task: Optional[asyncio.Task] = None
 
+    def _map_robot_state_to_status(self, robot_state: str) -> str:
+        """Map robot state to connection status string."""
+        if robot_state == "emergency_stop":
+            return "emergency_stopped"
+        if robot_state in ["idle", "busy"]:
+            return "connected"
+        return "disconnected"
+
     def _map_robot_statuses(self, system_status) -> Dict[str, str]:
-        """Map robot details from system status to connection statuses.
-
-        Args:
-            system_status: SystemStatus object from orchestrator
-
-        Returns:
-            Dict mapping robot type to 'connected' or 'disconnected'
-        """
-        robot_statuses = {
-            "meca": "disconnected",
-            "arduino": "disconnected",
-            "ot2": "disconnected"
-        }
+        """Map robot details from system status to connection statuses."""
+        robot_statuses = {"meca": "disconnected", "arduino": "disconnected", "ot2": "disconnected"}
 
         for robot_id, robot_info in system_status.robot_details.items():
             robot_state = robot_info.get("state", "disconnected")
-            if "meca" in robot_id.lower():
-                robot_statuses["meca"] = "connected" if robot_state in ["idle", "busy"] else "disconnected"
-            elif "ot2" in robot_id.lower():
-                robot_statuses["ot2"] = "connected" if robot_state in ["idle", "busy"] else "disconnected"
-            elif "arduino" in robot_id.lower():
-                robot_statuses["arduino"] = "connected" if robot_state in ["idle", "busy"] else "disconnected"
+            robot_id_lower = robot_id.lower()
+
+            for robot_type in ["meca", "ot2", "arduino"]:
+                if robot_type in robot_id_lower:
+                    robot_statuses[robot_type] = self._map_robot_state_to_status(robot_state)
+                    break
 
         return robot_statuses
 
@@ -115,47 +128,21 @@ class WebsocketHandler:
                 "timestamp": datetime.now().isoformat()
             })
 
-            # Send current robot status - only the 4 required statuses
             try:
-                # Get system status from orchestrator
                 system_status = await self.orchestrator.get_system_status()
-                
-                # Send backend status based on system state
+
                 backend_status = "connected" if system_status.system_state.value == "ready" else "disconnected"
                 await websocket.send_json({
                     "type": "status_update",
-                    "data": {
-                        "type": "backend",
-                        "status": backend_status
-                    },
+                    "data": {"type": "backend", "status": backend_status},
                     "timestamp": datetime.now().isoformat()
                 })
-                
-                # Send robot status updates - check if robots exist and their states
-                robot_statuses = {
-                    "meca": "disconnected",
-                    "arduino": "disconnected", 
-                    "ot2": "disconnected"
-                }
-                
-                # Update robot statuses based on actual robot states
-                for robot_id, robot_info in system_status.robot_details.items():
-                    robot_state = robot_info.get("state", "disconnected")
-                    if "meca" in robot_id.lower():
-                        robot_statuses["meca"] = "connected" if robot_state in ["idle", "busy"] else "disconnected"
-                    elif "ot2" in robot_id.lower():
-                        robot_statuses["ot2"] = "connected" if robot_state in ["idle", "busy"] else "disconnected"
-                    elif "arduino" in robot_id.lower():
-                        robot_statuses["arduino"] = "connected" if robot_state in ["idle", "busy"] else "disconnected"
-                
-                # Send individual robot status updates
+
+                robot_statuses = self._map_robot_statuses(system_status)
                 for robot_type, status in robot_statuses.items():
                     await websocket.send_json({
                         "type": "status_update",
-                        "data": {
-                            "type": robot_type,
-                            "status": status
-                        },
+                        "data": {"type": robot_type, "status": status},
                         "timestamp": datetime.now().isoformat()
                     })
             except Exception as e:
@@ -185,6 +172,11 @@ class WebsocketHandler:
         """Broadcast a message to all connected clients."""
         disconnected_clients = []
 
+        # Log broadcast for debugging emergency stop UI issues
+        msg_type = message.get("type", "unknown")
+        msg_data = message.get("data", {})
+        logger.info(f"[BROADCAST] Sending to {len(self.active_connections)} connections: type={msg_type}, data={msg_data}")
+
         # Add timestamp to message
         message_with_timestamp = {
             **message,
@@ -193,7 +185,9 @@ class WebsocketHandler:
 
         for websocket in self.active_connections:
             try:
-                await websocket.send_json(message_with_timestamp)
+                # Check WebSocket state before sending to avoid race condition
+                if websocket.client_state == WebSocketState.CONNECTED:
+                    await websocket.send_json(message_with_timestamp)
             except Exception as e:
                 logger.error(f"Error broadcasting message: {e}")
                 disconnected_clients.append(websocket)
@@ -209,48 +203,22 @@ class WebsocketHandler:
             logger.info(f"Received message of type: {msg_type}")
 
             if msg_type == "get_status":
-                # Get current status from orchestrator
                 try:
                     system_status = await self.orchestrator.get_system_status()
                     logger.info(f"Status request received. System state: {system_status.system_state.value}")
 
-                    # Send individual status updates for each component
-                    # Backend status based on system state
                     backend_status = "connected" if system_status.system_state.value == "ready" else "disconnected"
                     await websocket.send_json({
                         "type": "status_update",
-                        "data": {
-                            "type": "backend",
-                            "status": backend_status
-                        },
+                        "data": {"type": "backend", "status": backend_status},
                         "timestamp": datetime.now().isoformat()
                     })
-                    
-                    # Send robot status updates - check if robots exist and their states
-                    robot_statuses = {
-                        "meca": "disconnected",
-                        "arduino": "disconnected", 
-                        "ot2": "disconnected"
-                    }
-                    
-                    # Update robot statuses based on actual robot states
-                    for robot_id, robot_info in system_status.robot_details.items():
-                        robot_type = robot_info.get("state", "disconnected")
-                        if "meca" in robot_id.lower():
-                            robot_statuses["meca"] = "connected" if robot_type in ["idle", "busy"] else "disconnected"
-                        elif "ot2" in robot_id.lower():
-                            robot_statuses["ot2"] = "connected" if robot_type in ["idle", "busy"] else "disconnected"
-                        elif "arduino" in robot_id.lower():
-                            robot_statuses["arduino"] = "connected" if robot_type in ["idle", "busy"] else "disconnected"
-                    
-                    # Send individual robot status updates
+
+                    robot_statuses = self._map_robot_statuses(system_status)
                     for robot_type, status in robot_statuses.items():
                         await websocket.send_json({
                             "type": "status_update",
-                            "data": {
-                                "type": robot_type,
-                                "status": status
-                            },
+                            "data": {"type": robot_type, "status": status},
                             "timestamp": datetime.now().isoformat()
                         })
                 except Exception as e:
@@ -279,24 +247,89 @@ class WebsocketHandler:
 
                 # Route to appropriate command handler
                 if command_type == "emergency_stop":
+                    # Check if this is a per-robot stop (new) or stop-all (existing)
+                    target_robot_id = command_data.get("robot_id")  # Single robot stop
+                    robots = command_data.get("robots", {})  # Multi-robot stop (legacy)
+
                     # IMMEDIATE ACKNOWLEDGMENT - send response without waiting for execution
-                    logger.critical(f"🚨 EMERGENCY STOP command received - sending immediate acknowledgment")
-                    
+                    if target_robot_id:
+                        logger.critical(f"[EMERGENCY] PER-ROBOT EMERGENCY STOP for {target_robot_id}")
+                        ack_message = f"Emergency stop for {target_robot_id} received"
+                    else:
+                        logger.critical(f"[EMERGENCY] EMERGENCY STOP command received - sending immediate acknowledgment")
+                        ack_message = "Emergency stop command received - validating robot states"
+
                     immediate_response = {
                         "type": "command_response",
                         "commandId": command_id,
                         "command_type": command_type,
                         "status": "acknowledged",
-                        "message": "Emergency stop command received - validating robot states",
+                        "message": ack_message,
+                        "robot_id": target_robot_id,  # Include in response
                         "timestamp": datetime.now().isoformat(),
                     }
                     await websocket.send_json(immediate_response)
-                    
+
                     # Execute emergency stop asynchronously without blocking response
                     async def execute_emergency_stop():
                         try:
+                            # Per-robot emergency stop (new behavior)
+                            if target_robot_id:
+                                reason = command_data.get("reason", "User triggered via WebSocket")
+                                logger.critical(f"[EMERGENCY] Executing per-robot emergency stop for {target_robot_id}")
+
+                                result = await self.orchestrator.emergency_stop_robot(
+                                    target_robot_id, reason=reason
+                                )
+
+                                if result.success:
+                                    final_response = {
+                                        "type": "command_response",
+                                        "commandId": command_id,
+                                        "command_type": command_type,
+                                        "status": "success",
+                                        "message": f"Emergency stop executed for {target_robot_id}",
+                                        "data": result.data,
+                                        "timestamp": datetime.now().isoformat(),
+                                    }
+                                else:
+                                    final_response = {
+                                        "type": "command_response",
+                                        "commandId": command_id,
+                                        "command_type": command_type,
+                                        "status": "error",
+                                        "message": f"Emergency stop failed for {target_robot_id}: {result.error}",
+                                        "timestamp": datetime.now().isoformat(),
+                                    }
+
+                                await websocket.send_json(final_response)
+
+                                # Broadcast e-stop event to all clients
+                                await self.broadcast({
+                                    "type": "emergency_stop_event",
+                                    "data": {
+                                        "robot_id": target_robot_id,
+                                        "success": result.success,
+                                        "per_robot": True,
+                                        "timestamp": datetime.now().isoformat()
+                                    }
+                                })
+
+                                # Also broadcast status_update so frontend shows RecoveryPanel immediately
+                                if result.success:
+                                    await self.broadcast({
+                                        "type": "status_update",
+                                        "data": {
+                                            "type": target_robot_id,
+                                            "status": "emergency_stopped"
+                                        },
+                                        "timestamp": datetime.now().isoformat()
+                                    })
+                                return
+
+                            # Multi-robot emergency stop (existing behavior)
                             robots = command_data.get("robots", {})
-                            logger.critical(f"🚨 Executing emergency stop for robots: {robots}")
+                            logger.critical(f"[EMERGENCY] Executing emergency stop for robots: {robots}")
                             
                             # Validate actual robot connection states from backend
                             system_status = await self.orchestrator.get_system_status()
@@ -330,8 +363,8 @@ class WebsocketHandler:
                                     }
                                     disconnected_robots.append(robot_id)
                             
-                            logger.critical(f"🔍 Robot connection validation: Connected={connected_robots}, Disconnected={disconnected_robots}")
-                            
+                            logger.critical(f"[DEBUG] Robot connection validation: Connected={connected_robots}, Disconnected={disconnected_robots}")
+
                             # Send validation status to user
                             validation_response = {
                                 "type": "command_response",
@@ -354,7 +387,7 @@ class WebsocketHandler:
                             
                             if not connected_robots:
                                 # NO ROBOTS AVAILABLE - Send critical error
-                                logger.error(f"❌ CRITICAL: No operational robots found for emergency stop!")
+                                logger.error(f"[ERROR] CRITICAL: No operational robots found for emergency stop!")
                                 error_response = {
                                     "type": "command_response",
                                     "commandId": command_id,
@@ -372,7 +405,7 @@ class WebsocketHandler:
                                 return
                             
                             # Execute emergency stop directly on robot services (bypass command queue)
-                            logger.critical(f"🚨 Executing IMMEDIATE emergency stop on {len(connected_robots)} operational robots")
+                            logger.critical(f"[EMERGENCY] Executing IMMEDIATE emergency stop on {len(connected_robots)} operational robots")
                             
                             # Create direct service call tasks
                             tasks = []
@@ -381,14 +414,14 @@ class WebsocketHandler:
                                     try:
                                         robot_service = await self.orchestrator.get_robot_service(robot_id)
                                         if robot_service:
-                                            logger.critical(f"🚨 Calling direct emergency_stop() for {robot_id}")
+                                            logger.critical(f"[EMERGENCY] Calling direct emergency_stop() for {robot_id}")
                                             emergency_result = await robot_service.emergency_stop()
                                             return robot_id, emergency_result
                                         else:
-                                            logger.error(f"❌ No service found for robot {robot_id}")
+                                            logger.error(f"[ERROR] No service found for robot {robot_id}")
                                             return robot_id, None
                                     except Exception as e:
-                                        logger.error(f"❌ Emergency stop exception for {robot_id}: {e}")
+                                        logger.error(f"[ERROR] Emergency stop exception for {robot_id}: {e}")
                                         return robot_id, e
                                 
                                 tasks.append(emergency_stop_robot(robot_id))
@@ -403,25 +436,25 @@ class WebsocketHandler:
                             for result in results:
                                 if isinstance(result, Exception):
                                     failed_stops.append({"robot_id": "unknown", "error": str(result)})
-                                    logger.error(f"❌ Emergency stop task failed: {result}")
+                                    logger.error(f"[ERROR] Emergency stop task failed: {result}")
                                 elif isinstance(result, tuple) and len(result) == 2:
                                     robot_id, emergency_result = result
                                     if isinstance(emergency_result, Exception):
                                         failed_stops.append({"robot_id": robot_id, "error": str(emergency_result)})
-                                        logger.error(f"❌ Emergency stop failed for {robot_id}: {emergency_result}")
+                                        logger.error(f"[ERROR] Emergency stop failed for {robot_id}: {emergency_result}")
                                     elif emergency_result and hasattr(emergency_result, 'success') and emergency_result.success:
                                         successful_stops.append(robot_id)
-                                        logger.critical(f"✅ IMMEDIATE emergency stop executed for {robot_id}")
+                                        logger.critical(f"[OK] IMMEDIATE emergency stop executed for {robot_id}")
                                     elif emergency_result is None:
                                         failed_stops.append({"robot_id": robot_id, "error": "Service not found"})
-                                        logger.error(f"❌ Emergency stop failed for {robot_id}: Service not found")
+                                        logger.error(f"[ERROR] Emergency stop failed for {robot_id}: Service not found")
                                     else:
                                         error_msg = getattr(emergency_result, 'error', 'Unknown error')
                                         failed_stops.append({"robot_id": robot_id, "error": error_msg})
-                                        logger.error(f"❌ Emergency stop failed for {robot_id}: {error_msg}")
+                                        logger.error(f"[ERROR] Emergency stop failed for {robot_id}: {error_msg}")
                                 else:
                                     failed_stops.append({"robot_id": "unknown", "error": f"Unexpected result format: {result}"})
-                                    logger.error(f"❌ Emergency stop unexpected result: {result}")
+                                    logger.error(f"[ERROR] Emergency stop unexpected result: {result}")
                             
                             # Send comprehensive final status
                             if successful_stops:
@@ -449,10 +482,10 @@ class WebsocketHandler:
                             }
                             
                             await websocket.send_json(final_response)
-                            logger.critical(f"🚨 Emergency stop completed: {len(successful_stops)}/{len(connected_robots)} operational robots stopped")
+                            logger.critical(f"[EMERGENCY] Emergency stop completed: {len(successful_stops)}/{len(connected_robots)} operational robots stopped")
                             
                         except Exception as e:
-                            logger.error(f"❌ Emergency stop execution failed with exception: {e}", exc_info=True)
+                            logger.error(f"[ERROR] Emergency stop execution failed with exception: {e}", exc_info=True)
                             error_response = {
                                 "type": "command_response",
                                 "commandId": command_id,
@@ -471,26 +504,33 @@ class WebsocketHandler:
                                 pass  # Websocket might be closed
                     
                     # Start emergency stop execution without waiting
-                    asyncio.create_task(execute_emergency_stop())
-                    
+                    # Wrap in safe handler to prevent unhandled task exceptions from crashing backend
+                    async def safe_execute_emergency_stop():
+                        try:
+                            await execute_emergency_stop()
+                        except Exception as e:
+                            logger.error(f"Background emergency stop failed: {e}", exc_info=True)
+
+                    asyncio.create_task(safe_execute_emergency_stop())
+
                     # Return immediately - don't send another response
                     return
                 
                 elif command_type == "emergency_reset":
                     # Reset emergency stop state
                     try:
-                        logger.info("🔄 Resetting emergency stop state via WebSocket")
+                        logger.info("[CONNECTING] Resetting emergency stop state via WebSocket")
                         result = await self.orchestrator.reset_emergency_stop()
                         
                         if result.success:
-                            logger.info("✅ Emergency stop reset successful")
+                            logger.info("[OK] Emergency stop reset successful")
                             response.update({
                                 "status": "success",
                                 "message": "Emergency stop reset successfully",
                                 "data": {"reset": True}
                             })
                         else:
-                            logger.error(f"❌ Emergency stop reset failed: {result.error}")
+                            logger.error(f"[ERROR] Emergency stop reset failed: {result.error}")
                             response.update({
                                 "status": "error",
                                 "message": f"Emergency stop reset failed: {result.error}"
@@ -1055,23 +1095,8 @@ class WebsocketHandler:
                 await self.broadcast(message)
                 self.last_status["backend"] = backend_status
 
-            # Broadcast robot status updates - only the 4 required statuses
-            robot_statuses = {
-                "meca": "disconnected",
-                "arduino": "disconnected", 
-                "ot2": "disconnected"
-            }
-            
-            # Update robot statuses based on actual robot states
-            for robot_id, robot_info in system_status.robot_details.items():
-                robot_state = robot_info.get("state", "disconnected")
-                if "meca" in robot_id.lower():
-                    robot_statuses["meca"] = "connected" if robot_state in ["idle", "busy"] else "disconnected"
-                elif "ot2" in robot_id.lower():
-                    robot_statuses["ot2"] = "connected" if robot_state in ["idle", "busy"] else "disconnected"
-                elif "arduino" in robot_id.lower():
-                    robot_statuses["arduino"] = "connected" if robot_state in ["idle", "busy"] else "disconnected"
-            
+            robot_statuses = self._map_robot_statuses(system_status)
+
             # Send individual robot status updates only if changed
             for robot_type, status in robot_statuses.items():
                 if self.last_status.get(robot_type) != status:

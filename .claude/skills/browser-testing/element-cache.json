@@ -1,0 +1,129 @@
+{
+  "version": "3.0",
+  "last_updated": "2026-02-01T14:35:19.767066",
+  "pages": {
+    "localhost:3002": {
+      "elements": {
+        "estop-btn": {
+          "css_selector": "button:has-text('Emergency Stop')",
+          "text_selector": "Emergency Stop button",
+          "coordinates": null,
+          "viewport_size": "1536x643",
+          "alternatives": [
+            {
+              "type": "text",
+              "selector": "button with red background"
+            },
+            {
+              "type": "text",
+              "selector": "E-Stop button"
+            }
+          ],
+          "hit_count": 0,
+          "last_updated": "2026-01-27T11:49:48.990264"
+        },
+        "quick-recovery-btn": {
+          "css_selector": "button.quick-recovery, button[class*='recovery']",
+          "text_selector": "Quick Recovery button",
+          "coordinates": {
+            "x": 1336,
+            "y": 83
+          },
+          "viewport_size": "1536x643",
+          "alternatives": [
+            {
+              "type": "text",
+              "selector": "Option 1 button"
+            },
+            {
+              "type": "text",
+              "selector": "Recovery option 1"
+            }
+          ],
+          "hit_count": 1,
+          "last_updated": "2026-01-27T11:19:22.426323"
+        },
+        "safe-homing-btn": {
+          "css_selector": "button.safe-homing, button[class*='homing']",
+          "text_selector": "Start Safe Homing button",
+          "coordinates": null,
+          "viewport_size": null,
+          "alternatives": [
+            {
+              "type": "text",
+              "selector": "Option 2 button"
+            },
+            {
+              "type": "text",
+              "selector": "Safe Homing"
+            }
+          ],
+          "hit_count": 0
+        },
+        "system-status": {
+          "css_selector": ".system-status, [class*='status-panel']",
+          "text_selector": "System Status section",
+          "coordinates": null,
+          "viewport_size": null,
+          "alternatives": [
+            {
+              "type": "text",
+              "selector": "Meca status"
+            },
+            {
+              "type": "text",
+              "selector": "robot status panel"
+            }
+          ],
+          "hit_count": 0
+        },
+        "meca-connect-btn": {
+          "css_selector": "button[class*='meca-connect'], button[data-robot='meca']",
+          "text_selector": "Connect Meca button",
+          "coordinates": null,
+          "viewport_size": null,
+          "alternatives": [
+            {
+              "type": "text",
+              "selector": "Meca connection button"
+            },
+            {
+              "type": "text",
+              "selector": "Connect robot button"
+            }
+          ],
+          "hit_count": 0
+        },
+        "ot2-connect-btn": {
+          "css_selector": "button[class*='ot2-connect'], button[data-robot='ot2']",
+          "text_selector": "Connect OT2 button",
+          "coordinates": null,
+          "viewport_size": null,
+          "alternatives": [
+            {
+              "type": "text",
+              "selector": "OT2 connection button"
+            },
+            {
+              "type": "text",
+              "selector": "Opentrons connect"
+            }
+          ],
+          "hit_count": 0
+        },
+        "reset-emergency-btn": {
+          "hit_count": 0,
+          "alternatives": [],
+          "css_selector": "button:has-text('Reset Emergency')",
+          "text_selector": "Reset Emergency button",
+          "viewport_size": "1536x643",
+          "last_updated": "2026-01-27T11:49:54.003767"
+        }
+      }
+    }
+  },
+  "stats": {
+    "hits": 2,
+    "misses": 0
+  }
+}

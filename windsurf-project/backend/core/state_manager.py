@@ -167,10 +167,11 @@ class AtomicStateManager:
             RobotState.EMERGENCY_STOP
         },
         RobotState.ERROR: {
-            RobotState.IDLE, 
-            RobotState.MAINTENANCE, 
+            RobotState.IDLE,
+            RobotState.MAINTENANCE,
             RobotState.DISCONNECTED,
-            RobotState.EMERGENCY_STOP
+            RobotState.EMERGENCY_STOP,
+            RobotState.CONNECTING  # Allow reconnect after error
         },
         RobotState.MAINTENANCE: {
             RobotState.IDLE, 
@@ -180,7 +181,8 @@ class AtomicStateManager:
         RobotState.EMERGENCY_STOP: {
             RobotState.IDLE,
             RobotState.MAINTENANCE,
-            RobotState.DISCONNECTED
+            RobotState.DISCONNECTED,
+            RobotState.CONNECTING  # Allow reconnect after e-stop
         }
     }
     
@@ -627,3 +629,37 @@ class AtomicStateManager:
         """Check if robot's current step is paused"""
         step_state = await self.get_step_state(robot_id)
         return step_state is not None and step_state.paused
+
+    async def clear_all_paused_steps(self) -> List[str]:
+        """
+        Clear all paused step states on startup.
+
+        SAFETY: This prevents sequences from resuming after backend restart.
+        When the backend restarts after an emergency stop, all in-memory
+        step state is lost anyway. This method ensures a clean slate.
+
+        Returns:
+            List of robot IDs that had steps cleared
+        """
+        async with self._lock:
+            cleared_robots = []
+
+            for robot_id, robot_info in self._robots.items():
+                if robot_info.current_step is not None:
+                    step = robot_info.current_step
+                    self.logger.warning(
+                        f"[SAFETY] Clearing stale step state for {robot_id}: "
+                        f"step={step.step_index} ({step.step_name}), "
+                        f"paused={step.paused}, progress={step.progress_data}"
+                    )
+                    robot_info.current_step = None
+                    cleared_robots.append(robot_id)
+
+            if cleared_robots:
+                self.logger.warning(
+                    f"[SAFETY] Cleared {len(cleared_robots)} stale step states on startup: {cleared_robots}"
+                )
+            else:
+                self.logger.info("No stale step states to clear on startup")
+
+            return cleared_robots

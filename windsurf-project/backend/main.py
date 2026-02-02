@@ -4,33 +4,27 @@ from fastapi.responses import JSONResponse
 import traceback
 import asyncio
 from datetime import datetime
-from utils.logger import get_logger
+from utils.logger import get_logger, cleanup_old_logs
 from dependencies import (
-    startup_dependencies, 
-    shutdown_dependencies, 
+    startup_dependencies,
+    shutdown_dependencies,
     check_dependencies_health,
     get_container
 )
 from websocket.connection_manager import ConnectionManager
-from websocket.websocket_handlers import get_websocket_handler
+from websocket.websocket_handlers import get_websocket_handler, set_websocket_handler_singleton
 from routers import meca, ot2, arduino, config
+from core.settings import get_settings
 
 logger = get_logger("main")
 app = FastAPI()
 
-# CORS setup remains the same
-origins = [
-    "http://localhost:3000",
-    "http://localhost:3002",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:3002",
-]
+# CORS configuration from centralized settings
+settings = get_settings()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=settings.cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -53,7 +47,10 @@ async def initialize_application():
             state_manager=container.get_state_manager(),
             connection_manager=connection_manager
         )
-        
+
+        # Register the websocket handler singleton for services to access
+        set_websocket_handler_singleton(websocket_handler)
+
         # Store services in app state for FastAPI dependencies
         app.state.container = container
         app.state.websocket_handler = websocket_handler
@@ -174,6 +171,11 @@ async def startup_event():
     """
     try:
         logger.info("Starting application initialization...")
+
+        # Clean up old log files (30-day retention policy)
+        removed_count = cleanup_old_logs()
+        if removed_count > 0:
+            logger.info(f"Cleaned up {removed_count} old log file(s)")
         
         # Initialize dependencies (this will start all services)
         await startup_dependencies()

@@ -689,24 +689,43 @@ const SpreadingPage = () => {
   };
 
   // Handle emergency stop - IMMEDIATE execution without confirmation
+  // Context-aware: only stops the robot active in the current workflow step
   const handleEmergencyStop = useCallback(() => {
     logger.log('Emergency stop activated - immediate execution');
     setEmergencyStopStopping(true);
 
     try {
-      websocketService.send({
-        type: 'command',
-        command_type: 'emergency_stop',
-        data: {
-          robots: {
-            meca: systemStatus.meca === 'connected',
-            ot2: systemStatus.ot2 === 'connected',
-            arduino: systemStatus.arduino === 'connected',
-          },
-        },
-      });
+      // Get the currently active robot from the workflow step
+      const activeRobot = steps[activeStep]?.robot?.toLowerCase() || null;
 
-      logger.log('Emergency stop command sent - robots should halt immediately');
+      if (activeRobot && activeRobot !== 'arduino') {
+        // Per-robot emergency stop (context-aware)
+        logger.log(`Sending per-robot emergency stop for: ${activeRobot}`);
+        websocketService.send({
+          type: 'command',
+          command_type: 'emergency_stop',
+          data: {
+            robot_id: activeRobot,
+            reason: `User triggered emergency stop during ${steps[activeStep]?.label || 'operation'}`
+          },
+        });
+      } else {
+        // Fallback: Global stop if no specific robot (or Arduino step)
+        logger.log('Sending global emergency stop (fallback)');
+        websocketService.send({
+          type: 'command',
+          command_type: 'emergency_stop',
+          data: {
+            robots: {
+              meca: systemStatus.meca === 'connected',
+              ot2: systemStatus.ot2 === 'connected',
+              arduino: systemStatus.arduino === 'connected',
+            },
+          },
+        });
+      }
+
+      logger.log('Emergency stop command sent');
 
       setTimeout(() => {
         setEmergencyStopStopping(false);
@@ -718,8 +737,7 @@ const SpreadingPage = () => {
       setLastError(`Emergency stop failed: ${error.message}`);
       toast.error(`Emergency stop failed: ${error.message}`);
     }
-
-  }, [systemStatus, wsConnected]);
+  }, [activeStep, steps, systemStatus]);
 
   // Handle emergency stop reset - IMMEDIATE execution without confirmation
   const handleEmergencyReset = useCallback(() => {

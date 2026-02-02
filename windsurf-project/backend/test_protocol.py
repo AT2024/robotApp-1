@@ -23,10 +23,10 @@ def test_protocol_fixes():
     # Import the protocol module
     try:
         from protocols.ot2Protocole import load_environment_config, metadata
-        print("✅ Protocol imports successfully")
-        print(f"✅ API Level: {metadata['apiLevel']}")
+        print("[OK] Protocol imports successfully")
+        print(f"[OK] API Level: {metadata['apiLevel']}")
     except Exception as e:
-        print(f"❌ Protocol import failed: {e}")
+        print(f"[ERROR] Protocol import failed: {e}")
         return False
     
     # Test environment config loading
@@ -35,37 +35,37 @@ def test_protocol_fixes():
         config = load_environment_config(ctx)
         
         if config:
-            print("✅ Environment configuration loaded successfully")
-            print(f"✅ Config keys: {list(config.keys())}")
+            print("[OK] Environment configuration loaded successfully")
+            print(f"[OK] Config keys: {list(config.keys())}")
             
             # Check critical parameters
             if "THORIUM_VOL" in config:
-                print(f"✅ THORIUM_VOL: {config['THORIUM_VOL']}")
+                print(f"[OK] THORIUM_VOL: {config['THORIUM_VOL']}")
             else:
-                print("❌ THORIUM_VOL not found in config")
+                print("[ERROR] THORIUM_VOL not found in config")
                 
             if "NUM_OF_GENERATORS" in config:
-                print(f"✅ NUM_OF_GENERATORS: {config['NUM_OF_GENERATORS']}")
+                print(f"[OK] NUM_OF_GENERATORS: {config['NUM_OF_GENERATORS']}")
             else:
-                print("❌ NUM_OF_GENERATORS not found in config")
+                print("[ERROR] NUM_OF_GENERATORS not found in config")
                 
             if "generators_locations" in config:
-                print(f"✅ generators_locations: {len(config['generators_locations'])} locations")
+                print(f"[OK] generators_locations: {len(config['generators_locations'])} locations")
             else:
-                print("❌ generators_locations not found in config")
+                print("[ERROR] generators_locations not found in config")
                 
         else:
-            print("❌ Environment configuration not loaded")
+            print("[ERROR] Environment configuration not loaded")
             return False
             
     except Exception as e:
-        print(f"❌ Environment config test failed: {e}")
+        print(f"[ERROR] Environment config test failed: {e}")
         import traceback
         traceback.print_exc()
         return False
     
     print("=" * 50)
-    print("✅ All protocol tests passed!")
+    print("[OK] All protocol tests passed!")
     print("=" * 50)
     
     # Print comments from protocol loading

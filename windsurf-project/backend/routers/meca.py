@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Body
 from utils.logger import get_logger
 from dependencies import MecaServiceDep, OrchestratorDep, CommandServiceDep
-from services.meca_service import MecaService
+from services.meca import MecaService
 from services.orchestrator import RobotOrchestrator
 from services.command_service import RobotCommandService, CommandType, CommandPriority
 from common.helpers import RouterHelper, CommandHelper, ResponseHelper
@@ -486,4 +486,245 @@ async def reload_sequence_config(meca_service: MecaService = MecaServiceDep()):
     )
     return ResponseHelper.create_success_response(
         data=result, message="Sequence configuration reloaded successfully"
+    )
+
+
+# -----------------------------------------------------------------------------
+# Recovery Endpoints - For post-emergency-stop recovery
+# -----------------------------------------------------------------------------
+
+
+@router.post("/recovery/enable")
+async def enable_recovery_mode(meca_service: MecaService = MecaServiceDep()):
+    """
+    Enable recovery mode for safe robot repositioning.
+
+    WARNING: This DISABLES joint limits. Use only after emergency stop when
+    the robot needs to be manually repositioned to a safe location.
+
+    Recovery mode enables slow movement without homing, which is critical
+    for repositioning a robot that may be in an unsafe position.
+    """
+    logger.warning("Recovery mode enable requested - joint limits will be disabled")
+    result = await RouterHelper.execute_service_operation(
+        meca_service.enable_recovery_mode, "enable_recovery_mode", logger
+    )
+    return ResponseHelper.create_success_response(
+        data=result,
+        message="Recovery mode enabled - joint limits DISABLED. Move robot carefully."
+    )
+
+
+@router.post("/recovery/disable")
+async def disable_recovery_mode(meca_service: MecaService = MecaServiceDep()):
+    """
+    Disable recovery mode after robot has been repositioned.
+
+    Call this after the robot has been moved to a safe position to
+    re-enable normal joint limits and safety features.
+    """
+    logger.info("Recovery mode disable requested")
+    result = await RouterHelper.execute_service_operation(
+        meca_service.disable_recovery_mode, "disable_recovery_mode", logger
+    )
+    return ResponseHelper.create_success_response(
+        data=result,
+        message="Recovery mode disabled - joint limits restored"
+    )
+
+
+@router.get("/recovery/status")
+async def get_recovery_status(meca_service: MecaService = MecaServiceDep()):
+    """
+    Get current recovery status and available actions.
+
+    Returns comprehensive status including:
+    - Current robot state
+    - Safety status (errors, e-stop, recovery mode)
+    - Available recovery actions
+    - Recommended recovery workflow
+    """
+    result = await RouterHelper.execute_service_operation(
+        meca_service.get_recovery_status, "get_recovery_status", logger
+    )
+    return ResponseHelper.create_success_response(data=result)
+
+
+@router.post("/recovery/reset-and-reconnect")
+async def reset_and_reconnect(meca_service: MecaService = MecaServiceDep()):
+    """
+    Full recovery sequence: reset errors and reconnect.
+
+    This performs the complete recovery workflow:
+    1. Reset any error states
+    2. Attempt to reconnect if needed
+    3. Prepare robot for activation (but don't activate)
+
+    After this succeeds, call /confirm-activation to activate and home the robot.
+    """
+    logger.info("Full recovery sequence (reset and reconnect) requested")
+    result = await RouterHelper.execute_service_operation(
+        meca_service.reset_errors_and_reconnect, "reset_and_reconnect", logger
+    )
+    return ResponseHelper.create_success_response(
+        data=result,
+        message=result.get("message", "Recovery sequence completed")
+    )
+
+
+@router.post("/recovery/move-to-safe")
+async def move_to_safe_position(
+    data: dict = Body(default={}),
+    meca_service: MecaService = MecaServiceDep()
+):
+    """
+    Move robot to safe position while in recovery mode.
+
+    The robot MUST be in recovery mode before calling this endpoint.
+    Movement is performed at very slow speed for safety.
+
+    Request body (optional):
+        speed_percent: Movement speed as percentage (default: 10, max: 20)
+
+    WARNING: Only use this after enabling recovery mode with /recovery/enable
+    """
+    speed_percent = data.get("speed_percent", 10.0)
+
+    # Validate and clamp speed
+    if speed_percent > 20.0:
+        logger.warning(f"Requested speed {speed_percent}% exceeds max. Clamping to 20%")
+        speed_percent = 20.0
+    if speed_percent < 1.0:
+        speed_percent = 1.0
+
+    logger.warning(f"Recovery movement requested at {speed_percent}% speed")
+
+    result = await RouterHelper.execute_service_operation(
+        lambda: meca_service.move_to_safe_position_recovery(speed_percent),
+        "move_to_safe_position_recovery",
+        logger
+    )
+    return ResponseHelper.create_success_response(
+        data=result,
+        message=result.get("message", "Recovery movement completed")
+    )
+
+
+@router.post("/recovery/quick-recovery")
+async def quick_recovery(meca_service: MecaService = MecaServiceDep()):
+    """
+    Quick recovery - resume workflow from where it stopped.
+
+    Resumes a paused workflow after an emergency stop without losing progress.
+    Clears robot error state and continues from the checkpoint.
+
+    This is the recommended recovery option when the robot position is safe
+    and you want to continue the workflow.
+    """
+    logger.info("Quick recovery requested for Meca")
+    result = await RouterHelper.execute_service_operation(
+        meca_service.quick_recovery, "quick_recovery", logger
+    )
+    return ResponseHelper.create_success_response(
+        data=result,
+        message=result.get("message", "Quick recovery completed")
+    )
+
+
+@router.post("/recovery/start-safe-homing")
+async def start_safe_homing(
+    data: dict = Body(default={}),
+    meca_service: MecaService = MecaServiceDep()
+):
+    """
+    Start safe homing at 20% speed with stop/resume capability.
+
+    Moves the robot to a safe home position at reduced speed.
+    The movement can be stopped and resumed at any time using the
+    stop-safe-homing and resume-safe-homing endpoints.
+
+    Request body (optional):
+        speed_percent: Movement speed (default: 20, max: 20)
+    """
+    speed_percent = min(data.get("speed_percent", 20), 20)
+    logger.info(f"Starting safe homing at {speed_percent}% speed")
+
+    result = await RouterHelper.execute_service_operation(
+        lambda: meca_service.start_safe_homing(speed_percent),
+        "start_safe_homing",
+        logger
+    )
+    return ResponseHelper.create_success_response(
+        data=result,
+        message=result.get("message", "Safe homing started")
+    )
+
+
+@router.post("/recovery/stop-safe-homing")
+async def stop_safe_homing(meca_service: MecaService = MecaServiceDep()):
+    """
+    Stop safe homing mid-movement - robot holds position.
+
+    Pauses the safe homing movement. The robot will hold its current
+    position until resume-safe-homing is called.
+    """
+    logger.warning("Stop safe homing requested")
+    result = await RouterHelper.execute_service_operation(
+        meca_service.stop_safe_homing, "stop_safe_homing", logger
+    )
+    return ResponseHelper.create_success_response(
+        data=result,
+        message=result.get("message", "Safe homing stopped")
+    )
+
+
+@router.post("/recovery/resume-safe-homing")
+async def resume_safe_homing(meca_service: MecaService = MecaServiceDep()):
+    """
+    Resume safe homing from current position.
+
+    Continues the safe homing movement from where it was stopped.
+    """
+    logger.info("Resume safe homing requested")
+    result = await RouterHelper.execute_service_operation(
+        meca_service.resume_safe_homing, "resume_safe_homing", logger
+    )
+    return ResponseHelper.create_success_response(
+        data=result,
+        message=result.get("message", "Safe homing resumed")
+    )
+
+
+@router.get("/recovery/safe-homing-status")
+async def get_safe_homing_status(meca_service: MecaService = MecaServiceDep()):
+    """
+    Get current safe homing status.
+
+    Returns whether safe homing is active and whether it's stopped (paused).
+    """
+    return ResponseHelper.create_success_response(
+        data={
+            "active": meca_service.is_safe_homing_active(),
+            "stopped": meca_service.is_safe_homing_stopped()
+        }
+    )
+
+
+@router.post("/recovery/reset-emergency")
+async def reset_emergency_stop(orchestrator: RobotOrchestrator = OrchestratorDep()):
+    """
+    Reset emergency stop state for Meca robot.
+
+    This is a REST API fallback for when WebSocket is unavailable.
+    Clears the e-stop flag so the robot can receive new commands.
+    """
+    logger.info("Reset emergency stop requested for Meca via REST API")
+    result = await RouterHelper.execute_service_operation(
+        lambda: orchestrator.reset_robot_emergency_stop("meca"),
+        "reset_meca_emergency_stop",
+        logger
+    )
+    return ResponseHelper.create_success_response(
+        data={"reset": result},
+        message="Emergency stop state cleared for Meca"
     )

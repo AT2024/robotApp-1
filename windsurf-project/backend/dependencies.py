@@ -25,7 +25,7 @@ from core.connection_pool import (
 from websocket.selective_broadcaster import get_broadcaster
 
 from services.orchestrator import RobotOrchestrator
-from services.meca_service import MecaService
+from services.meca import MecaService
 from services.ot2_service import OT2Service
 from services.protocol_service import ProtocolExecutionService
 from services.command_service import RobotCommandService

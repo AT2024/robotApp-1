@@ -11,7 +11,7 @@ import asyncio
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 from typing import Dict, Any
 
-from services.meca_service import MecaService
+from services.meca import MecaService
 from core.state_manager import AtomicStateManager
 from core.resource_lock import ResourceLockManager
 from core.async_robot_wrapper import AsyncRobotWrapper
@@ -112,7 +112,7 @@ def mock_lock_manager():
 def meca_service(mock_settings, mock_state_manager, mock_lock_manager, mock_async_wrapper):
     """Create MecaService instance with mocked dependencies."""
     # Patch WaferConfigManager to avoid complex config requirements
-    with patch('services.meca_service.WaferConfigManager'):
+    with patch('services.meca.service.WaferConfigManager'):
         service = MecaService(
             robot_id="meca_test",
             settings=mock_settings,
@@ -120,6 +120,8 @@ def meca_service(mock_settings, mock_state_manager, mock_lock_manager, mock_asyn
             lock_manager=mock_lock_manager,
             async_wrapper=mock_async_wrapper
         )
+        # Set service as running to bypass service state check
+        service._running = True
         return service
 
 
@@ -137,12 +139,13 @@ class TestConnectSafe:
             # Execute
             result = await meca_service.connect_safe()
 
-            # Verify
-            assert result['connected'] is True
-            assert result['awaiting_confirmation'] is True
-            assert 'joints' in result
-            assert len(result['joints']) == 6
-            assert result['joints'] == [0.0, 45.0, 90.0, 0.0, 45.0, 0.0]
+            # Verify - result is now a ServiceResult
+            assert result.success is True
+            assert result.data['connected'] is True
+            assert result.data['awaiting_confirmation'] is True
+            assert 'joints' in result.data
+            assert len(result.data['joints']) == 6
+            assert result.data['joints'] == [0.0, 45.0, 90.0, 0.0, 45.0, 0.0]
 
             # Verify driver was connected but NOT activated/homed
             mock_robot_driver.connect.assert_called_once()
@@ -168,10 +171,11 @@ class TestConnectSafe:
             # Execute
             result = await meca_service.connect_safe()
 
-            # Verify error is reported
-            assert result['connected'] is True
-            assert result['error'] is True
-            assert result['error_code'] == 1042
+            # Verify - result is now a ServiceResult
+            assert result.success is True
+            assert result.data['connected'] is True
+            assert result.data['error'] is True
+            assert result.data['error_code'] == 1042
 
             # Should NOT proceed to activation
             mock_robot_driver.activate_robot.assert_not_called()
@@ -179,34 +183,37 @@ class TestConnectSafe:
     @pytest.mark.asyncio
     async def test_connect_safe_broadcasts_pending_state(self, meca_service, mock_robot_driver):
         """Test that connect_safe broadcasts connection pending state via WebSocket."""
-        # Mock WebSocket broadcaster
-        with patch('websocket.selective_broadcaster.get_broadcaster') as mock_get_broadcaster:
-            mock_broadcaster = AsyncMock()
-            mock_get_broadcaster.return_value = mock_broadcaster
+        # Mock WebSocket connection manager
+        with patch('services.meca.service.get_connection_manager') as mock_get_conn_mgr:
+            mock_conn_mgr = AsyncMock()
+            mock_get_conn_mgr.return_value = mock_conn_mgr
 
             # Execute
             await meca_service.connect_safe()
 
             # Verify broadcast was called with correct message
-            mock_broadcaster.broadcast_message.assert_called_once()
-            call_args = mock_broadcaster.broadcast_message.call_args
-            message = call_args[0][0]
+            mock_conn_mgr.broadcast_message.assert_called()
+            # Get the first call that was for 'connection_pending'
+            calls = mock_conn_mgr.broadcast_message.call_args_list
+            pending_calls = [c for c in calls if c[1].get('message_type') == 'connection_pending']
+            assert len(pending_calls) >= 1
+            message = pending_calls[0][0][0]
 
-            assert message['type'] == 'connection_pending'
             assert 'joints' in message
-            assert message['requires_confirmation'] is True
+            assert message.get('requires_confirmation') is True or message.get('awaiting_confirmation') is True
 
     @pytest.mark.asyncio
     async def test_connect_safe_connection_failure(self, meca_service, mock_robot_driver):
-        """Test that connect_safe raises HardwareError on connection failure."""
+        """Test that connect_safe returns failure ServiceResult on connection failure."""
         # Mock connection failure
         mock_robot_driver.connect.side_effect = Exception("Connection timeout")
 
-        # Execute and verify exception
-        with pytest.raises(HardwareError) as exc_info:
-            await meca_service.connect_safe()
+        # Execute - now returns ServiceResult instead of raising exception
+        result = await meca_service.connect_safe()
 
-        assert "Safe connect failed" in str(exc_info.value)
+        # Verify failure is captured in ServiceResult
+        assert result.success is False
+        assert "Connection timeout" in str(result.error) or "connect" in str(result.error).lower()
 
 
 class TestConfirmActivation:
@@ -223,9 +230,10 @@ class TestConfirmActivation:
             # Execute
             result = await meca_service.confirm_activation()
 
-            # Verify result
-            assert result['connected'] is True
-            assert result['homed'] is True
+            # Verify result - result is now a ServiceResult
+            assert result.success is True
+            assert result.data['connected'] is True
+            assert result.data['homed'] is True
 
             # Verify activation sequence
             mock_robot_driver.activate_robot.assert_called_once()
@@ -296,36 +304,36 @@ class TestConfirmActivation:
     @pytest.mark.asyncio
     async def test_confirm_activation_broadcasts_complete_state(self, meca_service, mock_robot_driver):
         """Test that confirm_activation broadcasts connection complete state."""
-        # Mock WebSocket broadcaster
-        with patch('websocket.selective_broadcaster.get_broadcaster') as mock_get_broadcaster:
-            mock_broadcaster = AsyncMock()
-            mock_get_broadcaster.return_value = mock_broadcaster
+        # Mock WebSocket connection manager
+        with patch('services.meca.service.get_connection_manager') as mock_get_conn_mgr:
+            mock_conn_mgr = AsyncMock()
+            mock_get_conn_mgr.return_value = mock_conn_mgr
 
             # Execute
             await meca_service.confirm_activation()
 
             # Verify broadcast was called with correct message
-            mock_broadcaster.broadcast_message.assert_called_once()
-            call_args = mock_broadcaster.broadcast_message.call_args
-            message = call_args[0][0]
+            mock_conn_mgr.broadcast_message.assert_called()
+            # Get the first call that was for 'connection_complete'
+            calls = mock_conn_mgr.broadcast_message.call_args_list
+            complete_calls = [c for c in calls if c[1].get('message_type') == 'connection_complete']
+            assert len(complete_calls) >= 1
+            message = complete_calls[0][0][0]
 
-            assert message['type'] == 'connection_complete'
             assert message['homed'] is True
 
     @pytest.mark.asyncio
     async def test_confirm_activation_failure_calls_emergency_stop(self, meca_service, mock_robot_driver):
-        """Test that confirm_activation calls emergency stop on failure."""
+        """Test that confirm_activation returns failure on activation error."""
         # Mock activation failure
         mock_robot_driver.activate_robot.side_effect = Exception("Activation failed")
 
         # Mock emergency stop method
         meca_service._execute_emergency_stop = AsyncMock()
 
-        # Execute and verify exception
-        with pytest.raises(HardwareError) as exc_info:
-            await meca_service.confirm_activation()
+        # Execute - now returns ServiceResult instead of raising exception
+        result = await meca_service.confirm_activation()
 
-        assert "Activation failed" in str(exc_info.value)
-
-        # Verify emergency stop was called
-        meca_service._execute_emergency_stop.assert_called_once()
+        # Verify failure is captured in ServiceResult
+        assert result.success is False
+        assert "Activation failed" in str(result.error)

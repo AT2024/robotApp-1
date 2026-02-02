@@ -1,0 +1,125 @@
+{
+  "name": "connection-flow",
+  "description": "Test robot connection workflow for Meca and OT2",
+  "url": "http://localhost:3002",
+  "prerequisites": ["App running", "Backend running on port 8080"],
+  "token_budget": {
+    "max_screenshots": 2,
+    "max_read_page": 3,
+    "prefer_api_verify": true
+  },
+  "playwright_selectors": {
+    "system-status": "region \"System Status\"",
+    "meca-connect-btn": "button \"Connect Meca\"",
+    "meca-status": "[data-testid=\"meca-status\"]",
+    "ot2-connect-btn": "button \"Connect OT2\"",
+    "ot2-status": "[data-testid=\"ot2-status\"]"
+  },
+  "fallback_selectors": {
+    "system-status": {
+      "css": ".system-status, [class*='status']",
+      "text": "System Status"
+    },
+    "meca-connect-btn": {
+      "css": "button[class*='meca'][class*='connect'], button.connect-meca",
+      "text": "Connect Meca"
+    },
+    "ot2-connect-btn": {
+      "css": "button[class*='ot2'][class*='connect'], button.connect-ot2",
+      "text": "Connect OT2"
+    }
+  },
+  "steps": [
+    {
+      "id": "navigate-to-app",
+      "action": "navigate",
+      "url": "http://localhost:3002",
+      "wait_for": "page load",
+      "playwright": {
+        "tool": "browser_navigate",
+        "url": "http://localhost:3002"
+      }
+    },
+    {
+      "id": "verify-initial-state",
+      "action": "verify",
+      "target": "system-status",
+      "cache_key": "system-status",
+      "method": "find",
+      "expected": "Status panels visible",
+      "playwright": {
+        "tool": "browser_snapshot",
+        "verify": "Status or System Status in accessibility tree"
+      }
+    },
+    {
+      "id": "click-meca-connect",
+      "action": "click",
+      "target": "meca-connect-btn",
+      "cache_key": "meca-connect-btn",
+      "verify": {"api_check": "GET /api/meca/status"},
+      "playwright": {
+        "tool": "browser_click",
+        "element": "button \"Connect Meca\"",
+        "ref": "Use ref from snapshot if exact text differs"
+      }
+    },
+    {
+      "id": "wait-for-meca-connection",
+      "action": "wait",
+      "duration": 3000,
+      "description": "Wait for Meca connection to establish",
+      "playwright": {
+        "tool": "browser_wait",
+        "time": 3
+      }
+    },
+    {
+      "id": "verify-meca-connected",
+      "action": "verify",
+      "method": "api",
+      "api_endpoint": "GET /api/meca/status",
+      "expected": "Meca connected or idle"
+    },
+    {
+      "id": "click-ot2-connect",
+      "action": "click",
+      "target": "ot2-connect-btn",
+      "cache_key": "ot2-connect-btn",
+      "verify": {"api_check": "GET /api/ot2/status"},
+      "playwright": {
+        "tool": "browser_click",
+        "element": "button \"Connect OT2\"",
+        "ref": "Use ref from snapshot if exact text differs"
+      }
+    },
+    {
+      "id": "wait-for-ot2-connection",
+      "action": "wait",
+      "duration": 5000,
+      "description": "Wait for OT2 connection (slower than Meca)",
+      "playwright": {
+        "tool": "browser_wait",
+        "time": 5
+      }
+    },
+    {
+      "id": "verify-both-connected",
+      "action": "verify",
+      "method": "api",
+      "api_endpoint": "GET /api/status",
+      "expected": "Both robots connected"
+    }
+  ],
+  "on_failure": {
+    "screenshot": true,
+    "try_alternatives": true,
+    "max_retries": 2
+  },
+  "debug_endpoints": [
+    "GET /api/meca/status",
+    "GET /api/ot2/status",
+    "GET /api/health",
+    "GET /api/status"
+  ]
+}

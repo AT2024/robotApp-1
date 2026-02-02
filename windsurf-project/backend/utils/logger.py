@@ -1,6 +1,12 @@
 """
 Logging configuration module.
 Provides centralized logging with timezone support, log consolidation, and automatic cleanup.
+
+Logging Strategy:
+- Daily rotation at midnight (TimedRotatingFileHandler)
+- 30-day retention with automatic cleanup
+- Three log categories: app.log, robot.log, error.log
+- Backup files named: app.2026-01-29.log, etc.
 """
 import logging
 import sys
@@ -8,7 +14,7 @@ import os
 import glob
 import time
 from datetime import datetime
-from logging.handlers import RotatingFileHandler
+from logging.handlers import TimedRotatingFileHandler
 from typing import Optional
 
 # Try to import zoneinfo (Python 3.9+), fallback to pytz
@@ -151,22 +157,28 @@ def get_logger(name: str) -> logging.Logger:
             timezone=timezone
         )
 
-        # Main file handler (10MB max, keep 5 files)
-        file_handler = RotatingFileHandler(
+        # Main file handler (daily rotation at midnight, keep 30 days)
+        file_handler = TimedRotatingFileHandler(
             log_file,
-            maxBytes=10*1024*1024,  # 10MB
-            backupCount=5
+            when='midnight',
+            interval=1,
+            backupCount=30,  # Keep 30 days of logs
+            encoding='utf-8'
         )
+        file_handler.suffix = '%Y-%m-%d'  # Produces: app.log.2026-01-29
         file_handler.setLevel(file_log_level)
         file_handler.setFormatter(file_formatter)
         logger.addHandler(file_handler)
 
-        # Error-only file handler (always captures ERROR and CRITICAL)
-        error_handler = RotatingFileHandler(
+        # Error-only file handler (daily rotation, keep 30 days)
+        error_handler = TimedRotatingFileHandler(
             error_log_file,
-            maxBytes=10*1024*1024,  # 10MB
-            backupCount=5
+            when='midnight',
+            interval=1,
+            backupCount=30,  # Keep 30 days of logs
+            encoding='utf-8'
         )
+        error_handler.suffix = '%Y-%m-%d'  # Produces: error.log.2026-01-29
         error_handler.setLevel(logging.ERROR)
         error_handler.setFormatter(file_formatter)
         logger.addHandler(error_handler)
@@ -180,13 +192,16 @@ def get_logger(name: str) -> logging.Logger:
     return logger
 
 
-def cleanup_old_logs(logs_dir: Optional[str] = None, max_age_days: int = 7) -> int:
+def cleanup_old_logs(logs_dir: Optional[str] = None, max_age_days: int = 30) -> int:
     """
     Remove old log files that exceed the maximum age.
 
+    Called automatically on application startup to clean legacy files
+    and maintain 30-day retention policy.
+
     Args:
         logs_dir: Directory containing log files. Defaults to backend/logs.
-        max_age_days: Maximum age in days for log files. Default 7 days.
+        max_age_days: Maximum age in days for log files. Default 30 days.
 
     Returns:
         Number of files removed

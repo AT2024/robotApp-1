@@ -280,18 +280,14 @@ class RobotCommandService(BaseService):
         )
         
         async def _submit_command():
-            # Convert string to enum if needed
             if isinstance(command_type, str):
                 try:
                     cmd_type = CommandType(command_type.lower())
-                    self.logger.debug(f"Converted command type '{command_type}' to enum {cmd_type}")
                 except ValueError:
-                    self.logger.error(f"Invalid command type: {command_type}")
                     raise ValidationError(f"Invalid command type: {command_type}")
             else:
                 cmd_type = command_type
-            
-            # Create command with correlation ID
+
             command_id = f"cmd_{robot_id}_{int(time.time() * 1000)}"
             command = RobotCommand(
                 command_id=command_id,
@@ -301,104 +297,64 @@ class RobotCommandService(BaseService):
                 priority=priority,
                 timeout=timeout
             )
-            
-            # Log with correlation ID for end-to-end tracking
-            self.logger.info(f"[{command.correlation_id}] Submitting command: type={command_type}, robot={robot_id}, command_id={command_id}")
-            self.logger.debug(f"[{command.correlation_id}] Command parameters: {parameters}")
-            
-            # Validate robot exists and is available
-            self.logger.debug(f"[{command.correlation_id}] Checking robot state for {robot_id}")
+
+            self.logger.info(f"[{command.correlation_id}] Submitting command: type={command_type}, robot={robot_id}")
+
             robot_info = await self.state_manager.get_robot_state(robot_id)
             if not robot_info:
-                self.logger.error(f"[{command.correlation_id}] Robot not found in state manager: {robot_id}")
                 raise ValidationError(f"Robot not found: {robot_id}")
-            
-            self.logger.info(f"[{command.correlation_id}] Robot {robot_id} state: {robot_info.current_state}, operational: {robot_info.is_operational}")
-            
+
             if not robot_info.is_operational:
-                self.logger.error(f"[{command.correlation_id}] Robot {robot_id} not operational (state: {robot_info.current_state})")
-                raise ValidationError(f"Robot not operational: {robot_id}")
-            
-            self.logger.debug(f"[{command.correlation_id}] Created command: {command_id}")
-            
-            # Validate command parameters
+                raise ValidationError(f"Robot not operational: {robot_id} (state: {robot_info.current_state})")
+
             await self._validate_command(command)
-            self.logger.debug(f"[{command.correlation_id}] Command validation passed for {command_id}")
-            
-            # Add to queue
+
             queue_priority = priority.value * -1
-            self.logger.info(f"[{command.correlation_id}] Adding command {command_id} to queue with priority {queue_priority}")
             await self._command_queue.put((queue_priority, time.time(), command))
-            
+
             async with self._commands_lock:
                 self._active_commands[command_id] = command
-            
-            self.logger.info(f"[{command.correlation_id}] Command submitted successfully: {command_id} for robot {robot_id}, queue size: {self._command_queue.qsize()}")
+
+            self.logger.info(f"[{command.correlation_id}] Command submitted: {command_id}, queue size: {self._command_queue.qsize()}")
             return command_id
         
         return await self.execute_operation(context, _submit_command)
     
     async def _validate_command(self, command: RobotCommand):
-        """Validate command parameters"""
-        self.logger.debug(f"[{command.correlation_id}] Validating command {command.command_id}: type={command.command_type.value}, parameters={command.parameters}")
-        
+        """Validate command parameters against defined rules"""
         if command.command_type not in self._validation_rules:
-            self.logger.debug(f"[{command.correlation_id}] No validation rules defined for command type: {command.command_type.value}")
-            return  # No validation rules defined
-        
-        rules = self._validation_rules[command.command_type]
-        self.logger.debug(f"[{command.correlation_id}] Applying {len(rules)} validation rules for command type: {command.command_type.value}")
-        
-        validation_results = []
-        
-        for rule in rules:
-            param_name = rule.parameter_name
-            param_value = command.parameters.get(param_name)
-            
-            # Check required parameters
+            return
+
+        for rule in self._validation_rules[command.command_type]:
+            param_value = command.parameters.get(rule.parameter_name)
+
             if rule.required and param_value is None:
-                error_msg = f"Required parameter missing: {param_name}"
-                self.logger.error(f"[{command.correlation_id}] Command {command.command_id} validation failed: {error_msg}")
-                raise ValidationError(error_msg)
-            
-            if param_value is not None:
-                # Check data type
-                if not isinstance(param_value, rule.data_type):
-                    error_msg = f"Parameter {param_name} must be of type {rule.data_type.__name__}"
-                    self.logger.error(f"[{command.correlation_id}] Command {command.command_id} validation failed: {error_msg} (got {type(param_value).__name__})")
-                    raise ValidationError(error_msg)
-                
-                # Check numeric ranges
-                if rule.min_value is not None and param_value < rule.min_value:
-                    error_msg = f"Parameter {param_name} must be >= {rule.min_value}"
-                    self.logger.error(f"[{command.correlation_id}] Command {command.command_id} validation failed: {error_msg} (got {param_value})")
-                    raise ValidationError(error_msg)
-                
-                if rule.max_value is not None and param_value > rule.max_value:
-                    error_msg = f"Parameter {param_name} must be <= {rule.max_value}"
-                    self.logger.error(f"[{command.correlation_id}] Command {command.command_id} validation failed: {error_msg} (got {param_value})")
-                    raise ValidationError(error_msg)
-                
-                # Check allowed values
-                if rule.allowed_values and param_value not in rule.allowed_values:
-                    error_msg = f"Parameter {param_name} must be one of: {rule.allowed_values}"
-                    self.logger.error(f"[{command.correlation_id}] Command {command.command_id} validation failed: {error_msg} (got {param_value})")
-                    raise ValidationError(error_msg)
-                
-                # Custom validation function
-                if rule.validator_func:
-                    try:
-                        rule.validator_func(param_value)
-                    except Exception as e:
-                        error_msg = f"Parameter {param_name} validation failed: {e}"
-                        self.logger.error(f"[{command.correlation_id}] Command {command.command_id} custom validation failed: {error_msg}")
-                        raise ValidationError(error_msg)
-                
-                validation_results.append(f"{param_name}={param_value}")
-            else:
-                validation_results.append(f"{param_name}=<not_provided>")
-        
-        self.logger.info(f"[{command.correlation_id}] Command {command.command_id} validation passed: {', '.join(validation_results)}")
+                raise ValidationError(f"Required parameter missing: {rule.parameter_name}")
+
+            if param_value is None:
+                continue
+
+            if not isinstance(param_value, rule.data_type):
+                raise ValidationError(
+                    f"Parameter {rule.parameter_name} must be of type {rule.data_type.__name__}"
+                )
+
+            if rule.min_value is not None and param_value < rule.min_value:
+                raise ValidationError(f"Parameter {rule.parameter_name} must be >= {rule.min_value}")
+
+            if rule.max_value is not None and param_value > rule.max_value:
+                raise ValidationError(f"Parameter {rule.parameter_name} must be <= {rule.max_value}")
+
+            if rule.allowed_values and param_value not in rule.allowed_values:
+                raise ValidationError(
+                    f"Parameter {rule.parameter_name} must be one of: {rule.allowed_values}"
+                )
+
+            if rule.validator_func:
+                try:
+                    rule.validator_func(param_value)
+                except Exception as e:
+                    raise ValidationError(f"Parameter {rule.parameter_name} validation failed: {e}")
     
     async def _process_command_queue(self):
         """Background task to process command queue"""
@@ -432,124 +388,75 @@ class RobotCommandService(BaseService):
     async def _execute_command(self, command: RobotCommand):
         """Execute a single command"""
         try:
-            self.logger.info(f"*** EXECUTING COMMAND {command.command_id} ***")
-            self.logger.info(f"Command details: robot={command.robot_id}, type={command.command_type.value}, params={command.parameters}")
-            
+            self.logger.info(f"Executing command {command.command_id}: robot={command.robot_id}, type={command.command_type.value}")
+
+            if command.robot_id == "meca":
+                await self._check_and_reset_meca_error(command)
+
             command.status = "running"
             command.started_at = time.time()
-            
-            # Get current state before changing
+
             current_state = await self.state_manager.get_robot_state(command.robot_id)
-            self.logger.info(f"Setting robot {command.robot_id} state to BUSY (current state: {current_state.current_state.value if current_state else 'unknown'})")
-            
-            # Update robot state to busy
+            current_state_value = current_state.current_state if current_state else None
+
+            if current_state_value == RobotState.ERROR:
+                self.logger.warning(f"Robot {command.robot_id} in ERROR state - resetting to IDLE before command")
+                await self.state_manager.update_robot_state(
+                    command.robot_id, RobotState.IDLE,
+                    reason="Reset from ERROR to allow command"
+                )
+
             await self.state_manager.update_robot_state(
-                command.robot_id,
-                RobotState.BUSY,
+                command.robot_id, RobotState.BUSY,
                 reason=f"Executing command: {command.command_type.value}"
             )
-            
-            # Verify state change
-            updated_state = await self.state_manager.get_robot_state(command.robot_id)
-            self.logger.info(f"Robot {command.robot_id} state updated to BUSY (verified: {updated_state.current_state.value if updated_state else 'unknown'})")
-            
-            # Get robot type to determine processor
+
             robot_info = await self.state_manager.get_robot_state(command.robot_id)
             robot_type = robot_info.robot_type if robot_info else "unknown"
             
-            self.logger.info(f"Robot type: {robot_type}, available processors: {list(self._command_processors.keys())}")
-            
-            # Execute command with appropriate processor
-            if robot_type in self._command_processors:
-                processor = self._command_processors[robot_type]
-                self.logger.info(f"Using processor: {processor}")
-                
-                if command.timeout:
-                    self.logger.debug(f"Executing command with timeout: {command.timeout}s")
-                    result = await asyncio.wait_for(
-                        processor(command),
-                        timeout=command.timeout
-                    )
-                else:
-                    self.logger.debug("Executing command without timeout")
-                    result = await processor(command)
-                
-                command.result = result
-                command.status = "completed"
-                command.completed_at = time.time()
-                
-                self.logger.info(f"Command {command.command_id} completed successfully with result: {result}")
-                
+            if robot_type not in self._command_processors:
+                raise ValidationError(f"No processor found for robot type: {robot_type}")
+
+            processor = self._command_processors[robot_type]
+
+            if command.timeout:
+                result = await asyncio.wait_for(processor(command), timeout=command.timeout)
             else:
-                error_msg = f"No processor found for robot type: {robot_type}"
-                self.logger.error(error_msg)
-                raise ValidationError(error_msg)
-            
-            # Update robot state back to idle
-            current_state = await self.state_manager.get_robot_state(command.robot_id)
-            self.logger.info(f"Setting robot {command.robot_id} state back to IDLE (current state: {current_state.current_state.value if current_state else 'unknown'})")
+                result = await processor(command)
+
+            command.result = result
+            command.status = "completed"
+            command.completed_at = time.time()
+
+            self.logger.info(f"Command {command.command_id} completed successfully")
+
             await self.state_manager.update_robot_state(
-                command.robot_id,
-                RobotState.IDLE,
-                reason="Command completed"
+                command.robot_id, RobotState.IDLE, reason="Command completed"
             )
-            # Verify state change
-            updated_state = await self.state_manager.get_robot_state(command.robot_id)
-            self.logger.info(f"Robot {command.robot_id} state updated to IDLE (verified: {updated_state.current_state.value if updated_state else 'unknown'})")
             
         except asyncio.TimeoutError:
             command.status = "timeout"
             command.error = f"Command timed out after {command.timeout}s"
             command.completed_at = time.time()
             command.retry_count += 1
-            
+
             self.logger.error(f"Command {command.command_id} timed out")
-            
-            # Reset robot state from busy on timeout
-            try:
-                current_state = await self.state_manager.get_robot_state(command.robot_id)
-                self.logger.warning(f"Resetting robot {command.robot_id} state to IDLE after timeout (current state: {current_state.current_state.value if current_state else 'unknown'})")
-                await self.state_manager.update_robot_state(
-                    command.robot_id,
-                    RobotState.IDLE,
-                    reason="Command timed out, resetting to idle"
-                )
-                # Verify state change
-                updated_state = await self.state_manager.get_robot_state(command.robot_id)
-                self.logger.info(f"Robot {command.robot_id} state reset to IDLE after timeout (verified: {updated_state.current_state.value if updated_state else 'unknown'})")
-            except Exception as state_error:
-                self.logger.error(f"Failed to reset robot state after timeout: {state_error}")
-            
-            # Retry if possible
+            await self._reset_robot_state_on_error(command.robot_id, "Command timed out")
+
             if command.retry_count <= command.max_retries:
                 await self._retry_command(command)
             else:
                 await self._handle_command_failure(command)
-            
+
         except Exception as e:
             command.status = "failed"
             command.error = str(e)
             command.completed_at = time.time()
             command.retry_count += 1
-            
+
             self.logger.error(f"Command {command.command_id} failed: {e}")
-            
-            # Reset robot state from busy on failure
-            try:
-                current_state = await self.state_manager.get_robot_state(command.robot_id)
-                self.logger.warning(f"Resetting robot {command.robot_id} state to IDLE after failure (current state: {current_state.current_state.value if current_state else 'unknown'})")
-                await self.state_manager.update_robot_state(
-                    command.robot_id,
-                    RobotState.IDLE,
-                    reason="Command failed, resetting to idle"
-                )
-                # Verify state change
-                updated_state = await self.state_manager.get_robot_state(command.robot_id)
-                self.logger.info(f"Robot {command.robot_id} state reset to IDLE after failure (verified: {updated_state.current_state.value if updated_state else 'unknown'})")
-            except Exception as state_error:
-                self.logger.error(f"Failed to reset robot state after failure: {state_error}")
-            
-            # Retry if possible
+            await self._reset_robot_state_on_error(command.robot_id, "Command failed")
+
             if command.retry_count <= command.max_retries:
                 await self._retry_command(command)
             else:
@@ -559,6 +466,15 @@ class RobotCommandService(BaseService):
             # Move to history and cleanup
             await self._finalize_command(command)
     
+    async def _reset_robot_state_on_error(self, robot_id: str, reason: str):
+        """Reset robot state to IDLE after command error"""
+        try:
+            await self.state_manager.update_robot_state(
+                robot_id, RobotState.IDLE, reason=f"{reason}, resetting to idle"
+            )
+        except Exception as e:
+            self.logger.error(f"Failed to reset robot state after error: {e}")
+
     async def _retry_command(self, command: RobotCommand):
         """Retry a failed command"""
         self.logger.info(f"Retrying command {command.command_id} (attempt {command.retry_count + 1})")
@@ -738,7 +654,69 @@ class RobotCommandService(BaseService):
         # Carousel commands would be processed here
         # For now, just return success
         return {"status": "success", "command": command.command_type.value}
-    
+
+    async def _check_and_reset_meca_error(self, command: RobotCommand) -> None:
+        """
+        Check if Mecademic robot is in error state and reset if needed.
+        Following Mecademic's recommended pattern from robot_initializer.py.
+
+        From Mecademic best practices:
+            if robot.GetStatusRobot().error_status:
+                robot.ResetError()
+                robot.WaitErrorReset(timeout=5)
+        """
+        try:
+            # Get the MecaService from orchestrator
+            if not self.orchestrator:
+                self.logger.debug("No orchestrator available for Meca error check")
+                return
+
+            meca_service = await self.orchestrator.get_robot_service(command.robot_id)
+            if not meca_service or not hasattr(meca_service, 'async_wrapper'):
+                self.logger.debug(f"No MecaService with async_wrapper for {command.robot_id}")
+                return
+
+            if not hasattr(meca_service.async_wrapper, 'robot_driver'):
+                self.logger.debug(f"No robot_driver in async_wrapper for {command.robot_id}")
+                return
+
+            driver = meca_service.async_wrapper.robot_driver
+            if not driver:
+                self.logger.debug(f"Robot driver is None for {command.robot_id}")
+                return
+
+            # Get robot status (Mecademic pattern)
+            status = await driver.get_status()
+
+            if status.get('error_status'):
+                error_code = status.get('error_code', 'unknown')
+                self.logger.warning(
+                    f"Mecademic robot {command.robot_id} in error state (code: {error_code}). "
+                    "Attempting reset per Mecademic best practices."
+                )
+
+                # Call ResetError() + WaitErrorReset (Mecademic pattern)
+                if hasattr(driver, 'reset_error'):
+                    success = await driver.reset_error()
+                    if success:
+                        self.logger.info(f"Mecademic robot {command.robot_id} error reset successful")
+                    else:
+                        self.logger.error(f"Mecademic robot {command.robot_id} error reset failed")
+                        raise ValidationError(
+                            f"Robot {command.robot_id} is in error state and could not be reset. "
+                            "Check physical robot and try 'Reset & Reconnect'."
+                        )
+                else:
+                    self.logger.warning(f"Robot driver for {command.robot_id} does not have reset_error method")
+            else:
+                self.logger.debug(f"Mecademic robot {command.robot_id} not in error state - OK to proceed")
+
+        except ValidationError:
+            raise
+        except Exception as e:
+            self.logger.warning(f"Error checking/resetting Mecademic error state for {command.robot_id}: {e}")
+            # Continue anyway - the command might still work
+
     async def get_command_status(self, command_id: str) -> ServiceResult[Dict[str, Any]]:
         """Get status of a specific command"""
         async with self._commands_lock:
