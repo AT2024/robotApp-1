@@ -463,11 +463,15 @@ class MecaConnectionManager:
             await driver.wait_homed(timeout=30.0)
             self.logger.info(f"Robot {self.robot_id} homing complete")
 
-            # Step 5: Check if robot is paused after homing and resume if needed
+            # Step 5: Clear any pending motion commands after homing
+            # IMPORTANT: After emergency stop + homing, the robot is at HOME position.
+            # Any pending motion commands from before would be invalid/dangerous to resume.
+            # Users must explicitly call quick_recovery to resume a paused sequence.
             status = await driver.get_status()
             if status.get('pause_motion_status'):
-                self.logger.info(f"Robot {self.robot_id} paused after homing - resuming motion")
-                await driver.resume_motion()
+                self.logger.info(f"Robot {self.robot_id} has paused motion after homing - clearing motion queue")
+                await driver.clear_motion()
+                self.logger.info(f"Motion queue cleared. Use quick_recovery to resume sequence if needed.")
 
             # Step 6: Broadcast connection complete state
             if self.broadcaster_callback:

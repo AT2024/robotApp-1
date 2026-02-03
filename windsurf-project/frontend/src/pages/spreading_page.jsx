@@ -9,6 +9,7 @@ import { ProgressSteps, StepContent } from '../components/steps';
 import { EmergencyButton, SecondaryButton, PauseButton, ResumeButton, ResetButton } from '../components/buttons';
 import { ConfirmationModal } from '../components/common';
 import { BatchProgress, BatchErrorDialog, AllCompleteDialog } from '../components/batch';
+import { CycleWaferDisplay } from '../components/wafer';
 
 const ROBOT_MAP = {
   MECA: 'meca',
@@ -87,6 +88,13 @@ const SpreadingPage = () => {
   const [showAllComplete, setShowAllComplete] = useState(false);
   const [currentWafer, setCurrentWafer] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // Cycle wafer display state
+  const [cycleStart, setCycleStart] = useState(1);
+  const [cycleCount, setCycleCount] = useState(5);
+  const [currentOperation, setCurrentOperation] = useState('');
+  const [waferProgress, setWaferProgress] = useState(0);
+  const [completedWafers, setCompletedWafers] = useState([]);
 
   // WebSocket connection status
   const [wsConnected, setWsConnected] = useState(false);
@@ -546,12 +554,19 @@ const SpreadingPage = () => {
         toast.error(`OT2 protocol error: ${error || 'Unknown error'}`, { autoClose: 5000 });
       } else if (message.type === 'operation_update' && message.data?.event === 'batch_completion') {
         // Handle batch completion events from backend
-        const { operation_type, wafers_failed, wafers_processed, batch_start, batch_count } = message.data;
+        const { operation_type, wafers_failed, wafers_processed, wafers_succeeded, batch_start, batch_count } = message.data;
         logger.log('Received batch completion event:', message.data);
 
         // Reset current wafer indicator and processing state since batch is done
         setCurrentWafer(0);
         setIsProcessing(false);
+        setCurrentOperation('');
+        setWaferProgress(0);
+
+        // Track completed wafers for cycle display
+        if (wafers_succeeded && wafers_succeeded.length > 0) {
+          setCompletedWafers(prev => [...new Set([...prev, ...wafers_succeeded])]);
+        }
 
         // Store batch result
         setBatchResults(prev => [...prev, message.data]);
@@ -607,12 +622,18 @@ const SpreadingPage = () => {
           }, 2500);  // 2.5 second delay to show step 8 completion
         }
       } else if (message.type === 'operation_update' && message.data?.event === 'wafer_progress') {
-        // Handle wafer progress updates
-        const { wafer_num, wafer_index } = message.data;
-        logger.log(`Wafer progress: ${wafer_num} (index ${wafer_index})`);
+        // Handle wafer progress updates for CycleWaferDisplay
+        const { wafer_num, wafer_index, start, count, operation, progress } = message.data;
+        logger.log(`Wafer progress: ${wafer_num} (index ${wafer_index}), operation: ${operation}, progress: ${progress}%`);
+
         setCurrentWafer(wafer_num);
+        setCycleStart(start + 1);  // Convert to 1-indexed for display
+        setCycleCount(count || 5);
+        setCurrentOperation(operation || '');
+        setWaferProgress(progress || 0);
+
         // Set processing state when first wafer starts
-        if (wafer_index === 0 || wafer_num === 1) {
+        if (wafer_index === start || wafer_num === start + 1) {
           setIsProcessing(true);
         }
       }
@@ -909,6 +930,13 @@ const SpreadingPage = () => {
     setCurrentBatch(0);
     setBatchResults([]);
 
+    // Reset cycle wafer display state
+    setCompletedWafers([]);
+    setCurrentWafer(0);
+    setCurrentOperation('');
+    setWaferProgress(0);
+    setCycleStart(1);
+
     // Navigate back to form
     navigate('/spreading/form');
   }, [navigate]);
@@ -1007,6 +1035,18 @@ const SpreadingPage = () => {
           totalBatches={totalBatches}
           totalWafers={totalWafers}
           currentWafer={currentWafer}
+        />
+
+        {/* Cycle Wafer Display - Shows 5 wafers for current cycle */}
+        <CycleWaferDisplay
+          currentWafer={currentWafer}
+          cycleStart={cycleStart}
+          cycleCount={cycleCount}
+          currentOperation={currentOperation}
+          progress={waferProgress}
+          totalWafers={totalWafers}
+          completedWafers={completedWafers}
+          failedWafers={failedWafers}
         />
 
         {/* Progress Steps */}

@@ -9,7 +9,6 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, Any, List, Optional, Callable, Union
 from dataclasses import dataclass, field
 from enum import Enum
-from abc import ABC, abstractmethod
 
 from .exceptions import HardwareError, ValidationError
 from utils.logger import get_logger
@@ -142,7 +141,7 @@ class AsyncRobotWrapper:
         
         # Shutdown executor
         self.executor.shutdown(wait=True)
-        self.logger.info(f"AsyncRobotWrapper for {self.robot_id} shutdown complete")
+        self.logger.debug(f"AsyncRobotWrapper for {self.robot_id} shutdown complete")
     
     async def get_status(self, use_cache: bool = True) -> Dict[str, Any]:
         """
@@ -199,7 +198,7 @@ class AsyncRobotWrapper:
             return False
         getattr(robot, method_name)(*args)
         if log_info:
-            self.logger.info(f"{log_info} for {self.robot_id}")
+            self.logger.debug(f"{log_info} for {self.robot_id}")
         return True
 
     def _get_status_sync(self) -> Dict[str, Any]:
@@ -240,7 +239,7 @@ class AsyncRobotWrapper:
         command_id = f"{self.robot_id}_{int(time.time() * 1000)}"
         start_time = time.time()
 
-        self.logger.info(f"Executing {command.command_type} command {command_id}")
+        self.logger.debug(f"Executing {command.command_type} command {command_id}")
 
         try:
             loop = asyncio.get_event_loop()
@@ -257,7 +256,7 @@ class AsyncRobotWrapper:
             
             await self._update_command_stats(CommandType.MOVEMENT, True, execution_time)
 
-            self.logger.info(f"Command {command_id} completed in {execution_time:.3f}s")
+            self.logger.debug(f"Command {command_id} completed in {execution_time:.3f}s")
             
             return CommandResult(
                 command_id=command_id,
@@ -346,6 +345,76 @@ class AsyncRobotWrapper:
             self.logger.error(f"Error waiting for robot {self.robot_id} to idle: {e}")
             raise
 
+    async def resume_motion(self) -> None:
+        """Resume paused motion - continues from exact position.
+
+        After PauseMotion(), the motion queue is preserved. ResumeMotion()
+        tells the robot to continue executing those queued commands from
+        the exact position where it stopped.
+
+        This is essential for safe wafer handling recovery - the robot
+        continues its interrupted movement rather than skipping to the
+        next operation.
+
+        Delegates to robot_driver.resume_motion() if available (MecademicDriver),
+        otherwise falls back to direct robot instance call.
+        """
+        try:
+            # Prefer driver's resume_motion method (MecademicDriver has full implementation)
+            if hasattr(self.robot_driver, 'resume_motion'):
+                result = await self.robot_driver.resume_motion()
+                if result:
+                    self.logger.debug(f"ResumeMotion() delegated to driver for {self.robot_id}")
+                return
+
+            # Fallback: direct robot instance call
+            loop = asyncio.get_event_loop()
+            robot = self.robot_driver.get_robot_instance() if hasattr(self.robot_driver, 'get_robot_instance') else None
+
+            if robot and hasattr(robot, 'ResumeMotion'):
+                await loop.run_in_executor(self.executor, robot.ResumeMotion)
+                self.logger.debug(f"ResumeMotion() executed for {self.robot_id} - continuing from paused position")
+
+                # Clear software e-stop flag if set
+                if hasattr(self.robot_driver, '_software_estop_active'):
+                    self.robot_driver._software_estop_active = False
+            else:
+                self.logger.warning(f"ResumeMotion not available for robot {self.robot_id}")
+
+        except Exception as e:
+            self.logger.error(f"Failed to resume motion for {self.robot_id}: {e}")
+            raise HardwareError(f"Resume motion failed: {e}", robot_id=self.robot_id)
+
+    async def reset_error(self) -> None:
+        """Reset robot error state.
+
+        Should be called before resuming motion if the robot entered an
+        error state (e.g., collision detection, torque limit exceeded).
+
+        Delegates to robot_driver.reset_error() if available (MecademicDriver),
+        otherwise falls back to direct robot instance call.
+        """
+        try:
+            # Prefer driver's reset_error method
+            if hasattr(self.robot_driver, 'reset_error'):
+                result = await self.robot_driver.reset_error()
+                if result:
+                    self.logger.debug(f"ResetError() delegated to driver for {self.robot_id}")
+                return
+
+            # Fallback: direct robot instance call
+            loop = asyncio.get_event_loop()
+            robot = self.robot_driver.get_robot_instance() if hasattr(self.robot_driver, 'get_robot_instance') else None
+
+            if robot and hasattr(robot, 'ResetError'):
+                await loop.run_in_executor(self.executor, robot.ResetError)
+                self.logger.debug(f"ResetError() executed for {self.robot_id}")
+            else:
+                self.logger.warning(f"ResetError not available for robot {self.robot_id}")
+
+        except Exception as e:
+            self.logger.warning(f"Could not reset error for {self.robot_id}: {e}")
+
     def _execute_movement_sync(self, command: MovementCommand) -> Any:
         """Execute movement command synchronously (runs in thread pool)"""
         try:
@@ -377,7 +446,7 @@ class AsyncRobotWrapper:
                         command.target_position["joint5"],
                         command.target_position["joint6"]
                     )
-                    self.logger.info(f"Executed MoveJoints command for {self.robot_id}")
+                    self.logger.debug(f"Executed MoveJoints command for {self.robot_id}")
                 else:
                     self.logger.warning(f"MoveJoints not available on robot {self.robot_id}")
             
@@ -391,7 +460,7 @@ class AsyncRobotWrapper:
                         command.target_position.get("beta", 0),
                         command.target_position.get("gamma", 0)
                     )
-                    self.logger.info(f"Executed MovePose command for {self.robot_id}: x={command.target_position['x']}, y={command.target_position['y']}, z={command.target_position['z']}")
+                    self.logger.debug(f"Executed MovePose command for {self.robot_id}: x={command.target_position['x']}, y={command.target_position['y']}, z={command.target_position['z']}")
                 else:
                     self.logger.warning(f"MovePose not available on robot {self.robot_id}")
             
@@ -405,7 +474,7 @@ class AsyncRobotWrapper:
                         command.target_position.get("beta", 0),
                         command.target_position.get("gamma", 0)
                     )
-                    self.logger.info(f"Executed MoveLin command for {self.robot_id}")
+                    self.logger.debug(f"Executed MoveLin command for {self.robot_id}")
                 else:
                     self.logger.warning(f"MoveLin not available on robot {self.robot_id}")
             
@@ -429,10 +498,10 @@ class AsyncRobotWrapper:
                     # Prefer robot's Delay method to queue delay in motion buffer
                     if hasattr(actual_robot, 'Delay'):
                         actual_robot.Delay(duration)
-                        self.logger.info(f"Queued robot Delay of {duration} seconds for {self.robot_id}")
+                        self.logger.debug(f"Queued robot Delay of {duration} seconds for {self.robot_id}")
                     else:
                         # Fallback to Python sleep if robot doesn't support Delay
-                        self.logger.info(f"Executing Python sleep delay of {duration} seconds for {self.robot_id}")
+                        self.logger.debug(f"Executing Python sleep delay of {duration} seconds for {self.robot_id}")
                         time.sleep(duration)
                 else:
                     self.logger.warning(f"Invalid delay duration: {duration} for {self.robot_id}")
@@ -470,35 +539,38 @@ class AsyncRobotWrapper:
                 self.logger.critical(f"EMERGENCY STOP triggered for {self.robot_id}")
                 emergency_executed = False
 
-                # Step 1: Immediate stop current movement
+                # Step 1: Immediate stop current movement using PauseMotion
+                # CRITICAL: PauseMotion PRESERVES the motion queue so ResumeMotion can continue
+                # from the exact position. This is essential for safe wafer handling recovery.
                 if hasattr(actual_robot, 'PauseMotion'):
                     actual_robot.PauseMotion()
-                    self.logger.critical(f"PauseMotion() executed for {self.robot_id}")
+                    self.logger.critical(f"PauseMotion() executed for {self.robot_id} - motion queue PRESERVED for resume")
                     emergency_executed = True
                     if hasattr(self.robot_driver, '_software_estop_active'):
                         self.robot_driver._software_estop_active = True
 
-                # Step 2: Clear remaining movement queue
-                if hasattr(actual_robot, 'ClearMotion'):
-                    actual_robot.ClearMotion()
-                    self.logger.critical(f"ClearMotion() executed for {self.robot_id}")
-                    emergency_executed = True
+                # DO NOT call ClearMotion() here!
+                # ClearMotion() destroys the motion queue, making ResumeMotion unable to
+                # continue from the exact position. This causes the robot to skip to the
+                # next wafer, which can break wafers if the gripper is holding one.
+                # The motion queue is needed for Quick Recovery to work correctly.
 
-                    if hasattr(actual_robot, 'BrakesOn'):
-                        try:
-                            actual_robot.BrakesOn()
-                            self.logger.critical(f"Brakes engaged for {self.robot_id}")
-                        except Exception as brake_error:
-                            self.logger.warning(f"Could not engage brakes: {brake_error}")
-                
-                # STEP 3: Fallback if neither PauseMotion nor ClearMotion available
+                # Optionally engage brakes for extra safety (doesn't affect motion queue)
+                if hasattr(actual_robot, 'BrakesOn'):
+                    try:
+                        actual_robot.BrakesOn()
+                        self.logger.critical(f"Brakes engaged for {self.robot_id}")
+                    except Exception as brake_error:
+                        self.logger.warning(f"Could not engage brakes: {brake_error}")
+
+                # Fallback: if PauseMotion not available, use StopMotion
                 if not emergency_executed and hasattr(actual_robot, 'StopMotion'):
                     actual_robot.StopMotion()
                     self.logger.critical(f"StopMotion() fallback executed for {self.robot_id}")
                     emergency_executed = True
 
                 if emergency_executed:
-                    self.logger.critical(f"Emergency stop completed for {self.robot_id} - robot halted")
+                    self.logger.critical(f"Emergency stop completed for {self.robot_id} - robot halted, queue preserved")
                 else:
                     self.logger.error(f"Emergency stop FAILED for {self.robot_id} - no suitable methods")
             

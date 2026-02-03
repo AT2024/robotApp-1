@@ -7,15 +7,17 @@ Logging Strategy:
 - 30-day retention with automatic cleanup
 - Three log categories: app.log, robot.log, error.log
 - Backup files named: app.2026-01-29.log, etc.
+- Optional JSON structured logging for machine-parseable output
 """
 import logging
 import sys
 import os
 import glob
 import time
+import json
 from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler
-from typing import Optional
+from typing import Optional, Dict, Any
 
 # Try to import zoneinfo (Python 3.9+), fallback to pytz
 try:
@@ -62,6 +64,78 @@ class TimezoneFormatter(logging.Formatter):
         else:
             # Default format with milliseconds
             return ct.strftime("%Y-%m-%d %H:%M:%S") + f",{int(record.msecs):03d}"
+
+
+class StructuredFormatter(logging.Formatter):
+    """
+    JSON structured formatter for machine-parseable log output.
+
+    Outputs logs in JSON format:
+    {
+        "timestamp": "2026-01-29T10:15:32.123",
+        "level": "INFO",
+        "logger": "meca_service",
+        "message": "Pickup completed",
+        "func": "execute_pickup",
+        "line": 123,
+        "correlation_id": "pickup-abc123",
+        "wafer_id": 3,
+        "robot_id": "meca"
+    }
+
+    Extra fields from log records (correlation_id, wafer_id, robot_id)
+    are automatically included in the JSON output.
+    """
+
+    def __init__(self, timezone: str = "Asia/Jerusalem"):
+        super().__init__()
+        self.timezone_name = timezone
+        self._tz = None
+
+        if ZoneInfo is not None:
+            try:
+                self._tz = ZoneInfo(timezone)
+            except Exception:
+                self._tz = None
+
+    def _get_timestamp(self, record: logging.LogRecord) -> str:
+        """Get ISO8601 formatted timestamp with timezone."""
+        ct = datetime.fromtimestamp(record.created)
+
+        if self._tz is not None:
+            try:
+                ct = datetime.fromtimestamp(record.created, tz=self._tz)
+            except Exception:
+                pass
+
+        # ISO8601 format with milliseconds
+        return ct.strftime("%Y-%m-%dT%H:%M:%S") + f".{int(record.msecs):03d}"
+
+    def format(self, record: logging.LogRecord) -> str:
+        """Format the log record as JSON."""
+        # Base log entry
+        log_entry: Dict[str, Any] = {
+            "timestamp": self._get_timestamp(record),
+            "level": record.levelname,
+            "logger": record.name,
+            "message": record.getMessage(),
+            "func": record.funcName,
+            "line": record.lineno,
+        }
+
+        # Add extra fields from CorrelationFilter or manual extras
+        # These are added to the record by filters or logger.info("msg", extra={...})
+        extra_fields = ["correlation_id", "wafer_id", "robot_id", "operation_type"]
+        for field in extra_fields:
+            value = getattr(record, field, None)
+            if value is not None:
+                log_entry[field] = value
+
+        # Include exception info if present
+        if record.exc_info:
+            log_entry["exception"] = self.formatException(record.exc_info)
+
+        return json.dumps(log_entry, default=str)
 
 
 def _get_component_category(logger_name: str) -> str:
@@ -118,6 +192,7 @@ def get_logger(name: str) -> logging.Logger:
         env_log_level = os.getenv('ROBOTICS_LOG_LEVEL', 'INFO').upper()
         is_production = os.getenv('ROBOTICS_ENV', 'development').lower() == 'production'
         timezone = os.getenv('ROBOTICS_TIMEZONE', 'Asia/Jerusalem')
+        log_format = os.getenv('ROBOTICS_LOG_FORMAT', 'text').lower()  # 'text' or 'json'
 
         # Set logger level based on environment
         log_level_map = {
@@ -147,15 +222,21 @@ def get_logger(name: str) -> logging.Logger:
         log_file = os.path.join(logs_dir, f'{category}.log')
         error_log_file = os.path.join(logs_dir, 'error.log')
 
-        # Create timezone-aware formatters
-        file_formatter = TimezoneFormatter(
-            '%(asctime)s - %(name)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s',
-            timezone=timezone
-        )
-        console_formatter = TimezoneFormatter(
-            '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-            timezone=timezone
-        )
+        # Create formatters based on log format setting
+        if log_format == 'json':
+            # JSON structured logging for machine-parseable output
+            file_formatter = StructuredFormatter(timezone=timezone)
+            console_formatter = StructuredFormatter(timezone=timezone)
+        else:
+            # Default text format with timezone support
+            file_formatter = TimezoneFormatter(
+                '%(asctime)s - %(name)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s',
+                timezone=timezone
+            )
+            console_formatter = TimezoneFormatter(
+                '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                timezone=timezone
+            )
 
         # Main file handler (daily rotation at midnight, keep 30 days)
         file_handler = TimedRotatingFileHandler(
@@ -188,6 +269,10 @@ def get_logger(name: str) -> logging.Logger:
         console_handler.setLevel(console_log_level)
         console_handler.setFormatter(console_formatter)
         logger.addHandler(console_handler)
+
+        # Add correlation filter for automatic context tracking
+        from utils.correlation import CorrelationFilter
+        logger.addFilter(CorrelationFilter())
 
     return logger
 

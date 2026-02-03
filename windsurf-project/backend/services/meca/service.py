@@ -166,13 +166,6 @@ class MecaService(RobotService):
         self.carousel_positions = self.position_calculator.carousel_positions
         self.safe_position = self.position_calculator.safe_position
 
-        # Safe homing state (delegated to recovery operations)
-        self._safe_homing_active = False
-        self._safe_homing_stop_requested = False
-
-        # Resume task reference
-        self._resume_task: Optional[asyncio.Task] = None
-
         # Gripper state (accessed through movement executor)
         self._gripper_open = True
 
@@ -224,10 +217,10 @@ class MecaService(RobotService):
             True if broadcast succeeded
         """
         try:
-            # Import websocket handler singleton which has reference to actual connection manager
+            # Import websocket handler singleton which manages client connections
             from websocket.websocket_handlers import get_websocket_handler_singleton
             ws_handler = get_websocket_handler_singleton()
-            if ws_handler and ws_handler.connection_manager:
+            if ws_handler:
                 # Use operation_update format expected by frontend
                 message = {
                     "type": "operation_update",
@@ -238,13 +231,13 @@ class MecaService(RobotService):
                 }
                 # INFO-level logging to verify broadcasts are reaching WebSocket
                 self.logger.info(f"[BROADCAST] {message_type}: wafer_num={data.get('wafer_num', 'N/A')}, data={data}")
-                await ws_handler.connection_manager.broadcast(message)
+                # Call ws_handler.broadcast() directly - this uses active_connections
+                # where clients are actually registered (not connection_manager which is separate)
+                await ws_handler.broadcast(message)
                 return True
             else:
                 self.logger.warning(
-                    f"No WebSocket handler available for {message_type} broadcast "
-                    f"(ws_handler={ws_handler is not None}, "
-                    f"connection_manager={ws_handler.connection_manager is not None if ws_handler else 'N/A'})"
+                    f"No WebSocket handler available for {message_type} broadcast"
                 )
         except Exception as e:
             self.logger.warning(f"Failed to broadcast {message_type}: {e}")

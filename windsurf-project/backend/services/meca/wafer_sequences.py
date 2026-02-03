@@ -72,7 +72,7 @@ class MecaWaferSequences:
         self.SPREAD_WAIT = movement_params.get("spread_wait", 25)
 
         # Log speed settings for diagnostics
-        self.logger.info(
+        self.logger.debug(
             f"[WAFER SEQ SPEED] Speed settings: WAFER={self.WAFER_SPEED}, "
             f"SPEED={self.SPEED}, ALIGN={self.ALIGN_SPEED}, ENTRY={self.ENTRY_SPEED}, "
             f"EMPTY={self.EMPTY_SPEED}"
@@ -84,6 +84,55 @@ class MecaWaferSequences:
     async def _execute_command(self, command_type: str, parameters: List[Any] = None) -> None:
         """Execute movement command through the movement executor."""
         await self.movement_executor.execute_movement_command(command_type, parameters)
+
+    def _get_resume_speed(self, sequence_type: str, cmd_index: int) -> float:
+        """
+        Get the appropriate speed for resuming at a given command index.
+
+        This ensures the robot moves at the correct speed when resuming mid-sequence,
+        based on what phase of the sequence it's in.
+
+        Args:
+            sequence_type: "pickup" or "drop"
+            cmd_index: Current command index (0-based)
+
+        Returns:
+            Speed percentage for the given position in the sequence
+        """
+        if sequence_type == "pickup":
+            # Pickup sequence speed phases:
+            # Commands 0-4: ALIGN_SPEED (approach phase)
+            # Commands 5-11: WAFER_SPEED (holding wafer)
+            # Commands 12-17: ALIGN_SPEED (spreader alignment)
+            # Commands 18+: EMPTY_SPEED (empty return)
+            if cmd_index < 5:
+                return self.ALIGN_SPEED
+            elif cmd_index < 12:
+                return self.WAFER_SPEED
+            elif cmd_index < 18:
+                return self.ALIGN_SPEED
+            else:
+                return self.EMPTY_SPEED
+
+        elif sequence_type == "drop":
+            # Drop sequence speed phases:
+            # Commands 0-7: ALIGN_SPEED (spreader pickup)
+            # Commands 8-10: SPEED (travel to baking)
+            # Commands 11-19: ALIGN_SPEED (baking alignment)
+            # Commands 20+: SPEED (return)
+            if cmd_index < 8:
+                return self.ALIGN_SPEED
+            elif cmd_index < 11:
+                return self.SPEED
+            elif cmd_index < 20:
+                return self.ALIGN_SPEED
+            else:
+                return self.SPEED
+
+        else:
+            # Default to align speed for unknown sequences
+            self.logger.warning(f"Unknown sequence type '{sequence_type}', defaulting to ALIGN_SPEED")
+            return self.ALIGN_SPEED
 
     async def _broadcast_wafer_progress(
         self,
@@ -168,18 +217,35 @@ class MecaWaferSequences:
         elif existing_step.paused:
             # Step exists but is paused - resume it (preserves progress_data)
             await self.state_manager.resume_step(self.robot_id)
-            self.logger.info(
+            self.logger.debug(
                 f"Resumed paused pickup sequence from wafer {existing_step.progress_data.get('current_wafer_index', start)}"
             )
+        else:
+            # Step exists but is not paused - preserve existing progress
+            # This can happen if resume already occurred elsewhere (e.g., during recovery)
+            self.logger.debug(
+                f"[PRESERVE STATE] Step exists (not paused) - preserving state: "
+                f"wafer={existing_step.progress_data.get('current_wafer_index')}, "
+                f"cmd={existing_step.progress_data.get('current_command_index')}"
+            )
 
-        self.logger.info(f"Starting pickup sequence for wafers {start+1} to {start+count}")
+        self.logger.debug(f"Starting pickup sequence for wafers {start+1} to {start+count}")
 
         # Determine resume state FIRST (before any robot commands)
         step_state = await self.state_manager.get_step_state(self.robot_id)
         resume_from_wafer = step_state.progress_data.get("current_wafer_index", 0) if step_state else 0
         resume_from_cmd = step_state.progress_data.get("current_command_index", 0) if step_state else 0
-        # Include was_paused to handle edge case: resume from wafer 0, cmd 0 after emergency stop
-        is_resume = was_paused or resume_from_wafer > start or resume_from_cmd > 0
+        # Determine if this is a resume operation:
+        # 1. was_paused: step existed and was paused before we started
+        # 2. retry_wafers provided: called from _resume_pickup_sequence with specific wafers
+        # 3. resume_from_cmd > 0: resuming mid-wafer (regardless of wafer index)
+        # NOTE: retry_wafers is the KEY indicator - if provided, we're ALWAYS resuming
+        is_resume = was_paused or retry_wafers is not None or resume_from_cmd > 0
+
+        self.logger.debug(
+            f"[RESUME CHECK] was_paused={was_paused}, retry_wafers={retry_wafers is not None}, "
+            f"resume_from_cmd={resume_from_cmd}, is_resume={is_resume}"
+        )
 
         # Initial setup - apply ONLY on fresh start, NOT on resume
         # On resume, gripper may be holding a wafer - opening it would drop the wafer
@@ -194,9 +260,13 @@ class MecaWaferSequences:
             await self._execute_command("GripperOpen", [])
             await self._execute_command("Delay", [1])
         else:
-            self.logger.info(
+            self.logger.debug(
                 f"[RESUME] Skipping initial setup - resuming from wafer {resume_from_wafer}, cmd {resume_from_cmd}"
             )
+            # Set appropriate speed using helper method
+            resume_speed = self._get_resume_speed("pickup", resume_from_cmd)
+            self.logger.debug(f"[RESUME PICKUP] Setting speed to {resume_speed}% for cmd index {resume_from_cmd}")
+            await self._execute_command("SetJointVel", [resume_speed])
 
         processed_wafers = []
         failed_wafers = []
@@ -204,7 +274,7 @@ class MecaWaferSequences:
         # Use already-computed resume values for wafer indices
         wafer_indices = retry_wafers if retry_wafers else list(range(max(start, resume_from_wafer), start + count))
 
-        self.logger.info(
+        self.logger.debug(
             f"Resume state: wafer_index={resume_from_wafer}, cmd_index={resume_from_cmd}, "
             f"wafers_to_process={wafer_indices}"
         )
@@ -229,7 +299,7 @@ class MecaWaferSequences:
 
             try:
                 await self._broadcast_wafer_progress("pickup", wafer_num, i, start, count)
-                self.logger.info(f"[WAFER {wafer_num}/{start+count}] Starting pickup from inert tray")
+                self.logger.debug(f"[WAFER {wafer_num}/{start+count}] Starting pickup from inert tray")
 
                 positions = self.position_calculator.calculate_intermediate_positions(i, "pickup")
                 pickup_position = self.position_calculator.calculate_wafer_position(i, "inert")
@@ -263,7 +333,7 @@ class MecaWaferSequences:
                 cmd_start = 0
                 if i == resume_from_wafer and resume_from_cmd > 0:
                     cmd_start = resume_from_cmd
-                    self.logger.info(
+                    self.logger.debug(
                         f"[MID-RESUME] Wafer {wafer_num}: resuming from command {cmd_start} "
                         f"(skipping {cmd_start} completed commands)"
                     )
@@ -378,11 +448,19 @@ class MecaWaferSequences:
         elif existing_step.paused:
             # Step exists but is paused - resume it (preserves progress_data)
             await self.state_manager.resume_step(self.robot_id)
-            self.logger.info(
+            self.logger.debug(
                 f"Resumed paused drop sequence from wafer {existing_step.progress_data.get('current_wafer_index', start)}"
             )
+        else:
+            # Step exists but is not paused - preserve existing progress
+            # This can happen if resume already occurred elsewhere (e.g., during recovery)
+            self.logger.debug(
+                f"[PRESERVE STATE] Step exists (not paused) - preserving state: "
+                f"wafer={existing_step.progress_data.get('current_wafer_index')}, "
+                f"cmd={existing_step.progress_data.get('current_command_index')}"
+            )
 
-        self.logger.info(f"Starting drop sequence for wafers {start+1} to {start+count}")
+        self.logger.debug(f"Starting drop sequence for wafers {start+1} to {start+count}")
 
         processed_wafers = []
         failed_wafers = []
@@ -393,7 +471,7 @@ class MecaWaferSequences:
         resume_from_cmd = step_state.progress_data.get("current_command_index", 0) if step_state else 0
         wafer_indices = retry_wafers if retry_wafers else list(range(max(start, resume_from_wafer), start + count))
 
-        self.logger.info(
+        self.logger.debug(
             f"Resume state: wafer_index={resume_from_wafer}, cmd_index={resume_from_cmd}, "
             f"wafers_to_process={wafer_indices}"
         )
@@ -412,7 +490,7 @@ class MecaWaferSequences:
 
             try:
                 await self._broadcast_wafer_progress("drop", wafer_num, i, start, count)
-                self.logger.info(f"[WAFER {wafer_num}/{start+count}] Starting drop to baking tray")
+                self.logger.debug(f"[WAFER {wafer_num}/{start+count}] Starting drop to baking tray")
 
                 positions = self.position_calculator.calculate_intermediate_positions(i, "drop")
 
@@ -447,10 +525,14 @@ class MecaWaferSequences:
                 cmd_start = 0
                 if i == resume_from_wafer and resume_from_cmd > 0:
                     cmd_start = resume_from_cmd
-                    self.logger.info(
+                    self.logger.debug(
                         f"[MID-RESUME] Wafer {wafer_num}: resuming from command {cmd_start} "
                         f"(skipping {cmd_start} completed commands)"
                     )
+                    # Set appropriate speed using helper method
+                    resume_speed = self._get_resume_speed("drop", resume_from_cmd)
+                    self.logger.debug(f"[MID-RESUME DROP] Setting speed to {resume_speed}% for cmd index {resume_from_cmd}")
+                    await self._execute_command("SetJointVel", [resume_speed])
 
                 # Execute commands with tracking
                 for cmd_idx, (cmd_type, params, cmd_name) in enumerate(commands):
@@ -548,7 +630,7 @@ class MecaWaferSequences:
 
         for i in range(start, start + count):
             wafer_num = i + 1
-            self.logger.info(f"Processing wafer {wafer_num} from baking tray to carousel")
+            self.logger.debug(f"Processing wafer {wafer_num} from baking tray to carousel")
 
             if wafer_num % 11 == 1 and wafer_num >= 1:
                 await self._execute_command("Delay", [5])
@@ -642,7 +724,7 @@ class MecaWaferSequences:
 
         for i in range(start, start + count):
             wafer_num = i + 1
-            self.logger.info(f"Processing wafer {wafer_num} from carousel to baking tray")
+            self.logger.debug(f"Processing wafer {wafer_num} from carousel to baking tray")
 
             if wafer_num % 11 == 1:
                 await self._execute_command("Delay", [7.5])
@@ -755,10 +837,25 @@ class MecaWaferSequences:
 
         Supports true mid-resume: resumes from the exact command position within a wafer.
 
+        IMPORTANT: This method creates a NEW task to execute the sequence. It should NOT
+        be called if the original task is still running (waiting in pause loop). In that
+        case, simply resume the step flag and robot motion - the original task will continue.
+
         Returns:
             ServiceResult with resume status
         """
         try:
+            # Guard: Check if there's already a resume task running
+            if self._resume_task and not self._resume_task.done():
+                self.logger.info(
+                    f"Resume task already running for {self.robot_id}, skipping duplicate creation"
+                )
+                return ServiceResult.success_result({
+                    "resumed": False,
+                    "reason": "task_already_running",
+                    "message": "A resume task is already in progress"
+                })
+
             step_state = await self.state_manager.get_step_state(self.robot_id)
 
             if not step_state:
@@ -768,7 +865,7 @@ class MecaWaferSequences:
             operation_type = step_state.operation_type
             progress = step_state.progress_data or {}
 
-            self.logger.info(f"Resuming {operation_type} for {self.robot_id} from progress: {progress}")
+            self.logger.debug(f"Resuming {operation_type} for {self.robot_id} from progress: {progress}")
 
             # Extract resume parameters (wafer-level and command-level)
             start = progress.get("start", 0)
@@ -778,7 +875,7 @@ class MecaWaferSequences:
             last_command = progress.get("last_command", None)
             remaining_wafers = list(range(current_index, start + count))
 
-            self.logger.info(
+            self.logger.debug(
                 f"[MID-RESUME] Resume parameters: start={start}, count={count}, "
                 f"wafer_index={current_index}, cmd_index={current_cmd_index}, "
                 f"last_command={last_command}, remaining_wafers={remaining_wafers}"
@@ -786,7 +883,7 @@ class MecaWaferSequences:
 
             if operation_type == "pickup_sequence" and remaining_wafers:
                 self._resume_task = asyncio.create_task(
-                    self._resume_pickup_sequence(start, count, remaining_wafers)
+                    self._resume_pickup_sequence(start, count, remaining_wafers, current_cmd_index)
                 )
                 return ServiceResult.success_result({
                     "resumed": True,
@@ -800,7 +897,7 @@ class MecaWaferSequences:
 
             elif operation_type == "drop_sequence" and remaining_wafers:
                 self._resume_task = asyncio.create_task(
-                    self._resume_drop_sequence(start, count, remaining_wafers)
+                    self._resume_drop_sequence(start, count, remaining_wafers, current_cmd_index)
                 )
                 return ServiceResult.success_result({
                     "resumed": True,
@@ -822,28 +919,51 @@ class MecaWaferSequences:
             self.logger.error(f"Failed to resume operations: {e}")
             return ServiceResult.error_result(str(e))
 
-    async def _resume_pickup_sequence(self, start: int, count: int, remaining_wafers: List[int]) -> None:
-        """Resume pickup sequence from interrupted point."""
-        try:
-            self.logger.info(f"Resuming pickup sequence: remaining_wafers={remaining_wafers}")
+    async def _resume_pickup_sequence(self, start: int, count: int, remaining_wafers: List[int], resume_cmd_index: int = 0) -> None:
+        """Resume pickup sequence from interrupted point.
 
-            # Reset errors and clear motion queue before wait_idle
+        CRITICAL: After emergency stop, do NOT clear the motion queue.
+        Mecademic's PauseMotion preserves pending commands, and ResumeMotion
+        continues from the exact position. Calling clear_motion() destroys
+        this preserved queue, causing the robot to lose track of where it
+        was going - which can break wafers.
+
+        Args:
+            start: Original start wafer index
+            count: Total wafer count
+            remaining_wafers: List of wafer indices still to process
+            resume_cmd_index: Command index where we paused (for speed calculation)
+        """
+        try:
+            self.logger.debug(f"Resuming pickup sequence: remaining_wafers={remaining_wafers}, resume_cmd={resume_cmd_index}")
+
+            # Reset errors first
             try:
                 await self.async_wrapper.reset_error()
             except Exception as e:
                 self.logger.warning(f"Could not reset errors: {e}")
 
-            try:
-                await self.async_wrapper.clear_motion()
-            except Exception as e:
-                self.logger.warning(f"Could not clear motion: {e}")
+            # CRITICAL: Set the correct speed BEFORE resuming motion!
+            # The robot will resume pending commands at whatever speed is currently set.
+            # We must set the appropriate speed based on where in the sequence we paused.
+            resume_speed = self._get_resume_speed("pickup", resume_cmd_index)
+            self.logger.debug(f"[RESUME SPEED] Setting speed to {resume_speed}% before resuming motion (cmd_index={resume_cmd_index})")
+            await self._execute_command("SetJointVel", [resume_speed])
 
+            # DO NOT call clear_motion() here!
+            # clear_motion() destroys the preserved motion queue from PauseMotion,
+            # causing the robot to lose track of where it was supposed to go.
+            # The robot needs to complete its pending motion from the exact
+            # position where it stopped.
+
+            # Resume motion - robot continues from where it paused at the correct speed
             try:
                 await self.async_wrapper.resume_motion()
             except Exception as e:
                 self.logger.warning(f"Could not resume motion: {e}")
 
-            await self.async_wrapper.wait_idle(timeout=10.0)
+            # Wait for pending motion to complete before starting new commands
+            await self.async_wrapper.wait_idle(timeout=30.0)
 
             result = await self.execute_pickup_sequence(
                 start=start,
@@ -859,27 +979,51 @@ class MecaWaferSequences:
         finally:
             self._resume_task = None
 
-    async def _resume_drop_sequence(self, start: int, count: int, remaining_wafers: List[int]) -> None:
-        """Resume drop sequence from interrupted point."""
-        try:
-            self.logger.info(f"Resuming drop sequence: remaining_wafers={remaining_wafers}")
+    async def _resume_drop_sequence(self, start: int, count: int, remaining_wafers: List[int], resume_cmd_index: int = 0) -> None:
+        """Resume drop sequence from interrupted point.
 
+        CRITICAL: After emergency stop, do NOT clear the motion queue.
+        Mecademic's PauseMotion preserves pending commands, and ResumeMotion
+        continues from the exact position. Calling clear_motion() destroys
+        this preserved queue, causing the robot to lose track of where it
+        was going - which can break wafers.
+
+        Args:
+            start: Original start wafer index
+            count: Total wafer count
+            remaining_wafers: List of wafer indices still to process
+            resume_cmd_index: Command index where we paused (for speed calculation)
+        """
+        try:
+            self.logger.debug(f"Resuming drop sequence: remaining_wafers={remaining_wafers}, resume_cmd={resume_cmd_index}")
+
+            # Reset errors first
             try:
                 await self.async_wrapper.reset_error()
             except Exception as e:
                 self.logger.warning(f"Could not reset errors: {e}")
 
-            try:
-                await self.async_wrapper.clear_motion()
-            except Exception as e:
-                self.logger.warning(f"Could not clear motion: {e}")
+            # CRITICAL: Set the correct speed BEFORE resuming motion!
+            # The robot will resume pending commands at whatever speed is currently set.
+            # We must set the appropriate speed based on where in the sequence we paused.
+            resume_speed = self._get_resume_speed("drop", resume_cmd_index)
+            self.logger.debug(f"[RESUME SPEED] Setting speed to {resume_speed}% before resuming motion (cmd_index={resume_cmd_index})")
+            await self._execute_command("SetJointVel", [resume_speed])
 
+            # DO NOT call clear_motion() here!
+            # clear_motion() destroys the preserved motion queue from PauseMotion,
+            # causing the robot to lose track of where it was supposed to go.
+            # The robot needs to complete its pending motion from the exact
+            # position where it stopped.
+
+            # Resume motion - robot continues from where it paused at the correct speed
             try:
                 await self.async_wrapper.resume_motion()
             except Exception as e:
                 self.logger.warning(f"Could not resume motion: {e}")
 
-            await self.async_wrapper.wait_idle(timeout=10.0)
+            # Wait for pending motion to complete before starting new commands
+            await self.async_wrapper.wait_idle(timeout=30.0)
 
             result = await self.execute_drop_sequence(
                 start=start,

@@ -9,7 +9,6 @@ Handles all recovery-related operations including:
 """
 
 import asyncio
-import time
 from typing import Dict, Any, Optional
 
 from core.async_robot_wrapper import AsyncRobotWrapper
@@ -396,19 +395,11 @@ class MecaRecoveryOperations:
             except Exception as e:
                 self.logger.warning(f"Could not clear error state: {e}")
 
-        # Step 2: Resume motion if robot is paused
-        self.logger.info(f"Quick recovery Step 2: Resuming motion for {self.robot_id}")
-        try:
-            await self._resume_motion_safe(driver)
-        except Exception as e:
-            self.logger.warning(f"Resume motion warning: {e}")
-
-        # Step 2.5: Restore speed settings from config
-        self.logger.info(f"Quick recovery Step 2.5: Restoring speed settings for {self.robot_id}")
-        try:
-            await self._restore_speed_settings(driver)
-        except Exception as e:
-            self.logger.warning(f"Could not restore speed settings: {e}")
+        # NOTE: Do NOT call _resume_motion_safe() here!
+        # The motion will be resumed by _resume_pickup_sequence() or _resume_drop_sequence()
+        # AFTER setting the correct speed based on where in the sequence we paused.
+        # Calling resume_motion here would resume at the wrong speed.
+        self.logger.info(f"Quick recovery Step 2: Motion will be resumed by wafer sequence with correct speed")
 
         # Step 3: Get step state and update robot state
         step_state = await self.state_manager.get_step_state(self.robot_id)
@@ -426,40 +417,71 @@ class MecaRecoveryOperations:
                 reason="Exiting maintenance mode for recovery"
             )
 
+        # If in EMERGENCY_STOP, go through IDLE first (EMERGENCY_STOP -> BUSY not allowed)
+        if current_state == RobotState.EMERGENCY_STOP:
+            self.logger.info(f"Transitioning {self.robot_id} from EMERGENCY_STOP to IDLE first")
+            await self.state_manager.update_robot_state(
+                self.robot_id,
+                RobotState.IDLE,
+                reason="Exiting emergency stop for recovery"
+            )
+
         if step_state and step_state.paused:
             self.logger.info(
                 f"Quick recovery for {self.robot_id}: resuming step {step_state.step_index} "
                 f"({step_state.step_name})"
             )
-            # NOTE: Do NOT call resume_step() here! The paused flag must remain True
-            # until execute_pickup_sequence() reads it to determine is_resume.
-            # execute_pickup_sequence() calls resume_step() at line 170 after checking
-            # was_paused. Calling it here would clear the flag too early, causing
-            # is_resume=False and the sequence to restart from the beginning instead
-            # of resuming from the exact command where it was paused.
 
+            # FIX: Do NOT call orchestrator.resume_all_operations() here!
+            # The original task (execute_pickup_sequence) is still running - it's waiting
+            # in a while loop at wafer_sequences.py:291. Calling resume_all_operations()
+            # creates a SECOND task via asyncio.create_task() in resume_operations(),
+            # causing a race condition where both tasks try to complete the same wafers.
+            #
+            # Instead, we:
+            # 1. Resume the step flag directly - this lets the original task exit its pause loop
+            # 2. Resume robot motion - robot continues its queued commands
+            # 3. The original task will continue on its own - no duplicate task needed
+
+            # Step 4a: Resume step flag so original task can exit its pause loop
+            self.logger.info(f"Quick recovery Step 4a: Resuming step flag for {self.robot_id}")
+            await self.state_manager.resume_step(self.robot_id)
+            self.logger.info(f"Resumed step {step_state.step_index} for robot {self.robot_id}")
+
+            # Step 4b: Resume robot motion (robot continues queued commands)
+            # The speed is already set by the original task which is still running
+            driver = self.async_wrapper.robot_driver
+            if hasattr(driver, '_robot') and driver._robot and hasattr(driver._robot, 'ResumeMotion'):
+                self.logger.info(f"Quick recovery Step 4b: Resuming robot motion for {self.robot_id}")
+                try:
+                    loop = asyncio.get_event_loop()
+                    await loop.run_in_executor(driver._executor, driver._robot.ResumeMotion)
+                    self.logger.info(f"ResumeMotion() executed for robot {self.robot_id}")
+                except Exception as motion_error:
+                    self.logger.warning(f"Could not resume motion: {motion_error}")
+
+            # Step 4c: Update state to BUSY
             await self.state_manager.update_robot_state(
                 self.robot_id,
                 RobotState.BUSY,
                 reason="Quick recovery - resuming workflow"
             )
 
-            # Step 4: Signal orchestrator to resume
-            self.logger.info(f"Quick recovery Step 4: Signaling orchestrator to resume")
-            try:
-                from dependencies import get_orchestrator
-                orchestrator = await get_orchestrator()
-                await orchestrator.resume_all_operations()
-                self.logger.info(f"Orchestrator resumed for {self.robot_id}")
+            # Step 4d: Broadcast workflow resumed
+            if self.broadcaster_callback:
+                await self.broadcaster_callback("workflow_resumed", {
+                    "robot_id": self.robot_id,
+                    "step_index": step_state.step_index,
+                    "resumed_from": "quick_recovery"
+                })
 
-                if self.broadcaster_callback:
-                    await self.broadcaster_callback("workflow_resumed", {
-                        "robot_id": self.robot_id,
-                        "step_index": step_state.step_index,
-                        "resumed_from": "quick_recovery"
-                    })
-            except Exception as resume_error:
-                self.logger.warning(f"Failed to resume orchestrator: {resume_error}")
+            # NOTE: We do NOT call orchestrator.resume_all_operations()!
+            # The original task will continue on its own now that:
+            # - The pause flag is cleared (resume_step)
+            # - The robot motion is resumed (ResumeMotion)
+            self.logger.info(
+                f"Quick recovery complete for {self.robot_id} - original task will continue"
+            )
 
             return {
                 "robot_id": self.robot_id,

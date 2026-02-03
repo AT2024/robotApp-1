@@ -142,6 +142,150 @@ async def list_active_commands(
 
 
 # -----------------------------------------------------------------------------
+# Wafer Status Endpoints
+# -----------------------------------------------------------------------------
+
+
+@router.get("/wafer/current")
+async def get_current_wafer():
+    """Get the currently processing wafer information."""
+    try:
+        from database.db_config import SessionLocal
+        from database.repositories import WaferRepository
+
+        db = SessionLocal()
+        try:
+            # Get currently processing wafer (status='picked')
+            current_wafer = WaferRepository.get_current_processing(db)
+
+            if current_wafer:
+                # Calculate cycle info
+                wafer_pos = current_wafer.wafer_pos
+                cycle_number = ((wafer_pos - 1) // 5) + 1
+                wafer_in_cycle = ((wafer_pos - 1) % 5) + 1
+                cycle_start = ((cycle_number - 1) * 5) + 1
+
+                return ResponseHelper.create_success_response(data={
+                    "wafer_id": current_wafer.id,
+                    "wafer_pos": wafer_pos,
+                    "status": current_wafer.status,
+                    "cycle_number": cycle_number,
+                    "wafer_in_cycle": wafer_in_cycle,
+                    "cycle_start": cycle_start,
+                    "cycle_end": cycle_start + 4,
+                    "updated_at": current_wafer.updated_at.isoformat() if current_wafer.updated_at else None
+                })
+            else:
+                # No wafer currently processing
+                return ResponseHelper.create_success_response(data={
+                    "wafer_id": None,
+                    "wafer_pos": None,
+                    "status": "idle",
+                    "message": "No wafer currently being processed"
+                })
+        finally:
+            db.close()
+    except Exception as e:
+        logger.error(f"Error getting current wafer: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/wafer/status/{wafer_num}")
+async def get_wafer_status(wafer_num: int):
+    """Get status of a specific wafer by position number (1-55)."""
+    if wafer_num < 1 or wafer_num > 55:
+        raise HTTPException(status_code=400, detail="Wafer number must be between 1 and 55")
+
+    try:
+        from database.db_config import SessionLocal
+        from database.repositories import WaferRepository
+
+        db = SessionLocal()
+        try:
+            wafer = WaferRepository.get_by_position(db, wafer_num)
+
+            if wafer:
+                cycle_number = ((wafer_num - 1) // 5) + 1
+                wafer_in_cycle = ((wafer_num - 1) % 5) + 1
+
+                return ResponseHelper.create_success_response(data={
+                    "wafer_id": wafer.id,
+                    "wafer_pos": wafer.wafer_pos,
+                    "status": wafer.status,
+                    "cycle_number": cycle_number,
+                    "wafer_in_cycle": wafer_in_cycle,
+                    "created_at": wafer.created_at.isoformat() if wafer.created_at else None,
+                    "updated_at": wafer.updated_at.isoformat() if wafer.updated_at else None
+                })
+            else:
+                # Wafer not yet in database
+                cycle_number = ((wafer_num - 1) // 5) + 1
+                wafer_in_cycle = ((wafer_num - 1) % 5) + 1
+
+                return ResponseHelper.create_success_response(data={
+                    "wafer_id": None,
+                    "wafer_pos": wafer_num,
+                    "status": "not_started",
+                    "cycle_number": cycle_number,
+                    "wafer_in_cycle": wafer_in_cycle,
+                    "message": "Wafer has not been processed yet"
+                })
+        finally:
+            db.close()
+    except Exception as e:
+        logger.error(f"Error getting wafer status: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/wafer/batch-status")
+async def get_batch_status():
+    """Get status of all wafers for batch progress tracking."""
+    try:
+        from database.db_config import SessionLocal
+        from database.repositories import WaferRepository
+
+        db = SessionLocal()
+        try:
+            all_wafers = WaferRepository.get_all(db, limit=55)
+
+            # Build status summary
+            status_counts = {"created": 0, "picked": 0, "dropped": 0, "completed": 0, "failed": 0, "not_started": 0}
+            wafer_statuses = []
+
+            # Create a map of existing wafers
+            existing_wafers = {w.wafer_pos: w for w in all_wafers}
+
+            for pos in range(1, 56):
+                if pos in existing_wafers:
+                    wafer = existing_wafers[pos]
+                    status_counts[wafer.status] = status_counts.get(wafer.status, 0) + 1
+                    wafer_statuses.append({
+                        "wafer_pos": pos,
+                        "status": wafer.status,
+                        "cycle": ((pos - 1) // 5) + 1
+                    })
+                else:
+                    status_counts["not_started"] += 1
+                    wafer_statuses.append({
+                        "wafer_pos": pos,
+                        "status": "not_started",
+                        "cycle": ((pos - 1) // 5) + 1
+                    })
+
+            return ResponseHelper.create_success_response(data={
+                "total_wafers": 55,
+                "status_counts": status_counts,
+                "wafers": wafer_statuses,
+                "progress_percent": round((status_counts.get("completed", 0) / 55) * 100, 1)
+            })
+        finally:
+            db.close()
+    except Exception as e:
+        logger.error(f"Error getting batch status: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# -----------------------------------------------------------------------------
 # Sequence Operation Endpoints
 # -----------------------------------------------------------------------------
 
@@ -172,8 +316,6 @@ async def create_pickup(
     """Execute pickup sequence for wafers."""
     start = data.get("start", 0)
     count = data.get("count", 5)
-    if not meca_service:
-        raise HTTPException(status_code=503, detail="MecaService not available")
     return await _execute_sequence(
         meca_service, meca_service.execute_pickup_sequence, "Pickup sequence", start, count
     )

@@ -3,7 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import traceback
 import asyncio
-from datetime import datetime
+import os
+from datetime import datetime, time as dt_time, timedelta
 from utils.logger import get_logger, cleanup_old_logs
 from dependencies import (
     startup_dependencies,
@@ -13,11 +14,77 @@ from dependencies import (
 )
 from websocket.connection_manager import ConnectionManager
 from websocket.websocket_handlers import get_websocket_handler, set_websocket_handler_singleton
-from routers import meca, ot2, arduino, config
+from routers import meca, ot2, arduino, config, logs
 from core.settings import get_settings
+from database.init_db import init_db
 
 logger = get_logger("main")
 app = FastAPI()
+
+# Background task reference for cleanup scheduler
+_cleanup_task: asyncio.Task = None
+
+
+async def scheduled_processlog_cleanup():
+    """
+    Background task that runs ProcessLog cleanup daily at 3 AM.
+
+    Uses environment variables for configuration:
+    - ROBOTICS_PROCESSLOG_RETENTION_DAYS: Days to keep logs (default 90)
+    - ROBOTICS_PROCESSLOG_MAX_COUNT: Maximum records to keep (default 100000)
+    - ROBOTICS_PROCESSLOG_ARCHIVE_DIR: Archive directory (default logs/archive/)
+    """
+    from database.database import get_db
+    from database.repositories import ProcessLogRepository
+
+    retention_days = int(os.getenv('ROBOTICS_PROCESSLOG_RETENTION_DAYS', '90'))
+    max_count = int(os.getenv('ROBOTICS_PROCESSLOG_MAX_COUNT', '100000'))
+    archive_dir = os.getenv('ROBOTICS_PROCESSLOG_ARCHIVE_DIR', 'logs/archive/')
+
+    logger.info(
+        f"ProcessLog cleanup scheduler started: retention={retention_days}d, "
+        f"max_count={max_count}, archive_dir={archive_dir}"
+    )
+
+    while True:
+        try:
+            # Calculate seconds until 3 AM
+            now = datetime.now()
+            target_time = datetime.combine(now.date(), dt_time(3, 0))
+            if now >= target_time:
+                # Already past 3 AM today, schedule for tomorrow
+                target_time = datetime.combine(
+                    now.date() + timedelta(days=1),
+                    dt_time(3, 0)
+                )
+            seconds_until_cleanup = (target_time - now).total_seconds()
+
+            logger.debug(f"Next ProcessLog cleanup scheduled in {seconds_until_cleanup/3600:.1f} hours")
+            await asyncio.sleep(seconds_until_cleanup)
+
+            # Run cleanup
+            logger.info("Starting scheduled ProcessLog cleanup")
+            try:
+                db = next(get_db())
+                result = ProcessLogRepository.cleanup_old_logs(
+                    db,
+                    retention_days=retention_days,
+                    max_count=max_count,
+                    archive_dir=archive_dir
+                )
+                logger.info(f"ProcessLog cleanup completed: {result}")
+            except Exception as cleanup_error:
+                logger.error(f"ProcessLog cleanup failed: {cleanup_error}")
+            finally:
+                db.close()
+
+        except asyncio.CancelledError:
+            logger.info("ProcessLog cleanup scheduler cancelled")
+            break
+        except Exception as e:
+            logger.error(f"Error in ProcessLog cleanup scheduler: {e}")
+            # Wait 1 hour before retrying on error
+            await asyncio.sleep(3600)
 
 # CORS configuration from centralized settings
 settings = get_settings()
@@ -68,6 +135,7 @@ app.include_router(meca.router, prefix="/api/meca", tags=["Mecademic Robot"])
 app.include_router(ot2.router, prefix="/api/ot2", tags=["OT2 Robot"])
 app.include_router(arduino.router, prefix="/api/arduino", tags=["Arduino System"])
 app.include_router(config.router, prefix="/api", tags=["Configuration"])
+app.include_router(logs.router, prefix="/api/logs", tags=["Logs"])
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -176,7 +244,15 @@ async def startup_event():
         removed_count = cleanup_old_logs()
         if removed_count > 0:
             logger.info(f"Cleaned up {removed_count} old log file(s)")
-        
+
+        # Initialize database tables (creates tables if they don't exist)
+        try:
+            init_db()
+            logger.info("Database tables initialized successfully")
+        except Exception as db_error:
+            logger.warning(f"Database initialization skipped: {db_error}")
+            # Continue startup - database may not be available in all environments
+
         # Initialize dependencies (this will start all services)
         await startup_dependencies()
         
@@ -188,7 +264,12 @@ async def startup_event():
         health_info = await check_dependencies_health()
         if not health_info.get("healthy", False):
             logger.warning(f"Some components are not healthy: {health_info}")
-        
+
+        # Start ProcessLog cleanup scheduler
+        global _cleanup_task
+        _cleanup_task = asyncio.create_task(scheduled_processlog_cleanup())
+        logger.info("ProcessLog cleanup scheduler started")
+
         logger.info("Application startup completed successfully")
     except Exception as e:
         logger.error(f"Critical error during startup: {e}")
@@ -203,7 +284,17 @@ async def shutdown_event():
     """
     try:
         logger.info("Starting application shutdown...")
-        
+
+        # Cancel ProcessLog cleanup scheduler
+        global _cleanup_task
+        if _cleanup_task and not _cleanup_task.done():
+            _cleanup_task.cancel()
+            try:
+                await _cleanup_task
+            except asyncio.CancelledError:
+                pass
+            logger.info("ProcessLog cleanup scheduler stopped")
+
         # Close all WebSocket connections
         if hasattr(app.state, 'websocket_handler'):
             for websocket in app.state.websocket_handler.active_connections:
@@ -211,7 +302,7 @@ async def shutdown_event():
                     await websocket.close()
                 except Exception as e:
                     logger.error(f"Error closing websocket during shutdown: {e}")
-        
+
         # Shutdown all dependencies and services
         await shutdown_dependencies()
         

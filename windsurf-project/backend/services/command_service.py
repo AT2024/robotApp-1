@@ -430,9 +430,17 @@ class RobotCommandService(BaseService):
 
             self.logger.info(f"Command {command.command_id} completed successfully")
 
-            await self.state_manager.update_robot_state(
-                command.robot_id, RobotState.IDLE, reason="Command completed"
-            )
+            # Don't auto-reset to IDLE if robot is in EMERGENCY_STOP state
+            # Emergency stop should only be cleared by explicit reset command
+            post_command_state = await self.state_manager.get_robot_state(command.robot_id)
+            if post_command_state and post_command_state.current_state == RobotState.EMERGENCY_STOP:
+                self.logger.info(
+                    f"Preserving EMERGENCY_STOP state for {command.robot_id} - requires explicit reset"
+                )
+            else:
+                await self.state_manager.update_robot_state(
+                    command.robot_id, RobotState.IDLE, reason="Command completed"
+                )
             
         except asyncio.TimeoutError:
             command.status = "timeout"

@@ -9,6 +9,8 @@
 | Docker build fails | Use `--no-cache` flag, check Alpine vs Debian packages, verify memory allocation |
 | State desync | ResourceLockManager in use, AtomicStateManager for state changes |
 | "invalid high surrogate" error | Plan contains Unicode; use `/text-cleaner` to fix, follow `unicode-safety.md` rules |
+| Bash command fails on Windows | Use Unix paths `/c/Users/...` not `C:\Users\...` in Git Bash/WSL |
+| E-stop timeout during recovery | Check `asyncio.wait_for()` timeout >= 3s; robot needs time to clear E-stop state |
 
 ## Tool Selection
 

@@ -49,4 +49,7 @@ Log files are stored in `windsurf-project/backend/logs/`:
 
 **Environment Variables:**
 - `ROBOTICS_LOG_LEVEL`: DEBUG, INFO, WARNING, ERROR, CRITICAL (default: INFO)
+- `ROBOTICS_LOG_FORMAT`: text or json (default: text)
 - `ROBOTICS_TIMEZONE`: Timezone for log timestamps (default: Asia/Jerusalem)
+
+**See also:** `.claude/rules/backend/logging.md` for detailed logging patterns, correlation IDs, and usage examples.

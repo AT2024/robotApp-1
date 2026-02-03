@@ -5,7 +5,6 @@ Provides async wrapper for mecademicpy.Robot with proper error handling and conn
 
 import asyncio
 import time
-import logging
 from typing import Dict, Any, Optional
 from concurrent.futures import ThreadPoolExecutor
 import mecademicpy
@@ -118,15 +117,15 @@ class MecademicDriver(BaseRobotDriver):
         """Implementation-specific connection logic"""
         try:
             self.debug_log("_connect_impl", "entry", "Starting MecademicDriver connection process")
-            self.logger.info(f"[CONNECTING] Starting MecademicDriver connection process for {self.robot_id}")
+            self.logger.debug(f"[CONNECTING] Starting MecademicDriver connection process for {self.robot_id}")
             
             # Create robot instance
             self.debug_log("_connect_impl", "create_instance", "Creating mecademicpy Robot() instance")
-            self.logger.info(f"[INIT] Creating mecademicpy Robot() instance for {self.robot_id}")
+            self.logger.debug(f"[INIT] Creating mecademicpy Robot() instance for {self.robot_id}")
             try:
                 self._robot = MecademicRobot()
                 self.debug_log("_connect_impl", "instance_success", "mecademicpy instance created successfully")
-                self.logger.info(f"[OK] mecademicpy Robot() instance created successfully for {self.robot_id}")
+                self.logger.debug(f"[OK] mecademicpy Robot() instance created successfully for {self.robot_id}")
             except Exception as robot_create_error:
                 self.debug_log("_connect_impl", "instance_failure", f"Robot instance creation failed", 
                               {"error": str(robot_create_error)})
@@ -136,7 +135,7 @@ class MecademicDriver(BaseRobotDriver):
             
             # Connect in thread pool to avoid blocking
             self.debug_log("_connect_impl", "thread_pool", "Submitting connection to thread pool executor")
-            self.logger.info(f"[EXEC] Executing connection in thread pool (timeout={self.timeout}s) for {self.robot_id}")
+            self.logger.debug(f"[EXEC] Executing connection in thread pool (timeout={self.timeout}s) for {self.robot_id}")
             loop = asyncio.get_event_loop()
             
             try:
@@ -160,18 +159,18 @@ class MecademicDriver(BaseRobotDriver):
             
             if connect_success:
                 self.debug_log("_connect_impl", "tcp_success", "mecademicpy Robot.Connect() succeeded")
-                self.logger.info(f"[SUCCESS] mecademicpy Robot.Connect() succeeded for {self.robot_id}")
+                self.logger.debug(f"[SUCCESS] mecademicpy Robot.Connect() succeeded for {self.robot_id}")
                 
                 # Activate robot before setting parameters
                 self.debug_log("_connect_impl", "stabilization", "Waiting for connection stabilization")
-                self.logger.info(f"[WAITING] Waiting 1s for connection stabilization before activation for {self.robot_id}")
+                self.logger.debug(f"[WAITING] Waiting 1s for connection stabilization before activation for {self.robot_id}")
                 await asyncio.sleep(1.0)  # Give connection more time to stabilize
                 
                 try:
                     self.debug_log("_connect_impl", "activation_start", "Starting robot activation sequence")
                     await self._activate_robot_after_connect()
                     self.debug_log("_connect_impl", "activation_success", "Robot activation completed successfully")
-                    self.logger.info(f"[OK] Robot activation completed for {self.robot_id}")
+                    self.logger.debug(f"[OK] Robot activation completed for {self.robot_id}")
                 except Exception as activation_error:
                     self.debug_log("_connect_impl", "activation_failure", 
                                   f"Robot activation failed", {"error": str(activation_error)})
@@ -181,7 +180,7 @@ class MecademicDriver(BaseRobotDriver):
                 # Set initial parameters
                 try:
                     await self._set_initial_parameters()
-                    self.logger.info(f"[OK] Initial parameters set for {self.robot_id}")
+                    self.logger.debug(f"[OK] Initial parameters set for {self.robot_id}")
                 except Exception as params_error:
                     self.logger.warning(f"[WARNING] Failed to set initial parameters for {self.robot_id}: {params_error}")
                     self.logger.warning(f"[TIP] Connection successful but parameters may need manual configuration")
@@ -211,7 +210,7 @@ class MecademicDriver(BaseRobotDriver):
     def _connect_sync(self) -> bool:
         """Synchronous connection implementation"""
         try:
-            self.logger.info(f"[CONNECTING] Starting mecademicpy Robot.Connect() to {self.ip_address}:{self.port} for {self.robot_id}")
+            self.logger.debug(f"[CONNECTING] Starting mecademicpy Robot.Connect() to {self.ip_address}:{self.port} for {self.robot_id}")
             
             # Verify robot instance exists
             if not self._robot:
@@ -222,33 +221,24 @@ class MecademicDriver(BaseRobotDriver):
             try:
                 import mecademicpy
                 version = getattr(mecademicpy, '__version__', 'unknown')
-                self.logger.info(f"[INIT] Using mecademicpy version: {version} for {self.robot_id}")
+                self.logger.debug(f"[INIT] Using mecademicpy version: {version} for {self.robot_id}")
             except Exception:
                 self.logger.warning(f"[WARNING] Could not determine mecademicpy version for {self.robot_id}")
             
             # Log connection parameters for debugging
-            self.logger.info(f"[EXEC] Connection parameters for {self.robot_id}:")
-            self.logger.info(f"   - IP Address: {self.ip_address}")
-            self.logger.info(f"   - Port: {self.port} (mecademicpy uses fixed port 10000)")
-            self.logger.info(f"   - Timeout: {self.timeout}s")
-            self.logger.info(f"   - Force: {self.force}")
-            self.logger.info(f"   - Speed: {self.speed}")
-            self.logger.info(f"   - Acceleration: {self.acceleration}")
+            self.logger.debug(f"[EXEC] Connection parameters for {self.robot_id}: IP={self.ip_address}, port={self.port}, timeout={self.timeout}s")
+            self.logger.debug(f"   - Force: {self.force}, Speed: {self.speed}, Acceleration: {self.acceleration}")
             
             # Disable auto-disconnect on exception to prevent premature disconnection
             if hasattr(self._robot, 'SetDisconnectOnException'):
                 self._robot.SetDisconnectOnException(False)
-                self.logger.info(f"[EXEC] Disabled auto-disconnect on exception for {self.robot_id}")
+                self.logger.debug(f"[EXEC] Disabled auto-disconnect on exception for {self.robot_id}")
             else:
                 self.logger.warning(f"[WARNING] Robot {self.robot_id} does not support SetDisconnectOnException")
             
-            # Connect to robot with detailed logging  
+            # Connect to robot with detailed logging
             # Note: mecademicpy Connect() only takes address parameter, not port (port is fixed at 10000)
-            self.logger.info(f"[STARTING] Calling mecademicpy Robot.Connect() with parameters for {self.robot_id}:")
-            self.logger.info(f"   - address='{self.ip_address}'")
-            self.logger.info(f"   - enable_synchronous_mode=False")
-            self.logger.info(f"   - disconnect_on_exception=False")
-            self.logger.info(f"   - timeout={self.timeout}")
+            self.logger.debug(f"[STARTING] Calling Robot.Connect(address='{self.ip_address}', timeout={self.timeout}) for {self.robot_id}")
             
             start_time = time.time()
             
@@ -264,8 +254,8 @@ class MecademicDriver(BaseRobotDriver):
                 try:
                     mode_name = mode_config["mode_name"]
                     enable_sync = mode_config["enable_synchronous_mode"]
-                    
-                    self.logger.info(f"[CONNECTING] Attempting connection in {mode_name} mode for {self.robot_id}")
+
+                    self.logger.debug(f"[CONNECTING] Attempting connection in {mode_name} mode for {self.robot_id}")
                     
                     self._robot.Connect(
                         address=self.ip_address,
@@ -274,7 +264,7 @@ class MecademicDriver(BaseRobotDriver):
                         timeout=self.timeout
                     )
                     
-                    self.logger.info(f"[OK] Connection successful in {mode_name} mode for {self.robot_id}")
+                    self.logger.debug(f"[OK] Connection successful in {mode_name} mode for {self.robot_id}")
                     connection_succeeded = True
                     break
                     
@@ -317,27 +307,27 @@ class MecademicDriver(BaseRobotDriver):
                 return False
             
             connect_duration = time.time() - start_time
-            self.logger.info(f"[TIMEOUT] mecademicpy Robot.Connect() completed in {connect_duration:.2f}s for {self.robot_id}")
-            
+            self.logger.debug(f"[TIMING] Robot.Connect() completed in {connect_duration:.2f}s for {self.robot_id}")
+
             # Wait for connection to be established
-            self.logger.info(f"[WAITING] Waiting 0.5s for connection stabilization for {self.robot_id}")
+            self.logger.debug(f"[WAITING] Waiting 0.5s for connection stabilization for {self.robot_id}")
             time.sleep(0.5)
             
             # Check if connected
             if hasattr(self._robot, 'IsConnected'):
                 try:
                     is_connected = self._robot.IsConnected()
-                    self.logger.info(f"[DEBUG] mecademicpy Robot.IsConnected() returned: {is_connected} for {self.robot_id}")
+                    self.logger.debug(f"[CHECK] Robot.IsConnected() returned: {is_connected} for {self.robot_id}")
                     
                     if is_connected:
-                        self.logger.info(f"[OK] Successfully connected to Mecademic robot {self.robot_id}")
-                        
+                        self.logger.debug(f"[OK] Successfully connected to Mecademic robot {self.robot_id}")
+
                         # Additional connection validation
                         try:
                             # Try to get robot status to validate connection
                             if hasattr(self._robot, 'GetStatusRobot'):
                                 status = self._robot.GetStatusRobot()
-                                self.logger.info(f"[OK] Robot status check successful for {self.robot_id}: {status}")
+                                self.logger.debug(f"[OK] Robot status check successful for {self.robot_id}: {status}")
                             else:
                                 self.logger.warning(f"[WARNING] GetStatusRobot not available for validation on {self.robot_id}")
                         except Exception as status_e:
@@ -354,7 +344,7 @@ class MecademicDriver(BaseRobotDriver):
             else:
                 self.logger.warning(f"[WARNING] mecademicpy Robot instance lacks IsConnected() method for {self.robot_id}")
                 # Assume connection succeeded if no exception was thrown
-                self.logger.info(f"[OK] Assuming successful connection to Mecademic robot {self.robot_id} (no IsConnected method)")
+                self.logger.debug(f"[OK] Assuming successful connection to Mecademic robot {self.robot_id} (no IsConnected method)")
                 return True
                 
         except Exception as e:
@@ -379,13 +369,13 @@ class MecademicDriver(BaseRobotDriver):
     def _activate_robot_sync_internal(self):
         """Internal activation and homing for connection process (per mecademicpy best practices)"""
         try:
-            self.logger.info(f"[EXEC] Starting robot activation sequence for {self.robot_id}")
+            self.logger.debug(f"[EXEC] Starting robot activation sequence for {self.robot_id}")
             
             # Check robot status before activation
             try:
                 if hasattr(self._robot, 'GetStatusRobot'):
                     status = self._robot.GetStatusRobot()
-                    self.logger.info(f"[STATUS] Robot status before activation for {self.robot_id}: {status}")
+                    self.logger.debug(f"[STATUS] Robot status before activation for {self.robot_id}: {status}")
                     
                     # Check if robot is in error state
                     if hasattr(status, 'error_status') and status.error_status:
@@ -393,19 +383,19 @@ class MecademicDriver(BaseRobotDriver):
                         # Try to reset errors if possible
                         if hasattr(self._robot, 'ResetError'):
                             self._robot.ResetError()
-                            self.logger.info(f"[OK] Error reset attempted for {self.robot_id}")
+                            self.logger.debug(f"[OK] Error reset attempted for {self.robot_id}")
             except Exception as status_e:
                 self.logger.warning(f"[WARNING] Could not check robot status before activation for {self.robot_id}: {status_e}")
             
             # Step 1: Activate Robot
             if hasattr(self._robot, 'ActivateRobot'):
-                self.logger.info(f"[ACTIVATING] Activating robot {self.robot_id}...")
+                self.logger.debug(f"[ACTIVATING] Activating robot {self.robot_id}...")
                 try:
                     self._robot.ActivateRobot()
-                    self.logger.info(f"[OK] Robot {self.robot_id} activation command sent")
-                    
+                    self.logger.debug(f"[OK] Robot {self.robot_id} activation command sent")
+
                     # Wait for activation to complete
-                    self.logger.info(f"[WAITING] Waiting 2s for activation to complete for {self.robot_id}")
+                    self.logger.debug(f"[WAITING] Waiting 2s for activation to complete for {self.robot_id}")
                     time.sleep(2.0)
                     
                     # Verify activation if possible
@@ -413,7 +403,7 @@ class MecademicDriver(BaseRobotDriver):
                         try:
                             status = self._robot.GetStatusRobot()
                             if hasattr(status, 'activation_status'):
-                                self.logger.info(f"[STATUS] Robot {self.robot_id} activation status: {status.activation_status}")
+                                self.logger.debug(f"[STATUS] Robot {self.robot_id} activation status: {status.activation_status}")
                         except Exception:
                             pass
                 except Exception as activate_e:
@@ -424,24 +414,24 @@ class MecademicDriver(BaseRobotDriver):
             
             # Step 2: Home Robot (required before movements per mecademicpy docs)
             if hasattr(self._robot, 'Home'):
-                self.logger.info(f"[HOMING] Homing robot {self.robot_id}...")
+                self.logger.debug(f"[HOMING] Homing robot {self.robot_id}...")
                 try:
                     self._robot.Home()
-                    self.logger.info(f"[OK] Robot {self.robot_id} homing command sent")
-                    
+                    self.logger.debug(f"[OK] Robot {self.robot_id} homing command sent")
+
                     # Wait for homing or use WaitHomed if available
                     if hasattr(self._robot, 'WaitHomed'):
-                        self.logger.info(f"[WAITING] Waiting for robot {self.robot_id} to complete homing...")
+                        self.logger.debug(f"[WAITING] Waiting for robot {self.robot_id} to complete homing...")
                         try:
                             self._robot.WaitHomed(timeout=30.0)  # 30 second timeout for homing
-                            self.logger.info(f"[OK] Robot {self.robot_id} homing completed")
+                            self.logger.debug(f"[OK] Robot {self.robot_id} homing completed")
                         except Exception as wait_e:
                             self.logger.warning(f"[WARNING] WaitHomed timeout/error for {self.robot_id}: {wait_e}")
-                            self.logger.info(f"[WAITING] Fallback: waiting 5s for homing to complete")
+                            self.logger.debug(f"[WAITING] Fallback: waiting 5s for homing to complete")
                             time.sleep(5.0)
                     else:
                         # Fallback: wait a reasonable time for homing
-                        self.logger.info(f"[WAITING] Waiting 5s for robot {self.robot_id} homing (no WaitHomed method)")
+                        self.logger.debug(f"[WAITING] Waiting 5s for robot {self.robot_id} homing (no WaitHomed method)")
                         time.sleep(5.0)
                         
                     # Verify homing if possible
@@ -449,7 +439,7 @@ class MecademicDriver(BaseRobotDriver):
                         try:
                             status = self._robot.GetStatusRobot()
                             if hasattr(status, 'homing_status'):
-                                self.logger.info(f"[STATUS] Robot {self.robot_id} homing status: {status.homing_status}")
+                                self.logger.debug(f"[STATUS] Robot {self.robot_id} homing status: {status.homing_status}")
                         except Exception:
                             pass
                 except Exception as home_e:
@@ -467,10 +457,10 @@ class MecademicDriver(BaseRobotDriver):
                     paused = getattr(status, 'pause_motion_status', False)
 
                     if paused:
-                        self.logger.info(f"[EXEC] Robot {self.robot_id} is paused (pause_motion_status: True) - calling ResumeMotion()...")
+                        self.logger.debug(f"[EXEC] Robot {self.robot_id} is paused (pause_motion_status: True) - calling ResumeMotion()...")
                         if hasattr(self._robot, 'ResumeMotion'):
                             self._robot.ResumeMotion()
-                            self.logger.info(f"[OK] ResumeMotion() completed for {self.robot_id}")
+                            self.logger.debug(f"[OK] ResumeMotion() completed for {self.robot_id}")
 
                             # Wait briefly and verify motion resumed
                             time.sleep(1.0)
@@ -480,16 +470,16 @@ class MecademicDriver(BaseRobotDriver):
                             if verify_paused:
                                 self.logger.warning(f"[WARNING] Motion still paused after ResumeMotion() for {self.robot_id}")
                             else:
-                                self.logger.info(f"[OK] Motion resume verified (pause_motion_status: False) for {self.robot_id}")
+                                self.logger.debug(f"[OK] Motion resume verified (pause_motion_status: False) for {self.robot_id}")
                         else:
                             self.logger.warning(f"[WARNING] ResumeMotion() not available for {self.robot_id}")
                     else:
-                        self.logger.info(f"[OK] Robot {self.robot_id} not paused (pause_motion_status: False)")
+                        self.logger.debug(f"[OK] Robot {self.robot_id} not paused (pause_motion_status: False)")
             except Exception as resume_e:
                 self.logger.warning(f"[WARNING] Error checking/resuming motion for {self.robot_id}: {resume_e}")
                 # Don't raise - allow activation to proceed
 
-            self.logger.info(f"[SUCCESS] Robot activation sequence completed for {self.robot_id}")
+            self.logger.debug(f"[SUCCESS] Robot activation sequence completed for {self.robot_id}")
 
         except Exception as e:
             self.logger.error(f"[ERROR] Error in robot activation sequence for {self.robot_id}: {e}")
@@ -527,7 +517,7 @@ class MecademicDriver(BaseRobotDriver):
             if hasattr(self._robot, 'SetForce') and self.force > 0:
                 self._robot.SetForce(self.force)
             
-            self.logger.info(f"Set initial parameters for {self.robot_id}")
+            self.logger.debug(f"Set initial parameters for {self.robot_id}")
             
         except Exception as e:
             self.logger.error(f"Error setting parameters for {self.robot_id}: {e}")
@@ -555,7 +545,7 @@ class MecademicDriver(BaseRobotDriver):
                         if still_connected:
                             self.logger.warning(f"Robot {self.robot_id} still connected after Disconnect(), TCP may not be fully released")
                         else:
-                            self.logger.info(f"Robot {self.robot_id} IsConnected() confirmed False - TCP released")
+                            self.logger.debug(f"Robot {self.robot_id} IsConnected() confirmed False - TCP released")
                     except Exception as e:
                         # IsConnected may fail after disconnect, which is fine
                         self.logger.debug(f"IsConnected check after disconnect: {e}")
@@ -580,7 +570,7 @@ class MecademicDriver(BaseRobotDriver):
         try:
             if self._robot and hasattr(self._robot, 'Disconnect'):
                 self._robot.Disconnect()
-                self.logger.info(f"Disconnect() called for Mecademic robot {self.robot_id}")
+                self.logger.debug(f"Disconnect() called for Mecademic robot {self.robot_id}")
         except Exception as e:
             self.logger.error(f"Error disconnecting from {self.robot_id}: {e}")
 
@@ -610,13 +600,13 @@ class MecademicDriver(BaseRobotDriver):
             True if reconnection successful, False otherwise
         """
         try:
-            self.logger.info(f"Force reconnect initiated for {self.robot_id}")
+            self.logger.debug(f"Force reconnect initiated for {self.robot_id}")
 
             # Step 0: Try to reset error state first (needed after software E-stop)
             if self._robot:
                 try:
                     if hasattr(self._robot, 'ResetError'):
-                        self.logger.info(f"Resetting error state for {self.robot_id}")
+                        self.logger.debug(f"Resetting error state for {self.robot_id}")
                         self._robot.ResetError()
                         await asyncio.sleep(0.5)  # Brief pause for robot to process
                 except Exception as reset_err:
@@ -627,7 +617,7 @@ class MecademicDriver(BaseRobotDriver):
                 try:
                     # Deactivate BEFORE disconnect to release occupation lock (fixes Error 3001)
                     if hasattr(self._robot, 'DeactivateRobot'):
-                        self.logger.info(f"Deactivating robot to release occupation lock for {self.robot_id}")
+                        self.logger.debug(f"Deactivating robot to release occupation lock for {self.robot_id}")
                         try:
                             self._robot.DeactivateRobot()
                         except Exception as deact_err:
@@ -647,11 +637,11 @@ class MecademicDriver(BaseRobotDriver):
 
             # Step 2: Wait for TCP cleanup - increased to 5 seconds for Error 3001
             # This allows TIME_WAIT sockets to clear and the robot to release the session
-            self.logger.info(f"Waiting 5s for TCP cleanup and session release for {self.robot_id}")
+            self.logger.debug(f"Waiting 5s for TCP cleanup and session release for {self.robot_id}")
             await asyncio.sleep(5.0)
 
             # Step 3: Full reconnect with activation/homing/params
-            self.logger.info(f"Attempting fresh connection for {self.robot_id}")
+            self.logger.debug(f"Attempting fresh connection for {self.robot_id}")
             return await self._connect_impl()
 
         except Exception as e:
@@ -918,12 +908,12 @@ class MecademicDriver(BaseRobotDriver):
         try:
             if hasattr(self._robot, 'Home'):
                 self._robot.Home()
-                self.logger.info(f"Homing initiated for {self.robot_id}")
+                self.logger.debug(f"Homing initiated for {self.robot_id}")
 
                 # Wait for homing to complete if method available
                 if hasattr(self._robot, 'WaitHomed'):
                     self._robot.WaitHomed(timeout=60.0)
-                    self.logger.info(f"Homing completed for {self.robot_id}")
+                    self.logger.debug(f"Homing completed for {self.robot_id}")
                 else:
                     # Fallback: wait a bit and check status
                     time.sleep(2.0)
@@ -947,7 +937,7 @@ class MecademicDriver(BaseRobotDriver):
             if not self._robot:
                 raise ConnectionError(f"Robot {self.robot_id} not connected")
 
-            self.logger.info(f"Waiting for robot {self.robot_id} to complete homing (timeout: {timeout}s)")
+            self.logger.debug(f"Waiting for robot {self.robot_id} to complete homing (timeout: {timeout}s)")
 
             loop = asyncio.get_event_loop()
 
@@ -957,7 +947,7 @@ class MecademicDriver(BaseRobotDriver):
                     self._robot.WaitHomed,
                     timeout
                 )
-                self.logger.info(f"Robot {self.robot_id} homing completed")
+                self.logger.debug(f"Robot {self.robot_id} homing completed")
                 return True
             else:
                 # Fallback: wait and check status periodically
@@ -971,7 +961,7 @@ class MecademicDriver(BaseRobotDriver):
 
     async def activate_robot(self) -> bool:
         """Activate the robot for operation with connection validation and retry"""
-        self.logger.info(f"[STARTING] NEW ACTIVATION LOGIC CALLED for {self.robot_id}")
+        self.logger.debug(f"[STARTING] NEW ACTIVATION LOGIC CALLED for {self.robot_id}")
         max_retries = 2
         
         for attempt in range(max_retries):
@@ -988,7 +978,7 @@ class MecademicDriver(BaseRobotDriver):
                     self._activate_robot_sync
                 )
                 
-                self.logger.info(f"[OK] Robot {self.robot_id} activation successful on attempt {attempt + 1}")
+                self.logger.debug(f"[OK] Robot {self.robot_id} activation successful on attempt {attempt + 1}")
                 return True
                 
             except Exception as e:
@@ -999,12 +989,12 @@ class MecademicDriver(BaseRobotDriver):
                 if attempt < max_retries - 1 and any(err in error_str.lower() for err in 
                     ['socket was closed', 'connection', 'disconnect', 'communication']):
                     
-                    self.logger.info(f"[CONNECTING] Connection issue detected, attempting reconnection for {self.robot_id}")
+                    self.logger.debug(f"[CONNECTING] Connection issue detected, attempting reconnection for {self.robot_id}")
                     
                     # Try to reconnect
                     try:
                         await self._reconnect_for_activation()
-                        self.logger.info(f"[READY] Reconnection successful, retrying activation for {self.robot_id}")
+                        self.logger.debug(f"[READY] Reconnection successful, retrying activation for {self.robot_id}")
                         continue  # Retry activation
                     except Exception as reconnect_error:
                         self.logger.error(f"[ERROR] Reconnection failed for {self.robot_id}: {reconnect_error}")
@@ -1016,7 +1006,7 @@ class MecademicDriver(BaseRobotDriver):
     
     async def _validate_connection_before_activation(self, attempt_num: int):
         """Validate connection status before attempting activation"""
-        self.logger.info(f"[DEBUG] Validating connection before activation attempt {attempt_num} for {self.robot_id}")
+        self.logger.debug(f"[DEBUG] Validating connection before activation attempt {attempt_num} for {self.robot_id}")
         
         if not self._robot:
             raise ConnectionError(f"No robot instance available for {self.robot_id}")
@@ -1029,7 +1019,7 @@ class MecademicDriver(BaseRobotDriver):
                 lambda: self._robot.IsConnected()
             )
             
-            self.logger.info(f"[STATUS] Robot {self.robot_id} IsConnected() reports: {is_connected}")
+            self.logger.debug(f"[STATUS] Robot {self.robot_id} IsConnected() reports: {is_connected}")
             
             if not is_connected:
                 raise ConnectionError(f"Robot {self.robot_id} reports as not connected")
@@ -1041,7 +1031,7 @@ class MecademicDriver(BaseRobotDriver):
     
     async def _clear_robot_occupation_state(self, attempt_num: int):
         """Clear robot occupation state to allow activation"""
-        self.logger.info(f"[CLEARING] Clearing robot occupation state for attempt {attempt_num} on {self.robot_id}")
+        self.logger.debug(f"[CLEARING] Clearing robot occupation state for attempt {attempt_num} on {self.robot_id}")
         
         if not self._robot:
             self.logger.warning(f"[WARNING] No robot instance to clear state for {self.robot_id}")
@@ -1058,19 +1048,19 @@ class MecademicDriver(BaseRobotDriver):
                     homed = getattr(current_status, 'homing_state', False)
                     error = getattr(current_status, 'error_status', False)
                     
-                    self.logger.info(f"[DEBUG] Current robot state before clearing: activated={activated}, homed={homed}, error={error}")
-                    
+                    self.logger.debug(f"[DEBUG] Current robot state before clearing: activated={activated}, homed={homed}, error={error}")
+
                     # If robot is already activated and homed with no errors, don't clear
                     if activated and homed and not error:
-                        self.logger.info(f"[OK] Robot {self.robot_id} already in good state, skipping occupation clearing")
+                        self.logger.debug(f"[OK] Robot {self.robot_id} already in good state, skipping occupation clearing")
                         return
-                    
+
                     # If robot just has error but is activated/homed, only reset error, don't deactivate
                     if activated and homed and error:
-                        self.logger.info(f"[EXEC] Robot {self.robot_id} activated/homed but has error, only resetting error")
+                        self.logger.debug(f"[EXEC] Robot {self.robot_id} activated/homed but has error, only resetting error")
                         if hasattr(self._robot, 'ResetError'):
                             await loop.run_in_executor(self._executor, self._robot.ResetError)
-                            self.logger.info(f"[OK] Error reset for {self.robot_id}")
+                            self.logger.debug(f"[OK] Error reset for {self.robot_id}")
                         return
                         
                 except Exception as status_e:
@@ -1078,12 +1068,12 @@ class MecademicDriver(BaseRobotDriver):
             
             # Step 1: Deactivate robot if it's activated/occupied (only if needed)
             if hasattr(self._robot, 'DeactivateRobot'):
-                self.logger.info(f"[EXEC] Calling DeactivateRobot() to clear occupation for {self.robot_id}")
+                self.logger.debug(f"[EXEC] Calling DeactivateRobot() to clear occupation for {self.robot_id}")
                 await loop.run_in_executor(
                     self._executor,
                     self._robot.DeactivateRobot
                 )
-                self.logger.info(f"[OK] DeactivateRobot() completed for {self.robot_id}")
+                self.logger.debug(f"[OK] DeactivateRobot() completed for {self.robot_id}")
                 
                 # Wait for deactivation to complete
                 await asyncio.sleep(1.0)
@@ -1092,29 +1082,29 @@ class MecademicDriver(BaseRobotDriver):
             
             # Step 2: Clear any pending motions
             if hasattr(self._robot, 'ClearMotion'):
-                self.logger.info(f"[EXEC] Calling ClearMotion() for {self.robot_id}")
+                self.logger.debug(f"[EXEC] Calling ClearMotion() for {self.robot_id}")
                 await loop.run_in_executor(
                     self._executor,
                     self._robot.ClearMotion
                 )
-                self.logger.info(f"[OK] ClearMotion() completed for {self.robot_id}")
+                self.logger.debug(f"[OK] ClearMotion() completed for {self.robot_id}")
             else:
                 self.logger.warning(f"[WARNING] ClearMotion() not available for {self.robot_id}")
             
             # Step 3: Reset any error states
             if hasattr(self._robot, 'ResetError'):
-                self.logger.info(f"[EXEC] Calling ResetError() for {self.robot_id}")
+                self.logger.debug(f"[EXEC] Calling ResetError() for {self.robot_id}")
                 await loop.run_in_executor(
                     self._executor,
                     self._robot.ResetError
                 )
-                self.logger.info(f"[OK] ResetError() completed for {self.robot_id}")
+                self.logger.debug(f"[OK] ResetError() completed for {self.robot_id}")
             else:
                 self.logger.warning(f"[WARNING] ResetError() not available for {self.robot_id}")
             
             # Wait a moment for all clearing operations to take effect
             await asyncio.sleep(0.5)
-            self.logger.info(f"[READY] Robot occupation state cleared for {self.robot_id}")
+            self.logger.debug(f"[READY] Robot occupation state cleared for {self.robot_id}")
             
         except Exception as e:
             self.logger.warning(f"[WARNING] Error during occupation state clearing for {self.robot_id}: {e}")
@@ -1122,7 +1112,7 @@ class MecademicDriver(BaseRobotDriver):
     
     async def _reconnect_for_activation(self):
         """Attempt to reconnect the robot for activation"""
-        self.logger.info(f"[CONNECTING] Starting reconnection process for {self.robot_id}")
+        self.logger.debug(f"[CONNECTING] Starting reconnection process for {self.robot_id}")
         
         # First disconnect if still connected
         try:
@@ -1132,7 +1122,7 @@ class MecademicDriver(BaseRobotDriver):
                     self._executor,
                     self._robot.Disconnect
                 )
-                self.logger.info(f"[SOCKET] Disconnected stale connection for {self.robot_id}")
+                self.logger.debug(f"[SOCKET] Disconnected stale connection for {self.robot_id}")
         except Exception as disconnect_error:
             self.logger.warning(f"[WARNING] Error during disconnect for {self.robot_id}: {disconnect_error}")
         
@@ -1147,15 +1137,15 @@ class MecademicDriver(BaseRobotDriver):
         if not connection_success:
             raise ConnectionError(f"Failed to re-establish connection for {self.robot_id}")
         
-        self.logger.info(f"[OK] Fresh connection established for {self.robot_id}")
+        self.logger.debug(f"[OK] Fresh connection established for {self.robot_id}")
 
     def _activate_robot_sync(self):
         """Synchronous robot activation implementation"""
         try:
             if hasattr(self._robot, 'ActivateRobot'):
-                self.logger.info(f"[EXEC] Calling ActivateRobot() for {self.robot_id}")
+                self.logger.debug(f"[EXEC] Calling ActivateRobot() for {self.robot_id}")
                 self._robot.ActivateRobot()
-                self.logger.info(f"[OK] ActivateRobot() completed for {self.robot_id}")
+                self.logger.debug(f"[OK] ActivateRobot() completed for {self.robot_id}")
                 
                 # Wait for activation to complete
                 time.sleep(1.0)
@@ -1176,7 +1166,7 @@ class MecademicDriver(BaseRobotDriver):
                 return False
                 
             self.debug_log("clear_motion", "clearing", "Calling ClearMotion() on robot instance")
-            self.logger.info(f"[EXEC] Clearing motion queue for {self.robot_id}")
+            self.logger.debug(f"[EXEC] Clearing motion queue for {self.robot_id}")
             loop = asyncio.get_event_loop()
             
             if hasattr(self._robot, 'ClearMotion'):
@@ -1186,7 +1176,7 @@ class MecademicDriver(BaseRobotDriver):
                     self._robot.ClearMotion
                 )
                 self.debug_log("clear_motion", "success", "ClearMotion() completed successfully")
-                self.logger.info(f"[OK] ClearMotion() completed for {self.robot_id}")
+                self.logger.debug(f"[OK] ClearMotion() completed for {self.robot_id}")
                 return True
             else:
                 self.debug_log("clear_motion", "unavailable", "ClearMotion() method not available")
@@ -1208,7 +1198,7 @@ class MecademicDriver(BaseRobotDriver):
                 return False
                 
             self.debug_log("resume_motion", "resuming", "Calling ResumeMotion() on robot instance")
-            self.logger.info(f"[EXEC] Resuming motion for {self.robot_id}")
+            self.logger.debug(f"[EXEC] Resuming motion for {self.robot_id}")
             loop = asyncio.get_event_loop()
             
             if hasattr(self._robot, 'ResumeMotion'):
@@ -1218,7 +1208,7 @@ class MecademicDriver(BaseRobotDriver):
                     self._robot.ResumeMotion
                 )
                 self.debug_log("resume_motion", "success", "ResumeMotion() completed successfully")
-                self.logger.info(f"[OK] ResumeMotion() completed for {self.robot_id}")
+                self.logger.debug(f"[OK] ResumeMotion() completed for {self.robot_id}")
                 return True
             else:
                 self.debug_log("resume_motion", "unavailable", "ResumeMotion() method not available")
@@ -1236,7 +1226,7 @@ class MecademicDriver(BaseRobotDriver):
                 self.logger.warning(f"[WARNING] No robot connection to wait for idle for {self.robot_id}")
                 return False
                 
-            self.logger.info(f"[WAITING] Waiting for robot {self.robot_id} to become idle (timeout: {timeout}s)")
+            self.logger.debug(f"[WAITING] Waiting for robot {self.robot_id} to become idle (timeout: {timeout}s)")
             loop = asyncio.get_event_loop()
             
             if hasattr(self._robot, 'WaitIdle'):
@@ -1247,7 +1237,7 @@ class MecademicDriver(BaseRobotDriver):
                     self._robot.WaitIdle,
                     timeout_ms
                 )
-                self.logger.info(f"[OK] Robot {self.robot_id} is now idle")
+                self.logger.debug(f"[OK] Robot {self.robot_id} is now idle")
                 return True
             else:
                 self.logger.warning(f"[WARNING] WaitIdle() not available for {self.robot_id}")
@@ -1293,13 +1283,13 @@ class MecademicDriver(BaseRobotDriver):
                     self.logger.debug(f"Robot {self.robot_id} not in error/paused state - no reset needed")
                     return True
 
-                self.logger.info(f"[EXEC] Resetting robot {self.robot_id}: error={needs_error_reset}, paused={needs_motion_resume}, software_estop={software_estop} (attempt {attempt + 1})")
+                self.logger.debug(f"[EXEC] Resetting robot {self.robot_id}: error={needs_error_reset}, paused={needs_motion_resume}, software_estop={software_estop} (attempt {attempt + 1})")
                 loop = asyncio.get_event_loop()
 
                 # Call ResetError() (Mecademic pattern)
                 if hasattr(self._robot, 'ResetError'):
                     await loop.run_in_executor(self._executor, self._robot.ResetError)
-                    self.logger.info(f"[OK] ResetError() called for {self.robot_id}")
+                    self.logger.debug(f"[OK] ResetError() called for {self.robot_id}")
 
                     # Wait for error reset confirmation (Mecademic pattern)
                     if hasattr(self._robot, 'WaitErrorReset'):
@@ -1308,7 +1298,7 @@ class MecademicDriver(BaseRobotDriver):
                                 self._executor,
                                 lambda: self._robot.WaitErrorReset(timeout=5.0)
                             )
-                            self.logger.info(f"[OK] Error reset confirmed via WaitErrorReset() for {self.robot_id}")
+                            self.logger.debug(f"[OK] Error reset confirmed via WaitErrorReset() for {self.robot_id}")
                         except Exception as wait_err:
                             self.logger.warning(f"[WARNING] WaitErrorReset timeout for {self.robot_id}: {wait_err}")
                             # Check status again to verify error actually cleared
@@ -1328,18 +1318,14 @@ class MecademicDriver(BaseRobotDriver):
                     if hasattr(self, 'clear_status_cache'):
                         self.clear_status_cache()
 
-                    # Resume motion if paused (often needed after error reset)
-                    if hasattr(self._robot, 'ResumeMotion'):
-                        try:
-                            await loop.run_in_executor(self._executor, self._robot.ResumeMotion)
-                            self.logger.info(f"[OK] ResumeMotion() completed for {self.robot_id}")
-                        except Exception as resume_err:
-                            self.logger.debug(f"ResumeMotion after error reset: {resume_err}")
+                    # NOTE: ResumeMotion is NOT called here intentionally.
+                    # ResumeMotion should only be called from resume_motion() after speed is set,
+                    # to prevent race conditions where motion resumes before proper speed configuration.
 
                     # Clear software E-stop flag after successful recovery
                     async with self._estop_lock:
                         self._software_estop_active = False
-                    self.logger.info(f"[OK] Software E-stop cleared for {self.robot_id}")
+                    self.logger.debug(f"[OK] Software E-stop cleared for {self.robot_id}")
 
                     return True
                 else:
@@ -1353,7 +1339,7 @@ class MecademicDriver(BaseRobotDriver):
                 # Check if this is a connection error that we can recover from
                 if "socket was closed" in error_str.lower() or "connection" in error_str.lower():
                     if attempt < max_attempts - 1:
-                        self.logger.info(f"[CONNECTING] Connection lost during error reset, attempting to reconnect for {self.robot_id}")
+                        self.logger.debug(f"[CONNECTING] Connection lost during error reset, attempting to reconnect for {self.robot_id}")
                         try:
                             # Try to reconnect
                             await self.force_reconnect()
@@ -1394,7 +1380,7 @@ class MecademicDriver(BaseRobotDriver):
                 return False
 
             mode_str = "enabled" if activated else "disabled"
-            self.logger.info(f"[EXEC] Setting recovery mode {mode_str} for {self.robot_id}")
+            self.logger.debug(f"[EXEC] Setting recovery mode {mode_str} for {self.robot_id}")
 
             loop = asyncio.get_event_loop()
 
@@ -1406,7 +1392,7 @@ class MecademicDriver(BaseRobotDriver):
                 )
                 # Update local flag since mecademicpy doesn't expose this on status
                 self._recovery_mode_active = activated
-                self.logger.info(f"[OK] Recovery mode {mode_str} for {self.robot_id}")
+                self.logger.debug(f"[OK] Recovery mode {mode_str} for {self.robot_id}")
                 return True
             else:
                 self.logger.warning(f"[WARNING] SetRecoveryMode() not available for {self.robot_id}")
@@ -1447,7 +1433,7 @@ class MecademicDriver(BaseRobotDriver):
             if not self._robot:
                 return False
 
-            self.logger.info(f"Preparing robot {self.robot_id} for recovery mode")
+            self.logger.debug(f"Preparing robot {self.robot_id} for recovery mode")
 
             loop = asyncio.get_event_loop()
             if hasattr(self._robot, 'ClearMotion'):
@@ -1455,7 +1441,7 @@ class MecademicDriver(BaseRobotDriver):
                     self._executor,
                     self._robot.ClearMotion
                 )
-                self.logger.info(f"ClearMotion() completed for {self.robot_id}")
+                self.logger.debug(f"ClearMotion() completed for {self.robot_id}")
 
             await asyncio.sleep(0.5)
             return True
@@ -1562,7 +1548,7 @@ class MecademicDriver(BaseRobotDriver):
                     if regular_status.get("paused", False):
                         safety_info["motion_paused"] = True
                         safety_info["e_stop_active"] = True
-                        self.logger.info(f"Motion paused detected via get_status for {self.robot_id}")
+                        self.logger.debug(f"Motion paused detected via get_status for {self.robot_id}")
             except Exception as e:
                 self.logger.debug(f"Regular status fallback failed: {e}")
 
@@ -1614,7 +1600,7 @@ class MecademicDriver(BaseRobotDriver):
                 self.logger.warning(f"[WARNING] No robot connection to deactivate for {self.robot_id}")
                 return False
 
-            self.logger.info(f"[EXEC] Deactivating robot {self.robot_id}")
+            self.logger.debug(f"[EXEC] Deactivating robot {self.robot_id}")
 
             loop = asyncio.get_event_loop()
 
@@ -1623,7 +1609,7 @@ class MecademicDriver(BaseRobotDriver):
                     self._executor,
                     self._robot.DeactivateRobot
                 )
-                self.logger.info(f"[OK] Robot {self.robot_id} deactivated")
+                self.logger.debug(f"[OK] Robot {self.robot_id} deactivated")
                 return True
             else:
                 self.logger.warning(f"[WARNING] DeactivateRobot() not available for {self.robot_id}")
