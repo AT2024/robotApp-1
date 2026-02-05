@@ -102,4 +102,18 @@ const ResetButton = ({ disabled, className = "", ...props }) => (
   </button>
 );
 
-export { PrimaryButton, SecondaryButton, EmergencyButton, StepButton, PauseButton, ResumeButton, ResetButton };
+const ResetUIButton = ({ disabled, className = "", ...props }) => (
+  <button
+    className={`${baseButtonClasses} ${
+      disabled
+        ? "bg-gray-400 text-white cursor-not-allowed"
+        : "bg-purple-500 text-white hover:bg-purple-600 border-2 border-purple-600 hover:shadow-lg hover:shadow-purple-500/30"
+    } focus:ring-purple-500 font-medium ${className}`}
+    disabled={disabled}
+    {...props}
+  >
+    Reset UI
+  </button>
+);
+
+export { PrimaryButton, SecondaryButton, EmergencyButton, StepButton, PauseButton, ResumeButton, ResetButton, ResetUIButton };

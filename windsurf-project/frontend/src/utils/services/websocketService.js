@@ -13,7 +13,6 @@ class WebSocketService {
     this.reconnectAttempts = 0;
     this.WEBSOCKET_URL = WS_URL;
     this.MAX_RECONNECT_DELAY = 5000;
-    this.disconnect_on_exception = false; // Add this configuration flag
   }
 
   isConnected() {
@@ -110,14 +109,15 @@ class WebSocketService {
   }
 
   _handleDisconnect() {
-    const wasConnected = this.isConnected();
+    // FIX: Always notify disconnect listeners when socket closes
+    // Previously, this checked wasConnected AFTER setting socket to null, so it was always false
     this.socket = null;
 
-    if (wasConnected) {
-      this.disconnectListeners.forEach((listener) => listener());
-      // Attempt to reconnect after a delay
-      this._scheduleReconnect();
-    }
+    // Always notify disconnect listeners - UI needs to know about disconnection
+    this.disconnectListeners.forEach((listener) => listener());
+
+    // Always attempt to reconnect after a disconnect
+    this._scheduleReconnect();
   }
 
   _scheduleReconnect() {
@@ -165,25 +165,17 @@ class WebSocketService {
   }
 
   send(message) {
-    console.log('*** WEBSOCKET DEBUG: send() called with message:', message);
-    console.log('*** WEBSOCKET DEBUG: WebSocket connection state:', this.socket?.readyState);
-    console.log('*** WEBSOCKET DEBUG: isConnected():', this.isConnected());
-    
     if (!this.isConnected()) {
       const error = 'Cannot send message - WebSocket is not connected';
-      console.error('*** WEBSOCKET DEBUG: CONNECTION ERROR:', error);
       logger.error(error);
       throw new Error(error);
     }
 
     try {
       const jsonMessage = JSON.stringify(message);
-      console.log('*** WEBSOCKET DEBUG: Sending JSON message:', jsonMessage);
       this.socket.send(jsonMessage);
-      console.log('*** WEBSOCKET DEBUG: Message sent successfully');
       logger.log('Sent WebSocket message:', message);
     } catch (error) {
-      console.error('*** WEBSOCKET DEBUG: Send error:', error);
       logger.error('Error sending WebSocket message:', error);
       throw error;
     }

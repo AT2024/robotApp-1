@@ -6,9 +6,9 @@ import websocketService from '../utils/services/websocketService';
 import logger from '../utils/logger';
 import { SystemStatus } from '../components/status';
 import { ProgressSteps, StepContent } from '../components/steps';
-import { EmergencyButton, SecondaryButton, PauseButton, ResumeButton, ResetButton } from '../components/buttons';
+import { EmergencyButton, SecondaryButton, PauseButton, ResumeButton, ResetButton, ResetUIButton } from '../components/buttons';
 import { ConfirmationModal } from '../components/common';
-import { BatchProgress, BatchErrorDialog, AllCompleteDialog } from '../components/batch';
+import { BatchErrorDialog, AllCompleteDialog } from '../components/batch';
 import { CycleWaferDisplay } from '../components/wafer';
 
 const ROBOT_MAP = {
@@ -98,6 +98,9 @@ const SpreadingPage = () => {
 
   // WebSocket connection status
   const [wsConnected, setWsConnected] = useState(false);
+
+  // Safety timeout ref for isProcessing state
+  const processingTimeoutRef = useRef(null);
 
   // Refs to hold current values for WebSocket callback (avoids stale closure)
   const currentBatchRef = useRef(currentBatch);
@@ -344,6 +347,32 @@ const SpreadingPage = () => {
   useEffect(() => {
     totalBatchesRef.current = totalBatches;
   }, [totalBatches]);
+
+  // Safety timeout to reset isProcessing if no batch_completion event arrives
+  // This prevents the UI from getting stuck if WebSocket events are lost
+  const PROCESSING_TIMEOUT_MS = 120000; // 2 minute safety timeout
+  useEffect(() => {
+    if (isProcessing) {
+      // Clear any existing timeout
+      if (processingTimeoutRef.current) {
+        clearTimeout(processingTimeoutRef.current);
+      }
+
+      // Set safety timeout - 2 minutes max for any batch operation
+      processingTimeoutRef.current = setTimeout(() => {
+        logger.warn('Safety timeout: resetting isProcessing state after 2 minutes');
+        setIsProcessing(false);
+        toast.warning('Processing timeout - UI state reset. Check robot status.', { autoClose: 5000 });
+      }, PROCESSING_TIMEOUT_MS);
+
+      return () => {
+        if (processingTimeoutRef.current) {
+          clearTimeout(processingTimeoutRef.current);
+          processingTimeoutRef.current = null;
+        }
+      };
+    }
+  }, [isProcessing]);
 
   // Fetch sequence config on mount
   useEffect(() => {
@@ -777,7 +806,7 @@ const SpreadingPage = () => {
       setLastError(`Reset failed: ${error.message}`);
       toast.error(`Reset failed: ${error.message}`);
     }
-  }, [wsConnected]);
+  }, []);
 
   // Confirmation modal handlers
   const showConfirmation = (title, message, action, variant = 'primary') => {
@@ -866,7 +895,7 @@ const SpreadingPage = () => {
       setSystemPaused(true);
       toast.error(`Resume failed: ${error.message}`);
     }
-  }, [activeStep, steps, wsConnected, systemPaused]);
+  }, [activeStep, steps, wsConnected]);
 
   // Handle step skipping
   const handleSkip = () => {
@@ -917,6 +946,16 @@ const SpreadingPage = () => {
       setShowAllComplete(true);
     }
   }, [currentBatch, totalBatches]);
+
+  // Handle manual UI reset (for when buttons become unresponsive)
+  const handleResetUI = useCallback(() => {
+    logger.log('Manual UI reset triggered by user');
+    setIsProcessing(false);
+    setCurrentWafer(0);
+    setCurrentOperation('');
+    setWaferProgress(0);
+    toast.info('UI state reset. Buttons should now be responsive.', { autoClose: 3000 });
+  }, []);
 
   // Handle finish all batches
   const handleFinishAllBatches = useCallback(() => {
@@ -1029,14 +1068,6 @@ const SpreadingPage = () => {
         {/* System Status Component */}
         <SystemStatus onStatusChange={handleStatusChange} />
 
-        {/* Batch Progress */}
-        <BatchProgress
-          currentBatch={currentBatch}
-          totalBatches={totalBatches}
-          totalWafers={totalWafers}
-          currentWafer={currentWafer}
-        />
-
         {/* Cycle Wafer Display - Shows 5 wafers for current cycle */}
         <CycleWaferDisplay
           currentWafer={currentWafer}
@@ -1093,6 +1124,12 @@ const SpreadingPage = () => {
             onClick={handleResume}
             disabled={emergencyStopActive}
             className='w-full sm:w-auto'
+          />
+          <ResetUIButton
+            onClick={handleResetUI}
+            disabled={!isProcessing && wsConnected}
+            className='w-full sm:w-auto'
+            title='Reset UI state if buttons become unresponsive'
           />
           <SecondaryButton onClick={() => navigate('/spreading/form')} className='w-full sm:w-auto'>
             Back to Form
