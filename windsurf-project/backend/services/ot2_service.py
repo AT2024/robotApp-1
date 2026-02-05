@@ -39,6 +39,7 @@ class ProtocolStatus(Enum):
     SUCCEEDED = "succeeded"
     FAILED = "failed"
     STOPPED = "stopped"
+    STOP_REQUESTED = "stop-requested"
     PAUSED = "paused"
     FINISHING = "finishing"
 
@@ -290,20 +291,20 @@ class OT2Service(RobotService):
         new motion. User should manually home after emergency condition is cleared.
         """
         self.logger.critical(f"Executing emergency stop for OT2 robot {self.robot_id}")
-        stopped_operations = []
+        paused_operations = []
         failed_operations = []
 
         try:
-            # Step 1: Stop tracked run if active (running OR paused)
-            if self._current_run and self._current_run.status in [ProtocolStatus.RUNNING, ProtocolStatus.PAUSED]:
+            # Step 1: Pause tracked run if active (running only - already paused is fine)
+            if self._current_run and self._current_run.status == ProtocolStatus.RUNNING:
                 tracked_run_id = self._current_run.run_id
-                self.logger.critical(f"Stopping tracked run: {tracked_run_id} (status: {self._current_run.status})")
-                if await self._stop_run(tracked_run_id):
-                    stopped_operations.append(f"tracked_run_{tracked_run_id}")
+                self.logger.critical(f"Pausing tracked run: {tracked_run_id} (status: {self._current_run.status})")
+                if await self._pause_run(tracked_run_id):
+                    paused_operations.append(f"tracked_run_{tracked_run_id}")
                 else:
                     failed_operations.append(f"tracked_run_{tracked_run_id}")
 
-            # Step 2: CRITICAL - Query /runs API and stop ALL running/paused runs
+            # Step 2: CRITICAL - Query /runs API and pause ALL running runs
             # This handles state desync where _current_run may be None but runs are active
             try:
                 runs_data = await self._get_current_runs()
@@ -311,17 +312,17 @@ class OT2Service(RobotService):
                 if isinstance(data_list, list):
                     for run in data_list:
                         status = self._extract_run_status(run)
-                        # Stop both running AND paused runs
-                        if status in ["running", "paused"]:
+                        # Pause running runs only (already paused is fine)
+                        if status == "running":
                             run_id = run.get("id")
                             if run_id:
-                                # Skip if we already stopped this run in step 1
+                                # Skip if we already paused this run in step 1
                                 if self._current_run and run_id == self._current_run.run_id:
                                     continue
 
-                                self.logger.critical(f"Found active run via API query: {run_id} (status: {status})")
-                                if await self._stop_run(run_id):
-                                    stopped_operations.append(f"api_discovered_run_{run_id}")
+                                self.logger.critical(f"Found running run via API query: {run_id} (status: {status})")
+                                if await self._pause_run(run_id):
+                                    paused_operations.append(f"api_discovered_run_{run_id}")
                                 else:
                                     failed_operations.append(f"api_discovered_run_{run_id}")
             except Exception as e:
@@ -335,14 +336,14 @@ class OT2Service(RobotService):
                     await self._monitoring_task
                 except asyncio.CancelledError:
                     pass
-                stopped_operations.append("monitoring_task")
+                paused_operations.append("monitoring_task")
 
-            # Step 4: Clear internal state
-            # NOTE: Homing removed from emergency stop - homing initiates motion which
-            # contradicts the purpose of emergency stop (STOP all motion, not start new motion).
-            # User should manually home after emergency condition is cleared.
-            self._current_run = None
-            self._was_emergency_stopped = True  # Track that we need homing before next run
+            # Step 4: Update internal state
+            # NOTE: Keep _current_run so Quick Recovery can find and resume it.
+            # Unlike stop which terminates the run, pause allows resumption.
+            if self._current_run:
+                self._current_run.status = ProtocolStatus.PAUSED
+            self._was_emergency_stopped = True  # Track that we need recovery before next run
 
             # Step 5: Set robot state to EMERGENCY_STOP so RecoveryPanel is shown
             # This is critical - without this state change, the frontend won't display
@@ -356,10 +357,10 @@ class OT2Service(RobotService):
             if failed_operations:
                 self.logger.critical(
                     f"Emergency stop completed with failures. "
-                    f"Stopped: {stopped_operations}, Failed: {failed_operations}"
+                    f"Paused: {paused_operations}, Failed: {failed_operations}"
                 )
             else:
-                self.logger.critical(f"Emergency stop completed successfully. Stopped: {stopped_operations}")
+                self.logger.critical(f"Emergency stop completed successfully. Paused: {paused_operations}")
 
             return True
 
@@ -433,19 +434,29 @@ class OT2Service(RobotService):
                         "Hardware validation passed - proceeding with protocol execution"
                     )
 
-                    # Step 2.75: Pre-run homing (skip if already homed AND not after emergency stop)
-                    # Opentrons default is HOME_AND_STAY_ENGAGED after runs, so motors
-                    # stay engaged when robot is at known position. Skip homing if engaged
-                    # UNLESS we had an emergency stop (robot may be in unknown position).
+                    # Step 2.75: Pre-run E-stop check
+                    # After E-stop, block NEW protocol execution if no paused run exists.
+                    # User must either:
+                    # 1. Use Quick Recovery to resume the paused run, OR
+                    # 2. Use Safe Home (Reverse Path) to home and clear E-stop state
+                    if self._was_emergency_stopped and not self._current_run:
+                        self.logger.warning(
+                            "Protocol execution blocked - robot requires recovery after emergency stop"
+                        )
+                        raise ProtocolExecutionError(
+                            "Robot requires recovery after emergency stop. "
+                            "Please use Quick Recovery to resume, or Safe Home (Reverse Path) to home first.",
+                            error_code="ESTOP_REQUIRES_RECOVERY"
+                        )
+
+                    # Skip homing if motors engaged (robot at known position)
                     motors_engaged = await self._are_motors_engaged()
-                    if motors_engaged and not self._was_emergency_stopped:
+                    if motors_engaged:
                         self.logger.info("Motors engaged - skipping pre-run homing (robot already at known position)")
                     else:
-                        reason = "after emergency stop" if self._was_emergency_stopped else "motors not engaged"
-                        self.logger.info(f"Performing pre-run homing ({reason})...")
+                        self.logger.info("Motors not engaged - performing pre-run homing...")
                         home_success = await self._home_robot()
                         if home_success:
-                            self._was_emergency_stopped = False  # Clear flag after successful home
                             self.logger.info("Pre-run homing successful, waiting for stabilization...")
                             # Wait 20 seconds for homing to complete (successful runs show ~18s homing time)
                             await asyncio.sleep(20)
@@ -749,14 +760,27 @@ class OT2Service(RobotService):
                     "error": str(e)
                 })
 
-            # Step 4: Home the robot
+            # Step 4: Home the robot (use reverse path if position history available for safety)
             self.logger.info(f"Step 4: Homing robot {self.robot_id}")
             try:
-                home_success = await self._home_robot()
-                recovery_steps.append({
-                    "step": "home_robot",
-                    "success": home_success
-                })
+                if self._position_history:
+                    self.logger.info("Using reverse path homing (position history available)")
+                    result = await self.safe_home_reverse_path()
+                    home_success = result.success and result.data.get("homed", False)
+                    recovery_steps.append({
+                        "step": "home_robot",
+                        "success": home_success,
+                        "method": "reverse_path",
+                        "positions_retraced": result.data.get("positions_retraced", 0) if result.success else 0
+                    })
+                else:
+                    self.logger.info("No position history - using standard homing")
+                    home_success = await self._home_robot()
+                    recovery_steps.append({
+                        "step": "home_robot",
+                        "success": home_success,
+                        "method": "standard"
+                    })
             except Exception as e:
                 self.logger.warning(f"Homing failed: {e}")
                 recovery_steps.append({
@@ -1384,47 +1408,60 @@ class OT2Service(RobotService):
         self.logger.info(f"Run started: {run_id}")
         return status
 
+    async def _run_action(self, run_id: str, action: str) -> bool:
+        """
+        Execute a run action via OT2 API.
+
+        Consolidates the duplicate pattern from _stop_run, _pause_run, _resume_run.
+
+        Args:
+            run_id: The run ID to act on
+            action: One of "stop", "pause", "play"
+
+        Returns:
+            True if successful, False otherwise
+        """
+        action_names = {"stop": "stopped", "pause": "paused", "play": "resumed"}
+        try:
+            data = {"data": {"actionType": action}}
+            await self._api_request("POST", f"/runs/{run_id}/actions", data)
+            self.logger.info(f"Run {action_names.get(action, action)}: {run_id}")
+            return True
+        except Exception as e:
+            self.logger.error(f"Failed to {action} run {run_id}: {e}")
+            return False
+
     async def _stop_run(self, run_id: str) -> bool:
         """Stop protocol execution"""
-        try:
-            data = {"data": {"actionType": "stop"}}
-
-            await self._api_request("POST", f"/runs/{run_id}/actions", data)
-
-            self.logger.info(f"Run stopped: {run_id}")
-            return True
-
-        except Exception as e:
-            self.logger.error(f"Failed to stop run {run_id}: {e}")
-            return False
+        return await self._run_action(run_id, "stop")
 
     async def _pause_run(self, run_id: str) -> bool:
         """Pause protocol execution via OT2 API"""
-        try:
-            data = {"data": {"actionType": "pause"}}
-
-            await self._api_request("POST", f"/runs/{run_id}/actions", data)
-
-            self.logger.info(f"Run paused: {run_id}")
-            return True
-
-        except Exception as e:
-            self.logger.error(f"Failed to pause run {run_id}: {e}")
-            return False
+        return await self._run_action(run_id, "pause")
 
     async def _resume_run(self, run_id: str) -> bool:
         """Resume paused protocol execution via OT2 API"""
-        try:
-            data = {"data": {"actionType": "play"}}
+        return await self._run_action(run_id, "play")
 
-            await self._api_request("POST", f"/runs/{run_id}/actions", data)
+    async def _clear_emergency_stop_state(self, reason: str = "Recovery completed") -> None:
+        """
+        Clear emergency stop flag and update robot state to IDLE.
 
-            self.logger.info(f"Run resumed: {run_id}")
-            return True
+        Consolidates the duplicate E-stop clearing logic from:
+        - safe_home_reverse_path() normal homing
+        - safe_home_reverse_path() reverse path
+        - quick_recovery() after successful resume
 
-        except Exception as e:
-            self.logger.error(f"Failed to resume run {run_id}: {e}")
-            return False
+        Note: Must transition to IDLE (not BUSY) because EMERGENCY_STOP -> BUSY
+        is not a valid state transition. IDLE is always valid from EMERGENCY_STOP.
+        The protocol execution will transition to BUSY when it resumes operations.
+
+        Args:
+            reason: Reason string for state update log
+        """
+        self._was_emergency_stopped = False
+        await self.update_robot_state(RobotState.IDLE, reason=f"Recovery completed - {reason}")
+        self.logger.info(f"Emergency stop cleared - {reason}")
 
     async def get_active_run_id(self) -> Optional[str]:
         """
@@ -1570,6 +1607,9 @@ class OT2Service(RobotService):
         result = await self.resume_current_run()
 
         if result.success:
+            # Clear E-stop state using consolidated helper
+            await self._clear_emergency_stop_state("quick recovery - protocol resumed")
+
             # Resume step tracking if paused
             if step_state and step_state.paused:
                 await self.state_manager.resume_step(self.robot_id)
@@ -1693,13 +1733,7 @@ class OT2Service(RobotService):
             self.logger.info("No position history - using normal homing")
             result = await self._home_robot()
             if result:
-                # Clear emergency stop flag and update state to IDLE
-                self._was_emergency_stopped = False
-                await self.update_robot_state(
-                    RobotState.IDLE,
-                    reason="Recovery completed - normal homing successful"
-                )
-                self.logger.info("Emergency stop cleared - OT2 state set to IDLE after normal homing")
+                await self._clear_emergency_stop_state("normal homing successful")
             return ServiceResult.success_result({
                 "robot_id": self.robot_id,
                 "method": "normal_home",
@@ -1750,14 +1784,7 @@ class OT2Service(RobotService):
             home_result = await self._home_robot()
 
             if home_result:
-                # Clear emergency stop flag and update state to IDLE
-                # This allows the RecoveryPanel to auto-close
-                self._was_emergency_stopped = False
-                await self.update_robot_state(
-                    RobotState.IDLE,
-                    reason="Recovery completed - reverse path homing successful"
-                )
-                self.logger.info("Emergency stop cleared - OT2 state set to IDLE after reverse path homing")
+                await self._clear_emergency_stop_state("reverse path homing successful")
 
             return ServiceResult.success_result({
                 "robot_id": self.robot_id,
@@ -1841,6 +1868,10 @@ class OT2Service(RobotService):
         IDLE_WARNING_THRESHOLD = 30.0
         IDLE_TIMEOUT_THRESHOLD = 120.0
 
+        # Position recording for reverse path homing
+        last_position_record_time = 0.0
+        POSITION_RECORD_INTERVAL = 2.0  # Record every 2 seconds to reduce API overhead
+
         while True:
             try:
                 await asyncio.sleep(0.5)
@@ -1849,6 +1880,13 @@ class OT2Service(RobotService):
                 attrs = self._parse_run_response(run_data)
                 status = ProtocolStatus(attrs.get("status", "unknown"))
                 actions = attrs.get("actions", [])
+
+                # Record position for reverse path homing (only when RUNNING)
+                current_time = time.time()
+                if status == ProtocolStatus.RUNNING:
+                    if current_time - last_position_record_time >= POSITION_RECORD_INTERVAL:
+                        await self._record_position(f"run_{run_id}")
+                        last_position_record_time = current_time
 
                 # Check for stuck in idle state after play command
                 if self._has_play_action(actions) and status == ProtocolStatus.IDLE:
@@ -1876,7 +1914,7 @@ class OT2Service(RobotService):
                         self._current_run.end_time = time.time()
 
                     # Check for terminal states
-                    terminal_states = {ProtocolStatus.SUCCEEDED, ProtocolStatus.FAILED, ProtocolStatus.STOPPED}
+                    terminal_states = {ProtocolStatus.SUCCEEDED, ProtocolStatus.FAILED, ProtocolStatus.STOPPED, ProtocolStatus.STOP_REQUESTED}
                     if status in terminal_states:
                         self._current_run.end_time = time.time()
 

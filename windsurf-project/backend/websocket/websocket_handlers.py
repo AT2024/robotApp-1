@@ -587,16 +587,23 @@ class WebsocketHandler:
 
                                 # Broadcast result when complete
                                 if protocol_result.success:
-                                    logger.info(f"OT2 protocol completed successfully: {protocol_result.data}")
-                                    await self.broadcast({
-                                        "type": "ot2_protocol_complete",
-                                        "data": {
-                                            "success": True,
-                                            "result": protocol_result.data,
-                                            "error": None,
-                                            "step_index": current_step
-                                        }
-                                    })
+                                    # Check if this was actually an emergency stop, not a real completion
+                                    result_status = protocol_result.data.get("status", "completed") if isinstance(protocol_result.data, dict) else "completed"
+
+                                    if result_status == "emergency_stopped":
+                                        logger.info(f"OT2 protocol was emergency stopped - not broadcasting completion")
+                                        # Don't broadcast completion - the emergency_stop state change handles UI
+                                    else:
+                                        logger.info(f"OT2 protocol completed successfully: {protocol_result.data}")
+                                        await self.broadcast({
+                                            "type": "ot2_protocol_complete",
+                                            "data": {
+                                                "success": True,
+                                                "result": protocol_result.data,
+                                                "error": None,
+                                                "step_index": current_step
+                                            }
+                                        })
                                 else:
                                     logger.error(f"OT2 protocol execution failed: {protocol_result.error}")
                                     await self.broadcast({
