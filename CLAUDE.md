@@ -1,3 +1,19 @@
+# CC10x Orchestration (Always On)
+
+IMPORTANT: ALWAYS invoke cc10x-router on ANY development task. First action, no exceptions.
+IMPORTANT: Explore project first, then invoke the router.
+IMPORTANT: Prefer retrieval-led reasoning over pre-training-led reasoning.
+IMPORTANT: Never bypass the router. It is the system.
+IMPORTANT: NEVER use Edit, Write, or Bash (for code changes) without first invoking cc10x-router.
+
+**Skip CC10x ONLY when:**
+- User EXPLICITLY says "don't use cc10x", "without cc10x", or "skip cc10x"
+- No interpretation. No guessing. Only these exact opt-out phrases.
+
+[CC10x] | entry: ./plugins/cc10x/skills/cc10x-router/SKILL.md
+
+---
+
 # CLAUDE.md
 
 Laboratory automation controlling Mecademic arm, Opentrons OT-2, Arduino, and Carousel.

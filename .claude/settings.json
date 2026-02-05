@@ -6,7 +6,11 @@
       "Bash(python -m pytest:*)",
       "Bash(black:*)",
       "Bash(flake8:*)",
-      "Bash(mypy:*)"
+      "Bash(mypy:*)",
+      "Bash(mkdir:*)",
+      "Edit(.claude/cc10x/*)",
+      "Write(.claude/cc10x/*)",
+      "Read(.claude/cc10x/*)"
     ],
     "deny": [
       "Read(.env)",
